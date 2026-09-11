@@ -1,0 +1,25 @@
+# Gradle and Java
+.gradle/
+**/build/
+out/
+*.class
+
+# Local Minecraft instances
+run/
+runClient/
+runServer/
+logs/
+crash-reports/
+
+# Editors and local settings
+.idea/
+*.iml
+.vscode/
+.env
+.env.*
+!.env.example
+local.properties
+
+# Operating systems
+.DS_Store
+Thumbs.db
