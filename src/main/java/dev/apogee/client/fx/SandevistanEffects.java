@@ -11,7 +11,10 @@ import dev.apogee.client.ApogeeClientState;
 import dev.apogee.client.config.ApogeeClientConfig;
 import dev.apogee.config.SandevistanRules;
 import dev.apogee.network.ApogeeNetworking.WearerStatus;
+import dev.apogee.registry.ApogeeItems;
 import dev.apogee.registry.ApogeeSounds;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import java.util.Locale;
@@ -40,6 +43,11 @@ public final class SandevistanEffects {
     private static final int EDGE_OUTER_RGB = 0x806BFF;
     private static final float TRANSITION_TICKS = 8.0F;
     private static final int OVERDRIVE_FLASH_TICKS = 10;
+    private static final int HUD_CYAN = 0x02D7F2;
+    private static final int HUD_MAGENTA = 0xED1E79;
+    private static final int HUD_YELLOW = 0xFCEE0A;
+    private static final int HUD_RED = 0xFF4A57;
+    private static final ResourceLocation HUD_FONT = ResourceLocation.fromNamespaceAndPath("apogee", "cyber");
     private static final float FOV_PULSE_TICKS = 10.0F;
     private static final int RADIAL_SEGMENTS = 96;
 
@@ -49,6 +57,8 @@ public final class SandevistanEffects {
     private static boolean transitionActivating;
     private static float tintAlpha;
     private static long fovPulseStart = Long.MIN_VALUE;
+    private static long killFlashStart = Long.MIN_VALUE;
+    private static float hudAlpha;
     private static long clientTicks;
 
     private SandevistanEffects() {
@@ -66,6 +76,9 @@ public final class SandevistanEffects {
     // ------------------------------------------------------------------ state transitions
 
     public static void onStatus(WearerStatus previous, WearerStatus current) {
+        if (previous.active() && current.active() && current.endTime() > previous.endTime()) {
+            killFlashStart = clientTicks;
+        }
         if (previous.active() == current.active()) {
             return;
         }
@@ -110,6 +123,9 @@ public final class SandevistanEffects {
         float target = localActive && config.screenTint ? config.screenTintOpacity : 0.0F;
         float step = localActive ? 0.08F : 0.05F;
         tintAlpha = tintAlpha < target ? Math.min(target, tintAlpha + step) : Math.max(target, tintAlpha - step);
+        WearerStatus status = ApogeeClientState.status();
+        boolean inUse = status.active() || status.cooldownEnd() > ApogeeClientState.clientGameTime();
+        hudAlpha = Mth.clamp(hudAlpha + (inUse ? 0.25F : -0.125F), 0.0F, 1.0F);
     }
 
     /** The cyan overdrive texture shows during the first half second of an activation. */
@@ -268,6 +284,11 @@ public final class SandevistanEffects {
 
     // ------------------------------------------------------------------ HUD
 
+    /**
+     * Cyberware slot in the bottom-left corner, styled after Cyberpunk 2077's quick-access
+     * cyberware: the implant icon with a fill that drains while active (cyan) and during the
+     * cooldown (magenta), and the seconds left on top. Hidden while the implant is idle.
+     */
     public static void renderHud(GuiGraphics graphics, float partialTick) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
@@ -277,35 +298,101 @@ public final class SandevistanEffects {
         WearerStatus status = ApogeeClientState.status();
         SandevistanRules rules = ApogeeClientState.rules();
         long now = ApogeeClientState.clientGameTime();
-        float remaining;
-        float total;
-        int barColor;
-        Component label;
-        if (status.active()) {
-            remaining = Math.max(0.0F, status.endTime() - now - partialTick);
-            total = Math.max(1.0F, status.endTime() - status.startTime());
-            barColor = 0xFF78E2DF;
-            label = Component.translatable("hud.apogee.sandevistan.active", seconds(remaining));
-        } else if (status.cooldownEnd() > now) {
-            remaining = Math.max(0.0F, status.cooldownEnd() - now - partialTick);
-            total = Math.max(1.0F, rules.cooldownTicks());
-            barColor = 0xFF8A939C;
-            label = Component.translatable("hud.apogee.sandevistan.cooldown", seconds(remaining));
-        } else {
+        boolean active = status.active();
+        boolean cooling = !active && status.cooldownEnd() > now;
+        if (hudAlpha <= 0.0F) {
             return;
         }
 
+        float remaining;
+        float fill;
+        float extension = 0.0F;
+        int accent;
+        if (active) {
+            remaining = Math.max(0.0F, status.endTime() - now - partialTick);
+            fill = Mth.clamp(remaining / rules.durationTicks(), 0.0F, 1.0F);
+            int extra = rules.maxDurationTicks() - rules.durationTicks();
+            extension = extra <= 0 ? 0.0F : Mth.clamp((remaining - rules.durationTicks()) / extra, 0.0F, 1.0F);
+            boolean lastSeconds = remaining < 40.0F && (clientTicks / 3) % 2 == 0;
+            accent = lastSeconds ? HUD_RED : HUD_CYAN;
+        } else if (cooling) {
+            remaining = Math.max(0.0F, status.cooldownEnd() - now - partialTick);
+            fill = Mth.clamp(remaining / Math.max(1, rules.cooldownTicks()), 0.0F, 1.0F);
+            accent = HUD_MAGENTA;
+        } else {
+            remaining = 0.0F;
+            fill = 0.0F;
+            accent = HUD_CYAN;
+        }
+        float killFlash = killFlashStart == Long.MIN_VALUE ? 0.0F
+                : 1.0F - Mth.clamp((clientTicks - killFlashStart + partialTick) / 16.0F, 0.0F, 1.0F);
+        if (killFlash > 0.0F) {
+            accent = HUD_YELLOW;
+        }
+
+        int size = 24;
+        int x = 6;
+        int y = graphics.guiHeight() - size - 6;
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, (1.0F - hudAlpha) * 6.0F, 0.0F);
+
+        // Slot body with the bottom-left corner cut, like the game's quick-access squares.
+        int background = withAlpha(0x12151A, 0.9F * hudAlpha);
+        int chamfer = 5;
+        for (int row = 0; row < size; row++) {
+            int inset = Math.max(0, row - (size - chamfer));
+            graphics.fill(x + inset, y + row, x + size, y + row + 1, background);
+        }
+        int fillHeight = Math.round(size * fill);
+        int fillColor = withAlpha(active ? 0x02D7F2 : 0xED1E79, 0.32F * hudAlpha);
+        for (int row = size - fillHeight; row < size; row++) {
+            int inset = Math.max(0, row - (size - chamfer));
+            graphics.fill(x + inset, y + row, x + size, y + row + 1, fillColor);
+        }
+        if (extension > 0.0F) {
+            graphics.fill(x, y, x + Math.max(1, Math.round(size * extension)), y + 2, withAlpha(0xFCEE0A, hudAlpha));
+        }
+
+        // One-pixel frame following the chamfer.
+        int frame = withAlpha(accent, hudAlpha);
+        graphics.fill(x, y, x + size, y + 1, frame);
+        graphics.fill(x + size - 1, y, x + size, y + size, frame);
+        graphics.fill(x, y, x + 1, y + size - chamfer, frame);
+        graphics.fill(x + chamfer, y + size - 1, x + size, y + size, frame);
+        for (int i = 0; i < chamfer; i++) {
+            graphics.fill(x + i, y + size - chamfer + i, x + i + 1, y + size - chamfer + i + 1, frame);
+        }
+
+        // Small implant icon in the upper-left, leaving room for the seconds.
+        graphics.pose().pushPose();
+        graphics.pose().translate(x + 1.5F, y + 1.5F, 0.0F);
+        graphics.pose().scale(0.7F, 0.7F, 1.0F);
+        graphics.renderItem(new ItemStack(ApogeeItems.SANDEVISTAN), 0, 0);
+        graphics.pose().popPose();
+
         Font font = minecraft.font;
-        int barWidth = 102;
-        int x = (graphics.guiWidth() - barWidth) / 2;
-        int y = graphics.guiHeight() - 59 - (player.isCreative() ? 0 : 10) - (player.getArmorValue() > 0 ? 10 : 0);
-        float fraction = Mth.clamp(remaining / total, 0.0F, 1.0F);
-        graphics.fill(x - 2, y - 11, x + barWidth + 2, y + 5, 0xB0101215);
-        graphics.fill(x - 2, y - 11, x + 6, y - 10, 0xFF78E2DF);
-        graphics.fill(x + barWidth - 6, y - 11, x + barWidth + 2, y - 10, 0xFF78E2DF);
-        graphics.drawString(font, label, x, y - 9, 0xFFE8E9ED, false);
-        graphics.fill(x, y, x + barWidth, y + 3, 0xFF202429);
-        graphics.fill(x, y, x + Math.round(barWidth * fraction), y + 3, barColor);
+        if (remaining > 0.0F) {
+            float secondsLeft = remaining / 20.0F;
+            String number = active && secondsLeft < 3.0F
+                    ? String.format(Locale.ROOT, "%.1f", secondsLeft)
+                    : Integer.toString(Mth.ceil(secondsLeft));
+            Component text = Component.literal(number).withStyle(style -> style.withFont(HUD_FONT));
+            graphics.pose().pushPose();
+            graphics.pose().translate(0.0F, 0.0F, 200.0F);
+            graphics.drawString(font, text, x + size - 3 - font.width(text), y + size - 11, withAlpha(0xFFFFFF, hudAlpha), true);
+            graphics.pose().popPose();
+        }
+        if (killFlash > 0.0F) {
+            Component bonus = Component.translatable("tooltip.apogee.value.bonus_seconds", Integer.toString(rules.killExtensionTicks() / 20))
+                    .withStyle(style -> style.withFont(HUD_FONT));
+            graphics.drawString(font, bonus, x + size + 4, y + 2 - Math.round((1.0F - killFlash) * 6.0F),
+                    withAlpha(0xFCEE0A, killFlash * hudAlpha), true);
+        }
+        graphics.pose().popPose();
+    }
+
+    private static int withAlpha(int rgb, float alpha) {
+        return Mth.clamp(Math.round(alpha * 255.0F), 0, 255) << 24 | rgb & 0xFFFFFF;
     }
 
     public static String seconds(float ticks) {

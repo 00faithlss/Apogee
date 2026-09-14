@@ -28,6 +28,7 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 
 - Equipa el Sandevistan en la ranura **Sistema operativo** de Trinkets (la pechera y los élitros siguen libres).
 - **V** (configurable) activa el efecto o lo termina antes de tiempo.
+- Mientras está activo o recargando aparece un recuadro de ciberware abajo a la izquierda con los segundos restantes: cian con el efecto, magenta en la recarga, amarillo con «+2 s» al conseguir una baja y parpadeo rojo en los últimos 2 s. En reposo se oculta.
 - En el tooltip, **G** (tecla de pestañas de Simply Tooltips) alterna Descripción y Estadísticas; al dejar de señalar el objeto vuelve a Descripción. El tooltip usa la fuente Rajdhani y un borde con arcos eléctricos en amarillo, cian y magenta.
 
 ### Mecánica (valores por defecto)
@@ -61,7 +62,6 @@ El servidor (integrado del anfitrión o dedicado) valida la tecla, decide objeti
 
 - **Varios portadores en juego:** la regla ya está comprobada con pruebas automáticas (ver *Varios portadores*); falta confirmarla en una partida real con Essential.
 - **Tooltip en juego:** revisar dentro de Minecraft la fuente Rajdhani y el borde eléctrico en distintas escalas de interfaz y en español.
-- **Barras de uso y recarga:** rediseñar y ajustar el HUD de duración y recarga del Sandevistan (estilo, posición y convivencia con corazones, armadura y jugador en tercera persona).
 
 ## Instalación para anfitrión e invitados
 

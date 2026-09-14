@@ -13,6 +13,7 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ### Añadido
 
+- HUD rediseñado estilo ciberware de Cyberpunk 2077: recuadro abajo a la izquierda con el icono del implante, segundos restantes y relleno que baja (cian activo, magenta en recarga). Borde amarillo con «+2 s» al conseguir una baja, parpadeo rojo en los últimos 2 s, franja amarilla con el tiempo extra por bajas, y oculto cuando el implante no está en uso.
 - Borde del tooltip con arcos eléctricos animados en amarillo, cian y magenta.
 - Prueba `staggeredWearersKeepIndependentTimers`: confirma la regla con varios portadores (bonus e inmunidad mientras el efecto propio está activo, temporizadores independientes, ralentización al terminar).
 
@@ -20,7 +21,6 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 - Confirmar en una partida real la regla con varios portadores (ya cubierta por pruebas automáticas).
 - Revisión del tooltip en juego con la nueva fuente y el borde eléctrico.
-- Rediseño de las barras de uso y de recarga.
 
 ## [0.1.0+1.21.1] — 2026-09-14
 

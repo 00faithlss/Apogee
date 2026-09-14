@@ -58,7 +58,7 @@ Comparado con la maqueta: coinciden colores, marco, jerarquía y navegación. Di
 
 - [x] Regla con varios portadores comprobada con `staggeredWearersKeepIndependentTimers`. Falta verlo en una partida real con Essential.
 - [ ] Revisar en juego el tooltip con la fuente Rajdhani y el borde eléctrico.
-- [ ] Rediseñar las barras de uso y de recarga del HUD.
+- [x] HUD rediseñado como recuadro de ciberware abajo a la izquierda (visible solo en uso).
 
 ## Pendiente: pruebas manuales
 
