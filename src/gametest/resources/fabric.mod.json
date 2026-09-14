@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "apogee_gametest",
+  "version": "1.0.0",
+  "name": "Apogee GameTests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": ["dev.apogee.gametest.SandevistanGameTests"],
+    "client": ["dev.apogee.gametest.ApogeeClientSmoke"]
+  },
+  "mixins": ["apogee_gametest.mixins.json"],
+  "depends": {
+    "apogee": "*"
+  }
+}

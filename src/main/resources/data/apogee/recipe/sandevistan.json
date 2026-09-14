@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "DCD",
+    "NKN",
+    "DLD"
+  ],
+  "key": {
+    "D": { "item": "minecraft:diamond_block" },
+    "N": { "item": "minecraft:netherite_ingot" },
+    "C": { "item": "apogee:os_core_t5" },
+    "K": { "item": "apogee:apogee_overdrive_kernel_t5" },
+    "L": { "item": "apogee:quantum_sync_lattice_t5" }
+  },
+  "result": { "id": "apogee:sandevistan", "count": 1 }
+}

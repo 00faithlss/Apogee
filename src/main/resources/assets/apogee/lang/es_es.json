@@ -1,0 +1,39 @@
+{
+  "itemGroup.apogee": "Apogee",
+  "item.apogee.sandevistan": "Sandevistan",
+  "item.apogee.os_core_t5": "Núcleo T5",
+  "item.apogee.apogee_overdrive_kernel_t5": "Overdrive Kernel T5",
+  "item.apogee.quantum_sync_lattice_t5": "Quantum Sync Lattice T5",
+
+  "key.categories.apogee": "Apogee",
+  "key.apogee.activate_sandevistan": "Activar / terminar Sandevistan",
+
+  "trinkets.slot.cyberware.os": "Sistema operativo",
+
+  "subtitles.apogee.sandevistan_activate": "Sandevistan se activa",
+  "subtitles.apogee.sandevistan_deactivate": "Sandevistan se apaga",
+
+  "hud.apogee.sandevistan.active": "SANDEVISTAN %s s",
+  "hud.apogee.sandevistan.cooldown": "Recarga %s s",
+
+  "tooltip.apogee.brand": "Apogee",
+  "tooltip.apogee.sandevistan.badge": "IMPLANTE",
+  "tooltip.apogee.sandevistan.description_header": "Descripción",
+  "tooltip.apogee.sandevistan.description.0": "Acelera tus reflejos.",
+  "tooltip.apogee.sandevistan.description.1": "Ralentiza el combate.",
+  "tooltip.apogee.sandevistan.stats_header": "Mientras está activo",
+  "tooltip.apogee.sandevistan.stat.slowdown": "Ralentización",
+  "tooltip.apogee.sandevistan.stat.radius": "Radio",
+  "tooltip.apogee.sandevistan.stat.duration": "Duración",
+  "tooltip.apogee.sandevistan.stat.movement": "Movimiento",
+  "tooltip.apogee.sandevistan.stat.damage": "Daño",
+  "tooltip.apogee.sandevistan.stat.per_kill": "Por baja",
+  "tooltip.apogee.sandevistan.stat.max_duration": "Duración máxima",
+  "tooltip.apogee.sandevistan.stat.cooldown": "Recarga",
+  "tooltip.apogee.sandevistan.cooldown_note": "La recarga comienza al terminar.",
+  "tooltip.apogee.value.percent": "%s%%",
+  "tooltip.apogee.value.bonus_percent": "+%s%%",
+  "tooltip.apogee.value.blocks": "%s bloques",
+  "tooltip.apogee.value.seconds": "%s s",
+  "tooltip.apogee.value.bonus_seconds": "+%s s"
+}

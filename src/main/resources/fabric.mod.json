@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "apogee",
+  "version": "${version}",
+  "name": "Apogee",
+  "description": "A single cyberware implant: the Sandevistan. Speeds your reflexes and slows the fight around you.",
+  "authors": ["maaurisiso"],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/apogee/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.apogee.Apogee"],
+    "client": ["dev.apogee.client.ApogeeClient"]
+  },
+  "mixins": ["apogee.mixins.json"],
+  "accessWidener": "apogee.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": ">=0.116.17",
+    "trinkets": ">=3.10.0"
+  },
+  "custom": {
+    "apogee:client_requirements": "Simply Tooltips 0.1.5 with Architectury API and Fzzy Config"
+  }
+}

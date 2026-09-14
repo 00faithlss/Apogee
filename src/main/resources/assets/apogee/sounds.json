@@ -1,0 +1,10 @@
+{
+  "sandevistan_activate": {
+    "subtitle": "subtitles.apogee.sandevistan_activate",
+    "sounds": [{ "name": "apogee:sandevistan_activate", "stream": false }]
+  },
+  "sandevistan_deactivate": {
+    "subtitle": "subtitles.apogee.sandevistan_deactivate",
+    "sounds": [{ "name": "apogee:sandevistan_deactivate", "stream": false }]
+  }
+}

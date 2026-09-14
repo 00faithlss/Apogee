@@ -1,0 +1,39 @@
+{
+  "itemGroup.apogee": "Apogee",
+  "item.apogee.sandevistan": "Sandevistan",
+  "item.apogee.os_core_t5": "OS Core T5",
+  "item.apogee.apogee_overdrive_kernel_t5": "Overdrive Kernel T5",
+  "item.apogee.quantum_sync_lattice_t5": "Quantum Sync Lattice T5",
+
+  "key.categories.apogee": "Apogee",
+  "key.apogee.activate_sandevistan": "Activate / end Sandevistan",
+
+  "trinkets.slot.cyberware.os": "Operating System",
+
+  "subtitles.apogee.sandevistan_activate": "Sandevistan activates",
+  "subtitles.apogee.sandevistan_deactivate": "Sandevistan shuts down",
+
+  "hud.apogee.sandevistan.active": "SANDEVISTAN %s s",
+  "hud.apogee.sandevistan.cooldown": "Recharging %s s",
+
+  "tooltip.apogee.brand": "Apogee",
+  "tooltip.apogee.sandevistan.badge": "IMPLANT",
+  "tooltip.apogee.sandevistan.description_header": "Description",
+  "tooltip.apogee.sandevistan.description.0": "Speeds up your reflexes.",
+  "tooltip.apogee.sandevistan.description.1": "Slows down the fight.",
+  "tooltip.apogee.sandevistan.stats_header": "While active",
+  "tooltip.apogee.sandevistan.stat.slowdown": "Slowdown",
+  "tooltip.apogee.sandevistan.stat.radius": "Radius",
+  "tooltip.apogee.sandevistan.stat.duration": "Duration",
+  "tooltip.apogee.sandevistan.stat.movement": "Movement",
+  "tooltip.apogee.sandevistan.stat.damage": "Damage",
+  "tooltip.apogee.sandevistan.stat.per_kill": "Per kill",
+  "tooltip.apogee.sandevistan.stat.max_duration": "Max duration",
+  "tooltip.apogee.sandevistan.stat.cooldown": "Cooldown",
+  "tooltip.apogee.sandevistan.cooldown_note": "Cooldown starts when the effect ends.",
+  "tooltip.apogee.value.percent": "%s%%",
+  "tooltip.apogee.value.bonus_percent": "+%s%%",
+  "tooltip.apogee.value.blocks": "%s blocks",
+  "tooltip.apogee.value.seconds": "%s s",
+  "tooltip.apogee.value.bonus_seconds": "+%s s"
+}

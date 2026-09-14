@@ -1,0 +1,131 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        filter { includeGroup 'maven.modrinth' }
+    }
+    // Trinkets' TrinketComponent extends Cardinal Components' ComponentV3.
+    maven {
+        name = 'Ladysnake'
+        url = 'https://maven.ladysnake.org/releases'
+    }
+    mavenCentral()
+}
+
+sourceSets {
+    // Automated mechanic checks; never packaged into the release jar.
+    gametest {
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+loom {
+    accessWidenerPath = file('src/main/resources/apogee.accesswidener')
+
+    mods {
+        apogee {
+            sourceSet sourceSets.main
+        }
+        apogee_gametest {
+            sourceSet sourceSets.gametest
+        }
+    }
+
+    runs {
+        client {
+            runDir 'run/client'
+        }
+        server {
+            runDir 'run/server'
+        }
+        gametest {
+            server()
+            name 'Apogee GameTests'
+            source sourceSets.gametest
+            runDir 'build/gametest'
+            vmArg '-Dfabric-api.gametest'
+            vmArg "-Dfabric-api.gametest.report-file=${file('build/gametest/report.xml')}"
+        }
+        smokeClient {
+            client()
+            name 'Apogee client smoke run'
+            source sourceSets.gametest
+            runDir 'build/smoke-client'
+            vmArg '-Dapogee.smoke=true'
+        }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+
+    modImplementation "maven.modrinth:trinkets:${trinkets_version}"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${cca_version}"
+    modRuntimeOnly "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cca_version}"
+
+    // Client tooltip stack. Simply Tooltips is compiled against but never bundled.
+    modImplementation "maven.modrinth:simply-tooltips:${simply_tooltips_version}"
+    modRuntimeOnly "maven.modrinth:architectury-api:${architectury_version}"
+    modRuntimeOnly "maven.modrinth:fzzy-config:${fzzy_config_version}"
+    // Fabric's own maven publishes the Kotlin stdlib as transitive dependencies for dev runs.
+    modRuntimeOnly "net.fabricmc:fabric-language-kotlin:${fabric_kotlin_version}"
+    // Fzzy Config's jar-in-jar libraries are not unpacked on the dev classpath.
+    runtimeOnly 'blue.endless:jankson:1.2.3'
+    runtimeOnly 'net.peanuuutz.tomlkt:tomlkt-jvm:0.3.7'
+    modRuntimeOnly 'me.lucko:fabric-permissions-api:0.3.1'
+}
+
+processResources {
+    def props = [version: project.version]
+    inputs.properties props
+    filesMatching('fabric.mod.json') {
+        expand props
+    }
+
+    // Spanish-speaking locales share one translation file.
+    from('src/main/resources/assets/apogee/lang/es_es.json') {
+        into 'assets/apogee/lang'
+        rename { 'es_cl.json' }
+    }
+    from('src/main/resources/assets/apogee/lang/es_es.json') {
+        into 'assets/apogee/lang'
+        rename { 'es_mx.json' }
+    }
+    from('src/main/resources/assets/apogee/lang/es_es.json') {
+        into 'assets/apogee/lang'
+        rename { 'es_ar.json' }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from('LICENSE_ASSETS.md')
+}

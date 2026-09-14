@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.apogee.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "dev.apogee.mixin.ApogeeMixinPlugin",
+  "mixins": [
+    "EntityTimeMixin",
+    "LivingEntityMixin",
+    "PlayerTickMixin",
+    "ServerGamePacketListenerImplMixin",
+    "ServerLevelMixin"
+  ],
+  "client": [
+    "client.CameraMixin",
+    "client.ClientLevelMixin",
+    "client.GameRendererMixin",
+    "client.GuiMixin",
+    "client.LevelRendererMixin",
+    "client.LivingEntityLerpMixin",
+    "client.LivingEntityRendererAccessor",
+    "client.compat.SimplyTooltipsRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

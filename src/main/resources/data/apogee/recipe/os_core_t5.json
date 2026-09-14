@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "minecraft:netherite_ingot" },
+    { "item": "minecraft:netherite_ingot" },
+    { "item": "minecraft:netherite_ingot" },
+    { "item": "minecraft:netherite_ingot" },
+    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:comparator" }
+  ],
+  "result": { "id": "apogee:os_core_t5", "count": 1 }
+}

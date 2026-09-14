@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.apogee.gametest.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "KeepMockPlayersConnectedMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
