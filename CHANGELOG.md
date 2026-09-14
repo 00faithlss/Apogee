@@ -8,11 +8,17 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 - El +50 % de movimiento sube de forma gradual durante 2 s (`movementRampSeconds`) para suavizar el cambio de FOV.
 - Los objetivos ralentizados reciben el 30 % del empuje (`slowedKnockbackPercent`), para que no floten al golpearlos.
+- El tooltip del Sandevistan usa la fuente Rajdhani, con el título más grande.
+
+### Añadido
+
+- Borde del tooltip con arcos eléctricos animados en amarillo, cian y magenta.
+- Prueba `staggeredWearersKeepIndependentTimers`: confirma la regla con varios portadores (bonus e inmunidad mientras el efecto propio está activo, temporizadores independientes, ralentización al terminar).
 
 ### Pendiente
 
-- Confirmar la regla con varios portadores: bonus e inmunidad solo mientras el efecto propio está activo, temporizadores independientes, sin ralentización doble; al terminar, el portador se ralentiza por los campos que sigan activos.
-- Revisión del tooltip en juego.
+- Confirmar en una partida real la regla con varios portadores (ya cubierta por pruebas automáticas).
+- Revisión del tooltip en juego con la nueva fuente y el borde eléctrico.
 - Rediseño de las barras de uso y de recarga.
 
 ## [0.1.0+1.21.1] — 2026-09-14

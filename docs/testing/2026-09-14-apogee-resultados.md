@@ -7,7 +7,7 @@ Entorno: Windows 11, Temurin 21.0.12, Gradle 9.5.1, Loom 1.17.20, Fabric Loader 
 | Área | Resultado | Cómo |
 |---|---|---|
 | Compilación y JAR | ✅ `build/libs/apogee-0.1.0+1.21.1.jar` | `gradlew build` |
-| Mecánica de servidor | ✅ 16/16 | `gradlew runGametest` |
+| Mecánica de servidor | ✅ 17/17 | `gradlew runGametest` |
 | Cliente integrado (individual) | ✅ flujo completo y capturas | `gradlew runSmokeClient` |
 | Servidor dedicado de desarrollo | ✅ arranca y se detiene | `gradlew runServer` |
 | Servidor dedicado de producción | ✅ arranca con el JAR de entrega + Fabric API + Trinkets | `fabric-server-launch.jar` local |
@@ -29,6 +29,7 @@ Entorno: Windows 11, Temurin 21.0.12, Gradle 9.5.1, Loom 1.17.20, Fabric Loader 
 | `fieldFollowsWearerAndReleasesOnExit` | el campo sigue al portador y libera al salir |
 | `recentDamageExchangeSelectsMonster` | un esqueleto golpeado entra en el campo y sale al pasar los 10 s de memoria |
 | `activeWearersAreImmuneToEachOther` | un portador inactivo se ralentiza, puede activar dentro del campo y ambos quedan inmunes |
+| `staggeredWearersKeepIndependentTimers` | A activa; a los 6 s activa B con su propia duración sin alterar la de A; ambos sin ralentización y con bonus; al terminar A, queda ralentizado por el campo de B y B sigue igual |
 | `projectilesFollowOwnership` | proyectil del portador y de un combatiente ralentizados; sin dueño (dispensador) no; bonus marcado solo en proyectiles del portador activo |
 | `slowedTargetsTakeReducedKnockback` | un objetivo ralentizado recibe el 30 % del empuje de uno normal |
 | `meleeAndProjectileDamageBonus` | 4 → 4 inactivo, 4 → 5 activo; flecha lanzada durante la activación conserva +25 % tras terminar |
@@ -55,8 +56,8 @@ Comparado con la maqueta: coinciden colores, marco, jerarquía y navegación. Di
 
 ## Detalles a resolver
 
-- [ ] Regla con varios portadores: el Sandevistan activo da el bonus y la inmunidad a su portador; cada uno tiene su propio temporizador; sin efecto activo, el portador se ralentiza como cualquiera; los campos no se acumulan. Verificar la secuencia: A activa → a los 6 s activa B (deja de ralentizarse, 10 s propios) → A termina y queda ralentizado por B hasta que B termine.
-- [ ] Revisar el tooltip en juego y ajustarlo.
+- [x] Regla con varios portadores comprobada con `staggeredWearersKeepIndependentTimers`. Falta verlo en una partida real con Essential.
+- [ ] Revisar en juego el tooltip con la fuente Rajdhani y el borde eléctrico.
 - [ ] Rediseñar las barras de uso y de recarga del HUD.
 
 ## Pendiente: pruebas manuales

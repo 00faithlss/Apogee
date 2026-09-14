@@ -28,7 +28,7 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 
 - Equipa el Sandevistan en la ranura **Sistema operativo** de Trinkets (la pechera y los élitros siguen libres).
 - **V** (configurable) activa el efecto o lo termina antes de tiempo.
-- En el tooltip, **G** (tecla de pestañas de Simply Tooltips) alterna Descripción y Estadísticas; al dejar de señalar el objeto vuelve a Descripción.
+- En el tooltip, **G** (tecla de pestañas de Simply Tooltips) alterna Descripción y Estadísticas; al dejar de señalar el objeto vuelve a Descripción. El tooltip usa la fuente Rajdhani y un borde con arcos eléctricos en amarillo, cian y magenta.
 
 ### Mecánica (valores por defecto)
 
@@ -45,6 +45,7 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 
 - **Afectados:** jugadores en supervivencia/aventura y monstruos que tienen al portador como objetivo o intercambiaron daño con él en los últimos 10 s (también mobs neutrales que lo atacan). Ser amigo en Essential no da inmunidad.
 - **No afectados:** el portador, otros portadores activos, animales, aldeanos, gólems y monstruos ajenos al combate, bloques, redstone, tolvas y generación de mobs.
+- **Varios portadores:** quien tiene su Sandevistan **activo** recibe el bonus de velocidad y daño y no sufre ralentización, aunque esté dentro del campo de otro. Cada portador lleva su propio temporizador y los campos no se acumulan. Ejemplo: A activa; a los 6 s activa B, que deja de estar ralentizado y cuenta sus 10 s propios; cuando termina el efecto de A, A pasa a ralentizarse por el campo de B hasta que B termine.
 - **Proyectiles:** los del portador y de los combatientes seleccionados se ralentizan dentro del campo; los de dispensadores (sin dueño), no.
 - **Bajas que extienden:** muertes de enemigos afectados causadas directamente por el portador (ataque o proyectil). Animales y muertes sin atribución directa no cuentan.
 - **Fin y limpieza:** morir, desequipar, cambiar de dimensión, desconectarse o cerrar el mundo termina el efecto, inicia la recarga y quita modificadores y estado temporal.
@@ -58,14 +59,8 @@ El servidor (integrado del anfitrión o dedicado) valida la tecla, decide objeti
 
 ## Pendientes
 
-- **Varios portadores del Sandevistan (revisar y confirmar):** regla buscada:
-  - Todo portador con el Sandevistan **activo** recibe su bonus de velocidad y daño y no sufre ningún efecto negativo, aunque esté dentro del campo de otro.
-  - Cada portador lleva **su propio temporizador**.
-  - Mientras un portador no tiene su efecto activo, se ralentiza como cualquier jugador.
-  - Dos campos cerca no duplican la ralentización del entorno.
-  - Ejemplo: A activa; a los 6 s, B (que estaba ralentizado por A) activa y deja de estar ralentizado, con sus 10 s propios. Cuando termina el efecto de A, A pasa a ralentizarse por el campo de B hasta que B termine.
-  - Hoy el código parece seguir esta regla (inmunidad de portadores activos, temporizadores independientes, sin acumulación). Falta verificar la secuencia completa del ejemplo con una prueba y en juego.
-- **Tooltip en juego:** revisar cómo se ve dentro de Minecraft (escalas de interfaz, idioma español, tamaño del modelo en el rombo) y ajustarlo frente a la maqueta.
+- **Varios portadores en juego:** la regla ya está comprobada con pruebas automáticas (ver *Varios portadores*); falta confirmarla en una partida real con Essential.
+- **Tooltip en juego:** revisar dentro de Minecraft la fuente Rajdhani y el borde eléctrico en distintas escalas de interfaz y en español.
 - **Barras de uso y recarga:** rediseñar y ajustar el HUD de duración y recarga del Sandevistan (estilo, posición y convivencia con corazones, armadura y jugador en tercera persona).
 
 ## Instalación para anfitrión e invitados
@@ -107,7 +102,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```
 
 - `build`: genera el JAR de entrega en `build/libs`. Las pruebas no se incluyen en él.
-- `runGametest`: 16 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
+- `runGametest`: 17 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltip, activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
 Estructura principal: `dev.apogee.sandevistan.SandevistanManager` (autoridad del servidor), `dev.apogee.mixin` (salto de ticks, daño, anti-vuelo), `dev.apogee.client` (estado sincronizado, efectos, estelas, renderizado y tooltip).
@@ -116,6 +111,6 @@ Ramas: `main` estable, `develop` integración. Commits con Conventional Commits.
 
 ## Recursos y licencias
 
-El modelo y las texturas del implante proceden de Sandevistan (Cyperpunk) 1.2.0; las texturas de componentes y los sonidos, de Project: Edgerunner 1.1.2. Detalle y modificaciones en [LICENSE_ASSETS.md](LICENSE_ASSETS.md). Ninguno autoriza la redistribución: **no publicar el JAR**.
+El modelo y las texturas del implante proceden de Sandevistan (Cyperpunk) 1.2.0; las texturas de componentes y los sonidos, de Project: Edgerunner 1.1.2. La fuente Rajdhani (Indian Type Foundry) se distribuye bajo SIL OFL 1.1. Detalle y modificaciones en [LICENSE_ASSETS.md](LICENSE_ASSETS.md). Ninguno autoriza la redistribución: **no publicar el JAR**.
 
 Los documentos previos en `docs/design` y `docs/research` describen un alcance anterior (Gorilla Arms, Ripperdoc) que ya no aplica.

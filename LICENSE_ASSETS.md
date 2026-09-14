@@ -24,6 +24,12 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
   - `sounds/sandevistan_exit.ogg` → `assets/apogee/sounds/sandevistan_deactivate.ogg`.
 - Solo referencia (sin copiar código): duración y colores de la transición radial y del tinte, cadencia, cantidad, alcance y desvanecimiento de las estelas.
 
+## Rajdhani SemiBold — Indian Type Foundry
+
+- Origen: [google/fonts](https://github.com/google/fonts/tree/main/ofl/rajdhani), `ofl/rajdhani/Rajdhani-SemiBold.ttf`.
+- Licencia: SIL Open Font License 1.1 (redistribución permitida). Texto completo en `assets/apogee/font/rajdhani_ofl.txt`.
+- Usado sin cambios como `assets/apogee/font/rajdhani_semibold.ttf` en el tooltip del Sandevistan.
+
 ## Recursos propios
 
 - `assets/apogee/icon.png` y `assets/apogee/textures/gui/slots/os.png`: generados para Apogee.

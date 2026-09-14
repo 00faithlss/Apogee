@@ -324,6 +324,34 @@ public final class SandevistanGameTests implements FabricGameTest {
                 .thenSucceed();
     }
 
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_staggered", timeoutTicks = 100)
+    public void staggeredWearersKeepIndependentTimers(GameTestHelper helper) {
+        ServerPlayer first = wearer(helper, 2.5, 2.5);
+        ServerPlayer second = wearer(helper, 5.5, 2.5);
+        double baseSpeed = first.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        SandevistanManager.toggle(first);
+        long firstEnd = SandevistanManager.activeEndTime(first);
+        helper.startSequence()
+                .thenExecuteAfter(6, () -> {
+                    helper.assertTrue(slowed(second), "second wearer is slowed while inactive");
+                    SandevistanManager.toggle(second);
+                    helper.assertTrue(SandevistanManager.activeEndTime(second) == now(helper) + rules().durationTicks(), "second wearer gets their own full duration");
+                    helper.assertTrue(SandevistanManager.activeEndTime(first) == firstEnd, "first wearer's timer is unchanged");
+                })
+                .thenExecuteAfter(rules().movementRampTicks() + 2, () -> {
+                    helper.assertTrue(!slowed(first) && !slowed(second), "both active wearers are free of slowdown");
+                    helper.assertTrue(first.getAttributeValue(Attributes.MOVEMENT_SPEED) > baseSpeed
+                            && second.getAttributeValue(Attributes.MOVEMENT_SPEED) > baseSpeed, "both keep the movement bonus");
+                    SandevistanManager.end(first);
+                })
+                .thenExecuteAfter(2, () -> {
+                    helper.assertTrue(slowed(first), "first wearer is slowed by the other field once their effect ends");
+                    helper.assertTrue(!slowed(second) && SandevistanManager.isActive(second), "second wearer continues unaffected");
+                    cleanup(helper, first, second);
+                })
+                .thenSucceed();
+    }
+
     // ------------------------------------------------------------------ projectiles and damage
 
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_projectiles", timeoutTicks = 100)

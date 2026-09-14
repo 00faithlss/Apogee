@@ -50,7 +50,9 @@ public final class SandevistanTooltipPanel {
     private static final int LINE_H = 10;
     private static final int STAT_H = 11;
     private static final int MIN_WIDTH = 176;
-    private static final float SMALL = 0.75F;
+    private static final float SMALL = 0.8F;
+    private static final float TITLE_SCALE = 1.3F;
+    private static final ResourceLocation CYBER_FONT = Apogee.id("cyber");
 
     private static final ResourceLocation RESET_KEY = Apogee.id("tooltip_left");
     private static final List<TabState.Tab> TABS = List.of(TabState.Tab.LORE, TabState.Tab.STATS);
@@ -77,23 +79,28 @@ public final class SandevistanTooltipPanel {
         boolean showDescription = !tabsEnabled || !statsView;
         boolean showStats = !tabsEnabled || statsView;
 
-        Component title = SandevistanTooltipContent.title();
-        Component badge = SandevistanTooltipContent.badge();
-        List<Component> description = SandevistanTooltipContent.descriptionLines();
-        List<SandevistanTooltipContent.Stat> stats = SandevistanTooltipContent.stats();
-        Component note = SandevistanTooltipContent.cooldownNote();
-        Component brand = SandevistanTooltipContent.brand();
-        Component key = TooltipKeybinds.CYCLE_TAB.getTranslatedKeyMessage();
+        Component title = cyber(SandevistanTooltipContent.title());
+        Component badge = cyber(SandevistanTooltipContent.badge());
+        List<Component> description = SandevistanTooltipContent.descriptionLines().stream().map(SandevistanTooltipPanel::cyber).toList();
+        List<SandevistanTooltipContent.Stat> stats = SandevistanTooltipContent.stats().stream()
+                .map(stat -> new SandevistanTooltipContent.Stat(cyber(stat.label()), cyber(stat.value()), stat.separatedBefore()))
+                .toList();
+        Component note = cyber(SandevistanTooltipContent.cooldownNote());
+        Component brand = cyber(SandevistanTooltipContent.brand());
+        Component key = cyber(TooltipKeybinds.CYCLE_TAB.getTranslatedKeyMessage());
+        Component descriptionHeader = cyber(SandevistanTooltipContent.descriptionHeader());
+        Component statsHeader = cyber(SandevistanTooltipContent.statsHeader());
 
-        int contentW = Math.max(MIN_WIDTH - PAD * 2, MODEL_W + 7 + Math.max(font.width(title), font.width(badge)));
+        int titleW = Math.round(font.width(title) * TITLE_SCALE);
+        int contentW = Math.max(MIN_WIDTH - PAD * 2, MODEL_W + 7 + Math.max(titleW, font.width(badge)));
         if (showDescription) {
-            contentW = Math.max(contentW, font.width(SandevistanTooltipContent.descriptionHeader()) + 9);
+            contentW = Math.max(contentW, font.width(descriptionHeader) + 9);
             for (Component line : description) {
                 contentW = Math.max(contentW, font.width(line));
             }
         }
         if (showStats) {
-            contentW = Math.max(contentW, font.width(SandevistanTooltipContent.statsHeader()) + 9);
+            contentW = Math.max(contentW, font.width(statsHeader) + 9);
             for (SandevistanTooltipContent.Stat stat : stats) {
                 contentW = Math.max(contentW, font.width(stat.label()) + 12 + font.width(stat.value()));
             }
@@ -130,12 +137,17 @@ public final class SandevistanTooltipPanel {
         pose.translate(0.0F, 0.0F, 400.0F);
 
         drawFrame(graphics, x, y, panelW, panelH);
+        TooltipElectricity.draw(graphics, x, y, panelW, panelH, now);
 
         int top = y + 7;
         int left = x + PAD;
         drawModel(graphics, left, top, now);
         int textX = left + MODEL_W + 7;
-        graphics.drawString(font, title, textX, top + 11, TEXT, true);
+        pose.pushPose();
+        pose.translate(textX, top + 8, 0.0F);
+        pose.scale(TITLE_SCALE, TITLE_SCALE, 1.0F);
+        graphics.drawString(font, title, 0, 0, TEXT, true);
+        pose.popPose();
         graphics.drawString(font, badge, textX, top + 24, ACCENT, false);
 
         int cursor = top + HEADER_H + 3;
@@ -143,7 +155,7 @@ public final class SandevistanTooltipPanel {
         cursor += 7;
 
         if (showDescription) {
-            cursor = drawSectionTitle(graphics, font, SandevistanTooltipContent.descriptionHeader(), left, cursor);
+            cursor = drawSectionTitle(graphics, font, descriptionHeader, left, cursor);
             for (Component line : description) {
                 graphics.drawString(font, line, left, cursor, TEXT, false);
                 cursor += LINE_H;
@@ -153,7 +165,7 @@ public final class SandevistanTooltipPanel {
             if (showDescription) {
                 cursor += 8;
             }
-            cursor = drawSectionTitle(graphics, font, SandevistanTooltipContent.statsHeader(), left, cursor);
+            cursor = drawSectionTitle(graphics, font, statsHeader, left, cursor);
             int right = x + panelW - PAD;
             for (SandevistanTooltipContent.Stat stat : stats) {
                 if (stat.separatedBefore()) {
@@ -182,6 +194,11 @@ public final class SandevistanTooltipPanel {
         }
 
         pose.popPose();
+    }
+
+    /** Rajdhani, a Cyberpunk-style typeface, with Minecraft's font as fallback for missing glyphs. */
+    private static Component cyber(Component text) {
+        return text.copy().withStyle(style -> style.withFont(CYBER_FONT));
     }
 
     /** Clears the shared tab list once the Sandevistan tooltip is gone so G is not swallowed elsewhere. */
