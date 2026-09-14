@@ -9,6 +9,7 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - El +50 % de movimiento sube de forma gradual durante 2 s (`movementRampSeconds`) para suavizar el cambio de FOV.
 - Los objetivos ralentizados reciben el 30 % del empuje (`slowedKnockbackPercent`), para que no floten al golpearlos.
 - El tooltip del Sandevistan usa la fuente Rajdhani, con el título más grande.
+- Las recetas de Núcleo T5, Overdrive Kernel T5 y Quantum Sync Lattice T5 ordenan sus ingredientes en un patrón simétrico para que el libro de recetas y JEI las muestren ordenadas (siguen siendo sin forma).
 
 ### Añadido
 

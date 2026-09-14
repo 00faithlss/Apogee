@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
+    { "item": "minecraft:redstone_block" },
     { "item": "minecraft:end_crystal" },
-    { "item": "minecraft:end_crystal" },
-    { "item": "minecraft:amethyst_block" },
+    { "item": "minecraft:redstone_block" },
     { "item": "minecraft:amethyst_block" },
     { "item": "minecraft:experience_bottle" },
+    { "item": "minecraft:amethyst_block" },
     { "item": "minecraft:redstone_block" },
-    { "item": "minecraft:redstone_block" },
-    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:end_crystal" },
     { "item": "minecraft:redstone_block" }
   ],
   "result": { "id": "apogee:quantum_sync_lattice_t5", "count": 1 }

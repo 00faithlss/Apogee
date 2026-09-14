@@ -3,14 +3,14 @@
   "category": "misc",
   "ingredients": [
     { "item": "minecraft:netherite_ingot" },
+    { "item": "minecraft:redstone_block" },
     { "item": "minecraft:netherite_ingot" },
+    { "item": "minecraft:redstone_block" },
+    { "item": "minecraft:comparator" },
+    { "item": "minecraft:redstone_block" },
     { "item": "minecraft:netherite_ingot" },
-    { "item": "minecraft:netherite_ingot" },
     { "item": "minecraft:redstone_block" },
-    { "item": "minecraft:redstone_block" },
-    { "item": "minecraft:redstone_block" },
-    { "item": "minecraft:redstone_block" },
-    { "item": "minecraft:comparator" }
+    { "item": "minecraft:netherite_ingot" }
   ],
   "result": { "id": "apogee:os_core_t5", "count": 1 }
 }
