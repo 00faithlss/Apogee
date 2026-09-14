@@ -58,6 +58,17 @@ Cada entidad lleva un acumulador temporal. Mientras está ralentizada solo ejecu
 
 El servidor (integrado del anfitrión o dedicado) valida la tecla, decide objetivos, daño y temporizadores, y sincroniza con Fabric Networking al entrar, cambiar de dimensión, reaparecer y cada vez que cambia el campo.
 
+## Compatibilidad con Immersive Armors
+
+Si Immersive Armors está instalado, los **pantalones Steampunk** (que ya dan doble salto) ganan un **dash aéreo hacia delante**:
+
+- Pulsa la tecla de correr (Ctrl izquierdo por defecto) estando en el aire. Si venías manteniéndola desde el suelo, hay que soltarla y volver a pulsarla.
+- Un dash por salto: se recarga al tocar el suelo y es independiente del doble salto.
+- Impulsa hacia donde miras, con un leve empuje hacia arriba, y anula el daño por caída acumulado.
+- Vapor y sonido del propulsor, visibles para los demás jugadores.
+- En Controles hay una tecla opcional «Dash aéreo (pantalones Steampunk)», sin asignar, por si prefieres otra.
+- Sin Immersive Armors esta función no se carga.
+
 ## Pendientes
 
 - **Varios portadores en juego:** la regla ya está comprobada con pruebas automáticas (ver *Varios portadores*); falta confirmarla en una partida real con Essential.

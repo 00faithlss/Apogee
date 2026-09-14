@@ -42,6 +42,7 @@ public final class ApogeeClient implements ClientModInitializer {
     public void onInitializeClient() {
         ApogeeClientConfig.load();
         KeyBindingHelper.registerKeyBinding(ACTIVATE_SANDEVISTAN);
+        dev.apogee.client.compat.immersivearmors.SteamDashClient.register();
 
         EntityModelLayerRegistry.registerModelLayer(SandevistanModel.LAYER, SandevistanModel::createLayer);
         TrinketRendererRegistry.registerRenderer(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
