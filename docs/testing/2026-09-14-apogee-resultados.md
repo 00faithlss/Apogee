@@ -7,7 +7,7 @@ Entorno: Windows 11, Temurin 21.0.12, Gradle 9.5.1, Loom 1.17.20, Fabric Loader 
 | Área | Resultado | Cómo |
 |---|---|---|
 | Compilación y JAR | ✅ `build/libs/apogee-0.1.0+1.21.1.jar` | `gradlew build` |
-| Mecánica de servidor | ✅ 15/15 | `gradlew runGametest` |
+| Mecánica de servidor | ✅ 16/16 | `gradlew runGametest` |
 | Cliente integrado (individual) | ✅ flujo completo y capturas | `gradlew runSmokeClient` |
 | Servidor dedicado de desarrollo | ✅ arranca y se detiene | `gradlew runServer` |
 | Servidor dedicado de producción | ✅ arranca con el JAR de entrega + Fabric API + Trinkets | `fabric-server-launch.jar` local |
@@ -21,7 +21,7 @@ Entorno: Windows 11, Temurin 21.0.12, Gradle 9.5.1, Loom 1.17.20, Fabric Loader 
 |---|---|
 | `recipesProduceOneItem` | 4 recetas, 1 unidad, 9 ingredientes; implante no apilable y sin durabilidad; componentes apilables |
 | `implantUsesCyberwareSlotAndKeepsArmor` | ranura única `cyberware/os`, élitros equipados a la vez, segundo implante sin hueco |
-| `activationRequiresImplantAndStartsCooldownOnManualEnd` | sin implante no activa; 10 s; +50 % de velocidad exacto; fin manual restaura velocidad y fija 30 s; bloqueo durante recarga; recarga guardada en el NBT del jugador |
+| `activationRequiresImplantAndStartsCooldownOnManualEnd` | sin implante no activa; 10 s; velocidad que empieza en 0, sube gradualmente y llega a +50 % exacto a los 2 s; fin manual restaura velocidad y fija 30 s; bloqueo durante recarga; recarga guardada en el NBT del jugador |
 | `expiresAfterDuration` | termina a los 10 s (±2 ticks) |
 | `unequipEndsAndCleansUp` | desequipar termina, limpia ralentización y modificador, inicia recarga |
 | `deathEndsEffect` | morir termina el efecto |
@@ -30,6 +30,7 @@ Entorno: Windows 11, Temurin 21.0.12, Gradle 9.5.1, Loom 1.17.20, Fabric Loader 
 | `recentDamageExchangeSelectsMonster` | un esqueleto golpeado entra en el campo y sale al pasar los 10 s de memoria |
 | `activeWearersAreImmuneToEachOther` | un portador inactivo se ralentiza, puede activar dentro del campo y ambos quedan inmunes |
 | `projectilesFollowOwnership` | proyectil del portador y de un combatiente ralentizados; sin dueño (dispensador) no; bonus marcado solo en proyectiles del portador activo |
+| `slowedTargetsTakeReducedKnockback` | un objetivo ralentizado recibe el 30 % del empuje de uno normal |
 | `meleeAndProjectileDamageBonus` | 4 → 4 inactivo, 4 → 5 activo; flecha lanzada durante la activación conserva +25 % tras terminar |
 | `killsExtendUpToMaximum` | +2 s por baja atribuida; animales, fuera del campo y muertes no atribuidas no extienden; tope en 20 s |
 | `hoppersKeepGlobalRhythm` | una tolva junto a un campo activo mueve ≥9 objetos en 80 ticks |

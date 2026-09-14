@@ -37,10 +37,11 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 | Ralentización | 85 % (entidades afectadas avanzan al 15 %) |
 | Radio | 10 bloques, esfera centrada en el portador, sin línea de visión |
 | Duración | 10 s |
-| Movimiento | +50 % |
+| Movimiento | +50 %, alcanzado de forma gradual en 2 s para que el FOV no salte |
 | Daño cuerpo a cuerpo y proyectiles lanzados durante la activación | +25 % (los proyectiles conservan el bonus hasta impactar) |
 | Por baja | +2 s, con máximo absoluto de 20 s desde el inicio |
 | Recarga | 30 s desde que termina (también al terminar manualmente) |
+| Empuje sobre objetivos ralentizados | 30 % del normal, para que no queden flotando al golpearlos |
 
 - **Afectados:** jugadores en supervivencia/aventura y monstruos que tienen al portador como objetivo o intercambiaron daño con él en los últimos 10 s (también mobs neutrales que lo atacan). Ser amigo en Essential no da inmunidad.
 - **No afectados:** el portador, otros portadores activos, animales, aldeanos, gólems y monstruos ajenos al combate, bloques, redstone, tolvas y generación de mobs.
@@ -88,7 +89,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 
 ## Configuración
 
-- `config/apogee-server.json` (quien aloja el mundo): porcentaje de ralentización, radio, duraciones en segundos, bonificaciones, extensión por baja, máximo, recarga y memoria de combate. Se lee al abrir el mundo; los clientes reciben estos valores y el tooltip los muestra.
+- `config/apogee-server.json` (quien aloja el mundo): porcentaje de ralentización, radio, duraciones en segundos, bonificaciones, rampa de velocidad (`movementRampSeconds`), extensión por baja, máximo, recarga, memoria de combate y empuje sobre ralentizados (`slowedKnockbackPercent`). Se lee al abrir el mundo; los clientes reciben estos valores y el tooltip los muestra.
 - `config/apogee-client.json` (cada jugador): estelas (cantidad 28, alcance 48 bloques, desvanecimiento 5,2 s, separación, opacidad), volumen, tinte, transición radial, pulso de FOV y HUD.
 
 ## Desarrollo
@@ -106,7 +107,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```
 
 - `build`: genera el JAR de entrega en `build/libs`. Las pruebas no se incluyen en él.
-- `runGametest`: 15 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
+- `runGametest`: 16 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltip, activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
 Estructura principal: `dev.apogee.sandevistan.SandevistanManager` (autoridad del servidor), `dev.apogee.mixin` (salto de ticks, daño, anti-vuelo), `dev.apogee.client` (estado sincronizado, efectos, estelas, renderizado y tooltip).

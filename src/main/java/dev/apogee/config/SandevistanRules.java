@@ -17,9 +17,11 @@ public record SandevistanRules(
         int killExtensionTicks,
         int maxDurationTicks,
         int cooldownTicks,
-        int combatMemoryTicks
+        int combatMemoryTicks,
+        int movementRampTicks,
+        int slowedKnockbackPercent
 ) {
-    public static final SandevistanRules DEFAULTS = new SandevistanRules(85, 10.0, 200, 50, 25, 40, 400, 600, 200);
+    public static final SandevistanRules DEFAULTS = new SandevistanRules(85, 10.0, 200, 50, 25, 40, 400, 600, 200, 40, 30);
 
     public static final StreamCodec<ByteBuf, SandevistanRules> STREAM_CODEC = StreamCodec.of(
             (buf, rules) -> {
@@ -32,10 +34,14 @@ public record SandevistanRules(
                 ByteBufCodecs.VAR_INT.encode(buf, rules.maxDurationTicks);
                 ByteBufCodecs.VAR_INT.encode(buf, rules.cooldownTicks);
                 ByteBufCodecs.VAR_INT.encode(buf, rules.combatMemoryTicks);
+                ByteBufCodecs.VAR_INT.encode(buf, rules.movementRampTicks);
+                ByteBufCodecs.VAR_INT.encode(buf, rules.slowedKnockbackPercent);
             },
             buf -> new SandevistanRules(
                     ByteBufCodecs.VAR_INT.decode(buf),
                     ByteBufCodecs.DOUBLE.decode(buf),
+                    ByteBufCodecs.VAR_INT.decode(buf),
+                    ByteBufCodecs.VAR_INT.decode(buf),
                     ByteBufCodecs.VAR_INT.decode(buf),
                     ByteBufCodecs.VAR_INT.decode(buf),
                     ByteBufCodecs.VAR_INT.decode(buf),
@@ -53,6 +59,11 @@ public record SandevistanRules(
 
     public double movementMultiplier() {
         return movementBonusPercent / 100.0;
+    }
+
+    /** Knockback multiplier for slowed targets, so hits do not leave them hanging in the air. */
+    public double slowedKnockbackMultiplier() {
+        return slowedKnockbackPercent / 100.0;
     }
 
     public float damageMultiplier() {
@@ -73,7 +84,9 @@ public record SandevistanRules(
                 clamp(killExtensionTicks, 0, 20 * 60),
                 maxDuration,
                 clamp(cooldownTicks, 0, 20 * 3600),
-                clamp(combatMemoryTicks, 0, 20 * 120)
+                clamp(combatMemoryTicks, 0, 20 * 120),
+                clamp(movementRampTicks, 0, 20 * 10),
+                clamp(slowedKnockbackPercent, 0, 100)
         );
     }
 

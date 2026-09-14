@@ -62,6 +62,8 @@ public final class ApogeeServerConfig {
         double maxDurationSeconds = SandevistanRules.DEFAULTS.maxDurationTicks() / 20.0;
         double cooldownSeconds = SandevistanRules.DEFAULTS.cooldownTicks() / 20.0;
         double combatMemorySeconds = SandevistanRules.DEFAULTS.combatMemoryTicks() / 20.0;
+        double movementRampSeconds = SandevistanRules.DEFAULTS.movementRampTicks() / 20.0;
+        int slowedKnockbackPercent = SandevistanRules.DEFAULTS.slowedKnockbackPercent();
 
         SandevistanRules toRules() {
             return new SandevistanRules(
@@ -73,7 +75,9 @@ public final class ApogeeServerConfig {
                     ticks(killExtensionSeconds),
                     ticks(maxDurationSeconds),
                     ticks(cooldownSeconds),
-                    ticks(combatMemorySeconds)
+                    ticks(combatMemorySeconds),
+                    ticks(movementRampSeconds),
+                    slowedKnockbackPercent
             );
         }
 
@@ -88,6 +92,8 @@ public final class ApogeeServerConfig {
             format.maxDurationSeconds = rules.maxDurationTicks() / 20.0;
             format.cooldownSeconds = rules.cooldownTicks() / 20.0;
             format.combatMemorySeconds = rules.combatMemoryTicks() / 20.0;
+            format.movementRampSeconds = rules.movementRampTicks() / 20.0;
+            format.slowedKnockbackPercent = rules.slowedKnockbackPercent();
             return format;
         }
 

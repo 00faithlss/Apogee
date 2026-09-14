@@ -146,14 +146,28 @@ public final class SandevistanManager {
         if (ready) {
             ActiveSession session = new ActiveSession(player.getUUID(), now, now + rules.durationTicks(), now + rules.maxDurationTicks());
             SESSIONS.put(player.getUUID(), session);
-            AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
-            if (speed != null) {
-                speed.removeModifier(SPEED_MODIFIER);
-                speed.addTransientModifier(new AttributeModifier(SPEED_MODIFIER, rules.movementMultiplier(),
-                        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-            }
+            updateSpeedModifier(player, session, rules, now);
         }
         sendStatus(player);
+    }
+
+    /**
+     * Eases the movement bonus in over the ramp so the speed-driven FOV change is gradual
+     * instead of a jump. Only touches the attribute when the value actually changes.
+     */
+    private static void updateSpeedModifier(ServerPlayer player, ActiveSession session, SandevistanRules rules, long now) {
+        double progress = rules.movementRampTicks() <= 0 ? 1.0 : Math.min(1.0, (now - session.startTime) / (double) rules.movementRampTicks());
+        double eased = progress * progress * (3.0 - 2.0 * progress);
+        double amount = rules.movementMultiplier() * eased;
+        if (amount == session.appliedSpeedBonus) {
+            return;
+        }
+        AttributeInstance speed = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speed != null) {
+            speed.removeModifier(SPEED_MODIFIER);
+            speed.addTransientModifier(new AttributeModifier(SPEED_MODIFIER, amount, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        }
+        session.appliedSpeedBonus = amount;
     }
 
     /** Ends an activation (manual, expiry, death, unequip, dimension change or disconnect). */
@@ -208,6 +222,8 @@ public final class SandevistanManager {
                 SESSIONS.remove(session.wearer);
             } else if (!player.isAlive() || player.isSpectator() || !isEquipped(player) || now >= session.endTime) {
                 end(player);
+            } else {
+                updateSpeedModifier(player, session, rules, now);
             }
         }
 

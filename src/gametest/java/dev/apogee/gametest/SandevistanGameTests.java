@@ -138,10 +138,18 @@ public final class SandevistanGameTests implements FabricGameTest {
         helper.assertTrue(SandevistanManager.isActive(player), "activates when equipped");
         long start = now(helper);
         helper.assertTrue(SandevistanManager.activeEndTime(player) == start + rules().durationTicks(), "10 s duration");
-        double boosted = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
-        helper.assertTrue(Math.abs(boosted - baseSpeed * 1.5) < 1.0E-6, "+50% movement, got " + boosted + " from " + baseSpeed);
+        helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - baseSpeed) < 1.0E-6, "movement bonus starts at zero");
+        double[] halfway = new double[1];
 
         helper.startSequence()
+                .thenExecuteAfter(rules().movementRampTicks() / 2, () -> {
+                    halfway[0] = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                    helper.assertTrue(halfway[0] > baseSpeed && halfway[0] < baseSpeed * 1.5, "movement bonus eases in, got " + halfway[0]);
+                })
+                .thenExecuteAfter(rules().movementRampTicks() / 2 + 2, () -> {
+                    double boosted = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                    helper.assertTrue(Math.abs(boosted - baseSpeed * 1.5) < 1.0E-6, "+50% movement after the ramp, got " + boosted + " from " + baseSpeed);
+                })
                 .thenExecuteAfter(5, () -> {
                     SandevistanManager.toggle(player);
                     helper.assertTrue(!SandevistanManager.isActive(player), "manual end");
@@ -379,6 +387,30 @@ public final class SandevistanGameTests implements FabricGameTest {
                     health[0] = dummy.getHealth();
                     dummy.hurt(helper.getLevel().damageSources().arrow(arrow, player), 4.0F);
                     helper.assertTrue(Math.abs(health[0] - dummy.getHealth() - expected) < 1.0E-3, "boosted arrow after ending, got " + (health[0] - dummy.getHealth()));
+                    cleanup(helper, player);
+                })
+                .thenSucceed();
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_knockback", timeoutTicks = 100)
+    public void slowedTargetsTakeReducedKnockback(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, 2.5, 2.5);
+        Zombie slowedZombie = mob(helper, EntityType.ZOMBIE, 5.5, 2.5);
+        slowedZombie.setTarget(player);
+        Zombie normalZombie = mob(helper, EntityType.ZOMBIE, 2.5, 20.5);
+        SandevistanManager.toggle(player);
+        helper.startSequence()
+                .thenExecuteAfter(2, () -> {
+                    helper.assertTrue(slowed(slowedZombie) && !slowed(normalZombie), "setup");
+                    slowedZombie.setDeltaMovement(Vec3.ZERO);
+                    normalZombie.setDeltaMovement(Vec3.ZERO);
+                    slowedZombie.knockback(0.4, -1.0, 0.0);
+                    normalZombie.knockback(0.4, -1.0, 0.0);
+                    double slowedPush = slowedZombie.getDeltaMovement().horizontalDistance();
+                    double normalPush = normalZombie.getDeltaMovement().horizontalDistance();
+                    double expected = normalPush * rules().slowedKnockbackMultiplier();
+                    helper.assertTrue(Math.abs(slowedPush - expected) < 1.0E-6,
+                            "slowed knockback " + slowedPush + ", expected " + expected + " from " + normalPush);
                     cleanup(helper, player);
                 })
                 .thenSucceed();

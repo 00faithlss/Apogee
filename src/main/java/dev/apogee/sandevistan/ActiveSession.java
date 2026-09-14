@@ -10,6 +10,8 @@ final class ActiveSession {
     final long startTime;
     final long maxEndTime;
     long endTime;
+    /** Movement bonus currently applied while it eases in; NaN before the first update. */
+    double appliedSpeedBonus = Double.NaN;
     /** Living entities that were inside this field as valid targets at some point. */
     final Set<UUID> affected = new HashSet<>();
 
