@@ -1,16 +1,16 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    { "item": "minecraft:netherite_ingot" },
-    { "item": "minecraft:nether_star" },
-    { "item": "minecraft:netherite_ingot" },
-    { "item": "minecraft:diamond_block" },
-    { "item": "minecraft:totem_of_undying" },
-    { "item": "minecraft:diamond_block" },
-    { "item": "minecraft:netherite_ingot" },
-    { "item": "minecraft:nether_star" },
-    { "item": "minecraft:netherite_ingot" }
+  "pattern": [
+    "NSN",
+    "DTD",
+    "NSN"
   ],
+  "key": {
+    "N": { "item": "minecraft:netherite_ingot" },
+    "S": { "item": "minecraft:nether_star" },
+    "D": { "item": "minecraft:diamond_block" },
+    "T": { "item": "minecraft:totem_of_undying" }
+  },
   "result": { "id": "apogee:apogee_overdrive_kernel_t5", "count": 1 }
 }

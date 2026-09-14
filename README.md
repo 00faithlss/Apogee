@@ -19,9 +19,9 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 
 | Resultado | Ingredientes |
 |---|---|
-| Núcleo T5 (sin forma) | 4 lingotes de netherita, 4 bloques de redstone, 1 comparador. Se muestra como: netherita en esquinas, redstone en los lados, comparador al centro |
-| Overdrive Kernel T5 (sin forma) | 2 estrellas del Nether, 4 lingotes de netherita, 2 bloques de diamante, 1 tótem de inmortalidad. Se muestra como: netherita en esquinas, estrellas arriba y abajo, diamante a los lados, tótem al centro |
-| Quantum Sync Lattice T5 (sin forma) | 2 cristales del End, 2 bloques de amatista, 1 frasco de experiencia, 4 bloques de redstone. Se muestra como: redstone en esquinas, cristales arriba y abajo, amatista a los lados, frasco al centro |
+| Núcleo T5 (con forma) | 4 lingotes de netherita, 4 bloques de redstone, 1 comparador: netherita en esquinas, redstone en los lados, comparador al centro |
+| Overdrive Kernel T5 (con forma) | 2 estrellas del Nether, 4 lingotes de netherita, 2 bloques de diamante, 1 tótem de inmortalidad: netherita en esquinas, estrellas arriba y abajo, diamante a los lados, tótem al centro |
+| Quantum Sync Lattice T5 (con forma) | 2 cristales del End, 2 bloques de amatista, 1 frasco de experiencia, 4 bloques de redstone: redstone en esquinas, cristales arriba y abajo, amatista a los lados, frasco al centro |
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
 
 ## Uso
