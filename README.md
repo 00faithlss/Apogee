@@ -57,7 +57,13 @@ El servidor (integrado del anfitrión o dedicado) valida la tecla, decide objeti
 
 ## Pendientes
 
-- **Varios portadores del Sandevistan:** definir y ajustar la regla. Comportamiento buscado: otro jugador que porte el Sandevistan no se ralentiza, pero sí recibe su bonus de velocidad y daño. Además, dos portadores cerca no duplican la ralentización del entorno. Hoy la ralentización no se acumula y los portadores **activos** son inmunes entre sí. Sin embargo, un portador **con el implante equipado pero inactivo** dentro de otro campo sí se ralentiza (lo cubre la prueba `activeWearersAreImmuneToEachOther`).
+- **Varios portadores del Sandevistan (revisar y confirmar):** regla buscada:
+  - Todo portador con el Sandevistan **activo** recibe su bonus de velocidad y daño y no sufre ningún efecto negativo, aunque esté dentro del campo de otro.
+  - Cada portador lleva **su propio temporizador**.
+  - Mientras un portador no tiene su efecto activo, se ralentiza como cualquier jugador.
+  - Dos campos cerca no duplican la ralentización del entorno.
+  - Ejemplo: A activa; a los 6 s, B (que estaba ralentizado por A) activa y deja de estar ralentizado, con sus 10 s propios. Cuando termina el efecto de A, A pasa a ralentizarse por el campo de B hasta que B termine.
+  - Hoy el código parece seguir esta regla (inmunidad de portadores activos, temporizadores independientes, sin acumulación). Falta verificar la secuencia completa del ejemplo con una prueba y en juego.
 - **Tooltip en juego:** revisar cómo se ve dentro de Minecraft (escalas de interfaz, idioma español, tamaño del modelo en el rombo) y ajustarlo frente a la maqueta.
 - **Barras de uso y recarga:** rediseñar y ajustar el HUD de duración y recarga del Sandevistan (estilo, posición y convivencia con corazones, armadura y jugador en tercera persona).
 

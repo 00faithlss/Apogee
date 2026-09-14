@@ -6,7 +6,7 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ### Pendiente
 
-- Regla con varios portadores del Sandevistan (sin ralentización para portadores, con bonus, sin efecto doble).
+- Confirmar la regla con varios portadores: bonus e inmunidad solo mientras el efecto propio está activo, temporizadores independientes, sin ralentización doble; al terminar, el portador se ralentiza por los campos que sigan activos.
 - Revisión del tooltip en juego.
 - Rediseño de las barras de uso y de recarga.
 

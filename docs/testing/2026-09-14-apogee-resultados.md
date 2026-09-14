@@ -54,7 +54,7 @@ Comparado con la maqueta: coinciden colores, marco, jerarquía y navegación. Di
 
 ## Detalles a resolver
 
-- [ ] Regla con varios portadores: quien porte el Sandevistan no debe ralentizarse, pero sí recibir velocidad y daño; dos portadores no duplican la ralentización. Actualmente, un portador inactivo dentro de otro campo sí se ralentiza.
+- [ ] Regla con varios portadores: el Sandevistan activo da el bonus y la inmunidad a su portador; cada uno tiene su propio temporizador; sin efecto activo, el portador se ralentiza como cualquiera; los campos no se acumulan. Verificar la secuencia: A activa → a los 6 s activa B (deja de ralentizarse, 10 s propios) → A termina y queda ralentizado por B hasta que B termine.
 - [ ] Revisar el tooltip en juego y ajustarlo.
 - [ ] Rediseñar las barras de uso y de recarga del HUD.
 
