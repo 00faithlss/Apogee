@@ -28,13 +28,14 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 
 - Pestaña **Apogee**: aparece al conseguir cualquier componente o el implante.
 - **Un implante rudimentario** (desafío, marco morado): craftear el Sandevistan. Muestra el aviso de desafío completado y se anuncia en el chat.
+- Cada vez que alguien craftea el Sandevistan, todos los jugadores del servidor oyen a Adam Smasher decir «A rudimentary implant», estén donde estén.
 
 ## Uso
 
 - Equipa el Sandevistan en la ranura **Sistema operativo** de Trinkets (la pechera y los élitros siguen libres).
 - **V** (configurable) activa el efecto o lo termina antes de tiempo.
 - Mientras está activo o recargando aparece un recuadro de ciberware abajo a la izquierda con los segundos restantes: cian con el efecto, magenta en la recarga, amarillo con «+2 s» al conseguir una baja y parpadeo rojo en los últimos 2 s. En reposo se oculta.
-- En el tooltip, **G** (tecla de pestañas de Simply Tooltips) alterna Descripción y Estadísticas; al dejar de señalar el objeto vuelve a Descripción. El tooltip usa la fuente Rajdhani y un borde con arcos eléctricos en amarillo, cian y magenta.
+- En el tooltip, **G** (tecla de pestañas de Simply Tooltips) alterna Descripción y Estadísticas; al dejar de señalar el objeto vuelve a Descripción. El tooltip usa la fuente Rajdhani, un borde con arcos eléctricos en amarillo, cian y magenta, título ondulado con estelas de colores, partículas neón y scanlines con barrido.
 
 ### Mecánica (valores por defecto)
 

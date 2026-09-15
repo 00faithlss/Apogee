@@ -30,6 +30,12 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
 - Licencia: SIL Open Font License 1.1 (redistribución permitida). Texto completo en `assets/apogee/font/rajdhani_ofl.txt`.
 - Usado sin cambios como `assets/apogee/font/rajdhani_semibold.ttf` en el tooltip del Sandevistan.
 
+## Frase «A rudimentary implant»
+
+- Origen: `a-rudimentary-implant-made-with-Voicemod.mp3`, aportado por el usuario (creado con Voicemod), en referencia a la frase de Adam Smasher en *Cyberpunk: Edgerunners* (CD PROJEKT RED / Studio Trigger).
+- Licencia: no especificada; solo uso privado.
+- Convertido a Ogg Vorbis mono 44,1 kHz, sin silencios al inicio y al final y con volumen normalizado → `assets/apogee/sounds/rudimentary_implant.ogg`.
+
 ## Recursos propios
 
 - `assets/apogee/icon.png` y `assets/apogee/textures/gui/slots/os.png`: generados para Apogee.

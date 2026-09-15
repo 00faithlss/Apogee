@@ -137,17 +137,13 @@ public final class SandevistanTooltipPanel {
         pose.translate(0.0F, 0.0F, 400.0F);
 
         drawFrame(graphics, x, y, panelW, panelH);
-        TooltipElectricity.draw(graphics, x, y, panelW, panelH, now);
+        TooltipFx.particles(graphics, x, y, panelW, panelH, now);
 
         int top = y + 7;
         int left = x + PAD;
         drawModel(graphics, left, top, now);
         int textX = left + MODEL_W + 7;
-        pose.pushPose();
-        pose.translate(textX, top + 8, 0.0F);
-        pose.scale(TITLE_SCALE, TITLE_SCALE, 1.0F);
-        graphics.drawString(font, title, 0, 0, TEXT, true);
-        pose.popPose();
+        TooltipFx.wavyTitle(graphics, font, title, textX, top + 8, TITLE_SCALE, now);
         graphics.drawString(font, badge, textX, top + 24, ACCENT, false);
 
         int cursor = top + HEADER_H + 3;
@@ -192,6 +188,9 @@ public final class SandevistanTooltipPanel {
             drawDiamond(graphics, keyX - 16, dotY, 2, statsView ? DOT_IDLE : ACCENT);
             drawDiamond(graphics, keyX - 7, dotY, 2, statsView ? ACCENT : DOT_IDLE);
         }
+
+        TooltipFx.scan(graphics, x, y, panelW, panelH, now);
+        TooltipElectricity.draw(graphics, x, y, panelW, panelH, now);
 
         pose.popPose();
     }

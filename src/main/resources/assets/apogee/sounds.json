@@ -6,5 +6,9 @@
   "sandevistan_deactivate": {
     "subtitle": "subtitles.apogee.sandevistan_deactivate",
     "sounds": [{ "name": "apogee:sandevistan_deactivate", "stream": false }]
+  },
+  "rudimentary_implant": {
+    "subtitle": "subtitles.apogee.rudimentary_implant",
+    "sounds": [{ "name": "apogee:rudimentary_implant", "stream": false }]
   }
 }
