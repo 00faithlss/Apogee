@@ -5,6 +5,11 @@
   "item.apogee.apogee_overdrive_kernel_t5": "Overdrive Kernel T5",
   "item.apogee.quantum_sync_lattice_t5": "Quantum Sync Lattice T5",
 
+  "advancements.apogee.root.title": "Apogee",
+  "advancements.apogee.root.description": "Consigue componentes de cyberware",
+  "advancements.apogee.craft_sandevistan.title": "Un implante rudimentario",
+  "advancements.apogee.craft_sandevistan.description": "Craftea el Sandevistan. A Adam Smasher no le impresionó",
+
   "key.categories.apogee": "Apogee",
   "key.apogee.steam_dash": "Dash aéreo (pantalones Steampunk)",
   "key.apogee.activate_sandevistan": "Activar / terminar Sandevistan",

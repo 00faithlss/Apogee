@@ -330,7 +330,7 @@ public final class SandevistanEffects {
             accent = HUD_YELLOW;
         }
 
-        int size = 24;
+        int size = 26;
         int x = 6;
         int y = graphics.guiHeight() - size - 6;
         graphics.pose().pushPose();
@@ -363,14 +363,13 @@ public final class SandevistanEffects {
             graphics.fill(x + i, y + size - chamfer + i, x + i + 1, y + size - chamfer + i + 1, frame);
         }
 
-        // Small implant icon in the upper-left, leaving room for the seconds.
-        graphics.pose().pushPose();
-        graphics.pose().translate(x + 1.5F, y + 1.5F, 0.0F);
-        graphics.pose().scale(0.7F, 0.7F, 1.0F);
-        graphics.renderItem(new ItemStack(ApogeeItems.SANDEVISTAN), 0, 0);
-        graphics.pose().popPose();
+        // Full-size implant icon centered in the slot.
+        int iconOffset = (size - 16) / 2;
+        graphics.renderItem(new ItemStack(ApogeeItems.SANDEVISTAN), x + iconOffset, y + iconOffset);
 
+        // Seconds left beside the slot, vertically centered, in the accent color.
         Font font = minecraft.font;
+        int labelX = x + size + 4;
         if (remaining > 0.0F) {
             float secondsLeft = remaining / 20.0F;
             String number = active && secondsLeft < 3.0F
@@ -378,14 +377,15 @@ public final class SandevistanEffects {
                     : Integer.toString(Mth.ceil(secondsLeft));
             Component text = Component.literal(number).withStyle(style -> style.withFont(HUD_FONT));
             graphics.pose().pushPose();
-            graphics.pose().translate(0.0F, 0.0F, 200.0F);
-            graphics.drawString(font, text, x + size - 3 - font.width(text), y + size - 11, withAlpha(0xFFFFFF, hudAlpha), true);
+            graphics.pose().translate(labelX, y + size / 2.0F - 6.0F, 0.0F);
+            graphics.pose().scale(1.4F, 1.4F, 1.0F);
+            graphics.drawString(font, text, 0, 0, withAlpha(accent, hudAlpha), true);
             graphics.pose().popPose();
         }
         if (killFlash > 0.0F) {
             Component bonus = Component.translatable("tooltip.apogee.value.bonus_seconds", Integer.toString(rules.killExtensionTicks() / 20))
                     .withStyle(style -> style.withFont(HUD_FONT));
-            graphics.drawString(font, bonus, x + size + 4, y + 2 - Math.round((1.0F - killFlash) * 6.0F),
+            graphics.drawString(font, bonus, labelX, y - 8 - Math.round((1.0F - killFlash) * 6.0F),
                     withAlpha(0xFCEE0A, killFlash * hudAlpha), true);
         }
         graphics.pose().popPose();

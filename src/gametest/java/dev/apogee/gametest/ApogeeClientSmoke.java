@@ -134,7 +134,10 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
                 LOGGER.info("steam dash horizontal speed {}", horizontal);
                 check(horizontal > 0.6, "steam dash launches the player forward");
             }
-            case 250 -> {
+            case 244 -> server(mc, (level, player) ->
+                    net.minecraft.advancements.CriteriaTriggers.RECIPE_CRAFTED.trigger(player, dev.apogee.Apogee.id("sandevistan"), List.of()));
+            case 262 -> shot(mc, "07-challenge-toast");
+            case 270 -> {
                 LOGGER.info(FAILURES.isEmpty() ? "APOGEE_SMOKE_PASSED" : "APOGEE_SMOKE_FAILED " + FAILURES);
                 mc.stop();
             }

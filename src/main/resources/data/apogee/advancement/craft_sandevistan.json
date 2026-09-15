@@ -1,0 +1,17 @@
+{
+  "parent": "apogee:root",
+  "display": {
+    "icon": { "id": "apogee:sandevistan" },
+    "title": { "translate": "advancements.apogee.craft_sandevistan.title" },
+    "description": { "translate": "advancements.apogee.craft_sandevistan.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "crafted_sandevistan": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": { "recipe_id": "apogee:sandevistan" }
+    }
+  }
+}
