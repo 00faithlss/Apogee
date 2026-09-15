@@ -11,6 +11,11 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - El tooltip del Sandevistan usa la fuente Rajdhani, con el título más grande.
 - Las recetas de Núcleo T5, Overdrive Kernel T5 y Quantum Sync Lattice T5 pasan a ser con forma, con un patrón simétrico (material principal en esquinas, ingrediente clave al centro).
 
+### Corregido
+
+- El bonus de velocidad del Sandevistan ya no abre el FOV (se ignora en el cálculo de campo de visión de Minecraft).
+- Compatibilidad con Cinematic Zoom: el ajuste de FOV de Apogee se encadena con el de otros mods en lugar de cancelarlos, así que el zoom vuelve a funcionar.
+
 ### Añadido
 
 - Al craftear el Sandevistan suena para todos los jugadores del servidor la frase «A rudimentary implant» de Adam Smasher.

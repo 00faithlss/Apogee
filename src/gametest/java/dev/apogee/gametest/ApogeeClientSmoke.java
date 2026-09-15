@@ -108,6 +108,17 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
                         "targeting zombie slowed on the client");
                 mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
             }
+            case 150 -> {
+                var speed = mc.player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
+                var bonus = speed.getModifier(dev.apogee.sandevistan.SandevistanManager.SPEED_MODIFIER);
+                check(bonus != null && bonus.amount() > 0.4, "speed bonus synced to the client");
+                double withoutBonus = speed.getValue() / (1.0 + (bonus == null ? 0.0 : bonus.amount()));
+                float expected = (mc.player.getAbilities().flying ? 1.1F : 1.0F)
+                        * ((float) withoutBonus / mc.player.getAbilities().getWalkingSpeed() + 1.0F) / 2.0F;
+                expected = net.minecraft.util.Mth.lerp(mc.options.fovEffectScale().get().floatValue(), 1.0F, expected);
+                LOGGER.info("fov modifier {} expected without bonus {}", mc.player.getFieldOfViewModifier(), expected);
+                check(Math.abs(mc.player.getFieldOfViewModifier() - expected) < 1.0E-4F, "Sandevistan speed does not widen the FOV");
+            }
             case 160 -> shot(mc, "05-active-tint-hud-afterimages");
             case 200 -> ClientPlayNetworking.send(ToggleSandevistan.INSTANCE);
             case 206 -> {

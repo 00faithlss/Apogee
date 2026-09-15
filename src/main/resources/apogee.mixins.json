@@ -12,6 +12,7 @@
     "ServerLevelMixin"
   ],
   "client": [
+    "client.AbstractClientPlayerMixin",
     "client.CameraMixin",
     "client.ClientLevelMixin",
     "client.GameRendererMixin",

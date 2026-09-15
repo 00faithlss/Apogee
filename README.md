@@ -44,7 +44,7 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 | Ralentización | 85 % (entidades afectadas avanzan al 15 %) |
 | Radio | 10 bloques, esfera centrada en el portador, sin línea de visión |
 | Duración | 10 s |
-| Movimiento | +50 %, alcanzado de forma gradual en 2 s para que el FOV no salte |
+| Movimiento | +50 %, alcanzado de forma gradual en 2 s; no altera el FOV |
 | Daño cuerpo a cuerpo y proyectiles lanzados durante la activación | +25 % (los proyectiles conservan el bonus hasta impactar) |
 | Por baja | +2 s, con máximo absoluto de 20 s desde el inicio |
 | Recarga | 30 s desde que termina (también al terminar manualmente) |

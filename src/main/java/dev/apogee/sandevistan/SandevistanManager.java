@@ -53,7 +53,7 @@ import net.minecraft.world.phys.Vec3;
  * in sync. Runs identically on an Essential/LAN host's integrated server and on a dedicated one.
  */
 public final class SandevistanManager {
-    private static final ResourceLocation SPEED_MODIFIER = Apogee.id("sandevistan_movement");
+    public static final ResourceLocation SPEED_MODIFIER = Apogee.id("sandevistan_movement");
 
     private static final Map<UUID, ActiveSession> SESSIONS = new HashMap<>();
     private static final CombatMemory COMBAT = new CombatMemory();
