@@ -115,6 +115,12 @@ dependencies {
     modRuntimeOnly 'me.lucko:fabric-permissions-api:0.3.1'
     // Dev-only: exercises the optional Steampunk Leggings dash compatibility.
     modLocalRuntime "maven.modrinth:immersive-armors:${immersive_armors_version}"
+    // Dev-only, with -PirisTest: shader pack checks (tools/mantis_tests.sh iris), where Sodium
+    // and Iris are taken from here and run in a production-like instance.
+    if (project.hasProperty('irisTest')) {
+        modLocalRuntime 'maven.modrinth:sodium:mc1.21.1-0.8.13-fabric'
+        modLocalRuntime 'maven.modrinth:iris:1.8.14-beta.1+1.21.1-fabric'
+    }
 }
 
 processResources {
@@ -153,11 +159,30 @@ jar {
     from('LICENSE_ASSETS.md')
 }
 
+// Dev-only: the Mantis client smoke script as an intermediary-mapped mod, for runs in a
+// production-like instance (tools/mantis_tests.sh prod-iris), where mods such as Iris only work.
+tasks.register('smokeJar', Jar) {
+    from(sourceSets.gametest.output) {
+        include 'dev/apogee/gametest/MantisClientSmoke*.class'
+    }
+    from('src/gametest/smoke-jar')
+    archiveClassifier = 'smoke-dev'
+    destinationDirectory = layout.buildDirectory.dir('smoke')
+}
+tasks.register('remapSmokeJar', net.fabricmc.loom.task.RemapJarTask) {
+    dependsOn 'smokeJar'
+    inputFile = tasks.named('smokeJar').flatMap { it.archiveFile }
+    archiveClassifier = 'smoke'
+    destinationDirectory = layout.buildDirectory.dir('smoke')
+    addNestedDependencies = false
+}
+
 // Classpath of the dev runs, for tools/mantis_tests.sh, which starts several clients and a
 // server at once (Gradle runs one Minecraft at a time).
 tasks.register('writeDevRuntimeClasspath') {
     dependsOn 'gametestClasses', 'configureLaunch', 'downloadAssets'
     def out = layout.buildDirectory.file('dev-runtime-classpath.txt')
+    inputs.property('irisTest', project.hasProperty('irisTest'))
     outputs.file out
     doLast {
         out.get().asFile.text = sourceSets.gametest.runtimeClasspath.asPath

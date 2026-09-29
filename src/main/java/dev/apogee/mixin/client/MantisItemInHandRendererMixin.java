@@ -17,9 +17,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * While the blades are out, and while they unfold or fold away, the first-person view shows
- * both implants and no held item. Each slash swings the arm that cuts (they alternate), and a
- * lunge brings both arms forward together.
+ * While the blades are out, while they unfold or fold away, and while folded with empty hands,
+ * the first-person view shows both implants and no held item. Each slash swings the arm that
+ * cuts (they alternate), and a lunge brings both arms forward together.
  * Low priority so this runs before other first-person animation mods and takes over the view.
  */
 @Mixin(value = ItemInHandRenderer.class, priority = 500)
@@ -36,7 +36,11 @@ public abstract class MantisItemInHandRendererMixin {
     @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void apogee$mantisHands(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource buffers,
                                     LocalPlayer player, int light, CallbackInfo ci) {
-        if (!MantisClient.isOut(player) || player.isScoping()) {
+        boolean out = MantisClient.isOut(player);
+        // Folded with nothing in either hand, both implant arms stay on screen too, so folding them
+        // away ends where it started instead of cutting to another mod's bare hands.
+        boolean bare = MantisClient.variant(player) != null && player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty();
+        if (!(out || bare) || player.isScoping()) {
             return;
         }
         ci.cancel();
@@ -64,12 +68,16 @@ public abstract class MantisItemInHandRendererMixin {
                     : MantisClient.slashProgress(player, right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT, partialTick);
             if (slash >= 0.0F) {
                 // A diagonal cut: the forearm sweeps in from its side of the view and down across it.
-                float out = Mth.sin(Mth.sqrt(slash) * Mth.PI);
-                poseStack.translate(-side * 0.22F * out, -0.08F * out, -0.18F * out);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(side * 28.0F * out));
+                float reach = Mth.sin(Mth.sqrt(slash) * Mth.PI);
+                poseStack.translate(-side * 0.22F * reach, -0.08F * reach, -0.18F * reach);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(side * 28.0F * reach));
+            }
+            float swing = Math.max(slash, 0.0F);
+            if (!out && arm == player.getMainArm()) {
+                swing = player.getAttackAnim(partialTick); // a plain punch while folded
             }
             // The vanilla swing, on whichever hand cuts; the implant's attack clip adds the blade's arc.
-            renderPlayerArm(poseStack, buffers, light, 0.0F, Math.max(slash, 0.0F), arm);
+            renderPlayerArm(poseStack, buffers, light, 0.0F, swing, arm);
             poseStack.popPose();
         }
         buffers.endBatch();

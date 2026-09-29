@@ -48,6 +48,12 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
 - Usado: seis golpes y un despliegue → `sounds/mantis/electric_hit{1,2,3}.ogg` (los tres más graves, al golpear a un enemigo), `sounds/mantis/electric_swing{1,2,3}.ogg` (corte al aire) y `sounds/mantis/electric_deploy.ogg`.
 - Modificaciones: se recortó el silencio inicial, se igualó el volumen y se convirtieron de MP3 estéreo a OGG Vorbis mono.
 
+## Sonidos de las Cuchillas Mantis normales
+
+- Origen: un único MP3 aportado por el autor del proyecto con los sonidos separados por silencios (el primero es el despliegue). Origen exacto por confirmar; si viene de la misma fuente que los eléctricos, aplica la misma nota de licencia.
+- Usado: el despliegue → `sounds/mantis/normal_deploy.ogg`; cuatro cortes al aire, los de timbre más agudo → `sounds/mantis/normal_swing{1,2,3,4}.ogg`; cuatro golpes, los más graves → `sounds/mantis/normal_hit{1,2,3,4}.ogg`. Los demás cortes del archivo no se usan.
+- Modificaciones: se separaron por silencios, se recortó el silencio inicial y final, se igualó el volumen con los eléctricos y se convirtieron a OGG Vorbis mono.
+
 Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 
 ## Kit Mantis v0.4 — diseño propio del proyecto

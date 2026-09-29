@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "apogee_smoke",
+  "version": "1.0.0",
+  "name": "Apogee Mantis smoke (production)",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.apogee.gametest.MantisClientSmoke"]
+  },
+  "depends": {
+    "apogee": "*"
+  }
+}

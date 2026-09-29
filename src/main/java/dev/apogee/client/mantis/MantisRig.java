@@ -157,7 +157,7 @@ public final class MantisRig {
         }
         poseStack.mulPose(right ? RIGHT_SEAT : LEFT_SEAT);
         renderer.prepare(player.getSkin().texture(), slim, glow, firstPersonPass);
-        renderer.render(poseStack, arm, buffers, null, null, light, partialTick);
+        renderer.renderInto(poseStack, arm, buffers, light, partialTick);
         poseStack.popPose();
     }
 }

@@ -51,8 +51,8 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 - Cerradas, el brazo se ve como uno normal con tu skin (clásica o Slim). Al desplegarlas se abren las cubiertas del antebrazo, el mecanismo sube por el costado externo y la hoja se extiende.
 - Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
 - Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
-- Variantes: la térmica prende fuego y la eléctrica aturde. La hoja térmica brilla al rojo vivo con halo, destellos de glitch y partículas de calor; el filo y los electrodos de la eléctrica brillan en azul mientras el implante está abierto.
-- La eléctrica tiene sonidos propios de despliegue, corte al aire y golpe. Los demás (normal, térmica, guardar y estocada) son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
+- Variantes: la térmica prende fuego y la eléctrica aturde. La hoja térmica brilla al rojo vivo con destellos de glitch y partículas de calor; el filo y los electrodos de la eléctrica brillan en azul mientras el implante está abierto. Con shaders, el brillo recibe el bloom del shader.
+- Sonidos propios de despliegue, corte al aire y golpe para la normal (que la térmica comparte) y para la eléctrica. Guardar y estocada son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
 
 ### Mecánica del Sandevistan (valores por defecto)
 
@@ -103,7 +103,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.2.0+1.21.1 (`build/libs/apogee-0.2.0+1.21.1.jar`) | Todos |
+| Apogee | 0.2.1+1.21.1 (`build/libs/apogee-0.2.1+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -149,11 +149,13 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```bash
 tools/mantis_tests.sh mp
 tools/mantis_tests.sh compat
+tools/mantis_tests.sh iris
 ```
 
 - `mp`: servidor dedicado y dos clientes (`Observer` y `Wearer`). El servidor equipa al portador y dirige despliegue, corte, estocada y repliegue; cada cliente comprueba lo que ve y captura en `build/mantis-mp/<cliente>/screenshots`.
 - `compat`: `runMantisSmoke` con Punchy 2.8c, Entity Model Features 3.3.9, Entity Texture Features 7.2.4 y Fresh Animations 1.10.4 con sus packs *Extensions* y *Player Extension*, descargados en `build/mantis-compat`.
-- Ambos requieren Linux con Xvfb.
+- `iris`: `runMantisSmoke` con Sodium 0.8.13, Iris 1.8.14 y el shader MakeUp UltraFast 9.5e, en una instancia como la de un launcher armada en `build/mantis-iris` (Iris no arranca en el entorno de desarrollo).
+- Los tres requieren Linux con Xvfb.
 
 El modelo de las Cuchillas Mantis viene del kit Mantis v0.4: los proyectos de Blockbench y su documentación están en [`art/mantis-kit/`](art/mantis-kit/LEEME.md). Tras exportar desde Blockbench con el flujo de GeckoLib, `python3 tools/mantis_kit_import.py <carpeta del kit>` copia geometrías, animaciones y texturas a `assets/apogee` y añade la mano y el tope del hombro que el kit deja fuera de su exportación. Los recursos actuales ya incluyen revisiones posteriores al kit v0.4 (cyberware inferior, hoja y riel separados, alcance de la hoja, colores); volver a importar el kit v0.4 las desharía.
 

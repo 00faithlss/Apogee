@@ -199,6 +199,9 @@ public final class MantisClientSmoke implements ClientModInitializer {
             }
             case 195 -> ClientPlayNetworking.send(ToggleMantis.INSTANCE);
             case 203 -> shot(mc, name + "-13-unfolding-first-person");
+            case 214 -> mc.player.setXRot(70.0F);
+            case 219 -> shot(mc, name + "-13b-open-first-person-looking-down");
+            case 220 -> mc.player.setXRot(10.0F);
             case 225 -> {
                 check(MantisClient.isDeployed(mc.player), name + " deployed again on the client");
                 shot(mc, name + "-14-open-first-person-item");

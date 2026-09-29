@@ -2,7 +2,7 @@ package dev.apogee.client.mantis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.apogee.Apogee;
+import dev.apogee.client.fx.AfterimageRenderer;
 import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -36,16 +36,14 @@ import software.bernie.geckolib.util.RenderUtil;
  * layout, so every panel shows the patch of skin it covers when the arm is closed and carries it
  * along as it opens.
  *
- * <p>The thermal blade also gets a fake bloom (larger, dimmer additive copies of the blade) and
- * glitch ghosts, and every blade's position is recorded for {@link MantisBladeFx}.
+ * <p>The thermal blade also gets glitch ghosts, and every blade's position is recorded for
+ * {@link MantisBladeFx}.
  */
 public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
     /** The kit's {@code skin} material cell in its 64x64 atlas, as UV bounds. */
     private static final float SKIN_U0 = 48 / 64F;
     private static final float SKIN_V0 = 16 / 64F;
     private static final float SKIN_V1 = 32 / 64F;
-    /** Additive, fullbright: each bloom shell adds light instead of covering what is behind it. */
-    private static final RenderType THERMAL_BLOOM = RenderType.eyes(Apogee.id("textures/mantis/mantis_thermal_glowmask.png"));
 
     private boolean skinPass;
     private ResourceLocation skinTexture;
@@ -56,8 +54,6 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
     private int bladeDepth;
     /** While set, only the blade's cubes are drawn. */
     private boolean bladeOnly;
-    /** Extra thickness of the blade's cubes in a bloom pass, as a fraction of their size. */
-    private float inflate;
     /** Set during the main pass, while the blade's cubes are recorded for its effects. */
     private boolean recording;
 
@@ -75,11 +71,22 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
         this.firstPerson = firstPerson;
     }
 
+    /**
+     * Draws the arm into {@code buffers}. {@link GeoObjectRenderer#render} swaps in the level's
+     * main buffers when given no vertex consumer, and shader packs draw the first-person hands
+     * with buffers of their own: the hands would then be drawn with the world's transform.
+     */
+    public void renderInto(PoseStack poseStack, MantisArm arm, MultiBufferSource buffers, int packedLight, float partialTick) {
+        this.animatable = arm;
+        defaultRender(poseStack, arm, buffers, null, null, 0.0F, partialTick, packedLight);
+    }
+
     @Override
     public void actuallyRender(PoseStack poseStack, MantisArm animatable, BakedGeoModel model, @Nullable RenderType renderType,
                                MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick,
                                int packedLight, int packedOverlay, int colour) {
-        recording = !isReRender;
+        // Afterimages draw the wearer again in past poses; only the live model feeds the effects.
+        recording = !isReRender && !AfterimageRenderer.isRendering();
         if (recording) {
             animatable.bladeSegmentCount = 0;
             animatable.bladeTick = MantisClient.clientTicks();
@@ -152,21 +159,7 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
             if (recording && bladeDepth > 0) {
                 recordBlade(poseStack, cube);
             }
-            if (inflate > 0.0F) {
-                Vector3f min = new Vector3f(Float.MAX_VALUE);
-                Vector3f max = new Vector3f(-Float.MAX_VALUE);
-                bounds(cube, min, max);
-                Vector3f centre = min.add(max).mul(0.5F);
-                poseStack.pushPose();
-                poseStack.translate(centre.x(), centre.y(), centre.z());
-                // The blade runs along Z: thicken it all round, lengthen it only a little.
-                poseStack.scale(1.0F + inflate, 1.0F + inflate, 1.0F + inflate * 0.06F);
-                poseStack.translate(-centre.x(), -centre.y(), -centre.z());
-                super.renderCube(poseStack, cube, buffer, packedLight, packedOverlay, colour);
-                poseStack.popPose();
-            } else {
-                super.renderCube(poseStack, cube, buffer, packedLight, packedOverlay, colour);
-            }
+            super.renderCube(poseStack, cube, buffer, packedLight, packedOverlay, colour);
             return;
         }
         RenderUtil.translateToPivotPoint(poseStack, cube);
@@ -304,8 +297,8 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
      * Emissive mask ({@code *_glowmask.png}), drawn only while the implant is open. The standard
      * variant has nothing that glows, and GeckoLib rejects an empty mask, so it is skipped.
      *
-     * <p>The thermal blade glows hot: additive shells around it, each larger and dimmer, stand in
-     * for bloom, and now and then a displaced copy flickers beside it like signal noise.
+     * <p>Now and then a displaced copy of the thermal blade flickers beside it like signal noise.
+     * The glow itself is only the mask: shader packs add their own bloom to emissive pixels.
      */
     private static final class GlowLayer extends AutoGlowingGeoLayer<MantisArm> {
         GlowLayer(GeoRenderer<MantisArm> renderer) {
@@ -321,23 +314,17 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
                 return;
             }
             super.render(poseStack, animatable, bakedModel, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
-            if (animatable.variant() == MantisVariant.THERMAL) {
-                heat(poseStack, animatable, bakedModel, bufferSource, partialTick, packedOverlay);
+            if (animatable.variant() == MantisVariant.THERMAL && !AfterimageRenderer.isRendering()) {
+                glitch(poseStack, animatable, bakedModel, bufferSource, partialTick, packedOverlay);
             }
         }
 
-        private void heat(PoseStack poseStack, MantisArm animatable, BakedGeoModel bakedModel, MultiBufferSource bufferSource,
-                          float partialTick, int packedOverlay) {
+        private void glitch(PoseStack poseStack, MantisArm animatable, BakedGeoModel bakedModel, MultiBufferSource bufferSource,
+                            float partialTick, int packedOverlay) {
             MantisArmGeoRenderer renderer = (MantisArmGeoRenderer) getRenderer();
-            RenderType additive = THERMAL_BLOOM;
             long tick = MantisClient.clientTicks();
-            // Slow shimmer of the whole halo.
-            float pulse = 0.85F + 0.15F * Mth.sin((tick + partialTick) * 0.7F + (animatable.right() ? 0.0F : 2.1F));
             renderer.bladeOnly = true;
             try {
-                shell(renderer, poseStack, animatable, bakedModel, bufferSource, additive, partialTick, packedOverlay, 0.8F, 0.50F * pulse);
-                shell(renderer, poseStack, animatable, bakedModel, bufferSource, additive, partialTick, packedOverlay, 1.8F, 0.26F * pulse);
-                shell(renderer, poseStack, animatable, bakedModel, bufferSource, additive, partialTick, packedOverlay, 3.2F, 0.11F * pulse);
                 long hash = mix(tick / 2 * 0x9E3779B97F4A7C15L + System.identityHashCode(animatable));
                 if ((hash & 0xFF) < 90) {
                     // Glitch: a copy of the blade jumps sideways for a moment.
@@ -345,23 +332,14 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
                     float dy = (((hash >>> 16) & 0xFF) / 255.0F - 0.5F) * 0.05F;
                     poseStack.pushPose();
                     poseStack.translate(dx, dy, 0.0F);
-                    shell(renderer, poseStack, animatable, bakedModel, bufferSource, additive, partialTick, packedOverlay, 0.0F, 0.7F);
+                    RenderType type = getRenderType(animatable, bufferSource);
+                    renderer.reRender(bakedModel, poseStack, bufferSource, animatable, type, bufferSource.getBuffer(type), partialTick,
+                            0xF000F0, packedOverlay, -1);
                     poseStack.popPose();
                 }
             } finally {
                 renderer.bladeOnly = false;
-                renderer.inflate = 0.0F;
             }
-        }
-
-        private static void shell(MantisArmGeoRenderer renderer, PoseStack poseStack, MantisArm animatable, BakedGeoModel bakedModel,
-                                  MultiBufferSource bufferSource, RenderType additive, float partialTick, int packedOverlay,
-                                  float inflate, float strength) {
-            renderer.inflate = inflate;
-            int level = Mth.clamp((int) (strength * 255.0F), 0, 255);
-            int colour = 0xFF000000 | level << 16 | level << 8 | level;
-            renderer.reRender(bakedModel, poseStack, bufferSource, animatable, additive, bufferSource.getBuffer(additive), partialTick,
-                    0xF000F0, packedOverlay, colour);
         }
 
         private static long mix(long h) {

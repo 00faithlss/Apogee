@@ -75,6 +75,11 @@ public final class AfterimageRenderer {
         }
     }
 
+    /** True while afterimages are being drawn. */
+    public static boolean isRendering() {
+        return rendering;
+    }
+
     public static void reset() {
         TRAILS.clear();
     }

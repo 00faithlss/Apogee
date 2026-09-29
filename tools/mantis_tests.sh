@@ -3,13 +3,17 @@
 #
 #   tools/mantis_tests.sh mp      dedicated server + two clients ("Observer", "Wearer")
 #   tools/mantis_tests.sh compat  runMantisSmoke with Punchy, EMF, ETF and Fresh Animations
+#   tools/mantis_tests.sh iris    the Mantis smoke script with Sodium, Iris and the MakeUp UltraFast
+#                                 shader pack, in a production-like instance (Iris fails in dev runs)
 #
-# Screenshots and logs end up in build/mantis-mp and build/mantis-compat.
+# Screenshots and logs end up in build/mantis-mp, build/mantis-compat and build/mantis-iris.
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd)
 
-sh ./gradlew writeDevRuntimeClasspath --console=plain --max-workers=1 -q
+# The iris mode resolves Sodium and Iris too (see build.gradle).
+case "${1:-}" in iris) EXTRA=-PirisTest ;; *) EXTRA= ;; esac
+sh ./gradlew writeDevRuntimeClasspath --console=plain --max-workers=1 -q $EXTRA
 CP=$(cat build/dev-runtime-classpath.txt)
 CFG="$ROOT/.gradle/loom-cache/launch.cfg"
 
@@ -52,6 +56,8 @@ mp)
         --quickPlayMultiplayer localhost:25565 --width 1280 --height 720 > "$base/wearer/run.out" 2>&1 &
     wearer=$!
     wait "$observer" "$wearer" || true
+    # The server stops itself when the script ends, but not if a client never joined.
+    (sleep 60; kill "$server" 2>/dev/null) &
     wait "$server" || true
     grep -h 'MultiplayerSmoke' "$base"/*/run.out | grep -E 'FAILED|passed|failed' || true
     ;;
@@ -72,8 +78,36 @@ compat)
         net.fabricmc.devlaunchinjector.Main --gameDir "$ROOT/$base" --width 1600 --height 900 > "$base/run.out" 2>&1 || true
     grep -h -E 'Loading [0-9]+ mods|MantisSmoke.*(FAILED|passed|failed)' "$base/run.out" || true
     ;;
+iris)
+    # A production-like instance (intermediary names, as in a launcher), where Iris works:
+    # the built mod, its dependencies, Sodium, Iris, a shader pack and the smoke script jar.
+    base=build/mantis-iris
+    rm -rf "$base/mods" "$base/screenshots" "$base/crash-reports"
+    mkdir -p "$base/mods" "$base/shaderpacks" "$base/config"
+    sh ./gradlew build remapSmokeJar -x test --console=plain -q $EXTRA
+    jar() { find "$HOME/.gradle/caches/modules-2/files-2.1/$1" -name "$2" ! -name '*sources*' | head -1; }
+    for j in "$(jar net.fabricmc.fabric-api/fabric-api 'fabric-api-*.jar')" "$(jar maven.modrinth/trinkets 'trinkets-*.jar')" \
+        "$(jar software.bernie.geckolib 'geckolib-*.jar')" "$(jar org.ladysnake.cardinal-components-api/cardinal-components-base '*.jar')" \
+        "$(jar org.ladysnake.cardinal-components-api/cardinal-components-entity '*.jar')" "$(jar maven.modrinth/simply-tooltips '*.jar')" \
+        "$(jar maven.modrinth/architectury-api '*.jar')" "$(jar maven.modrinth/fzzy-config '*.jar')" \
+        "$(jar net.fabricmc/fabric-language-kotlin '*.jar')" "$(jar maven.modrinth/sodium '*.jar')" "$(jar maven.modrinth/iris '*.jar')"; do
+        cp "$j" "$base/mods/"
+    done
+    cp "build/libs/apogee-$(sed -n 's/^mod_version=//p' gradle.properties).jar" "build/smoke/"*-smoke.jar "$base/mods/"
+    fetch() { [ -f "$2" ] || curl -sSfL -o "$2" "$1"; }
+    fetch https://cdn.modrinth.com/data/izsIPI7a/versions/T3EhqZo1/MakeUp-UltraFast-9.5e.zip "$base/shaderpacks/MakeUp-UltraFast-9.5e.zip"
+    printf 'enableShaders=true\nshaderPack=MakeUp-UltraFast-9.5e.zip\n' > "$base/config/iris.properties"
+    client_options "$base" 'resourcePacks:["vanilla","fabric"]'
+    # Libraries from the dev classpath, minus the named game, dev tooling and dev-remapped mods.
+    PCP=$(echo "$CP" | tr ':' '\n' | grep '\.jar$' | grep -v -E 'minecraft-merged|/remapped_mods/|dev-launch-injector|mappings\.jar|kotlin|atomicfu|tomlkt|jankson|annotations-' | tr '\n' ':')
+    PCP="$PCP$(jar net.fabricmc/intermediary '*.jar'):$HOME/.gradle/caches/fabric-loom/1.21.1/minecraft-client.jar"
+    xvfb-run -a -s "-screen 0 1600x900x24" java -Xmx3G -Dapogee.mantisSmoke=true -cp "$PCP" net.fabricmc.loader.impl.launch.knot.KnotClient \
+        --gameDir "$ROOT/$base" --assetsDir "$HOME/.gradle/caches/fabric-loom/assets" --assetIndex 1.21.1-17 --version 1.21.1 \
+        --accessToken 0 --username Dev --width 1600 --height 900 > "$base/run.out" 2>&1 || true
+    grep -h -E 'Loading [0-9]+ mods|Using shaderpack|Mantis smoke run|MantisSmoke.*(FAILED|passed|failed)' "$base/run.out" || true
+    ;;
 *)
-    sed -n '2,6p' "$0"
+    sed -n '2,8p' "$0"
     exit 2
     ;;
 esac

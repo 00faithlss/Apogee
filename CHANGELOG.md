@@ -4,6 +4,24 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.1+1.21.1] — 2026-09-29
+
+### Cambiado (Cuchillas Mantis)
+
+- Sonidos propios para las Cuchillas Mantis normales: despliegue, corte al aire (4 variantes) y golpe al enemigo (4 variantes, las más graves), recortados de un único audio y con el volumen igualado al de la eléctrica. La térmica usa los mismos eventos, así que ahora también suena con ellos. Guardar y estocada siguen provisionales.
+- La hoja térmica pasa a un rojo más intenso y se quitó el halo de bloom falso: el brillo es solo la máscara emisiva y los shaders le aplican su propio bloom.
+- Plegadas y con ambas manos vacías, en primera persona siguen viéndose los dos brazos del implante, así que el repliegue termina donde empezó en lugar de cambiar de golpe a las manos de otro mod (Punchy).
+
+### Corregido (Cuchillas Mantis)
+
+- Con shaders (Iris), las cuchillas de primera persona quedaban fijas mirando hacia adelante sin seguir la cámara. GeckoLib las dibujaba en el búfer del mundo en lugar del de las manos; ahora usan siempre el búfer que recibe el render.
+- Las estelas del Sandevistan ya no vuelven a registrar la hoja ni a dibujar los destellos de glitch de la térmica en cada copia, lo que aligera el uso conjunto del Sandevistan y las Cuchillas Mantis.
+
+### Añadido (pruebas)
+
+- `tools/mantis_tests.sh iris`: `runMantisSmoke` en una instancia como la de un launcher (nombres intermediary) con Sodium 0.8.13, Iris 1.8.14 y el shader MakeUp UltraFast 9.5e. En el entorno de desarrollo Iris no arranca, por eso se arma aparte.
+- La prueba de cliente captura la primera persona mirando al suelo, para ver que las cuchillas siguen a la cámara.
+
 ## [0.2.0+1.21.1] — 2026-09-29
 
 ### Añadido (Cuchillas Mantis)
