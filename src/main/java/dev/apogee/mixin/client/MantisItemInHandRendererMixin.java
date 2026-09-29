@@ -21,6 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(value = ItemInHandRenderer.class, priority = 500)
 public abstract class MantisItemInHandRendererMixin {
+    /** Extra sideways offset of each forearm while the blades are out, in screen units. */
+    private static final float ARM_SPREAD = 0.22F;
+
     @Shadow
     private void renderPlayerArm(PoseStack poseStack, MultiBufferSource buffer, int light, float equippedProgress,
                                  float swingProgress, HumanoidArm arm) {
@@ -39,10 +42,10 @@ public abstract class MantisItemInHandRendererMixin {
             boolean right = arm == HumanoidArm.RIGHT;
             float side = right ? 1.0F : -1.0F;
             poseStack.pushPose();
-            // Guard stance: both forearms come in towards the centre so the blades cross in front.
+            // Spread the forearms out towards the screen edges, level with where vanilla holds
+            // an item in each hand; the implants' blades then rise clear of the view's centre.
             float guard = MantisClient.deployProgress(player, partialTick);
-            poseStack.translate(-side * 0.10F * guard, 0.04F * guard, -0.08F * guard);
-            poseStack.mulPose(Axis.YP.rotationDegrees(side * 10.0F * guard));
+            poseStack.translate(side * ARM_SPREAD * guard, 0.0F, 0.0F);
             if (thrust >= 0.0F) {
                 float lunge = Mth.sin(thrust * Mth.PI);
                 poseStack.translate(-side * 0.30F * lunge, 0.12F * lunge, -0.60F * lunge);

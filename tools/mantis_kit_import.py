@@ -16,7 +16,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "src/main/resources/assets/apogee"
-SKIN_UV = [48, 16]  # the `skin` material cell of the kit's 4x4 material atlas
+MATERIALS = ["black", "steel", "silver", "edge", "cable", "accent", "core", "skin",
+             "sleeve", "bolt", "recess", "warning", "ceramic", "copper", "capacitor", "hazard"]
+
+
+def cell(material):
+    """UV origin of a material's 16x16 cell in the kit's 4x4 material atlas."""
+    index = MATERIALS.index(material)
+    return [index % 4 * 16, index // 4 * 16]
+
+
+SKIN_UV = cell("skin")
 # Reference cubes from the kit's .bbmodel projects, in editor coordinates (x is symmetric).
 EXTRA_BONES = [
     {"name": "skin_hand", "parent": "wrist", "pivot": [0, 0, -3.6], "from": [-2, -2, -6], "to": [2, 2, -3.6]},
@@ -26,8 +36,24 @@ EXTRA_BONES = [
 ]
 
 
+# Cyberware under the housing floor, in the band between the floor (y=-0.76) and the top of the
+# closed lower covers (y=-0.9): flat cables along the forearm held by clamps, and two small
+# modules. The cables use the `cable` material, whose colour follows the variant.
+UNDERSIDE = [("cable", [x, -0.88, -2.3], [x + 0.22, -0.77, 3.3]) for x in (-1.05, -0.62, -0.19, 0.24, 0.67)] + [
+    ("silver", [-1.15, -0.89, z], [1.15, -0.74, z + 0.2]) for z in (-1.7, -0.2, 1.3, 2.7)] + [
+    ("copper", [-0.5, -0.89, 0.25], [0.1, -0.76, 0.85]),
+    ("capacitor", [0.35, -0.89, 1.65], [0.9, -0.76, 2.2]),
+]
+# The standard variant's cables are grey rather than red.
+GREY_CABLES = {"mantis_normal.png"}
+
+
 def skin_cube(frm, to):
-    face = {"uv": SKIN_UV, "uv_size": [16, 16]}
+    return material_cube("skin", frm, to)
+
+
+def material_cube(material, frm, to):
+    face = {"uv": cell(material), "uv_size": [16, 16]}
     return {"origin": frm, "size": [to[i] - frm[i] for i in range(3)],
             "uv": {side: dict(face) for side in ("north", "east", "south", "west", "up", "down")}}
 
@@ -39,6 +65,8 @@ def main(kit):
     for geo in sorted((src / "geo").glob("*.geo.json")):
         data = json.loads(geo.read_text())
         bones = data["minecraft:geometry"][0]["bones"]
+        housing = next(bone for bone in bones if bone["name"] == "housing")
+        housing["cubes"].extend(material_cube(material, frm, to) for material, frm, to in UNDERSIDE)
         for extra in EXTRA_BONES:
             bones.append({"name": extra["name"], "parent": extra["parent"], "pivot": extra["pivot"],
                           "cubes": [skin_cube(extra["from"], extra["to"])]})
@@ -50,6 +78,21 @@ def main(kit):
     for png in sorted((src / "textures/item").glob("*.png")):
         name = png.name.replace("_emissive.png", "_glowmask.png")
         shutil.copy(png, textures / name)
+        if name in GREY_CABLES:
+            grey_cable_cell(textures / name)
+
+
+def grey_cable_cell(path):
+    """Desaturates the `cable` cell, keeping its shading."""
+    from PIL import Image
+    image = Image.open(path).convert("RGBA")
+    u0, v0 = cell("cable")
+    for y in range(v0, v0 + 16):
+        for x in range(u0, u0 + 16):
+            r, g, b, a = image.getpixel((x, y))
+            level = int(0.35 * r + 0.45 * g + 0.2 * b) + 40
+            image.putpixel((x, y), (level, level + 3, level + 8, a))
+    image.save(path)
 
 
 if __name__ == "__main__":

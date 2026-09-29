@@ -19,7 +19,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
@@ -42,6 +44,8 @@ public final class MantisClientSmoke implements ClientModInitializer {
     private static final String[] NAMES = {"thermal", "electric", "normal"};
     /** Ticks each variant's script takes. */
     private static final int ROUND = 200;
+    /** Client tick the first variant's round starts on, after the reference shot. */
+    private static final int START = 60;
     /** Third-person camera distance override for close-ups, or 0 for vanilla. */
     public static float cameraDistance;
     private static int worldTicks = -1;
@@ -86,9 +90,32 @@ public final class MantisClientSmoke implements ClientModInitializer {
                 player.onUpdateAbilities();
             });
         }
-        int round = (worldTicks - 20) / ROUND;
-        int t = (worldTicks - 20) % ROUND;
-        if (worldTicks < 20) {
+        int round = (worldTicks - START) / ROUND;
+        int t = (worldTicks - START) % ROUND;
+        // Reference for the first-person hand spacing: a vanilla item in each hand.
+        switch (worldTicks) {
+            case 12 -> server(mc, (level, player) -> {
+                player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.IRON_SWORD));
+            });
+            case 13 -> {
+                mc.options.hideGui = false;
+                mc.options.fov().set(70);
+                mc.options.setCameraType(CameraType.FIRST_PERSON);
+            }
+            case 45 -> shot(mc, "reference-items-first-person");
+            case 46 -> {
+                mc.options.hideGui = true;
+                mc.options.fov().set(30);
+                server(mc, (level, player) -> {
+                    player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    player.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                });
+            }
+            default -> {
+            }
+        }
+        if (worldTicks < START) {
             return;
         }
         if (round >= VARIANTS.length) {
