@@ -3,6 +3,7 @@ package dev.apogee.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.apogee.client.mantis.MantisClient;
+import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ItemInHandRenderer;
@@ -46,6 +47,12 @@ public abstract class MantisItemInHandRendererMixin {
             // an item in each hand; the implants' blades then rise clear of the view's centre.
             float guard = MantisClient.deployProgress(player, partialTick);
             poseStack.translate(side * ARM_SPREAD * guard, 0.0F, 0.0F);
+            if (!right && MantisClient.variant(player) == MantisVariant.THERMAL) {
+                // More of the left implant faces the camera, without resizing the skin hand.
+                poseStack.translate(0.10F * guard, 0.12F * guard, 0.10F * guard);
+                poseStack.mulPose(Axis.YP.rotationDegrees(-12.0F * guard));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(8.0F * guard));
+            }
             if (thrust >= 0.0F) {
                 float lunge = Mth.sin(thrust * Mth.PI);
                 poseStack.translate(-side * 0.30F * lunge, 0.12F * lunge, -0.60F * lunge);

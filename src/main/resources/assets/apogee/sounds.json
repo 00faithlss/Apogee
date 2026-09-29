@@ -36,6 +36,24 @@
       }
     ]
   },
+  "mantis_deploy_thermal": {
+    "subtitle": "subtitles.apogee.mantis_deploy_thermal",
+    "sounds": [
+      {
+        "name": "apogee:mantis_deploy_thermal",
+        "stream": false
+      }
+    ]
+  },
+  "mantis_deploy_electric": {
+    "subtitle": "subtitles.apogee.mantis_deploy_electric",
+    "sounds": [
+      {
+        "name": "apogee:mantis_deploy_electric",
+        "stream": false
+      }
+    ]
+  },
   "mantis_retract": {
     "subtitle": "subtitles.apogee.mantis_retract",
     "sounds": [

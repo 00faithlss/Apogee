@@ -9,7 +9,7 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - Implante «Cuchillas Mantis» en la nueva ranura Trinkets `cyberware/arms`, con receta con forma simétrica y logro de desafío «Mantis religiosa». Variantes **térmica** (prende fuego al objetivo) y **eléctrica** (lo aturde un momento), que se fabrican rodeando las Cuchillas Mantis con varas de blaze y bloques de magma, o con bloques de redstone y pararrayos.
 - Tecla R (configurable) para desplegar o guardar las cuchillas. Clic izquierdo: cortes alternados, un brazo distinto en cada golpe (+6 de daño y +1,5 de velocidad de ataque mientras están desplegadas). Clic derecho: estocada con ambas cuchillas, con impulso, daño a lo largo de 4 bloques y recarga de 2 s. El servidor valida el despliegue, el daño y la recarga.
 - Con las cuchillas desplegadas la ranura de la hotbar queda fija (rueda y teclas 1-9), el inventario no se abre y el clic derecho no usa objetos. El servidor también fija la ranura y cierra contenedores.
-- Modelo y animaciones del kit Mantis v0.4 (GeckoLib, una geometría por variante y lado, 25 huesos): cerrado, el brazo se ve como uno normal; al desplegar se abren las cubiertas superiores e inferiores, sube el mecanismo por el costado externo del antebrazo y se extiende la hoja telescópica. Animaciones de despliegue y repliegue (1 s) y de ataque por brazo (0,6 s).
+- Modelo y animaciones del kit Mantis v0.4 (GeckoLib, una geometría por variante y lado, 25 huesos): cerrado, el brazo se ve como uno normal; al desplegar se abren las cubiertas superiores e inferiores, sube el riel por el costado externo del antebrazo y la hoja sale de él en dos láminas rígidas (la principal y la punta), sin que el riel se estire. Animaciones de despliegue y repliegue (1 s) y de ataque por brazo (0,6 s).
 - El modelo reemplaza el brazo vanilla mientras se lleva el implante: los paneles de piel, la mano y el tope del hombro se dibujan con la skin del portador (clásica o Slim), proyectando cada panel sobre la zona del brazo que cubre al estar cerrado.
 - Tercera persona con postura de combate (brazos separados 20° del torso) y primera persona con ambas cuchillas desplegadas; plegadas se ve el brazo normal.
 - Máscaras emisivas de las variantes térmica y eléctrica, activas solo con el implante abierto, y partículas de brasas o chispas al atacar.
@@ -21,7 +21,10 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - En primera persona las dos cuchillas quedan hacia los bordes de la pantalla, a la misma distancia que un objeto en cada mano; antes se juntaban en el centro.
 - La prueba de cliente guarda una captura de referencia con una espada en cada mano para comparar la separación.
 - Con packs que animan los brazos, como Fresh Animations Player Extension, el implante abierto recibe igualmente la separación de 20° del torso para que sus cubiertas inferiores no lo atraviesen.
-- Sonidos provisionales (reutilizan eventos de Minecraft) hasta contar con grabaciones propias.
+- Revisión del modelo: hoja y riel en grupos independientes (`blade_slider` y `cutting_edge` deslizan dentro del riel fijo) y alcance mayor que el del kit original; los proyectos de Blockbench por pieza quedan en `art/mantis-kit/modular/`.
+- Metal oscuro en las tres variantes; la térmica tiene la hoja más ancha, filo naranja y punta amarilla, y la eléctrica un filo azul que brilla.
+- En primera persona, el brazo izquierdo de la térmica gira un poco hacia la cámara para mostrar más el mecanismo.
+- Sonidos de despliegue propios para la térmica y la eléctrica (`mantis_deploy_thermal`, `mantis_deploy_electric`, mono para que se oigan con posición en multijugador). La normal y el resto de acciones siguen con sonidos provisionales que reutilizan eventos de Minecraft.
 
 ### Cambiado
 

@@ -10,6 +10,8 @@ public final class ApogeeSounds {
     public static final SoundEvent SANDEVISTAN_DEACTIVATE = SoundEvent.createVariableRangeEvent(Apogee.id("sandevistan_deactivate"));
     public static final SoundEvent RUDIMENTARY_IMPLANT = SoundEvent.createVariableRangeEvent(Apogee.id("rudimentary_implant"));
     public static final SoundEvent MANTIS_DEPLOY = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_deploy"));
+    public static final SoundEvent MANTIS_DEPLOY_THERMAL = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_deploy_thermal"));
+    public static final SoundEvent MANTIS_DEPLOY_ELECTRIC = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_deploy_electric"));
     public static final SoundEvent MANTIS_RETRACT = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_retract"));
     public static final SoundEvent MANTIS_SWING = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_swing"));
     public static final SoundEvent MANTIS_HIT = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_hit"));
@@ -23,6 +25,8 @@ public final class ApogeeSounds {
         Registry.register(BuiltInRegistries.SOUND_EVENT, SANDEVISTAN_DEACTIVATE.getLocation(), SANDEVISTAN_DEACTIVATE);
         Registry.register(BuiltInRegistries.SOUND_EVENT, RUDIMENTARY_IMPLANT.getLocation(), RUDIMENTARY_IMPLANT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_DEPLOY.getLocation(), MANTIS_DEPLOY);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_DEPLOY_THERMAL.getLocation(), MANTIS_DEPLOY_THERMAL);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_DEPLOY_ELECTRIC.getLocation(), MANTIS_DEPLOY_ELECTRIC);
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_RETRACT.getLocation(), MANTIS_RETRACT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_SWING.getLocation(), MANTIS_SWING);
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_HIT.getLocation(), MANTIS_HIT);
