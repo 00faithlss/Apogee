@@ -72,7 +72,7 @@ public final class MantisArmRenderer {
         poseStack.translate(MantisArmModel.centerX(right, slim) / 16.0F, 0.0F, 0.0F);
         float scale = MantisArmModel.MECHANISM_SCALE;
         poseStack.scale(scale * MantisArmModel.widthScale(slim), scale, scale);
-        arm.skinCovers(right).render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(player.getSkin().texture())),
+        arm.skinFlaps(right).render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(player.getSkin().texture())),
                 light, OverlayTexture.NO_OVERLAY);
         arm.mechanism().render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(texture)),
                 hot ? LightTexture.FULL_BRIGHT : light, OverlayTexture.NO_OVERLAY);

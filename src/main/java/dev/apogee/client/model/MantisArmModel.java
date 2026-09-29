@@ -12,11 +12,12 @@ import net.minecraft.util.Mth;
  * hand, which ends at y=10, and -Z out of the forearm's front face).
  *
  * <p>Separate components, all authored in texels (half a model pixel, see
- * {@link MantisMechanismMesh}): the housing clamped to the forearm, two covers whose tops are
- * drawn with the wearer's own skin, the lower and upper links and the blade, whose edge slides out
- * of its housing. Folded, the links and blade lie in a trough on the forearm under the closed
- * covers. Deploying, the covers swing open to the sides, the links rise from the wrist towards
- * the elbow, the blade swings forward over the hand and the edge slides out.
+ * {@link MantisMechanismMesh}): the housing clamped to the forearm, the lower and upper links, the
+ * blade, whose edge slides out of its housing, and three flaps whose outsides are drawn with the
+ * wearer's own skin. The forearm's skin rides on the lower link: folded, it closes over the links
+ * and blade lying in a trough on the forearm; deploying, it rises with the link from the wrist
+ * towards the elbow while a flap near the elbow lifts and a flap under the wrist drops open over
+ * the cables. Then the blade swings forward over the hand and the edge slides out.
  */
 public final class MantisArmModel {
     public static final ModelLayerLocation SKIN_LAYER = new ModelLayerLocation(Apogee.id("mantis_arm"), "skin");
@@ -33,16 +34,19 @@ public final class MantisArmModel {
     private static final float LOWER_OPEN = (float) Math.toRadians(130.0);
     private static final float UPPER_OPEN = (float) Math.toRadians(152.0);
     private static final float BLADE_OPEN = (float) Math.toRadians(12.0);
-    /** How far each cover swings up and out to its side. */
-    private static final float COVER_OPEN = (float) Math.toRadians(145.0);
+    /** How far the elbow flap lifts and the wrist flap underneath drops. */
+    private static final float ELBOW_FLAP_OPEN = (float) Math.toRadians(35.0);
+    private static final float UNDER_FLAP_OPEN = (float) Math.toRadians(40.0);
     /** How far the edge slides out of the housing, in texels. */
     private static final float EDGE_TRAVEL = 14.0F;
     private static final float EDGE_HOME = 14.0F;
 
-    private final ModelPart[] skinCovers = new ModelPart[2];
-    private final ModelPart[][] skinCoverHalves = new ModelPart[2][2];
+    private final ModelPart[] skinFlaps = new ModelPart[2];
+    /** Per arm: the skin on the lower link, the elbow flap and the flap under the wrist. */
+    private final ModelPart[][] skinParts = new ModelPart[2][3];
     private final ModelPart housing;
-    private final ModelPart[] coverLinings = new ModelPart[2];
+    private final ModelPart elbowFlap;
+    private final ModelPart underFlap;
     private final ModelPart lowerLink;
     private final ModelPart upperLink;
     private final ModelPart blade;
@@ -50,13 +54,14 @@ public final class MantisArmModel {
 
     public MantisArmModel(ModelPart skinRoot, ModelPart mechanismRoot) {
         for (int arm = 0; arm < 2; arm++) {
-            skinCovers[arm] = skinRoot.getChild(arm == 0 ? "right_arm" : "left_arm");
-            skinCoverHalves[arm][0] = skinCovers[arm].getChild("cover_left");
-            skinCoverHalves[arm][1] = skinCovers[arm].getChild("cover_right");
+            skinFlaps[arm] = skinRoot.getChild(arm == 0 ? "right_arm" : "left_arm");
+            skinParts[arm][0] = skinFlaps[arm].getChild("link_lower");
+            skinParts[arm][1] = skinFlaps[arm].getChild("cover_elbow");
+            skinParts[arm][2] = skinFlaps[arm].getChild("cover_under");
         }
         housing = mechanismRoot.getChild("housing");
-        coverLinings[0] = housing.getChild("cover_left");
-        coverLinings[1] = housing.getChild("cover_right");
+        elbowFlap = housing.getChild("cover_elbow");
+        underFlap = housing.getChild("cover_under");
         lowerLink = housing.getChild("link_lower");
         upperLink = lowerLink.getChild("link_upper");
         blade = upperLink.getChild("blade");
@@ -87,8 +92,8 @@ public final class MantisArmModel {
         return LayerDefinition.create(mesh, MantisMechanismMesh.TEXTURE_SIZE, MantisMechanismMesh.TEXTURE_SIZE);
     }
 
-    public ModelPart skinCovers(boolean right) {
-        return skinCovers[right ? 0 : 1];
+    public ModelPart skinFlaps(boolean right) {
+        return skinFlaps[right ? 0 : 1];
     }
 
     public ModelPart mechanism() {
@@ -96,23 +101,14 @@ public final class MantisArmModel {
     }
 
     /**
-     * Poses every component for an unfold progress from 0 (folded) to 1 (open): the covers open
-     * first, then the links rise, the blade swings forward and the edge slides out.
+     * Poses every component for an unfold progress from 0 (folded) to 1 (open): the links rise
+     * with the forearm skin while the flaps open, then the blade swings forward and the edge
+     * slides out.
      */
     public void setDeployment(float progress) {
-        float open = Mth.clamp(progress / 0.3F, 0.0F, 1.0F);
-        float rise = Mth.clamp((progress - 0.2F) / 0.5F, 0.0F, 1.0F);
-        float swing = Mth.clamp((progress - 0.35F) / 0.5F, 0.0F, 1.0F);
-        float slide = Mth.clamp((progress - 0.6F) / 0.4F, 0.0F, 1.0F);
-
-        // The left cover lies on the +X side of its hinge: a positive yRot lifts it up and out to -X.
-        float cover = open * COVER_OPEN;
-        coverLinings[0].yRot = cover;
-        coverLinings[1].yRot = -cover;
-        for (ModelPart[] halves : skinCoverHalves) {
-            halves[0].yRot = cover;
-            halves[1].yRot = -cover;
-        }
+        float rise = Mth.clamp(progress / 0.55F, 0.0F, 1.0F);
+        float swing = Mth.clamp((progress - 0.25F) / 0.55F, 0.0F, 1.0F);
+        float slide = Mth.clamp((progress - 0.55F) / 0.45F, 0.0F, 1.0F);
 
         // Direction angles are measured from +Y towards -Z; a positive xRot turns +Y towards +Z.
         float lower = Mth.lerp(rise, Mth.PI, LOWER_OPEN);
@@ -122,5 +118,14 @@ public final class MantisArmModel {
         blade.xRot = upper - swing * BLADE_OPEN;
         edge.visible = slide > 0.0F;
         edge.y = EDGE_HOME - EDGE_TRAVEL * (1.0F - slide);
+
+        // The elbow flap lifts its wrist-side edge; the flap under the wrist drops its far edge.
+        elbowFlap.xRot = -rise * ELBOW_FLAP_OPEN;
+        underFlap.xRot = rise * UNDER_FLAP_OPEN;
+        for (ModelPart[] parts : skinParts) {
+            parts[0].xRot = lowerLink.xRot;
+            parts[1].xRot = elbowFlap.xRot;
+            parts[2].xRot = underFlap.xRot;
+        }
     }
 }

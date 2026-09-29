@@ -15,15 +15,20 @@ TEX = ROOT / "src/main/resources/assets/apogee/textures/entity"
 SIZE = 128
 
 # (part, parent, pivot, [(material, x, y, z, w, h, d, marks)])
-# Arm in texels: x -4..4, forearm y 6..16, hand y 16..20, forearm top face at z=-4.
+# Arm in texels: x -4..4, forearm y 6..16, hand y 16..20, forearm top face at z=-4, bottom at z=4.
 # Folded, the links and the blade housing lie in a trough on the forearm (z -6..-4) with the
-# links' fork plates straddling the blade, and the two covers close over them (z -8..-6).
+# links' fork plates straddling the blade. The forearm's skin rides on the lower link: folded it
+# closes over the trough (z -8..-6), deployed it rises with the link. A small flap near the elbow
+# lifts, and a flap under the wrist drops open over the red cables.
 PARTS = [
     ("housing", None, (0, 0, 0), [
         ("red", -5, 6, -3, 1, 10, 1, "cable"),      # cables along the sides of the forearm
         ("red", -5, 7, -1, 1, 8, 1, "cable"),
         ("red", 4, 6, -3, 1, 10, 1, "cable"),
         ("red", 4, 7, -1, 1, 8, 1, "cable"),
+        ("red", -4, 9, 4, 1, 6, 1, "cable"),        # cables under the wrist flap
+        ("red", 3, 9, 4, 1, 6, 1, "cable"),
+        ("red", -1, 10, 4, 2, 5, 1, "cable"),
         ("dark", -4, 6, -5, 1, 10, 1, ""),          # rails on the top edges
         ("dark", 3, 6, -5, 1, 10, 1, ""),
         ("light", -6, 5, -6, 2, 2, 5, "bolt"),      # brackets clamping the rails to the arm
@@ -32,24 +37,27 @@ PARTS = [
         ("light", 4, 10, -6, 2, 2, 5, "bolt"),
         ("dark", -3, 15, -6, 6, 2, 2, "core"),      # hinge seat at the wrist
     ]),
-    # Grey undersides of the skin covers; the skin tops are in COVER_SKIN.
-    ("cover_left", "housing", (-4, 7, -6), [("light", 0, 0, -1, 4, 7, 1, "")]),
-    ("cover_right", "housing", (4, 7, -6), [("light", -4, 0, -1, 4, 7, 1, "")]),
+    # Grey linings of the skin flaps; the skin outsides are in SKIN.
+    ("cover_elbow", "housing", (0, 1, -6), [("light", -4, 0, -1, 8, 4, 1, "")]),
+    # The flap under the wrist is skin only, so it stays flush over the cables.
+    ("cover_under", "housing", (0, 9, 5), []),
+    # The lower link's local +Z faces away from the arm while folded (it is turned 180 degrees).
     ("link_lower", "housing", (0, 15, -5), [
-        ("light", -2, 0, -1, 1, 7, 2, ""),          # fork plates either side of the blade
-        ("light", 1, 0, -1, 1, 7, 2, ""),
-        ("red", -2, 2, -2, 1, 4, 1, "cable"),       # actuators along the plates
-        ("red", 1, 2, -2, 1, 4, 1, "cable"),
-        ("dark", -3, 6, -1, 1, 2, 2, "core"),       # knuckle pins
-        ("dark", 2, 6, -1, 1, 2, 2, "core"),
+        ("light", -2, 0, -1, 1, 10, 2, ""),         # fork plates either side of the blade
+        ("light", 1, 0, -1, 1, 10, 2, ""),
+        ("light", -3, 0, 1, 6, 10, 1, ""),          # lining of the forearm skin it carries
+        ("red", -3, 1, -1, 1, 7, 2, "cable"),       # actuators beside the plates
+        ("red", 2, 1, -1, 1, 7, 2, "cable"),
+        ("dark", -3, 9, -1, 1, 2, 2, "core"),       # knuckle pins
+        ("dark", 2, 9, -1, 1, 2, 2, "core"),
     ]),
-    ("link_upper", "link_lower", (0, 7, 0), [
-        ("dark", -3, 0, -1, 1, 6, 2, ""),
-        ("dark", 2, 0, -1, 1, 6, 2, ""),
-        ("light", -3, 1, -2, 1, 4, 1, ""),
-        ("light", 2, 1, -2, 1, 4, 1, ""),
+    ("link_upper", "link_lower", (0, 10, 0), [
+        ("dark", -3, 0, -1, 1, 5, 2, ""),
+        ("dark", 2, 0, -1, 1, 5, 2, ""),
+        ("light", -3, 1, -2, 1, 3, 1, ""),
+        ("light", 2, 1, -2, 1, 3, 1, ""),
     ]),
-    ("blade", "link_upper", (0, 6, 0), [
+    ("blade", "link_upper", (0, 5, 0), [
         ("light", -2, -4, -2, 4, 4, 3, "eye"),      # hooked head
         ("light", -1, -6, -1, 2, 2, 2, ""),
         ("dark", -1, -4, 1, 2, 2, 1, ""),           # beak of the hook, towards the arm
@@ -68,17 +76,22 @@ PARTS = [
     ]),
 ]
 
-# Skin tops of the covers, drawn with the wearer's skin. The layer is declared 128x128 while the
-# skin is 64x64, so one texel reads half a skin pixel, matching the half-pixel mesh. A depth-1
-# box reads its top (-Z) face at (u+1, v+1): the forearm's front face starts at skin pixel
-# (44,20) on the right arm and (36,52) on the left, and the covers start 5.5 pixels below the
-# arm's top edge (11 texels).
-COVER_SKIN = {
-    "right_arm": {"cover_left": (87, 50), "cover_right": (91, 50)},
-    "left_arm": {"cover_left": (71, 114), "cover_right": (75, 114)},
+# Skin outsides of the flaps, drawn with the wearer's skin. The layer is declared 128x128 while
+# the skin is 64x64, so one texel reads half a skin pixel, matching the half-pixel mesh.
+# Each entry: part (same name and pivot as in PARTS), box, and (u, v) chosen so the face that
+# looks out lands on the arm's own pixels. Skin pixels, doubled: the right arm's front face starts
+# at (88,40) and its back face at (104,40); the left arm's at (72,104) and (88,104). The arm's top
+# edge is at y=-4, so a box starting at y reads rows from (y + 4).
+SKIN_BOXES = {
+    "cover_elbow": (-4, 0, -2, 8, 4, 1),            # front (-Z) face out: at (u+1, v+1)
+    "link_lower": (-3, 0, 2, 6, 10, 1),             # back (+Z) face out while folded: at (u+8, v+1)
+    "cover_under": (-3, 0, 0, 6, 6, 1),             # back (+Z) face out: at (u+8, v+1)
 }
-COVER_BOX = {"cover_left": (0, 0, -2, 4, 7, 1), "cover_right": (-4, 0, -2, 4, 7, 1)}
-COVER_PIVOT = {name: pivot for name, _, pivot, _ in PARTS if name.startswith("cover")}
+SKIN_UV = {
+    "right_arm": {"cover_elbow": (87, 44), "link_lower": (81, 48), "cover_under": (97, 52)},
+    "left_arm": {"cover_elbow": (71, 108), "link_lower": (65, 112), "cover_under": (81, 116)},
+}
+PIVOTS = {name: pivot for name, _, pivot, _ in PARTS}
 
 PALETTES = {
     "": {"dark": (52, 55, 63), "light": (178, 181, 186), "red": (158, 26, 34),
@@ -163,6 +176,11 @@ def fmt(n):
     return f"{float(n)}F"
 
 
+def camel(name):
+    head, *rest = name.split("_")
+    return head + "".join(part.capitalize() for part in rest)
+
+
 def java(uv):
     lines = []
     for name, parent, pivot, boxes in PARTS:
@@ -170,17 +188,17 @@ def java(uv):
             f"\n                        .texOffs({uv[(name, i)][0]}, {uv[(name, i)][1]})"
             f".addBox({fmt(x)}, {fmt(y)}, {fmt(z)}, {fmt(w)}, {fmt(h)}, {fmt(d)})"
             for i, (_, x, y, z, w, h, d, _) in enumerate(boxes))
-        target = "parent" if parent is None else parent
-        lines.append(f"        PartDefinition {name} = {target}.addOrReplaceChild(\"{name}\", CubeListBuilder.create(){cubes},\n"
+        target = "parent" if parent is None else camel(parent)
+        lines.append(f"        PartDefinition {camel(name)} = {target}.addOrReplaceChild(\"{name}\", CubeListBuilder.create(){cubes},\n"
                      f"                PartPose.offset({fmt(pivot[0])}, {fmt(pivot[1])}, {fmt(pivot[2])}));")
     body = "\n".join(lines)
     skin = []
-    for arm, covers in COVER_SKIN.items():
+    for arm, uvs in SKIN_UV.items():
         var = arm.replace("_a", "A")
         skin.append(f"        PartDefinition {var} = parent.addOrReplaceChild(\"{arm}\", CubeListBuilder.create(), PartPose.ZERO);")
-        for name, (u, v) in covers.items():
-            x, y, z, w, h, d = COVER_BOX[name]
-            px, py, pz = COVER_PIVOT[name]
+        for name, (u, v) in uvs.items():
+            x, y, z, w, h, d = SKIN_BOXES[name]
+            px, py, pz = PIVOTS[name]
             skin.append(f"        {var}.addOrReplaceChild(\"{name}\", CubeListBuilder.create()\n"
                         f"                        .texOffs({u}, {v}).addBox({fmt(x)}, {fmt(y)}, {fmt(z)}, {fmt(w)}, {fmt(h)}, {fmt(d)}),\n"
                         f"                PartPose.offset({fmt(px)}, {fmt(py)}, {fmt(pz)}));")
@@ -192,7 +210,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
 /**
- * Mantis Blade cubes, in texels (half a model pixel): the steel mechanism and the skin covers.
+ * Mantis Blade cubes, in texels (half a model pixel): the steel mechanism and the skin flaps.
  * Generated by tools/mantis_model.py together with textures/entity/mantis_blades*.png; edit the
  * script and run it again rather than editing this file, so geometry and UVs stay in sync.
  */
@@ -207,7 +225,7 @@ final class MantisMechanismMesh {{
 {body}
     }}
 
-    /** Skin tops of the wrist covers, one pair per arm, read from the wearer's 64x64 skin. */
+    /** Skin outsides of the flaps, one set per arm, read from the wearer's 64x64 skin. */
     static void buildSkinCovers(PartDefinition parent) {{
 {skin_body}
     }}
