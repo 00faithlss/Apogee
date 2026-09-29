@@ -34,8 +34,9 @@ public final class MantisArmModel {
     private static final float SEGMENT_LENGTH = 4.8F;
     /** A long, slender blade: about one and a half times the length of the forearm and hand. */
     private static final float[] PIECE_LENGTH = {2.0F, 2.0F, 2.0F, 2.0F, 1.8F, 1.4F};
-    /** In-plane width of each blade piece: a broad head at the hinge, then a thin taper to the point. */
-    private static final float[] PIECE_WIDTH = {1.3F, 1.0F, 0.8F, 0.7F, 0.55F, 0.35F};
+    /** In-plane width of each blade piece: a thin, even strip that only narrows at the very tip. */
+    private static final float[] PIECE_WIDTH = {0.7F, 0.7F, 0.65F, 0.6F, 0.5F, 0.25F};
+    private static final float BLADE_THICKNESS = 0.4F;
     /** Angle of the support off the forearm axis when open. */
     private static final float OPEN_SEGMENT = (float) Math.toRadians(42.0);
     /** Angle of the first blade piece past parallel, and the extra turn added at every joint after it. */
@@ -101,8 +102,8 @@ public final class MantisArmModel {
 
             PartDefinition segment = mech.addOrReplaceChild("segment",
                     CubeListBuilder.create()
-                            .texOffs(0, 32).addBox(-1.0F, -0.8F, -0.8F, 2.0F, 1.6F, 1.6F)
-                            .texOffs(0, 0).addBox(-0.8F, 0.0F, -0.4F, 1.6F, SEGMENT_LENGTH, 0.8F),
+                            .texOffs(0, 32).addBox(-0.5F, -0.4F, -0.4F, 1.0F, 0.8F, 0.8F)
+                            .texOffs(0, 0).addBox(-0.5F, 0.0F, -0.3F, 1.0F, SEGMENT_LENGTH, 0.6F),
                     PartPose.offset(centerX, WRIST_Y, HINGE_Z));
 
             PartDefinition piece = segment.addOrReplaceChild("blade", pieceCubes(0), PartPose.offset(0.0F, SEGMENT_LENGTH, 0.0F));
@@ -116,17 +117,10 @@ public final class MantisArmModel {
     private static CubeListBuilder pieceCubes(int k) {
         float w = PIECE_WIDTH[k];
         CubeListBuilder cubes = CubeListBuilder.create()
-                .texOffs(0, 16).addBox(-0.3F, 0.0F, -w / 2.0F, 0.6F, PIECE_LENGTH[k], w);
+                .texOffs(0, 16).addBox(-BLADE_THICKNESS / 2.0F, 0.0F, -w / 2.0F, BLADE_THICKNESS, PIECE_LENGTH[k], w);
         if (k == 0) {
-            // Pivot barrel and the swept-back hook of the blade head, behind the hinge.
-            cubes.texOffs(0, 32).addBox(-1.1F, -0.9F, -0.9F, 2.2F, 1.8F, 1.8F)
-                    .texOffs(0, 16).addBox(-0.3F, -1.1F, -w / 2.0F, 0.6F, 1.1F, w)
-                    .texOffs(0, 16).addBox(-0.3F, -1.9F, -w / 2.0F + 0.2F, 0.6F, 0.8F, w - 0.4F);
-        }
-        if (k <= 2) {
-            // Serrated lower edge, on the side facing the arm.
-            cubes.texOffs(0, 16).addBox(-0.15F, 0.2F, w / 2.0F, 0.3F, 0.5F, 0.35F)
-                    .texOffs(0, 16).addBox(-0.15F, 1.1F, w / 2.0F, 0.3F, 0.5F, 0.35F);
+            // Small hinge pin, no bulkier than the blade itself.
+            cubes.texOffs(0, 32).addBox(-0.5F, -0.4F, -0.4F, 1.0F, 0.8F, 0.8F);
         }
         return cubes;
     }
