@@ -37,7 +37,7 @@ public final class MantisArmRenderer {
     private static MantisArmModel model() {
         if (model == null) {
             var models = Minecraft.getInstance().getEntityModels();
-            model = new MantisArmModel(models.bakeLayer(MantisArmModel.PLATE_LAYER), models.bakeLayer(MantisArmModel.MECHANISM_LAYER));
+            model = new MantisArmModel(models.bakeLayer(MantisArmModel.SKIN_LAYER), models.bakeLayer(MantisArmModel.MECHANISM_LAYER));
         }
         return model;
     }
@@ -55,9 +55,7 @@ public final class MantisArmRenderer {
         }
         MantisArmModel arm = model();
         boolean slim = player.getSkin().model() == PlayerSkin.Model.SLIM;
-        arm.setDeployment(right, slim, progress);
-        arm.plate(right, slim).render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(player.getSkin().texture())),
-                light, OverlayTexture.NO_OVERLAY);
+        arm.setDeployment(progress);
 
         boolean hot = MantisClient.glowing(player);
         ResourceLocation texture = switch (variant) {
@@ -74,6 +72,8 @@ public final class MantisArmRenderer {
         poseStack.translate(MantisArmModel.centerX(right, slim) / 16.0F, 0.0F, 0.0F);
         float scale = MantisArmModel.MECHANISM_SCALE;
         poseStack.scale(scale * MantisArmModel.widthScale(slim), scale, scale);
+        arm.skinCovers(right).render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(player.getSkin().texture())),
+                light, OverlayTexture.NO_OVERLAY);
         arm.mechanism().render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(texture)),
                 hot ? LightTexture.FULL_BRIGHT : light, OverlayTexture.NO_OVERLAY);
         // Emissive pass: the heated edge, the electrodes and the eye stay lit in the dark.

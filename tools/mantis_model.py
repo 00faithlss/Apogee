@@ -15,42 +15,48 @@ TEX = ROOT / "src/main/resources/assets/apogee/textures/entity"
 SIZE = 128
 
 # (part, parent, pivot, [(material, x, y, z, w, h, d, marks)])
-# The wrist (y 14..18) is left clear: the skin covers there open to let the links out.
+# Arm in texels: x -4..4, forearm y 6..16, hand y 16..20, forearm top face at z=-4.
+# Folded, the links and the blade housing lie in a trough on the forearm (z -6..-4) with the
+# links' fork plates straddling the blade, and the two covers close over them (z -8..-6).
 PARTS = [
-    ("mech", None, (0, 0, 0), [
-        ("dark", -3, 6, -8, 6, 8, 2, ""),           # housing on the forearm
-        ("red", -2, 6, -9, 1, 8, 1, "cable"),       # cables over the housing
-        ("red", 1, 6, -9, 1, 8, 1, "cable"),
-        ("light", -4, 6, -9, 8, 2, 3, "bolt"),      # clamps
-        ("light", -4, 11, -9, 8, 2, 3, "bolt"),
-        ("red", -5, 6, -5, 1, 8, 1, "cable"),       # cables along the sides of the arm
-        ("red", -5, 6, -2, 1, 8, 1, "cable"),
-        ("red", 4, 6, -5, 1, 8, 1, "cable"),
-        ("red", 4, 6, -2, 1, 8, 1, "cable"),
-        ("light", -6, 8, -6, 1, 3, 6, ""),          # side plates
-        ("light", 5, 8, -6, 1, 3, 6, ""),
-        ("dark", -2, 13, -10, 4, 2, 2, "core"),     # hinge seat, glowing core
+    ("housing", None, (0, 0, 0), [
+        ("red", -5, 6, -3, 1, 10, 1, "cable"),      # cables along the sides of the forearm
+        ("red", -5, 7, -1, 1, 8, 1, "cable"),
+        ("red", 4, 6, -3, 1, 10, 1, "cable"),
+        ("red", 4, 7, -1, 1, 8, 1, "cable"),
+        ("dark", -4, 6, -5, 1, 10, 1, ""),          # rails on the top edges
+        ("dark", 3, 6, -5, 1, 10, 1, ""),
+        ("light", -6, 5, -6, 2, 2, 5, "bolt"),      # brackets clamping the rails to the arm
+        ("light", 4, 5, -6, 2, 2, 5, "bolt"),
+        ("light", -6, 10, -6, 2, 2, 5, "bolt"),
+        ("light", 4, 10, -6, 2, 2, 5, "bolt"),
+        ("dark", -3, 15, -6, 6, 2, 2, "core"),      # hinge seat at the wrist
     ]),
-    ("link_lower", "mech", (0, 14, -9), [
-        ("dark", -1, 0, -1, 2, 8, 2, ""),
-        ("light", 1, 1, -1, 1, 6, 2, ""),
-        ("light", -2, 1, -1, 1, 6, 2, ""),
-        ("red", -1, 2, -2, 2, 4, 1, "cable"),
-        ("light", -2, 7, -2, 4, 2, 3, "core"),      # knuckle
+    # Grey undersides of the skin covers; the skin tops are in COVER_SKIN.
+    ("cover_left", "housing", (-4, 7, -6), [("light", 0, 0, -1, 4, 7, 1, "")]),
+    ("cover_right", "housing", (4, 7, -6), [("light", -4, 0, -1, 4, 7, 1, "")]),
+    ("link_lower", "housing", (0, 15, -5), [
+        ("light", -2, 0, -1, 1, 7, 2, ""),          # fork plates either side of the blade
+        ("light", 1, 0, -1, 1, 7, 2, ""),
+        ("red", -2, 2, -2, 1, 4, 1, "cable"),       # actuators along the plates
+        ("red", 1, 2, -2, 1, 4, 1, "cable"),
+        ("dark", -3, 6, -1, 1, 2, 2, "core"),       # knuckle pins
+        ("dark", 2, 6, -1, 1, 2, 2, "core"),
     ]),
-    ("link_upper", "link_lower", (0, 8, 0), [
-        ("dark", -1, 0, -1, 2, 7, 2, ""),
-        ("light", -2, 1, -2, 4, 5, 1, ""),
-        ("red", -1, 2, -3, 2, 3, 1, "cable"),
+    ("link_upper", "link_lower", (0, 7, 0), [
+        ("dark", -3, 0, -1, 1, 6, 2, ""),
+        ("dark", 2, 0, -1, 1, 6, 2, ""),
+        ("light", -3, 1, -2, 1, 4, 1, ""),
+        ("light", 2, 1, -2, 1, 4, 1, ""),
     ]),
-    ("blade", "link_upper", (0, 7, 0), [
-        ("light", -2, -4, -2, 4, 5, 3, "eye"),      # hooked head
+    ("blade", "link_upper", (0, 6, 0), [
+        ("light", -2, -4, -2, 4, 4, 3, "eye"),      # hooked head
         ("light", -1, -6, -1, 2, 2, 2, ""),
-        ("dark", -1, -4, 1, 2, 2, 2, ""),           # beak of the hook, towards the arm
-        ("housing", -1, 1, -1, 2, 14, 2, "stripe"),
-        ("light", -1, 3, -2, 2, 10, 1, ""),         # spine plate
+        ("dark", -1, -4, 1, 2, 2, 1, ""),           # beak of the hook, towards the arm
+        ("housing", -1, 0, -1, 2, 14, 2, "stripe"),
+        ("light", -1, 2, -2, 2, 10, 1, ""),         # spine plate
     ]),
-    ("edge", "blade", (0, 15, 0), [
+    ("edge", "blade", (0, 14, 0), [
         ("steel", -0.5, 0, -1, 1, 22, 2, "edge"),
         ("steel", -0.5, 1, 1, 1, 1, 1, ""),         # serrations on the arm side
         ("steel", -0.5, 3, 1, 1, 1, 1, ""),
@@ -61,6 +67,18 @@ PARTS = [
         ("steel", -0.5, 24, -1, 1, 1, 1, "edge"),
     ]),
 ]
+
+# Skin tops of the covers, drawn with the wearer's skin. The layer is declared 128x128 while the
+# skin is 64x64, so one texel reads half a skin pixel, matching the half-pixel mesh. A depth-1
+# box reads its top (-Z) face at (u+1, v+1): the forearm's front face starts at skin pixel
+# (44,20) on the right arm and (36,52) on the left, and the covers start 5.5 pixels below the
+# arm's top edge (11 texels).
+COVER_SKIN = {
+    "right_arm": {"cover_left": (87, 50), "cover_right": (91, 50)},
+    "left_arm": {"cover_left": (71, 114), "cover_right": (75, 114)},
+}
+COVER_BOX = {"cover_left": (0, 0, -2, 4, 7, 1), "cover_right": (-4, 0, -2, 4, 7, 1)}
+COVER_PIVOT = {name: pivot for name, _, pivot, _ in PARTS if name.startswith("cover")}
 
 PALETTES = {
     "": {"dark": (52, 55, 63), "light": (178, 181, 186), "red": (158, 26, 34),
@@ -156,6 +174,17 @@ def java(uv):
         lines.append(f"        PartDefinition {name} = {target}.addOrReplaceChild(\"{name}\", CubeListBuilder.create(){cubes},\n"
                      f"                PartPose.offset({fmt(pivot[0])}, {fmt(pivot[1])}, {fmt(pivot[2])}));")
     body = "\n".join(lines)
+    skin = []
+    for arm, covers in COVER_SKIN.items():
+        var = arm.replace("_a", "A")
+        skin.append(f"        PartDefinition {var} = parent.addOrReplaceChild(\"{arm}\", CubeListBuilder.create(), PartPose.ZERO);")
+        for name, (u, v) in covers.items():
+            x, y, z, w, h, d = COVER_BOX[name]
+            px, py, pz = COVER_PIVOT[name]
+            skin.append(f"        {var}.addOrReplaceChild(\"{name}\", CubeListBuilder.create()\n"
+                        f"                        .texOffs({u}, {v}).addBox({fmt(x)}, {fmt(y)}, {fmt(z)}, {fmt(w)}, {fmt(h)}, {fmt(d)}),\n"
+                        f"                PartPose.offset({fmt(px)}, {fmt(py)}, {fmt(pz)}));")
+    skin_body = "\n".join(skin)
     return f'''package dev.apogee.client.model;
 
 import net.minecraft.client.model.geom.PartPose;
@@ -163,7 +192,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
 /**
- * Mantis Blade mechanism cubes, in texels (half a model pixel).
+ * Mantis Blade cubes, in texels (half a model pixel): the steel mechanism and the skin covers.
  * Generated by tools/mantis_model.py together with textures/entity/mantis_blades*.png; edit the
  * script and run it again rather than editing this file, so geometry and UVs stay in sync.
  */
@@ -176,6 +205,11 @@ final class MantisMechanismMesh {{
     @SuppressWarnings("unused")
     static void build(PartDefinition parent) {{
 {body}
+    }}
+
+    /** Skin tops of the wrist covers, one pair per arm, read from the wearer's 64x64 skin. */
+    static void buildSkinCovers(PartDefinition parent) {{
+{skin_body}
     }}
 }}
 '''
