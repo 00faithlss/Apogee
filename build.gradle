@@ -152,3 +152,14 @@ java {
 jar {
     from('LICENSE_ASSETS.md')
 }
+
+// Classpath of the dev runs, for tools/mantis_tests.sh, which starts several clients and a
+// server at once (Gradle runs one Minecraft at a time).
+tasks.register('writeDevRuntimeClasspath') {
+    dependsOn 'gametestClasses', 'configureLaunch', 'downloadAssets'
+    def out = layout.buildDirectory.file('dev-runtime-classpath.txt')
+    outputs.file out
+    doLast {
+        out.get().asFile.text = sourceSets.gametest.runtimeClasspath.asPath
+    }
+}

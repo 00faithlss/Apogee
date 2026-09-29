@@ -6,6 +6,9 @@
   "mixins": [
     "KeepMockPlayersConnectedMixin"
   ],
+  "client": [
+    "CloseCameraMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

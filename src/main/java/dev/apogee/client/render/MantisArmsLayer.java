@@ -25,7 +25,7 @@ public final class MantisArmsLayer extends RenderLayer<AbstractClientPlayer, Pla
             return;
         }
         PlayerModel<AbstractClientPlayer> model = getParentModel();
-        MantisRig.drawOnArm(poseStack, buffers, light, player, model.rightArm, true, partialTick);
-        MantisRig.drawOnArm(poseStack, buffers, light, player, model.leftArm, false, partialTick);
+        MantisRig.drawOnArm(poseStack, buffers, light, player, model.rightArm, true, partialTick, true);
+        MantisRig.drawOnArm(poseStack, buffers, light, player, model.leftArm, false, partialTick, true);
     }
 }

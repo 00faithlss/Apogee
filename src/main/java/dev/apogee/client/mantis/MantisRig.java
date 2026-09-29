@@ -1,6 +1,7 @@
 package dev.apogee.client.mantis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.MantisVariant;
 import java.util.function.IntPredicate;
@@ -19,6 +20,8 @@ import org.joml.Quaternionf;
 public final class MantisRig {
     private static final Int2ObjectOpenHashMap<MantisRig> RIGS = new Int2ObjectOpenHashMap<>();
     private static final long NEVER = -1000L;
+    /** The kit's combat pose holds each arm 20 degrees out from the torso. */
+    public static final float STANCE_ABDUCTION = (float) Math.toRadians(20.0);
 
     /*
      * Seating, from GeckoLib's model space (the kit's editor axes with X mirrored) to a player arm
@@ -94,15 +97,34 @@ public final class MantisRig {
      */
     public static void drawOnArm(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player,
                                  ModelPart armPart, boolean right, float partialTick) {
+        drawOnArm(poseStack, buffers, light, player, armPart, right, partialTick, false);
+    }
+
+    /**
+     * As {@link #drawOnArm(PoseStack, MultiBufferSource, int, AbstractClientPlayer, ModelPart, boolean, float)};
+     * with {@code enforceStance} (third person), an open implant also gets the combat stance's
+     * 20 degree abduction when the arm does not already have it. Animation packs such as Fresh
+     * Animations pose the arms after the vanilla pose code runs, and would otherwise leave the
+     * open implant's lower covers inside the torso.
+     */
+    public static void drawOnArm(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player,
+                                 ModelPart armPart, boolean right, float partialTick, boolean enforceStance) {
         MantisVariant variant = MantisClient.variant(player);
         if (variant == null) {
             return;
         }
         MantisRig rig = of(player.getId());
         rig.update(right ? 0 : 1, variant, MantisClient.isDeployed(player));
+        float progress = MantisClient.deployProgress(player, partialTick);
         poseStack.pushPose();
         armPart.translateAndRotate(poseStack);
-        rig.render(poseStack, buffers, light, player, right, MantisClient.deployProgress(player, partialTick) > 0.0F, partialTick);
+        if (enforceStance && progress > 0.0F) {
+            // A positive zRot lifts the right arm away from the body, a negative one the left.
+            float target = progress * STANCE_ABDUCTION;
+            float missing = right ? Math.max(0.0F, target - armPart.zRot) : Math.min(0.0F, -target - armPart.zRot);
+            poseStack.mulPose(Axis.ZP.rotation(missing));
+        }
+        rig.render(poseStack, buffers, light, player, right, progress > 0.0F, partialTick);
         poseStack.popPose();
     }
 

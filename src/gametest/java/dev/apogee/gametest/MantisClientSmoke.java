@@ -42,6 +42,8 @@ public final class MantisClientSmoke implements ClientModInitializer {
     private static final String[] NAMES = {"thermal", "electric", "normal"};
     /** Ticks each variant's script takes. */
     private static final int ROUND = 200;
+    /** Third-person camera distance override for close-ups, or 0 for vanilla. */
+    public static float cameraDistance;
     private static int worldTicks = -1;
     private static boolean worldRequested;
 
@@ -96,9 +98,15 @@ public final class MantisClientSmoke implements ClientModInitializer {
         String name = NAMES[round];
         Item variant = VARIANTS[round];
         // Three-quarter shots: turn the body 45 degrees from the head (vanilla keeps it within 50).
-        boolean turned = (t >= 30 && t <= 45) || (t >= 80 && t <= 95);
-        mc.player.setYBodyRot(mc.player.getYRot() + (turned ? 45.0F : 0.0F));
+        boolean turned = (t >= 30 && t <= 45) || (t >= 80 && t <= 95) || (t >= 140 && t <= 147) || (t >= 154 && t <= 157);
+        boolean turnedOther = t >= 148 && t <= 153;
+        mc.player.setYBodyRot(mc.player.getYRot() + (turned ? 45.0F : turnedOther ? -45.0F : 0.0F));
         mc.player.yBodyRotO = mc.player.yBodyRot;
+        // Close-ups: tilt the view so the camera frames the forearms instead of the head.
+        if (t >= 139 && t <= 157) {
+            mc.player.setXRot(t < 153 ? -35.0F : 35.0F);
+            mc.player.xRotO = mc.player.getXRot();
+        }
         switch (t) {
             case 0 -> server(mc, (level, player) -> {
                 player.setYRot(0.0F);
@@ -138,6 +146,22 @@ public final class MantisClientSmoke implements ClientModInitializer {
             case 130 -> shot(mc, name + "-07-open-first-person");
             case 132 -> mc.player.swing(InteractionHand.MAIN_HAND);
             case 137 -> shot(mc, name + "-08-attack-first-person");
+            case 139 -> {
+                mc.options.hideGui = true;
+                mc.options.fov().set(30);
+                cameraDistance = 2.0F;
+                mc.options.setCameraType(CameraType.THIRD_PERSON_FRONT);
+            }
+            case 146 -> shot(mc, name + "-10-closeup-front");
+            case 152 -> shot(mc, name + "-11-closeup-front-other-side");
+            case 153 -> mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            case 157 -> shot(mc, name + "-12-closeup-back");
+            case 158 -> {
+                cameraDistance = 0.0F;
+                mc.options.hideGui = false;
+                mc.options.fov().set(70);
+                mc.options.setCameraType(CameraType.FIRST_PERSON);
+            }
             case 160 -> ClientPlayNetworking.send(ToggleMantis.INSTANCE);
             case 190 -> {
                 check(!MantisClient.isDeployed(mc.player), name + " retracted on the client");

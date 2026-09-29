@@ -15,7 +15,9 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - Máscaras emisivas de las variantes térmica y eléctrica, activas solo con el implante abierto, y partículas de brasas o chispas al atacar.
 - GeckoLib 4.9.3 como dependencia obligatoria que se instala aparte (no va dentro del JAR).
 - `tools/mantis_kit_import.py` importa las exportaciones del kit al mod; los proyectos de Blockbench y la documentación del kit quedan en `art/mantis-kit/`.
-- Prueba de cliente `runMantisSmoke`: equipa cada variante y captura plegada, desplegando, desplegada, atacando y en primera persona.
+- Prueba de cliente `runMantisSmoke`: equipa cada variante y captura plegada, desplegando, desplegada, atacando, primeros planos y primera persona.
+- `tools/mantis_tests.sh`: prueba multijugador (servidor dedicado y dos clientes que comprueban la sincronización de variante, despliegue, ataques y repliegue) y prueba de compatibilidad con Punchy y Fresh Animations (con Entity Model Features y Entity Texture Features).
+- Con packs que animan los brazos, como Fresh Animations Player Extension, el implante abierto recibe igualmente la separación de 20° del torso para que sus cubiertas inferiores no lo atraviesen.
 - Sonidos provisionales (reutilizan eventos de Minecraft) hasta contar con grabaciones propias.
 
 ### Cambiado

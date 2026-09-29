@@ -1,6 +1,7 @@
 package dev.apogee.mixin.client;
 
 import dev.apogee.client.mantis.MantisClient;
+import dev.apogee.client.mantis.MantisRig;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Hides the vanilla arms of Mantis Blade wearers and poses them for combat while the blades are out. */
 @Mixin(PlayerModel.class)
 public abstract class MantisPlayerModelMixin<T extends LivingEntity> {
-    /** The kit's combat pose holds each arm 20 degrees out from the torso. */
-    private static final float STANCE_ABDUCTION = (float) Math.toRadians(20.0);
 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
     private void apogee$mantisPose(T entity, float limbSwing, float limbSwingAmount, float ageInTicks,
@@ -43,8 +42,8 @@ public abstract class MantisPlayerModelMixin<T extends LivingEntity> {
         float leftX = Mth.lerp(deploy, model.leftArm.xRot, -0.55F);
         float rightY = Mth.lerp(deploy, model.rightArm.yRot, 0.10F);
         float leftY = Mth.lerp(deploy, model.leftArm.yRot, -0.10F);
-        float rightZ = Mth.lerp(deploy, model.rightArm.zRot, STANCE_ABDUCTION);
-        float leftZ = Mth.lerp(deploy, model.leftArm.zRot, -STANCE_ABDUCTION);
+        float rightZ = Mth.lerp(deploy, model.rightArm.zRot, MantisRig.STANCE_ABDUCTION);
+        float leftZ = Mth.lerp(deploy, model.leftArm.zRot, -MantisRig.STANCE_ABDUCTION);
         if (thrust >= 0.0F) {
             float lunge = Mth.sin(thrust * Mth.PI);
             rightX = Mth.lerp(lunge, rightX, -1.5F);
