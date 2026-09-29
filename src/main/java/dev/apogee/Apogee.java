@@ -2,6 +2,7 @@ package dev.apogee;
 
 import dev.apogee.compat.immersivearmors.SteamDash;
 import dev.apogee.config.ApogeeServerConfig;
+import dev.apogee.mantis.MantisManager;
 import dev.apogee.network.ApogeeNetworking;
 import dev.apogee.registry.ApogeeAttachments;
 import dev.apogee.registry.ApogeeItems;
@@ -28,6 +29,7 @@ public final class Apogee implements ModInitializer {
         ApogeeAttachments.register();
         ApogeeNetworking.registerCommon();
         SandevistanManager.register();
+        MantisManager.register();
         SteamDash.registerServer();
     }
 }

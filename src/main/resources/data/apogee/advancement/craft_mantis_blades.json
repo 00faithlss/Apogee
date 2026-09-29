@@ -1,0 +1,17 @@
+{
+  "parent": "apogee:craft_sandevistan",
+  "display": {
+    "icon": { "id": "apogee:mantis_blades" },
+    "title": { "translate": "advancements.apogee.craft_mantis_blades.title" },
+    "description": { "translate": "advancements.apogee.craft_mantis_blades.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "crafted_mantis_blades": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": { "recipe_id": "apogee:mantis_blades" }
+    }
+  }
+}

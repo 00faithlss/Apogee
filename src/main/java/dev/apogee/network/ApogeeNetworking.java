@@ -17,6 +17,10 @@ public final class ApogeeNetworking {
     public static void registerCommon() {
         PayloadTypeRegistry.playC2S().register(ToggleSandevistan.TYPE, ToggleSandevistan.CODEC);
         PayloadTypeRegistry.playC2S().register(SteamDashRequest.TYPE, SteamDashRequest.CODEC);
+        PayloadTypeRegistry.playC2S().register(ToggleMantis.TYPE, ToggleMantis.CODEC);
+        PayloadTypeRegistry.playC2S().register(MantisThrust.TYPE, MantisThrust.CODEC);
+        PayloadTypeRegistry.playS2C().register(MantisSync.TYPE, MantisSync.CODEC);
+        PayloadTypeRegistry.playS2C().register(MantisSwing.TYPE, MantisSwing.CODEC);
         PayloadTypeRegistry.playS2C().register(RulesSync.TYPE, RulesSync.CODEC);
         PayloadTypeRegistry.playS2C().register(WearerStatus.TYPE, WearerStatus.CODEC);
         PayloadTypeRegistry.playS2C().register(TimeFieldSync.TYPE, TimeFieldSync.CODEC);
@@ -39,6 +43,60 @@ public final class ApogeeNetworking {
         public static final SteamDashRequest INSTANCE = new SteamDashRequest();
         public static final Type<SteamDashRequest> TYPE = new Type<>(Apogee.id("steam_dash"));
         public static final StreamCodec<FriendlyByteBuf, SteamDashRequest> CODEC = StreamCodec.unit(INSTANCE);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client asks to deploy or retract the Mantis Blades. The server validates. */
+    public record ToggleMantis() implements CustomPacketPayload {
+        public static final ToggleMantis INSTANCE = new ToggleMantis();
+        public static final Type<ToggleMantis> TYPE = new Type<>(Apogee.id("toggle_mantis"));
+        public static final StreamCodec<FriendlyByteBuf, ToggleMantis> CODEC = StreamCodec.unit(INSTANCE);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client asks for the two-blade lunge (right click while deployed). */
+    public record MantisThrust() implements CustomPacketPayload {
+        public static final MantisThrust INSTANCE = new MantisThrust();
+        public static final Type<MantisThrust> TYPE = new Type<>(Apogee.id("mantis_thrust"));
+        public static final StreamCodec<FriendlyByteBuf, MantisThrust> CODEC = StreamCodec.unit(INSTANCE);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Whether a player has the Mantis Blades out. Sent to the player and everyone tracking them. */
+    public record MantisSync(int entityId, boolean deployed) implements CustomPacketPayload {
+        public static final Type<MantisSync> TYPE = new Type<>(Apogee.id("mantis_sync"));
+        public static final StreamCodec<FriendlyByteBuf, MantisSync> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, MantisSync::entityId,
+                ByteBufCodecs.BOOL, MantisSync::deployed,
+                MantisSync::new
+        );
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Which arm slashed (0 right, 1 left) or 2 for the lunge. Sent to players tracking the wearer. */
+    public record MantisSwing(int entityId, int arm) implements CustomPacketPayload {
+        public static final Type<MantisSwing> TYPE = new Type<>(Apogee.id("mantis_swing"));
+        public static final StreamCodec<FriendlyByteBuf, MantisSwing> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, MantisSwing::entityId,
+                ByteBufCodecs.VAR_INT, MantisSwing::arm,
+                MantisSwing::new
+        );
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

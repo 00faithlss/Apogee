@@ -7,6 +7,7 @@
   "mixins": [
     "EntityTimeMixin",
     "LivingEntityMixin",
+    "MantisSwingMixin",
     "PlayerTickMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerLevelMixin"
@@ -20,6 +21,13 @@
     "client.LevelRendererMixin",
     "client.LivingEntityLerpMixin",
     "client.LivingEntityRendererAccessor",
+    "client.MantisInventoryMixin",
+    "client.MantisItemInHandLayerMixin",
+    "client.MantisItemInHandRendererMixin",
+    "client.MantisLocalPlayerMixin",
+    "client.MantisMinecraftMixin",
+    "client.MantisPlayerModelMixin",
+    "client.MantisPlayerRendererMixin",
     "client.compat.SimplyTooltipsRendererMixin"
   ],
   "injectors": {

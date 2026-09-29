@@ -13,7 +13,7 @@
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
-          { "items": ["apogee:os_core_t5", "apogee:apogee_overdrive_kernel_t5", "apogee:quantum_sync_lattice_t5", "apogee:sandevistan"] }
+          { "items": ["apogee:os_core_t5", "apogee:apogee_overdrive_kernel_t5", "apogee:quantum_sync_lattice_t5", "apogee:sandevistan", "apogee:mantis_blades"] }
         ]
       }
     }

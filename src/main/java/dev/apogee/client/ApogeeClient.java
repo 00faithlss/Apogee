@@ -5,11 +5,17 @@ import dev.apogee.Apogee;
 import dev.apogee.client.config.ApogeeClientConfig;
 import dev.apogee.client.fx.AfterimageRenderer;
 import dev.apogee.client.fx.SandevistanEffects;
+import dev.apogee.client.mantis.MantisClient;
+import dev.apogee.client.model.MantisArmModel;
 import dev.apogee.client.model.SandevistanModel;
+import dev.apogee.client.render.MantisArmsLayer;
 import dev.apogee.client.render.SandevistanImplantRenderer;
 import dev.apogee.client.tooltip.SandevistanTooltipContent;
+import dev.apogee.network.ApogeeNetworking.MantisSwing;
+import dev.apogee.network.ApogeeNetworking.MantisSync;
 import dev.apogee.network.ApogeeNetworking.RulesSync;
 import dev.apogee.network.ApogeeNetworking.TimeFieldSync;
+import dev.apogee.network.ApogeeNetworking.ToggleMantis;
 import dev.apogee.network.ApogeeNetworking.ToggleSandevistan;
 import dev.apogee.network.ApogeeNetworking.WearerStatus;
 import dev.apogee.registry.ApogeeItems;
@@ -24,6 +30,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
@@ -36,15 +43,25 @@ public final class ApogeeClient implements ClientModInitializer {
     public static final KeyMapping ACTIVATE_SANDEVISTAN = new KeyMapping(
             "key.apogee.activate_sandevistan", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.categories.apogee");
 
+    public static final KeyMapping TOGGLE_MANTIS = new KeyMapping(
+            "key.apogee.toggle_mantis", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.apogee");
+
     private static long clientTicks;
 
     @Override
     public void onInitializeClient() {
         ApogeeClientConfig.load();
         KeyBindingHelper.registerKeyBinding(ACTIVATE_SANDEVISTAN);
+        KeyBindingHelper.registerKeyBinding(TOGGLE_MANTIS);
         dev.apogee.client.compat.immersivearmors.SteamDashClient.register();
 
         EntityModelLayerRegistry.registerModelLayer(SandevistanModel.LAYER, SandevistanModel::createLayer);
+        EntityModelLayerRegistry.registerModelLayer(MantisArmModel.LAYER, MantisArmModel::createLayer);
+        LivingEntityFeatureRendererRegistrationCallback.EVENT.register((type, renderer, helper, context) -> {
+            if (renderer instanceof net.minecraft.client.renderer.entity.player.PlayerRenderer playerRenderer) {
+                helper.register(new MantisArmsLayer(playerRenderer));
+            }
+        });
         TrinketRendererRegistry.registerRenderer(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
 
@@ -54,12 +71,15 @@ public final class ApogeeClient implements ClientModInitializer {
             ApogeeClientState.acceptStatus(payload);
             SandevistanEffects.onStatus(previous, payload);
         });
+        ClientPlayNetworking.registerGlobalReceiver(MantisSync.TYPE, (payload, context) -> MantisClient.accept(payload));
+        ClientPlayNetworking.registerGlobalReceiver(MantisSwing.TYPE, (payload, context) -> MantisClient.accept(payload));
         ClientPlayNetworking.registerGlobalReceiver(TimeFieldSync.TYPE, (payload, context) -> {
             IntSet previous = ApogeeClientState.acceptField(payload);
             SandevistanEffects.onWearers(previous, ApogeeClientState.currentWearers());
         });
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> client.execute(ApogeeClient::resetSession));
 
+        ClientTickEvents.START_CLIENT_TICK.register(MantisClient::tick);
         ClientTickEvents.END_CLIENT_TICK.register(ApogeeClient::onEndTick);
         HudRenderCallback.EVENT.register((graphics, deltaTracker) ->
                 SandevistanEffects.renderHud(graphics, deltaTracker.getGameTimeDeltaPartialTick(false)));
@@ -86,6 +106,7 @@ public final class ApogeeClient implements ClientModInitializer {
 
     private static void resetSession() {
         ApogeeClientState.reset();
+        MantisClient.reset();
         SandevistanEffects.reset();
         AfterimageRenderer.reset();
     }
@@ -95,6 +116,11 @@ public final class ApogeeClient implements ClientModInitializer {
         while (ACTIVATE_SANDEVISTAN.consumeClick()) {
             if (client.player != null && client.screen == null && ClientPlayNetworking.canSend(ToggleSandevistan.TYPE)) {
                 ClientPlayNetworking.send(ToggleSandevistan.INSTANCE);
+            }
+        }
+        while (TOGGLE_MANTIS.consumeClick()) {
+            if (client.player != null && client.screen == null && ClientPlayNetworking.canSend(ToggleMantis.TYPE)) {
+                ClientPlayNetworking.send(ToggleMantis.INSTANCE);
             }
         }
         if (client.level == null) {

@@ -1,14 +1,79 @@
 {
   "sandevistan_activate": {
     "subtitle": "subtitles.apogee.sandevistan_activate",
-    "sounds": [{ "name": "apogee:sandevistan_activate", "stream": false }]
+    "sounds": [
+      {
+        "name": "apogee:sandevistan_activate",
+        "stream": false
+      }
+    ]
   },
   "sandevistan_deactivate": {
     "subtitle": "subtitles.apogee.sandevistan_deactivate",
-    "sounds": [{ "name": "apogee:sandevistan_deactivate", "stream": false }]
+    "sounds": [
+      {
+        "name": "apogee:sandevistan_deactivate",
+        "stream": false
+      }
+    ]
   },
   "rudimentary_implant": {
     "subtitle": "subtitles.apogee.rudimentary_implant",
-    "sounds": [{ "name": "apogee:rudimentary_implant", "stream": false }]
+    "sounds": [
+      {
+        "name": "apogee:rudimentary_implant",
+        "stream": false
+      }
+    ]
+  },
+  "mantis_deploy": {
+    "subtitle": "subtitles.apogee.mantis_deploy",
+    "sounds": [
+      {
+        "name": "minecraft:block.piston.extend",
+        "type": "event",
+        "pitch": 1.6
+      }
+    ]
+  },
+  "mantis_retract": {
+    "subtitle": "subtitles.apogee.mantis_retract",
+    "sounds": [
+      {
+        "name": "minecraft:block.piston.contract",
+        "type": "event",
+        "pitch": 1.6
+      }
+    ]
+  },
+  "mantis_swing": {
+    "subtitle": "subtitles.apogee.mantis_swing",
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.attack.sweep",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ]
+  },
+  "mantis_hit": {
+    "subtitle": "subtitles.apogee.mantis_hit",
+    "sounds": [
+      {
+        "name": "minecraft:item.trident.hit",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ]
+  },
+  "mantis_thrust": {
+    "subtitle": "subtitles.apogee.mantis_thrust",
+    "sounds": [
+      {
+        "name": "minecraft:item.trident.throw",
+        "type": "event",
+        "pitch": 1.5
+      }
+    ]
   }
 }

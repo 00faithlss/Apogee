@@ -4,6 +4,17 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+### Añadido (Cuchillas Mantis, sin compilar ni probar todavía)
+
+- Implante «Cuchillas Mantis» en la nueva ranura Trinkets `cyberware/arms`, con receta con forma simétrica y logro de desafío «Mantis religiosa».
+- Tecla R (configurable) para desplegar o guardar las cuchillas. Salen del antebrazo en forma de Z: riel sobre el antebrazo, tramo medio con bisagra en la muñeca que se abre hacia el codo y hoja que vuelve hacia adelante sobre la mano.
+- La carcasa sobre el antebrazo copia los píxeles de la skin de quien las porta (brazo normal o slim).
+- Clic izquierdo: cortes alternados, un brazo distinto en cada golpe (+6 de daño y +1,5 de velocidad de ataque mientras están desplegadas).
+- Clic derecho: estocada con ambas cuchillas, con impulso hacia adelante, daño perforante a lo largo de 4 bloques y recarga de 2 s.
+- Primera persona con ambos antebrazos y sin objeto en mano; tercera persona con las cuchillas visibles y postura propia.
+- Con las cuchillas desplegadas la ranura de la hotbar queda fija (rueda y teclas 1-9), el inventario no se puede abrir y el clic derecho no usa objetos. El servidor también fija la ranura y cierra contenedores.
+- Sonidos provisionales (reutilizan eventos de Minecraft) hasta contar con grabaciones propias.
+
 ### Cambiado
 
 - El +50 % de movimiento sube de forma gradual durante 2 s (`movementRampSeconds`) para suavizar el cambio de FOV.

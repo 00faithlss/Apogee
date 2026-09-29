@@ -42,5 +42,25 @@
   "tooltip.apogee.value.bonus_percent": "+%s%%",
   "tooltip.apogee.value.blocks": "%s bloques",
   "tooltip.apogee.value.seconds": "%s s",
-  "tooltip.apogee.value.bonus_seconds": "+%s s"
+  "tooltip.apogee.value.bonus_seconds": "+%s s",
+
+  "item.apogee.mantis_blades": "Cuchillas Mantis",
+
+  "advancements.apogee.craft_mantis_blades.title": "Mantis religiosa",
+  "advancements.apogee.craft_mantis_blades.description": "Craftea las Cuchillas Mantis",
+
+  "key.apogee.toggle_mantis": "Desplegar / guardar Cuchillas Mantis",
+
+  "trinkets.slot.cyberware.arms": "Brazos",
+
+  "subtitles.apogee.mantis_deploy": "Las Cuchillas Mantis se despliegan",
+  "subtitles.apogee.mantis_retract": "Las Cuchillas Mantis se guardan",
+  "subtitles.apogee.mantis_swing": "Las Cuchillas Mantis cortan el aire",
+  "subtitles.apogee.mantis_hit": "Las Cuchillas Mantis cortan",
+  "subtitles.apogee.mantis_thrust": "Las Cuchillas Mantis embisten",
+
+  "tooltip.apogee.mantis_blades.line.0": "Cuchillas que se despliegan desde el antebrazo.",
+  "tooltip.apogee.mantis_blades.line.1": "Clic izquierdo: cortes alternados.",
+  "tooltip.apogee.mantis_blades.line.2": "Clic derecho: estocada con ambas cuchillas.",
+  "tooltip.apogee.mantis_blades.line.3": "Desplegadas: hotbar e inventario bloqueados."
 }

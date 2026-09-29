@@ -2,7 +2,7 @@
 
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
-Contiene un único implante, el **Sandevistan**, y tres componentes para fabricarlo.
+Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres componentes para fabricarlos.
 
 > Estado: primera versión compilable y probada de forma automatizada. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -11,6 +11,7 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 | ID | Objeto | Notas |
 |---|---|---|
 | `apogee:sandevistan` | Sandevistan | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/os`. |
+| `apogee:mantis_blades` | Cuchillas Mantis | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
@@ -23,6 +24,8 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 | Overdrive Kernel T5 (con forma) | 2 estrellas del Nether, 4 lingotes de netherita, 2 bloques de diamante, 1 tótem de inmortalidad: netherita en esquinas, estrellas arriba y abajo, diamante a los lados, tótem al centro |
 | Quantum Sync Lattice T5 (con forma) | 2 cristales del End, 2 bloques de amatista, 1 frasco de experiencia, 4 bloques de redstone: redstone en esquinas, cristales arriba y abajo, amatista a los lados, frasco al centro |
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
+
+| Cuchillas Mantis (con forma) | Fila 1: lingote de netherita, espada de netherita, lingote de netherita · Fila 2: Núcleo T5, Overdrive Kernel T5, Núcleo T5 · Fila 3: igual que la fila 1 |
 
 ### Logros
 
@@ -37,7 +40,15 @@ Contiene un único implante, el **Sandevistan**, y tres componentes para fabrica
 - Mientras está activo o recargando aparece un recuadro de ciberware abajo a la izquierda con los segundos restantes: cian con el efecto, magenta en la recarga, amarillo con «+2 s» al conseguir una baja y parpadeo rojo en los últimos 2 s. En reposo se oculta.
 - En el tooltip, **G** (tecla de pestañas de Simply Tooltips) alterna Descripción y Estadísticas; al dejar de señalar el objeto vuelve a Descripción. El tooltip usa la fuente Rajdhani, un borde con arcos eléctricos en amarillo, cian y magenta, título ondulado con estelas de colores, partículas neón y scanlines con barrido.
 
-### Mecánica (valores por defecto)
+### Cuchillas Mantis
+
+- Equípalas en la ranura **Brazos** de Trinkets. **R** (configurable) las despliega o las guarda.
+- Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
+- Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
+- La carcasa del antebrazo toma los colores de tu skin, sea normal o slim.
+- Los sonidos son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
+
+### Mecánica del Sandevistan (valores por defecto)
 
 | Regla | Valor |
 |---|---|

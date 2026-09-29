@@ -42,5 +42,25 @@
   "tooltip.apogee.value.bonus_percent": "+%s%%",
   "tooltip.apogee.value.blocks": "%s blocks",
   "tooltip.apogee.value.seconds": "%s s",
-  "tooltip.apogee.value.bonus_seconds": "+%s s"
+  "tooltip.apogee.value.bonus_seconds": "+%s s",
+
+  "item.apogee.mantis_blades": "Mantis Blades",
+
+  "advancements.apogee.craft_mantis_blades.title": "Praying Mantis",
+  "advancements.apogee.craft_mantis_blades.description": "Craft the Mantis Blades",
+
+  "key.apogee.toggle_mantis": "Deploy / retract Mantis Blades",
+
+  "trinkets.slot.cyberware.arms": "Arms",
+
+  "subtitles.apogee.mantis_deploy": "Mantis Blades deploy",
+  "subtitles.apogee.mantis_retract": "Mantis Blades retract",
+  "subtitles.apogee.mantis_swing": "Mantis Blades slash",
+  "subtitles.apogee.mantis_hit": "Mantis Blades cut",
+  "subtitles.apogee.mantis_thrust": "Mantis Blades lunge",
+
+  "tooltip.apogee.mantis_blades.line.0": "Blades that unfold from the forearm.",
+  "tooltip.apogee.mantis_blades.line.1": "Left click: alternating slashes.",
+  "tooltip.apogee.mantis_blades.line.2": "Right click: lunge with both blades.",
+  "tooltip.apogee.mantis_blades.line.3": "Deployed: hotbar and inventory are locked."
 }
