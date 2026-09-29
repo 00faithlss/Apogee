@@ -128,11 +128,7 @@ public final class MantisManager {
         }
         DEPLOYED.put(player.getUUID(), new Deployment(player.getInventory().selected, variant));
         addModifiers(player);
-        play(player, switch (variant) {
-            case THERMAL -> ApogeeSounds.MANTIS_DEPLOY_THERMAL;
-            case ELECTRIC -> ApogeeSounds.MANTIS_DEPLOY_ELECTRIC;
-            case STANDARD -> ApogeeSounds.MANTIS_DEPLOY;
-        });
+        play(player, ApogeeSounds.MANTIS_DEPLOY);
         broadcast(player, true, variant);
     }
 

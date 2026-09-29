@@ -54,8 +54,6 @@
   "trinkets.slot.cyberware.arms": "Brazos",
 
   "subtitles.apogee.mantis_deploy": "Las Cuchillas Mantis se despliegan",
-  "subtitles.apogee.mantis_deploy_thermal": "Las Cuchillas Mantis térmicas se despliegan",
-  "subtitles.apogee.mantis_deploy_electric": "Las Cuchillas Mantis eléctricas se despliegan",
   "subtitles.apogee.mantis_retract": "Las Cuchillas Mantis se guardan",
   "subtitles.apogee.mantis_swing": "Las Cuchillas Mantis cortan el aire",
   "subtitles.apogee.mantis_hit": "Las Cuchillas Mantis cortan",

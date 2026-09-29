@@ -52,7 +52,7 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 - Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
 - Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
 - Variantes: la térmica prende fuego y la eléctrica aturde; sus filos y electrodos brillan mientras el implante está abierto.
-- La térmica y la eléctrica tienen sonido de despliegue propio. Los demás sonidos (despliegue de la normal, guardar, cortes, impacto y estocada) son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
+- Los sonidos son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
 
 ### Mecánica del Sandevistan (valores por defecto)
 

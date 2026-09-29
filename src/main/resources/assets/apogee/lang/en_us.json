@@ -54,8 +54,6 @@
   "trinkets.slot.cyberware.arms": "Arms",
 
   "subtitles.apogee.mantis_deploy": "Mantis Blades deploy",
-  "subtitles.apogee.mantis_deploy_thermal": "Thermal Mantis Blades deploy",
-  "subtitles.apogee.mantis_deploy_electric": "Electric Mantis Blades deploy",
   "subtitles.apogee.mantis_retract": "Mantis Blades retract",
   "subtitles.apogee.mantis_swing": "Mantis Blades slash",
   "subtitles.apogee.mantis_hit": "Mantis Blades cut",

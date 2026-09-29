@@ -50,7 +50,3 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 - Fuentes editables en `art/mantis-kit/` (proyectos completos en `blockbench/` y piezas de hoja y riel por separado en `modular/`).
 - Revisiones posteriores, también del autor del proyecto: metal oscuro, hoja térmica ensanchada, filo eléctrico azul, hoja y riel en grupos independientes. En el repositorio se añadieron el cyberware inferior, el mayor alcance de la hoja y la corrección de fotogramas clave duplicados que impedían cargar el repliegue en GeckoLib.
 
-## Sonidos de despliegue de las Cuchillas Mantis
-
-- `sounds/mantis_deploy_thermal.ogg` y `sounds/mantis_deploy_electric.ogg`: aportados por el autor del proyecto (MP3 estéreo de unos 2,5 s), convertidos a OGG Vorbis mono. Origen y licencia por confirmar.
-
