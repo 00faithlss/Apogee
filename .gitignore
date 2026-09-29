@@ -10,6 +10,7 @@ runClient/
 runServer/
 logs/
 crash-reports/
+/config/
 
 # Editors and local settings
 .idea/
