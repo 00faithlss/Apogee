@@ -30,8 +30,8 @@ public final class MantisArmModel {
     private static final float WRIST_Y = 10.0F;
     private static final float HINGE_Z = -3.6F;
     private static final float SEGMENT_LENGTH = 3.2F;
-    private static final float BLADE_LENGTH = 9.6F;
-    private static final float BLADE_TIP_LENGTH = 1.6F;
+    private static final float BLADE_LENGTH = 7.6F;
+    private static final float BLADE_TIP_LENGTH = 1.4F;
     /** Angle of the support off the forearm axis when open, and of the blade past parallel. */
     private static final float OPEN_SEGMENT = (float) Math.toRadians(21.0);
     private static final float OPEN_BLADE = (float) Math.toRadians(15.0);
@@ -97,8 +97,8 @@ public final class MantisArmModel {
             segment.addOrReplaceChild("blade",
                     CubeListBuilder.create()
                             .texOffs(0, 32).addBox(-1.0F, -0.9F, -0.9F, 2.0F, 1.8F, 1.8F)
-                            .texOffs(0, 16).addBox(-0.3F, 0.0F, -0.9F, 0.6F, BLADE_LENGTH, 1.5F)
-                            .texOffs(0, 16).addBox(-0.3F, BLADE_LENGTH, -0.5F, 0.6F, BLADE_TIP_LENGTH, 0.9F),
+                            .texOffs(0, 16).addBox(-0.3F, 0.0F, -0.6F, 0.6F, BLADE_LENGTH, 1.1F)
+                            .texOffs(0, 16).addBox(-0.3F, BLADE_LENGTH, -0.4F, 0.6F, BLADE_TIP_LENGTH, 0.7F),
                     PartPose.offset(0.0F, SEGMENT_LENGTH, 0.0F));
         }
         return LayerDefinition.create(mesh, 64, 64);
