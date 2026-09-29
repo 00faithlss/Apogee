@@ -48,5 +48,6 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 - Origen: kit `mantis-modelos-fabric-1.21.1` aportado por el autor del proyecto (proyectos de Blockbench, exportaciones GeckoLib, texturas y máscaras emisivas). Diseño fan-made inspirado en las Mantis Blades de Cyberpunk 2077, sin recursos copiados del juego.
 - Usado: `geo/mantis_*.geo.json`, `animations/mantis_*.animation.json` y `textures/mantis/*.png`, importados con `tools/mantis_kit_import.py`, que añade la mano y el tope del hombro con el material de piel y renombra las máscaras `_emissive` a `_glowmask`.
 - Fuentes editables en `art/mantis-kit/` (proyectos completos en `blockbench/` y piezas de hoja y riel por separado en `modular/`).
+- Sonidos de la variante eléctrica (`sounds/mantis/electric_*.ogg`): aportados por el autor del proyecto como MP3 estéreo; se recortó el silencio inicial, se igualó el volumen y se convirtieron a OGG Vorbis mono. Origen y licencia por confirmar.
 - Revisiones posteriores, también del autor del proyecto: metal oscuro, hoja térmica ensanchada, filo eléctrico azul, hoja y riel en grupos independientes. En el repositorio se añadieron el cyberware inferior, el mayor alcance de la hoja y la corrección de fotogramas clave duplicados que impedían cargar el repliegue en GeckoLib.
 

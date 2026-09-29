@@ -24,7 +24,8 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - Revisión del modelo: hoja y riel en grupos independientes (`blade_slider` y `cutting_edge` deslizan dentro del riel fijo) y alcance mayor que el del kit original; los proyectos de Blockbench por pieza quedan en `art/mantis-kit/modular/`.
 - Metal oscuro en las tres variantes; la térmica tiene la hoja más ancha, filo naranja y punta amarilla, y la eléctrica un filo azul que brilla.
 - En primera persona, el brazo izquierdo de la térmica gira un poco hacia la cámara para mostrar más el mecanismo.
-- Sonidos provisionales (reutilizan eventos de Minecraft) hasta contar con grabaciones propias.
+- Sonidos propios para la variante eléctrica: despliegue, corte al aire (3 variantes) y golpe al enemigo (3 variantes, las más graves). Se recortaron los silencios iniciales para que suenen sin retraso, se igualó el volumen y se pasaron a mono para que se oigan con posición en multijugador.
+- Las variantes normal y térmica, el guardado y la estocada siguen con sonidos provisionales que reutilizan eventos de Minecraft.
 
 ### Cambiado
 

@@ -128,7 +128,7 @@ public final class MantisManager {
         }
         DEPLOYED.put(player.getUUID(), new Deployment(player.getInventory().selected, variant));
         addModifiers(player);
-        play(player, ApogeeSounds.MANTIS_DEPLOY);
+        play(player, variant == MantisVariant.ELECTRIC ? ApogeeSounds.MANTIS_ELECTRIC_DEPLOY : ApogeeSounds.MANTIS_DEPLOY);
         broadcast(player, true, variant);
     }
 
@@ -207,7 +207,7 @@ public final class MantisManager {
         deployment.lastSwingTick = now;
         int arm = deployment.nextArm;
         deployment.nextArm = arm == MantisRules.ARM_RIGHT ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT;
-        play(player, ApogeeSounds.MANTIS_SWING);
+        play(player, deployment.variant == MantisVariant.ELECTRIC ? ApogeeSounds.MANTIS_ELECTRIC_SWING : ApogeeSounds.MANTIS_SWING);
         sendToTrackers(player, new MantisSwing(player.getId(), arm), false);
     }
 
@@ -216,7 +216,8 @@ public final class MantisManager {
             Deployment deployment = DEPLOYED.get(attacker.getUUID());
             if (deployment != null) {
                 victim.level().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
-                        ApogeeSounds.MANTIS_HIT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                        deployment.variant == MantisVariant.ELECTRIC ? ApogeeSounds.MANTIS_ELECTRIC_HIT : ApogeeSounds.MANTIS_HIT,
+                        SoundSource.PLAYERS, 1.0F, 1.0F);
                 applyVariantEffect(victim, deployment.variant);
             }
         }

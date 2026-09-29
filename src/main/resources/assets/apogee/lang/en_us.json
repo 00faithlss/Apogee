@@ -58,6 +58,9 @@
   "subtitles.apogee.mantis_swing": "Mantis Blades slash",
   "subtitles.apogee.mantis_hit": "Mantis Blades cut",
   "subtitles.apogee.mantis_thrust": "Mantis Blades lunge",
+  "subtitles.apogee.mantis_electric_deploy": "Electric Mantis Blades deploy",
+  "subtitles.apogee.mantis_electric_swing": "Electric Mantis Blades slash",
+  "subtitles.apogee.mantis_electric_hit": "Electric Mantis Blades shock",
 
   "tooltip.apogee.mantis_blades.line.0": "Blades that unfold from the forearm.",
   "tooltip.apogee.mantis_blades.line.1": "Left click: alternating slashes.",

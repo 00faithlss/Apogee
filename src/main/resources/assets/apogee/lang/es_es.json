@@ -58,6 +58,9 @@
   "subtitles.apogee.mantis_swing": "Las Cuchillas Mantis cortan el aire",
   "subtitles.apogee.mantis_hit": "Las Cuchillas Mantis cortan",
   "subtitles.apogee.mantis_thrust": "Las Cuchillas Mantis embisten",
+  "subtitles.apogee.mantis_electric_deploy": "Las Cuchillas Mantis eléctricas se despliegan",
+  "subtitles.apogee.mantis_electric_swing": "Las Cuchillas Mantis eléctricas cortan el aire",
+  "subtitles.apogee.mantis_electric_hit": "Las Cuchillas Mantis eléctricas electrocutan",
 
   "tooltip.apogee.mantis_blades.line.0": "Cuchillas que se despliegan desde el antebrazo.",
   "tooltip.apogee.mantis_blades.line.1": "Clic izquierdo: cortes alternados.",
