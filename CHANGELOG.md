@@ -13,6 +13,8 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - Clic derecho: estocada con ambas cuchillas, con impulso hacia adelante, daño perforante a lo largo de 4 bloques y recarga de 2 s.
 - Primera persona con ambos antebrazos y sin objeto en mano; tercera persona con las cuchillas visibles y postura propia.
 - Con las cuchillas desplegadas la ranura de la hotbar queda fija (rueda y teclas 1-9), el inventario no se puede abrir y el clic derecho no usa objetos. El servidor también fija la ranura y cierra contenedores.
+- Hoja larga y delgada tipo katana, curvada, con cabeza en gancho y borde aserrado, y soporte inclinado 42 grados.
+- Variantes: **térmicas** (brillan al rojo vivo al atacar y prenden fuego, `mantis_blades_thermal`) y **eléctricas** (crepitan con chispas azules al atacar y aturden un momento, `mantis_blades_electric`). Se fabrican rodeando las Cuchillas Mantis con bloques de magma y varas de blaze, o con bloques de redstone y pararrayos.
 - Sonidos provisionales (reutilizan eventos de Minecraft) hasta contar con grabaciones propias.
 
 ### Cambiado

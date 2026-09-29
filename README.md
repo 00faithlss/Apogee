@@ -12,6 +12,8 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 |---|---|---|
 | `apogee:sandevistan` | Sandevistan | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/os`. |
 | `apogee:mantis_blades` | Cuchillas Mantis | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
+| `apogee:mantis_blades_thermal` | Cuchillas Mantis térmicas | Variante que prende fuego al objetivo. |
+| `apogee:mantis_blades_electric` | Cuchillas Mantis eléctricas | Variante que aturde al objetivo. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
@@ -26,6 +28,9 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
 
 | Cuchillas Mantis (con forma) | Fila 1: lingote de netherita, espada de netherita, lingote de netherita · Fila 2: Núcleo T5, Overdrive Kernel T5, Núcleo T5 · Fila 3: igual que la fila 1 |
+
+| Cuchillas Mantis térmicas | Vara de blaze en las esquinas, bloque de magma en los lados y Cuchillas Mantis al centro |
+| Cuchillas Mantis eléctricas | Bloque de redstone en las esquinas, pararrayos en los lados y Cuchillas Mantis al centro |
 
 ### Logros
 

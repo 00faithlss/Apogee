@@ -5,7 +5,7 @@ import dev.apogee.network.ApogeeNetworking.MantisSwing;
 import dev.apogee.network.ApogeeNetworking.MantisSync;
 import dev.apogee.network.ApogeeNetworking.MantisThrust;
 import dev.apogee.network.ApogeeNetworking.ToggleMantis;
-import dev.apogee.registry.ApogeeItems;
+import dev.apogee.item.MantisBladesItem;
 import dev.apogee.registry.ApogeeSounds;
 import dev.emi.trinkets.api.TrinketsApi;
 import java.util.HashMap;
@@ -29,6 +29,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -54,11 +56,13 @@ public final class MantisManager {
 
     private static final class Deployment {
         final int lockedSlot;
+        final MantisVariant variant;
         int nextArm = MantisRules.ARM_RIGHT;
         long lastSwingTick = Long.MIN_VALUE;
 
-        Deployment(int lockedSlot) {
+        Deployment(int lockedSlot, MantisVariant variant) {
             this.lockedSlot = lockedSlot;
+            this.variant = variant;
         }
     }
 
@@ -89,7 +93,7 @@ public final class MantisManager {
         EntityTrackingEvents.START_TRACKING.register((tracked, viewer) -> {
             if (tracked instanceof ServerPlayer wearer && DEPLOYED.containsKey(wearer.getUUID())
                     && ServerPlayNetworking.canSend(viewer, MantisSync.TYPE)) {
-                ServerPlayNetworking.send(viewer, new MantisSync(wearer.getId(), true));
+                ServerPlayNetworking.send(viewer, new MantisSync(wearer.getId(), true, DEPLOYED.get(wearer.getUUID()).variant.ordinal()));
             }
         });
     }
@@ -99,9 +103,16 @@ public final class MantisManager {
     }
 
     public static boolean isEquipped(LivingEntity entity) {
+        return equippedVariant(entity) != null;
+    }
+
+    /** Variant of the equipped Mantis Blades, or null when none are worn. */
+    private static MantisVariant equippedVariant(LivingEntity entity) {
         return TrinketsApi.getTrinketComponent(entity)
-                .map(component -> component.isEquipped(ApogeeItems.MANTIS_BLADES))
-                .orElse(false);
+                .flatMap(component -> component.getEquipped(stack -> stack.getItem() instanceof MantisBladesItem).stream()
+                        .map(pair -> ((MantisBladesItem) pair.getB().getItem()).variant())
+                        .findFirst())
+                .orElse(null);
     }
 
     // ------------------------------------------------------------------ deploy
@@ -111,13 +122,14 @@ public final class MantisManager {
             retract(player, true);
             return;
         }
-        if (!player.isAlive() || player.isSpectator() || !isEquipped(player)) {
+        MantisVariant variant = equippedVariant(player);
+        if (!player.isAlive() || player.isSpectator() || variant == null) {
             return;
         }
-        DEPLOYED.put(player.getUUID(), new Deployment(player.getInventory().selected));
+        DEPLOYED.put(player.getUUID(), new Deployment(player.getInventory().selected, variant));
         addModifiers(player);
         play(player, ApogeeSounds.MANTIS_DEPLOY);
-        broadcast(player, true);
+        broadcast(player, true, variant);
     }
 
     /** Folds the blades away (manual, unequip, death, dimension change, disconnect). */
@@ -129,7 +141,7 @@ public final class MantisManager {
         if (audible) {
             play(player, ApogeeSounds.MANTIS_RETRACT);
         }
-        broadcast(player, false);
+        broadcast(player, false, MantisVariant.STANDARD);
     }
 
     private static void addModifiers(ServerPlayer player) {
@@ -200,10 +212,22 @@ public final class MantisManager {
     }
 
     private static void onDamage(LivingEntity victim, DamageSource source) {
-        if (source.is(DamageTypes.PLAYER_ATTACK) && source.getEntity() instanceof ServerPlayer attacker
-                && DEPLOYED.containsKey(attacker.getUUID())) {
-            victim.level().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
-                    ApogeeSounds.MANTIS_HIT, SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (source.is(DamageTypes.PLAYER_ATTACK) && source.getEntity() instanceof ServerPlayer attacker) {
+            Deployment deployment = DEPLOYED.get(attacker.getUUID());
+            if (deployment != null) {
+                victim.level().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
+                        ApogeeSounds.MANTIS_HIT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                applyVariantEffect(victim, deployment.variant);
+            }
+        }
+    }
+
+    /** Thermal blades set targets alight; electric blades stun them briefly. */
+    private static void applyVariantEffect(LivingEntity victim, MantisVariant variant) {
+        if (variant == MantisVariant.THERMAL) {
+            victim.igniteForSeconds(4.0F);
+        } else if (variant == MantisVariant.ELECTRIC) {
+            victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 2));
         }
     }
 
@@ -242,8 +266,8 @@ public final class MantisManager {
 
     // ------------------------------------------------------------------ sync
 
-    private static void broadcast(ServerPlayer player, boolean deployed) {
-        sendToTrackers(player, new MantisSync(player.getId(), deployed), true);
+    private static void broadcast(ServerPlayer player, boolean deployed, MantisVariant variant) {
+        sendToTrackers(player, new MantisSync(player.getId(), deployed, variant.ordinal()), true);
     }
 
     private static void sendToTrackers(ServerPlayer player, net.minecraft.network.protocol.common.custom.CustomPacketPayload payload,

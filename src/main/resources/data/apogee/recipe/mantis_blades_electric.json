@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RLR",
+    "LML",
+    "RLR"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "L": {
+      "item": "minecraft:lightning_rod"
+    },
+    "M": {
+      "item": "apogee:mantis_blades"
+    }
+  },
+  "result": {
+    "id": "apogee:mantis_blades_electric",
+    "count": 1
+  }
+}

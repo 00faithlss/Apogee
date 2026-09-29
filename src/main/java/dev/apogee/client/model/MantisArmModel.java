@@ -31,15 +31,16 @@ public final class MantisArmModel {
      */
     private static final float WRIST_Y = 10.0F;
     private static final float HINGE_Z = -3.6F;
-    private static final float SEGMENT_LENGTH = 4.6F;
-    private static final float[] PIECE_LENGTH = {2.0F, 2.0F, 2.0F, 1.8F, 1.4F};
-    /** In-plane width of each blade piece: broad near the hinge, tapering to a point. */
-    private static final float[] PIECE_WIDTH = {1.7F, 1.4F, 1.1F, 0.8F, 0.4F};
+    private static final float SEGMENT_LENGTH = 4.8F;
+    /** A long, slender blade: about one and a half times the length of the forearm and hand. */
+    private static final float[] PIECE_LENGTH = {2.0F, 2.0F, 2.0F, 2.0F, 1.8F, 1.4F};
+    /** In-plane width of each blade piece: a broad head at the hinge, then a thin taper to the point. */
+    private static final float[] PIECE_WIDTH = {1.3F, 1.0F, 0.8F, 0.7F, 0.55F, 0.35F};
     /** Angle of the support off the forearm axis when open. */
-    private static final float OPEN_SEGMENT = (float) Math.toRadians(38.0);
+    private static final float OPEN_SEGMENT = (float) Math.toRadians(42.0);
     /** Angle of the first blade piece past parallel, and the extra turn added at every joint after it. */
-    private static final float OPEN_BLADE = (float) Math.toRadians(10.0);
-    private static final float BLADE_CURVE = (float) Math.toRadians(5.5);
+    private static final float OPEN_BLADE = (float) Math.toRadians(6.0);
+    private static final float BLADE_CURVE = (float) Math.toRadians(3.0);
 
     private final ModelPart[] plates = new ModelPart[4];
     private final ModelPart[] mechanisms = new ModelPart[4];
@@ -104,19 +105,30 @@ public final class MantisArmModel {
                             .texOffs(0, 0).addBox(-0.8F, 0.0F, -0.4F, 1.6F, SEGMENT_LENGTH, 0.8F),
                     PartPose.offset(centerX, WRIST_Y, HINGE_Z));
 
-            PartDefinition piece = segment.addOrReplaceChild("blade",
-                    CubeListBuilder.create()
-                            .texOffs(0, 32).addBox(-1.1F, -1.0F, -1.0F, 2.2F, 2.0F, 2.0F)
-                            .texOffs(0, 16).addBox(-0.3F, 0.0F, -PIECE_WIDTH[0] / 2.0F, 0.6F, PIECE_LENGTH[0], PIECE_WIDTH[0]),
-                    PartPose.offset(0.0F, SEGMENT_LENGTH, 0.0F));
+            PartDefinition piece = segment.addOrReplaceChild("blade", pieceCubes(0), PartPose.offset(0.0F, SEGMENT_LENGTH, 0.0F));
             for (int k = 1; k < PIECE_LENGTH.length; k++) {
-                piece = piece.addOrReplaceChild("next",
-                        CubeListBuilder.create()
-                                .texOffs(0, 16).addBox(-0.3F, 0.0F, -PIECE_WIDTH[k] / 2.0F, 0.6F, PIECE_LENGTH[k], PIECE_WIDTH[k]),
-                        PartPose.offset(0.0F, PIECE_LENGTH[k - 1], 0.0F));
+                piece = piece.addOrReplaceChild("next", pieceCubes(k), PartPose.offset(0.0F, PIECE_LENGTH[k - 1], 0.0F));
             }
         }
         return LayerDefinition.create(mesh, 64, 64);
+    }
+
+    private static CubeListBuilder pieceCubes(int k) {
+        float w = PIECE_WIDTH[k];
+        CubeListBuilder cubes = CubeListBuilder.create()
+                .texOffs(0, 16).addBox(-0.3F, 0.0F, -w / 2.0F, 0.6F, PIECE_LENGTH[k], w);
+        if (k == 0) {
+            // Pivot barrel and the swept-back hook of the blade head, behind the hinge.
+            cubes.texOffs(0, 32).addBox(-1.1F, -0.9F, -0.9F, 2.2F, 1.8F, 1.8F)
+                    .texOffs(0, 16).addBox(-0.3F, -1.1F, -w / 2.0F, 0.6F, 1.1F, w)
+                    .texOffs(0, 16).addBox(-0.3F, -1.9F, -w / 2.0F + 0.2F, 0.6F, 0.8F, w - 0.4F);
+        }
+        if (k <= 2) {
+            // Serrated lower edge, on the side facing the arm.
+            cubes.texOffs(0, 16).addBox(-0.15F, 0.2F, w / 2.0F, 0.3F, 0.5F, 0.35F)
+                    .texOffs(0, 16).addBox(-0.15F, 1.1F, w / 2.0F, 0.3F, 0.5F, 0.35F);
+        }
+        return cubes;
     }
 
     public ModelPart plate(boolean right, boolean slim) {

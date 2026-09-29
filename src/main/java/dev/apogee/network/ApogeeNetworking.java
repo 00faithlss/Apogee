@@ -74,12 +74,13 @@ public final class ApogeeNetworking {
         }
     }
 
-    /** Whether a player has the Mantis Blades out. Sent to the player and everyone tracking them. */
-    public record MantisSync(int entityId, boolean deployed) implements CustomPacketPayload {
+    /** Whether a player has the Mantis Blades out, and which variant. Sent to the player and everyone tracking them. */
+    public record MantisSync(int entityId, boolean deployed, int variant) implements CustomPacketPayload {
         public static final Type<MantisSync> TYPE = new Type<>(Apogee.id("mantis_sync"));
         public static final StreamCodec<FriendlyByteBuf, MantisSync> CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, MantisSync::entityId,
                 ByteBufCodecs.BOOL, MantisSync::deployed,
+                ByteBufCodecs.VAR_INT, MantisSync::variant,
                 MantisSync::new
         );
 

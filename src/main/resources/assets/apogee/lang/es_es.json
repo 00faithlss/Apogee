@@ -62,5 +62,9 @@
   "tooltip.apogee.mantis_blades.line.0": "Cuchillas que se despliegan desde el antebrazo.",
   "tooltip.apogee.mantis_blades.line.1": "Clic izquierdo: cortes alternados.",
   "tooltip.apogee.mantis_blades.line.2": "Clic derecho: estocada con ambas cuchillas.",
-  "tooltip.apogee.mantis_blades.line.3": "Desplegadas: hotbar e inventario bloqueados."
+  "tooltip.apogee.mantis_blades.line.3": "Desplegadas: hotbar e inventario bloqueados.",
+  "item.apogee.mantis_blades_thermal": "Cuchillas Mantis térmicas",
+  "item.apogee.mantis_blades_electric": "Cuchillas Mantis eléctricas",
+  "tooltip.apogee.mantis_blades.variant.thermal": "Brillan al rojo vivo y prenden fuego a los objetivos.",
+  "tooltip.apogee.mantis_blades.variant.electric": "Crepitan de corriente y aturden un momento a los objetivos."
 }

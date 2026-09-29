@@ -1,6 +1,7 @@
 package dev.apogee.client.mantis;
 
 import dev.apogee.mantis.MantisRules;
+import dev.apogee.mantis.MantisVariant;
 import dev.apogee.network.ApogeeNetworking.MantisSwing;
 import dev.apogee.network.ApogeeNetworking.MantisSync;
 import dev.apogee.network.ApogeeNetworking.MantisThrust;
@@ -10,6 +11,8 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
@@ -25,6 +28,9 @@ public final class MantisClient {
         int swingArm = MantisRules.ARM_LEFT;
         int nextArm = MantisRules.ARM_RIGHT;
         long thrustStart = Long.MIN_VALUE;
+        MantisVariant variant = MantisVariant.STANDARD;
+        /** Tick until which the blades glow after an attack. */
+        long glowUntil = Long.MIN_VALUE;
     }
 
     private static final Int2ObjectOpenHashMap<Anim> ANIMS = new Int2ObjectOpenHashMap<>();
@@ -55,6 +61,9 @@ public final class MantisClient {
         Minecraft mc = Minecraft.getInstance();
         Anim anim = anim(payload.entityId());
         anim.deployed = payload.deployed();
+        if (payload.deployed()) {
+            anim.variant = MantisVariant.byId(payload.variant());
+        }
         anim.nextArm = MantisRules.ARM_RIGHT;
         anim.swingArm = MantisRules.ARM_LEFT;
         if (mc.player != null && payload.entityId() == mc.player.getId()) {
@@ -73,6 +82,7 @@ public final class MantisClient {
         } else {
             anim.swingArm = payload.arm();
         }
+        strike(mc, anim, payload.entityId());
     }
 
     /** Called when the local player starts a swing; mirrors the server's alternation. */
@@ -87,6 +97,29 @@ public final class MantisClient {
         }
         anim.swingArm = anim.nextArm;
         anim.nextArm = anim.nextArm == MantisRules.ARM_RIGHT ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT;
+        strike(mc, anim, mc.player.getId());
+    }
+
+    /** Lights the blades up and throws sparks or embers while an attack plays. */
+    private static void strike(Minecraft mc, Anim anim, int entityId) {
+        if (anim.variant == MantisVariant.STANDARD) {
+            return;
+        }
+        anim.glowUntil = ticks + 10;
+        Entity entity = mc.level == null ? null : mc.level.getEntity(entityId);
+        if (entity == null) {
+            return;
+        }
+        ParticleOptions particle = anim.variant == MantisVariant.THERMAL ? ParticleTypes.FLAME : ParticleTypes.ELECTRIC_SPARK;
+        var look = entity.getLookAngle();
+        var random = mc.level.random;
+        for (int i = 0; i < 6; i++) {
+            mc.level.addParticle(particle,
+                    entity.getX() + look.x * (0.6 + random.nextDouble() * 1.4) + (random.nextDouble() - 0.5) * 0.8,
+                    entity.getEyeY() - 0.5 + look.y * 0.8 + (random.nextDouble() - 0.5) * 0.6,
+                    entity.getZ() + look.z * (0.6 + random.nextDouble() * 1.4) + (random.nextDouble() - 0.5) * 0.8,
+                    (random.nextDouble() - 0.5) * 0.05, 0.02, (random.nextDouble() - 0.5) * 0.05);
+        }
     }
 
     // ------------------------------------------------------------------ queries
@@ -104,6 +137,17 @@ public final class MantisClient {
         }
         float raw = Mth.lerp(partialTick, anim.previous, anim.progress);
         return raw * raw * (3.0F - 2.0F * raw);
+    }
+
+    public static MantisVariant variant(Entity entity) {
+        Anim anim = ANIMS.get(entity.getId());
+        return anim == null ? MantisVariant.STANDARD : anim.variant;
+    }
+
+    /** True while a thermal or electric blade is lit up from an attack. */
+    public static boolean glowing(Entity entity) {
+        Anim anim = ANIMS.get(entity.getId());
+        return anim != null && anim.variant != MantisVariant.STANDARD && ticks < anim.glowUntil;
     }
 
     public static int swingArm(Entity entity) {
@@ -151,7 +195,9 @@ public final class MantisClient {
         while (options.keyUse.consumeClick()) {
             if (mc.screen == null && ticks >= localThrustReady && ClientPlayNetworking.canSend(MantisThrust.TYPE)) {
                 localThrustReady = ticks + MantisRules.THRUST_COOLDOWN_TICKS;
-                anim(player.getId()).thrustStart = ticks;
+                Anim self = anim(player.getId());
+                self.thrustStart = ticks;
+                strike(mc, self, player.getId());
                 ClientPlayNetworking.send(MantisThrust.INSTANCE);
             }
         }

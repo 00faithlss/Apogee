@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "BFB",
+    "FMF",
+    "BFB"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "F": {
+      "item": "minecraft:magma_block"
+    },
+    "M": {
+      "item": "apogee:mantis_blades"
+    }
+  },
+  "result": {
+    "id": "apogee:mantis_blades_thermal",
+    "count": 1
+  }
+}
