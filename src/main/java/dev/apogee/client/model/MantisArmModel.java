@@ -22,11 +22,18 @@ import net.minecraft.util.Mth;
 public final class MantisArmModel {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Apogee.id("mantis_arm"), "main");
 
-    private static final float WRIST_Y = 11.0F;
-    private static final float HINGE_Z = -4.5F;
-    private static final float SEGMENT_LENGTH = 5.0F;
-    /** Angle of the middle segment off the forearm axis when open, and of the blade past parallel. */
-    private static final float OPEN_SEGMENT = (float) Math.toRadians(40.0);
+    /*
+     * Proportions read off the official arm renders: a stretched, shallow Z that hugs the arm.
+     * The support leaves the rail at the wrist and rises only about 21 degrees towards the elbow;
+     * the blade starts over the forearm, climbs about 15 degrees and ends a little past the hand.
+     */
+    private static final float WRIST_Y = 10.0F;
+    private static final float HINGE_Z = -3.6F;
+    private static final float SEGMENT_LENGTH = 3.2F;
+    private static final float BLADE_LENGTH = 9.6F;
+    private static final float BLADE_TIP_LENGTH = 1.6F;
+    /** Angle of the support off the forearm axis when open, and of the blade past parallel. */
+    private static final float OPEN_SEGMENT = (float) Math.toRadians(21.0);
     private static final float OPEN_BLADE = (float) Math.toRadians(15.0);
 
     private final ModelPart[] plates = new ModelPart[4];
@@ -75,7 +82,7 @@ public final class MantisArmModel {
             PartDefinition mech = root.addOrReplaceChild("mech_" + key,
                     CubeListBuilder.create()
                             // rail along the forearm
-                            .texOffs(0, 0).addBox(centerX - 0.5F, 2.0F, -4.0F, 1.0F, 9.0F, 1.0F)
+                            .texOffs(0, 0).addBox(centerX - 0.75F, 3.0F, -3.6F, 1.5F, 7.5F, 0.6F)
                             // exposed muscle on both sides of the plate
                             .texOffs(32, 0).addBox(minX - 0.5F, 5.0F, -3.0F, 0.5F, 6.0F, 1.0F)
                             .texOffs(32, 0).addBox(minX + width, 5.0F, -3.0F, 0.5F, 6.0F, 1.0F),
@@ -83,15 +90,15 @@ public final class MantisArmModel {
 
             PartDefinition segment = mech.addOrReplaceChild("segment",
                     CubeListBuilder.create()
-                            .texOffs(0, 32).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F)
-                            .texOffs(0, 0).addBox(-0.5F, 0.0F, -0.5F, 1.0F, SEGMENT_LENGTH, 1.0F),
+                            .texOffs(0, 32).addBox(-1.0F, -0.8F, -0.8F, 2.0F, 1.6F, 1.6F)
+                            .texOffs(0, 0).addBox(-0.8F, 0.0F, -0.4F, 1.6F, SEGMENT_LENGTH, 0.8F),
                     PartPose.offset(centerX, WRIST_Y, HINGE_Z));
 
             segment.addOrReplaceChild("blade",
                     CubeListBuilder.create()
-                            .texOffs(0, 32).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F)
-                            .texOffs(0, 16).addBox(-0.3F, 0.0F, -0.8F, 0.6F, 11.0F, 1.6F)
-                            .texOffs(0, 16).addBox(-0.3F, 11.0F, -0.5F, 0.6F, 2.0F, 1.0F),
+                            .texOffs(0, 32).addBox(-1.0F, -0.9F, -0.9F, 2.0F, 1.8F, 1.8F)
+                            .texOffs(0, 16).addBox(-0.3F, 0.0F, -0.9F, 0.6F, BLADE_LENGTH, 1.5F)
+                            .texOffs(0, 16).addBox(-0.3F, BLADE_LENGTH, -0.5F, 0.6F, BLADE_TIP_LENGTH, 0.9F),
                     PartPose.offset(0.0F, SEGMENT_LENGTH, 0.0F));
         }
         return LayerDefinition.create(mesh, 64, 64);
