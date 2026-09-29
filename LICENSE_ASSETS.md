@@ -41,6 +41,13 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
 - `assets/apogee/icon.png` y `assets/apogee/textures/gui/slots/os.png`: generados para Apogee.
 - Diseño del tooltip: maqueta aprobada del plan (fondo negro translúcido, marco metálico, detalles cian).
 
+## Sonidos de las Cuchillas Mantis eléctricas — Cyberpunk 2077
+
+- Origen: audio del juego Cyberpunk 2077 (CD PROJEKT RED), descargado por el autor del proyecto desde [Cyberpunk 2077 SoundDB](https://sounddb.redmodding.org/), base de datos de la comunidad REDmodding con los sonidos extraídos del juego.
+- Licencia: propiedad de CD PROJEKT RED. La página no declara licencia ni permiso de uso; no se ha obtenido permiso de redistribución.
+- Usado: seis golpes y un despliegue → `sounds/mantis/electric_hit{1,2,3}.ogg` (los tres más graves, al golpear a un enemigo), `sounds/mantis/electric_swing{1,2,3}.ogg` (corte al aire) y `sounds/mantis/electric_deploy.ogg`.
+- Modificaciones: se recortó el silencio inicial, se igualó el volumen y se convirtieron de MP3 estéreo a OGG Vorbis mono.
+
 Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 
 ## Kit Mantis v0.4 — diseño propio del proyecto
@@ -48,6 +55,5 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 - Origen: kit `mantis-modelos-fabric-1.21.1` aportado por el autor del proyecto (proyectos de Blockbench, exportaciones GeckoLib, texturas y máscaras emisivas). Diseño fan-made inspirado en las Mantis Blades de Cyberpunk 2077, sin recursos copiados del juego.
 - Usado: `geo/mantis_*.geo.json`, `animations/mantis_*.animation.json` y `textures/mantis/*.png`, importados con `tools/mantis_kit_import.py`, que añade la mano y el tope del hombro con el material de piel y renombra las máscaras `_emissive` a `_glowmask`.
 - Fuentes editables en `art/mantis-kit/` (proyectos completos en `blockbench/` y piezas de hoja y riel por separado en `modular/`).
-- Sonidos de la variante eléctrica (`sounds/mantis/electric_*.ogg`): aportados por el autor del proyecto como MP3 estéreo; se recortó el silencio inicial, se igualó el volumen y se convirtieron a OGG Vorbis mono. Origen y licencia por confirmar.
 - Revisiones posteriores, también del autor del proyecto: metal oscuro, hoja térmica ensanchada, filo eléctrico azul, hoja y riel en grupos independientes. En el repositorio se añadieron el cyberware inferior, el mayor alcance de la hoja y la corrección de fotogramas clave duplicados que impedían cargar el repliegue en GeckoLib.
 
