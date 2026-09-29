@@ -51,7 +51,7 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 - Cerradas, el brazo se ve como uno normal con tu skin (clásica o Slim). Al desplegarlas se abren las cubiertas del antebrazo, el mecanismo sube por el costado externo y la hoja se extiende.
 - Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
 - Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
-- Variantes: la térmica prende fuego y la eléctrica aturde; sus filos y electrodos brillan mientras el implante está abierto.
+- Variantes: la térmica prende fuego y la eléctrica aturde. La hoja térmica brilla al rojo vivo con halo, destellos de glitch y partículas de calor; el filo y los electrodos de la eléctrica brillan en azul mientras el implante está abierto.
 - La eléctrica tiene sonidos propios de despliegue, corte al aire y golpe. Los demás (normal, térmica, guardar y estocada) son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
 
 ### Mecánica del Sandevistan (valores por defecto)
@@ -103,7 +103,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.1.0+1.21.1 (`build/libs/apogee-0.1.0+1.21.1.jar`) | Todos |
+| Apogee | 0.2.0+1.21.1 (`build/libs/apogee-0.2.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |

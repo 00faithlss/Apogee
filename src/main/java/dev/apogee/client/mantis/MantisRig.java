@@ -19,7 +19,6 @@ import org.joml.Quaternionf;
  */
 public final class MantisRig {
     private static final Int2ObjectOpenHashMap<MantisRig> RIGS = new Int2ObjectOpenHashMap<>();
-    private static final long NEVER = -1000L;
     /** The kit's combat pose holds each arm 20 degrees out from the torso. */
     public static final float STANCE_ABDUCTION = (float) Math.toRadians(20.0);
 
@@ -34,8 +33,8 @@ public final class MantisRig {
 
     private final MantisArm[] arms = {new MantisArm(true), new MantisArm(false)};
     private final MantisArmGeoRenderer[] renderers = {new MantisArmGeoRenderer(), new MantisArmGeoRenderer()};
-    /** Client tick each arm was last drawn on; GeckoLib only advances animations while drawing. */
-    private final long[] lastDrawn = {NEVER, NEVER};
+    /** Set while the first-person hands are drawn, which use view space instead of the level's. */
+    public static boolean firstPersonPass;
 
     private MantisRig() {
     }
@@ -66,16 +65,28 @@ public final class MantisRig {
     }
 
     /**
-     * Syncs one arm with the wearer's variant and deployed flag. An arm that was not on screen
-     * (first person shows one hand when folded, players come into view) skips the transition
-     * nobody saw instead of replaying it late.
+     * Syncs one arm with the wearer's variant and deployed flag. A change first seen once its
+     * travel is already over (a player coming into view with the blades out) skips the
+     * transition nobody saw instead of replaying it late; one seen while under way plays.
      */
-    private void update(int side, MantisVariant variant, boolean deployed) {
-        long now = MantisClient.clientTicks();
+    private void update(int side, MantisVariant variant, boolean deployed, float progress) {
         MantisArm arm = arms[side];
         arm.setVariant(variant);
-        arm.setDeployed(deployed, now - lastDrawn[side] > 2);
-        lastDrawn[side] = now;
+        arm.setDeployed(deployed, deployed ? progress >= 1.0F : progress <= 0.0F);
+    }
+
+    /** Visits both arms of every rig, with the wearer's entity id. */
+    public static void forEachArm(ArmVisitor visitor) {
+        for (var entry : RIGS.int2ObjectEntrySet()) {
+            for (MantisArm arm : entry.getValue().arms) {
+                visitor.visit(entry.getIntKey(), arm);
+            }
+        }
+    }
+
+    @FunctionalInterface
+    public interface ArmVisitor {
+        void visit(int entityId, MantisArm arm);
     }
 
     /** A slash by one arm: both clips play so the other arm follows through. */
@@ -114,8 +125,8 @@ public final class MantisRig {
             return;
         }
         MantisRig rig = of(player.getId());
-        rig.update(right ? 0 : 1, variant, MantisClient.isDeployed(player));
         float progress = MantisClient.deployProgress(player, partialTick);
+        rig.update(right ? 0 : 1, variant, MantisClient.isDeployed(player), progress);
         poseStack.pushPose();
         armPart.translateAndRotate(poseStack);
         if (enforceStance && progress > 0.0F) {
@@ -145,7 +156,7 @@ public final class MantisRig {
             poseStack.scale(0.75F, 1.0F, 1.0F);
         }
         poseStack.mulPose(right ? RIGHT_SEAT : LEFT_SEAT);
-        renderer.prepare(player.getSkin().texture(), slim, glow);
+        renderer.prepare(player.getSkin().texture(), slim, glow, firstPersonPass);
         renderer.render(poseStack, arm, buffers, null, null, light, partialTick);
         poseStack.popPose();
     }

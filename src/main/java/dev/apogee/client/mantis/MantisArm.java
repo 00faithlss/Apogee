@@ -31,6 +31,15 @@ public final class MantisArm implements GeoAnimatable {
     private boolean deployed;
     private RawAnimation current = FOLDED;
     private boolean restart;
+    /** Most segments of the blade tracked for its effects. */
+    static final int MAX_BLADE_SEGMENTS = 16;
+    /** Ends of each blade cube along its length, in world space, as last drawn: x0 y0 z0 x1 y1 z1 per segment. */
+    final double[] bladeSegments = new double[MAX_BLADE_SEGMENTS * 6];
+    int bladeSegmentCount;
+    /** Client tick the segments were recorded on. */
+    long bladeTick = Long.MIN_VALUE;
+    /** Whether the segments come from the first-person hands. */
+    boolean bladeFirstPerson;
 
     public MantisArm(boolean right) {
         this.right = right;

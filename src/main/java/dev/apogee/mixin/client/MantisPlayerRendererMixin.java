@@ -43,7 +43,12 @@ public abstract class MantisPlayerRendererMixin {
         }
         arm.xRot = 0.0F;
         float partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
-        MantisRig.drawOnArm(poseStack, buffers, light, player, arm, arm == model.rightArm, partialTick);
+        MantisRig.firstPersonPass = true;
+        try {
+            MantisRig.drawOnArm(poseStack, buffers, light, player, arm, arm == model.rightArm, partialTick);
+        } finally {
+            MantisRig.firstPersonPass = false;
+        }
         ci.cancel();
     }
 }

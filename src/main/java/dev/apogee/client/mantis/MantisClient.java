@@ -30,6 +30,8 @@ public final class MantisClient {
         int swingArm = MantisRules.ARM_LEFT;
         int nextArm = MantisRules.ARM_RIGHT;
         long thrustStart = Long.MIN_VALUE;
+        /** Client tick each arm's last slash started on, indexed by {@link MantisRules#ARM_RIGHT}/{@link MantisRules#ARM_LEFT}. */
+        final long[] slashStart = {Long.MIN_VALUE, Long.MIN_VALUE};
         MantisVariant variant = MantisVariant.STANDARD;
     }
 
@@ -83,6 +85,7 @@ public final class MantisClient {
             MantisRig.of(payload.entityId()).thrust();
         } else {
             anim.swingArm = payload.arm();
+            anim.slashStart[payload.arm()] = ticks;
             MantisRig.of(payload.entityId()).attack(payload.arm());
         }
         strike(mc, anim, payload.entityId());
@@ -100,6 +103,7 @@ public final class MantisClient {
         }
         anim.swingArm = anim.nextArm;
         anim.nextArm = anim.nextArm == MantisRules.ARM_RIGHT ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT;
+        anim.slashStart[anim.swingArm] = ticks;
         MantisRig.of(mc.player.getId()).attack(anim.swingArm);
         strike(mc, anim, mc.player.getId());
     }
@@ -113,10 +117,10 @@ public final class MantisClient {
         if (entity == null) {
             return;
         }
-        ParticleOptions particle = anim.variant == MantisVariant.THERMAL ? ParticleTypes.FLAME : ParticleTypes.ELECTRIC_SPARK;
         var look = entity.getLookAngle();
         var random = mc.level.random;
         for (int i = 0; i < 6; i++) {
+            ParticleOptions particle = anim.variant == MantisVariant.THERMAL ? MantisBladeFx.heatParticle(random) : ParticleTypes.ELECTRIC_SPARK;
             mc.level.addParticle(particle,
                     entity.getX() + look.x * (0.6 + random.nextDouble() * 1.4) + (random.nextDouble() - 0.5) * 0.8,
                     entity.getEyeY() - 0.5 + look.y * 0.8 + (random.nextDouble() - 0.5) * 0.6,
@@ -134,6 +138,12 @@ public final class MantisClient {
     public static boolean isDeployed(Entity entity) {
         Anim anim = ANIMS.get(entity.getId());
         return anim != null && anim.deployed;
+    }
+
+    /** True while the blades are out or still folding away. */
+    public static boolean isOut(Entity entity) {
+        Anim anim = ANIMS.get(entity.getId());
+        return anim != null && (anim.deployed || anim.progress > 0.0F || anim.previous > 0.0F);
     }
 
     /** Eased unfold progress, 0 folded to 1 fully open. */
@@ -154,6 +164,16 @@ public final class MantisClient {
     public static int swingArm(Entity entity) {
         Anim anim = ANIMS.get(entity.getId());
         return anim == null ? MantisRules.ARM_RIGHT : anim.swingArm;
+    }
+
+    /** Progress 0..1 of the slash the given arm is making, or -1 when it is not slashing. */
+    public static float slashProgress(Entity entity, int arm, float partialTick) {
+        Anim anim = ANIMS.get(entity.getId());
+        if (anim == null || anim.slashStart[arm] == Long.MIN_VALUE) {
+            return -1.0F;
+        }
+        float t = (ticks - anim.slashStart[arm] + partialTick) / MantisRules.SLASH_ANIMATION_TICKS;
+        return t >= 0.0F && t <= 1.0F ? t : -1.0F;
     }
 
     /** Lunge progress 0..1, or -1 when no lunge is playing. */
@@ -183,6 +203,7 @@ public final class MantisClient {
         if (mc.level != null && ticks % 100 == 0) {
             MantisRig.prune(id -> mc.level.getEntity(id) != null);
         }
+        MantisBladeFx.tick(mc);
         LocalPlayer player = mc.player;
         if (player == null || !isDeployed(player)) {
             return;

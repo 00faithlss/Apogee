@@ -15,6 +15,8 @@ public final class MantisRules {
     public static final int THRUST_COOLDOWN_TICKS = 40;
     /** Client-side length of the lunge animation, in ticks. */
     public static final int THRUST_ANIMATION_TICKS = 8;
+    /** Client-side length of a first-person slash, in ticks. */
+    public static final int SLASH_ANIMATION_TICKS = 7;
     /** Ticks the unfold/fold animation takes (the kit's deploy and retract clips last 1 s). */
     public static final int DEPLOY_TICKS = 20;
 

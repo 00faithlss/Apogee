@@ -34,7 +34,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Dev-only scripted client run ({@code gradlew runMantisSmoke}) for the Mantis Blades: equips
- * each variant, captures it folded, unfolding, open, attacking and in first person, then quits.
+ * each variant, captures it folded, unfolding, open, attacking and in first person (unfolding with
+ * an item in hand, a slash with each arm, folding away), then quits.
  * Disabled unless -Dapogee.mantisSmoke=true. Screenshots land in build/mantis-smoke/screenshots.
  */
 public final class MantisClientSmoke implements ClientModInitializer {
@@ -43,7 +44,7 @@ public final class MantisClientSmoke implements ClientModInitializer {
     private static final Item[] VARIANTS = {ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.MANTIS_BLADES};
     private static final String[] NAMES = {"thermal", "electric", "normal"};
     /** Ticks each variant's script takes. */
-    private static final int ROUND = 200;
+    private static final int ROUND = 265;
     /** Client tick the first variant's round starts on, after the reference shot. */
     private static final int START = 60;
     /** Third-person camera distance override for close-ups, or 0 for vanilla. */
@@ -193,6 +194,23 @@ public final class MantisClientSmoke implements ClientModInitializer {
             case 190 -> {
                 check(!MantisClient.isDeployed(mc.player), name + " retracted on the client");
                 shot(mc, name + "-09-folded-first-person");
+                // Unfold again in first person, holding an item, so the folded view shows no implant arm.
+                server(mc, (level, player) -> player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD)));
+            }
+            case 195 -> ClientPlayNetworking.send(ToggleMantis.INSTANCE);
+            case 203 -> shot(mc, name + "-13-unfolding-first-person");
+            case 225 -> {
+                check(MantisClient.isDeployed(mc.player), name + " deployed again on the client");
+                shot(mc, name + "-14-open-first-person-item");
+                mc.player.swing(InteractionHand.MAIN_HAND);
+            }
+            case 227 -> shot(mc, name + "-15-slash-right-first-person");
+            case 234 -> mc.player.swing(InteractionHand.MAIN_HAND);
+            case 236 -> shot(mc, name + "-16-slash-left-first-person");
+            case 242 -> ClientPlayNetworking.send(ToggleMantis.INSTANCE);
+            case 249 -> shot(mc, name + "-17-folding-first-person");
+            case 264 -> {
+                server(mc, (level, player) -> player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY));
                 mc.options.hideGui = true;
                 mc.options.fov().set(30);
             }

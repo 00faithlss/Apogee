@@ -3,6 +3,7 @@ package dev.apogee.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.apogee.client.mantis.MantisClient;
+import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,8 +17,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * While the blades are out the first-person view shows both implants and no held item; the
- * attack clips animate the cut, and a lunge brings both arms forward together.
+ * While the blades are out, and while they unfold or fold away, the first-person view shows
+ * both implants and no held item. Each slash swings the arm that cuts (they alternate), and a
+ * lunge brings both arms forward together.
  * Low priority so this runs before other first-person animation mods and takes over the view.
  */
 @Mixin(value = ItemInHandRenderer.class, priority = 500)
@@ -34,7 +36,7 @@ public abstract class MantisItemInHandRendererMixin {
     @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void apogee$mantisHands(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource buffers,
                                     LocalPlayer player, int light, CallbackInfo ci) {
-        if (!MantisClient.isDeployed(player) || player.isScoping()) {
+        if (!MantisClient.isOut(player) || player.isScoping()) {
             return;
         }
         ci.cancel();
@@ -58,8 +60,16 @@ public abstract class MantisItemInHandRendererMixin {
                 poseStack.translate(-side * 0.30F * lunge, 0.12F * lunge, -0.60F * lunge);
                 poseStack.mulPose(Axis.YP.rotationDegrees(side * 16.0F * lunge));
             }
-            // The cut is the arm_root track of the implant's attack clip, not the vanilla swing.
-            renderPlayerArm(poseStack, buffers, light, 0.0F, 0.0F, arm);
+            float slash = thrust >= 0.0F ? -1.0F
+                    : MantisClient.slashProgress(player, right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT, partialTick);
+            if (slash >= 0.0F) {
+                // A diagonal cut: the forearm sweeps in from its side of the view and down across it.
+                float out = Mth.sin(Mth.sqrt(slash) * Mth.PI);
+                poseStack.translate(-side * 0.22F * out, -0.08F * out, -0.18F * out);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(side * 28.0F * out));
+            }
+            // The vanilla swing, on whichever hand cuts; the implant's attack clip adds the blade's arc.
+            renderPlayerArm(poseStack, buffers, light, 0.0F, Math.max(slash, 0.0F), arm);
             poseStack.popPose();
         }
         buffers.endBatch();

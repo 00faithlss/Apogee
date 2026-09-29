@@ -4,6 +4,8 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.0+1.21.1] — 2026-09-29
+
 ### Añadido (Cuchillas Mantis)
 
 - Implante «Cuchillas Mantis» en la nueva ranura Trinkets `cyberware/arms`, con receta con forma simétrica y logro de desafío «Mantis religiosa». Variantes **térmica** (prende fuego al objetivo) y **eléctrica** (lo aturde un momento), que se fabrican rodeando las Cuchillas Mantis con varas de blaze y bloques de magma, o con bloques de redstone y pararrayos.
@@ -12,18 +14,22 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - Modelo y animaciones del kit Mantis v0.4 (GeckoLib, una geometría por variante y lado, 25 huesos): cerrado, el brazo se ve como uno normal; al desplegar se abren las cubiertas superiores e inferiores, sube el riel por el costado externo del antebrazo y la hoja sale de él en dos láminas rígidas (la principal y la punta), sin que el riel se estire. Animaciones de despliegue y repliegue (1 s) y de ataque por brazo (0,6 s).
 - El modelo reemplaza el brazo vanilla mientras se lleva el implante: los paneles de piel, la mano y el tope del hombro se dibujan con la skin del portador (clásica o Slim), proyectando cada panel sobre la zona del brazo que cubre al estar cerrado.
 - Tercera persona con postura de combate (brazos separados 20° del torso) y primera persona con ambas cuchillas desplegadas; plegadas se ve el brazo normal.
-- Máscaras emisivas de las variantes térmica y eléctrica, activas solo con el implante abierto, y partículas de brasas o chispas al atacar.
+- Máscaras emisivas de las variantes térmica y eléctrica, activas solo con el implante abierto, y partículas de calor o chispas al atacar.
 - GeckoLib 4.9.3 como dependencia obligatoria que se instala aparte (no va dentro del JAR).
 - `tools/mantis_kit_import.py` importa las exportaciones del kit al mod; los proyectos de Blockbench y la documentación del kit quedan en `art/mantis-kit/`.
-- Prueba de cliente `runMantisSmoke`: equipa cada variante y captura plegada, desplegando, desplegada, atacando, primeros planos y primera persona.
+- Prueba de cliente `runMantisSmoke`: equipa cada variante y captura plegada, desplegando, desplegada, atacando, primeros planos y primera persona (despliegue con un objeto en la mano, corte de cada brazo y repliegue).
 - `tools/mantis_tests.sh`: prueba multijugador (servidor dedicado y dos clientes que comprueban la sincronización de variante, despliegue, ataques y repliegue) y prueba de compatibilidad con Punchy y Fresh Animations (con Entity Model Features y Entity Texture Features).
 - Cyberware bajo el piso de la carcasa, visible al abrirse las cubiertas inferiores: cables a lo largo del antebrazo con abrazaderas y dos módulos. Los cables son rojos en la térmica, azules en la eléctrica y grises en la normal (sus cables pasan de rojo a gris).
 - En primera persona las dos cuchillas quedan hacia los bordes de la pantalla, a la misma distancia que un objeto en cada mano; antes se juntaban en el centro.
 - La prueba de cliente guarda una captura de referencia con una espada en cada mano para comparar la separación.
 - Con packs que animan los brazos, como Fresh Animations Player Extension, el implante abierto recibe igualmente la separación de 20° del torso para que sus cubiertas inferiores no lo atraviesen.
 - Revisión del modelo: hoja y riel en grupos independientes (`blade_slider` y `cutting_edge` deslizan dentro del riel fijo) y alcance mayor que el del kit original; los proyectos de Blockbench por pieza quedan en `art/mantis-kit/modular/`.
-- Metal oscuro en las tres variantes; la térmica tiene la hoja más ancha, filo naranja y punta amarilla, y la eléctrica un filo azul que brilla.
+- Metal oscuro en las tres variantes; la térmica tiene la hoja más ancha y la eléctrica un filo azul que brilla.
+- Hojas rectas en las tres variantes: se quitaron los dientes de sierra de la hoja y del riel.
+- La hoja térmica brilla al rojo vivo: textura roja con ruido, halo de brillo aditivo en capas (simula bloom sin shaders), destellos de «glitch» que desplazan una copia de la hoja por un instante, y partículas rojas de calor y vetas de ruido que salen de la hoja. Al golpear suelta chispas rojas en lugar de llamas.
 - En primera persona, el brazo izquierdo de la térmica gira un poco hacia la cámara para mostrar más el mecanismo.
+- En primera persona se ve la animación de despliegue y de repliegue con ambos brazos (antes aparecían ya abiertas de golpe, sobre todo con un objeto en la mano).
+- En primera persona cada corte mueve el brazo que golpea, alternando derecho e izquierdo; antes solo se notaba el derecho.
 - Sonidos propios para la variante eléctrica: despliegue, corte al aire (3 variantes) y golpe al enemigo (3 variantes, las más graves). Se recortaron los silencios iniciales para que suenen sin retraso, se igualó el volumen y se pasaron a mono para que se oigan con posición en multijugador.
 - Las variantes normal y térmica, el guardado y la estocada siguen con sonidos provisionales que reutilizan eventos de Minecraft.
 
