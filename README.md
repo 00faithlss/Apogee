@@ -48,9 +48,10 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 ### Cuchillas Mantis
 
 - Equípalas en la ranura **Brazos** de Trinkets. **R** (configurable) las despliega o las guarda.
+- Cerradas, el brazo se ve como uno normal con tu skin (clásica o Slim). Al desplegarlas se abren las cubiertas del antebrazo, el mecanismo sube por el costado externo y la hoja se extiende.
 - Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
 - Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
-- Equipadas y guardadas se ven plegadas sobre el antebrazo. Al desplegarlas la muñeca se abre y el mecanismo sube. La piel que cubre la muñeca y el antebrazo toma los colores de tu skin, sea normal o slim.
+- Variantes: la térmica prende fuego y la eléctrica aturde; sus filos y electrodos brillan mientras el implante está abierto.
 - Los sonidos son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
 
 ### Mecánica del Sandevistan (valores por defecto)
@@ -139,12 +140,15 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 - `runGametest`: 18 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltip, activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
-El modelo y las animaciones de las Cuchillas Mantis están en formato GeckoLib para editarlos en Blockbench (con el plugin *GeckoLib Animation Utils*): `assets/apogee/geo/mantis_blades.geo.json` y `assets/apogee/animations/mantis_blades.animation.json` (animaciones `deploy`, `deployed`, `slash`, `thrust` y `retract`). El modelo está al doble de tamaño de un brazo; el hueso `reference_arm` es solo una guía para modelar y los huesos `skin_*` se dibujan con la skin del portador. Se exportaron una vez con `tools/mantis_to_geckolib.py`; desde que se editen en Blockbench son la fuente del modelo.
+```bash
+./gradlew runMantisSmoke
+```
 
-> [!NOTE]
-> Mientras se conecta el render de GeckoLib, el juego sigue dibujando las cuchillas con `MantisMechanismMesh`, generado por `tools/mantis_model.py`.
+- `runMantisSmoke`: abre el cliente, equipa cada variante de las Cuchillas Mantis y captura plegada, desplegando, desplegada, atacando y en primera persona en `build/mantis-smoke/screenshots`.
 
-Estructura principal: `dev.apogee.sandevistan.SandevistanManager` (autoridad del servidor), `dev.apogee.mixin` (salto de ticks, daño, anti-vuelo), `dev.apogee.client` (estado sincronizado, efectos, estelas, renderizado y tooltip).
+El modelo de las Cuchillas Mantis viene del kit Mantis v0.4: los proyectos de Blockbench y su documentación están en [`art/mantis-kit/`](art/mantis-kit/LEEME.md). Tras exportar desde Blockbench con el flujo de GeckoLib, `python3 tools/mantis_kit_import.py <carpeta del kit>` copia geometrías, animaciones y texturas a `assets/apogee` y añade la mano y el tope del hombro que el kit deja fuera de su exportación.
+
+Estructura principal: `dev.apogee.sandevistan.SandevistanManager` y `dev.apogee.mantis.MantisManager` (autoridad del servidor), `dev.apogee.client.mantis` (modelo GeckoLib de las Cuchillas Mantis), `dev.apogee.mixin` (salto de ticks, daño, anti-vuelo), `dev.apogee.client` (estado sincronizado, efectos, estelas, renderizado y tooltip).
 
 Ramas: `main` estable, `develop` integración. Commits con Conventional Commits. Cambios en [CHANGELOG.md](CHANGELOG.md).
 

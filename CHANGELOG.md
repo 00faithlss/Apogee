@@ -4,24 +4,18 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
-### Añadido (Cuchillas Mantis, sin compilar ni probar todavía)
+### Añadido (Cuchillas Mantis)
 
-- GeckoLib 4.9.3 como dependencia obligatoria (se instala aparte, no va dentro del JAR). El modelo de las Cuchillas Mantis y sus animaciones (`deploy`, `deployed`, `slash`, `thrust`, `retract`) se exportaron a `geo/mantis_blades.geo.json` y `animations/mantis_blades.animation.json` para editarlos en Blockbench. El render con GeckoLib todavía no está conectado.
-
-- Implante «Cuchillas Mantis» en la nueva ranura Trinkets `cyberware/arms`, con receta con forma simétrica y logro de desafío «Mantis religiosa».
-- Tecla R (configurable) para desplegar o guardar las cuchillas. Salen del antebrazo en forma de Z: riel sobre el antebrazo, tramo medio con bisagra en la muñeca que se abre hacia el codo y hoja que vuelve hacia adelante sobre la mano.
-- La carcasa sobre el antebrazo copia los píxeles de la skin de quien las porta (brazo normal o slim).
-- Clic izquierdo: cortes alternados, un brazo distinto en cada golpe (+6 de daño y +1,5 de velocidad de ataque mientras están desplegadas).
-- Clic derecho: estocada con ambas cuchillas, con impulso hacia adelante, daño perforante a lo largo de 4 bloques y recarga de 2 s.
-- Primera persona con ambos antebrazos y sin objeto en mano; tercera persona con las cuchillas visibles y postura propia.
-- Con las cuchillas desplegadas la ranura de la hotbar queda fija (rueda y teclas 1-9), el inventario no se puede abrir y el clic derecho no usa objetos. El servidor también fija la ranura y cierra contenedores.
-- Mecanismo rehecho a doble resolución con textura pixelada: marco oscuro, abrazaderas grises y cables rojos sobre el antebrazo, soporte articulado que sale de la muñeca, cabeza en gancho con ojo rojo y hoja con carcasa oscura de la que se desliza el filo aserrado. Plegado, todo queda recostado sobre el antebrazo.
-- La bisagra del mecanismo queda en la muñeca (antes estaba en la punta de la mano).
-- Componentes separados: `housing` (rieles, cables y abrazaderas fijos al antebrazo), `link_lower` y `link_upper` (horquillas que se pliegan a los costados de la hoja), `blade` con su filo deslizante, y tres tapas con la piel del portador por fuera: la piel del antebrazo va montada sobre `link_lower` y sube con la mantis, `cover_elbow` se levanta cerca del codo y `cover_under` se abre por debajo de la muñeca dejando ver los cables. Plegada, la piel cierra sobre la hoja y los eslabones.
-- Con las cuchillas equipadas pero guardadas, el mecanismo se ve plegado sobre el antebrazo, en primera y tercera persona.
-- Variante eléctrica con cables azules y electrodos cian; variante térmica con el filo naranja. El filo, los electrodos y el ojo brillan siempre en la oscuridad (pasada emisiva `mantis_blades*_glow.png`).
-- `tools/mantis_model.py` genera la malla (`MantisMechanismMesh`) y las texturas `mantis_blades*.png` desde una sola lista de piezas.
-- Variantes: **térmicas** (brillan al rojo vivo al atacar y prenden fuego, `mantis_blades_thermal`) y **eléctricas** (crepitan con chispas azules al atacar y aturden un momento, `mantis_blades_electric`). Se fabrican rodeando las Cuchillas Mantis con bloques de magma y varas de blaze, o con bloques de redstone y pararrayos.
+- Implante «Cuchillas Mantis» en la nueva ranura Trinkets `cyberware/arms`, con receta con forma simétrica y logro de desafío «Mantis religiosa». Variantes **térmica** (prende fuego al objetivo) y **eléctrica** (lo aturde un momento), que se fabrican rodeando las Cuchillas Mantis con varas de blaze y bloques de magma, o con bloques de redstone y pararrayos.
+- Tecla R (configurable) para desplegar o guardar las cuchillas. Clic izquierdo: cortes alternados, un brazo distinto en cada golpe (+6 de daño y +1,5 de velocidad de ataque mientras están desplegadas). Clic derecho: estocada con ambas cuchillas, con impulso, daño a lo largo de 4 bloques y recarga de 2 s. El servidor valida el despliegue, el daño y la recarga.
+- Con las cuchillas desplegadas la ranura de la hotbar queda fija (rueda y teclas 1-9), el inventario no se abre y el clic derecho no usa objetos. El servidor también fija la ranura y cierra contenedores.
+- Modelo y animaciones del kit Mantis v0.4 (GeckoLib, una geometría por variante y lado, 25 huesos): cerrado, el brazo se ve como uno normal; al desplegar se abren las cubiertas superiores e inferiores, sube el mecanismo por el costado externo del antebrazo y se extiende la hoja telescópica. Animaciones de despliegue y repliegue (1 s) y de ataque por brazo (0,6 s).
+- El modelo reemplaza el brazo vanilla mientras se lleva el implante: los paneles de piel, la mano y el tope del hombro se dibujan con la skin del portador (clásica o Slim), proyectando cada panel sobre la zona del brazo que cubre al estar cerrado.
+- Tercera persona con postura de combate (brazos separados 20° del torso) y primera persona con ambas cuchillas desplegadas; plegadas se ve el brazo normal.
+- Máscaras emisivas de las variantes térmica y eléctrica, activas solo con el implante abierto, y partículas de brasas o chispas al atacar.
+- GeckoLib 4.9.3 como dependencia obligatoria que se instala aparte (no va dentro del JAR).
+- `tools/mantis_kit_import.py` importa las exportaciones del kit al mod; los proyectos de Blockbench y la documentación del kit quedan en `art/mantis-kit/`.
+- Prueba de cliente `runMantisSmoke`: equipa cada variante y captura plegada, desplegando, desplegada, atacando y en primera persona.
 - Sonidos provisionales (reutilizan eventos de Minecraft) hasta contar con grabaciones propias.
 
 ### Cambiado

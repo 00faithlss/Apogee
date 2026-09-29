@@ -1,0 +1,9 @@
+Validación estática completada.
+JSON/BBModel analizados: 19
+Jerarquías, dimensiones, UV, referencias y PNG/GIF: correctos.
+Importación UI de Blockbench: pendiente.
+Ejecución en Minecraft y compilación del mod: pendientes.
+v0.4: 30 comparaciones de poses BBModel/JSON correctas; simetría de tres variantes y montaje lateral en dos escenas comprobados.
+Cierre: las seis variantes/lados caben exactamente en 4 × 4 × 12 unidades, con piel de referencia.
+La comprobación específica de holguras se registra mediante check_clearance.py; no certifica todas las colisiones posibles.
+Visor: revisión estática, pendiente ejecución en navegador.

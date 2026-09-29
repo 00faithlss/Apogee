@@ -6,7 +6,6 @@ import dev.apogee.client.config.ApogeeClientConfig;
 import dev.apogee.client.fx.AfterimageRenderer;
 import dev.apogee.client.fx.SandevistanEffects;
 import dev.apogee.client.mantis.MantisClient;
-import dev.apogee.client.model.MantisArmModel;
 import dev.apogee.client.model.SandevistanModel;
 import dev.apogee.client.render.MantisArmsLayer;
 import dev.apogee.client.render.SandevistanImplantRenderer;
@@ -56,8 +55,6 @@ public final class ApogeeClient implements ClientModInitializer {
         dev.apogee.client.compat.immersivearmors.SteamDashClient.register();
 
         EntityModelLayerRegistry.registerModelLayer(SandevistanModel.LAYER, SandevistanModel::createLayer);
-        EntityModelLayerRegistry.registerModelLayer(MantisArmModel.SKIN_LAYER, MantisArmModel::createSkinLayer);
-        EntityModelLayerRegistry.registerModelLayer(MantisArmModel.MECHANISM_LAYER, MantisArmModel::createMechanismLayer);
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((type, renderer, helper, context) -> {
             if (renderer instanceof net.minecraft.client.renderer.entity.player.PlayerRenderer playerRenderer) {
                 helper.register(new MantisArmsLayer(playerRenderer));

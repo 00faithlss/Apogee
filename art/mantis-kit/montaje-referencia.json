@@ -1,0 +1,62 @@
+{
+  "note": "Especificación del montaje de referencia; no es un archivo que Minecraft cargue automáticamente. Coordenadas Blockbench, vectores columna.",
+  "unit": "model_units",
+  "local_axes": {
+    "forward_to_hand": "-Z",
+    "implant_opening": "+Y"
+  },
+  "third_person": {
+    "matrix_order": "T(shoulder) * Rz(abduction) * T(0,-6,0) * Rx(-90deg) * Rz(roll) * animated_arm_root",
+    "shoulder_pose_note": "Pose de referencia: brazos separados 20 grados; sustituir por la pose del jugador sin aplicar doble rotación.",
+    "right": {
+      "translation_before_shoulder_pose": [
+        -6,
+        18,
+        0
+      ],
+      "shoulder_pivot": [
+        -6,
+        24,
+        0
+      ],
+      "abduction_z": -20,
+      "roll_z": 90,
+      "opening_world_direction": [
+        -0.939693,
+        0.34202,
+        0
+      ]
+    },
+    "left": {
+      "translation_before_shoulder_pose": [
+        6,
+        18,
+        0
+      ],
+      "shoulder_pivot": [
+        6,
+        24,
+        0
+      ],
+      "abduction_z": 20,
+      "roll_z": -90,
+      "opening_world_direction": [
+        0.939693,
+        0.34202,
+        0
+      ]
+    }
+  },
+  "first_person": {
+    "note": "Transformaciones de cámara independientes; no reutilizar directamente el montaje del maniquí."
+  },
+  "wrist": {
+    "pivot_local": [
+      0,
+      0,
+      -3.6
+    ],
+    "idle_rotation_x": -18,
+    "note": "La skin de la mano debe seguir el hueso wrist."
+  }
+}

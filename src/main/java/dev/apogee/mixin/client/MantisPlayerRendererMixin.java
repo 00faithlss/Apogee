@@ -2,46 +2,48 @@ package dev.apogee.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.apogee.client.mantis.MantisClient;
-import dev.apogee.client.render.MantisArmRenderer;
+import dev.apogee.client.mantis.MantisRig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/** First-person hands go through renderRightHand/renderLeftHand; draw the blades after the arm. */
+/**
+ * First-person hands: while Mantis Blades are worn the implant model is the arm, so it is drawn
+ * in place of the vanilla arm and sleeve, with the same pose vanilla would give them.
+ */
 @Mixin(PlayerRenderer.class)
 public abstract class MantisPlayerRendererMixin {
-    @Inject(method = "renderRightHand", at = @At("HEAD"))
-    private void apogee$beginRight(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player, CallbackInfo ci) {
-        MantisClient.firstPersonRendering = true;
-    }
+    @Shadow
+    protected abstract void setModelProperties(AbstractClientPlayer player);
 
-    @Inject(method = "renderRightHand", at = @At("TAIL"))
-    private void apogee$mantisRight(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player, CallbackInfo ci) {
-        drawBlades(poseStack, buffers, light, player, true);
-    }
-
-    @Inject(method = "renderLeftHand", at = @At("HEAD"))
-    private void apogee$beginLeft(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player, CallbackInfo ci) {
-        MantisClient.firstPersonRendering = true;
-    }
-
-    @Inject(method = "renderLeftHand", at = @At("TAIL"))
-    private void apogee$mantisLeft(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player, CallbackInfo ci) {
-        drawBlades(poseStack, buffers, light, player, false);
-    }
-
-    private void drawBlades(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player, boolean right) {
-        MantisClient.firstPersonRendering = false;
-        float progress = MantisClient.deployProgress(player, 1.0F);
+    @Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
+    private void apogee$mantisHand(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player,
+                                   ModelPart arm, ModelPart sleeve, CallbackInfo ci) {
+        if (MantisClient.variant(player) == null) {
+            return;
+        }
         PlayerModel<AbstractClientPlayer> model = ((PlayerRenderer) (Object) this).getModel();
-        poseStack.pushPose();
-        (right ? model.rightArm : model.leftArm).translateAndRotate(poseStack);
-        MantisArmRenderer.render(poseStack, buffers, light, player, right, progress);
-        poseStack.popPose();
+        setModelProperties(player);
+        model.attackTime = 0.0F;
+        model.crouching = false;
+        model.swimAmount = 0.0F;
+        MantisClient.firstPersonRendering = true;
+        try {
+            model.setupAnim(player, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+        } finally {
+            MantisClient.firstPersonRendering = false;
+        }
+        arm.xRot = 0.0F;
+        float partialTick = Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false);
+        MantisRig.drawOnArm(poseStack, buffers, light, player, arm, arm == model.rightArm, partialTick);
+        ci.cancel();
     }
 }

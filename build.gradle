@@ -79,6 +79,14 @@ loom {
             runDir 'build/smoke-client'
             vmArg '-Dapogee.smoke=true'
         }
+        mantisSmoke {
+            client()
+            name 'Apogee Mantis Blades smoke run'
+            source sourceSets.gametest
+            runDir 'build/mantis-smoke'
+            vmArg '-Dapogee.mantisSmoke=true'
+            programArgs '--width', '1600', '--height', '900'
+        }
     }
 }
 

@@ -31,8 +31,6 @@ public final class MantisClient {
         int nextArm = MantisRules.ARM_RIGHT;
         long thrustStart = Long.MIN_VALUE;
         MantisVariant variant = MantisVariant.STANDARD;
-        /** Tick until which the blades glow after an attack. */
-        long glowUntil = Long.MIN_VALUE;
     }
 
     private static final Int2ObjectOpenHashMap<Anim> ANIMS = new Int2ObjectOpenHashMap<>();
@@ -48,6 +46,7 @@ public final class MantisClient {
 
     public static void reset() {
         ANIMS.clear();
+        MantisRig.clear();
         lockedSlot = -1;
         localThrustReady = 0L;
         firstPersonRendering = false;
@@ -81,8 +80,10 @@ public final class MantisClient {
         Anim anim = anim(payload.entityId());
         if (payload.arm() == MantisRules.ARM_BOTH) {
             anim.thrustStart = ticks;
+            MantisRig.of(payload.entityId()).thrust();
         } else {
             anim.swingArm = payload.arm();
+            MantisRig.of(payload.entityId()).attack(payload.arm());
         }
         strike(mc, anim, payload.entityId());
     }
@@ -99,15 +100,15 @@ public final class MantisClient {
         }
         anim.swingArm = anim.nextArm;
         anim.nextArm = anim.nextArm == MantisRules.ARM_RIGHT ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT;
+        MantisRig.of(mc.player.getId()).attack(anim.swingArm);
         strike(mc, anim, mc.player.getId());
     }
 
-    /** Lights the blades up and throws sparks or embers while an attack plays. */
+    /** Throws sparks or embers from thermal and electric blades as they strike. */
     private static void strike(Minecraft mc, Anim anim, int entityId) {
         if (anim.variant == MantisVariant.STANDARD) {
             return;
         }
-        anim.glowUntil = ticks + 10;
         Entity entity = mc.level == null ? null : mc.level.getEntity(entityId);
         if (entity == null) {
             return;
@@ -125,6 +126,10 @@ public final class MantisClient {
     }
 
     // ------------------------------------------------------------------ queries
+
+    public static long clientTicks() {
+        return ticks;
+    }
 
     public static boolean isDeployed(Entity entity) {
         Anim anim = ANIMS.get(entity.getId());
@@ -144,12 +149,6 @@ public final class MantisClient {
     /** Variant of the Mantis Blades the entity wears (Trinkets syncs worn items), or null. */
     public static MantisVariant variant(Entity entity) {
         return entity instanceof LivingEntity living ? MantisManager.equippedVariant(living) : null;
-    }
-
-    /** True while a thermal or electric blade is lit up from an attack. */
-    public static boolean glowing(Entity entity) {
-        Anim anim = ANIMS.get(entity.getId());
-        return anim != null && anim.variant != MantisVariant.STANDARD && ticks < anim.glowUntil;
     }
 
     public static int swingArm(Entity entity) {
@@ -181,6 +180,9 @@ public final class MantisClient {
                 iterator.remove();
             }
         }
+        if (mc.level != null && ticks % 100 == 0) {
+            MantisRig.prune(id -> mc.level.getEntity(id) != null);
+        }
         LocalPlayer player = mc.player;
         if (player == null || !isDeployed(player)) {
             return;
@@ -199,6 +201,7 @@ public final class MantisClient {
                 localThrustReady = ticks + MantisRules.THRUST_COOLDOWN_TICKS;
                 Anim self = anim(player.getId());
                 self.thrustStart = ticks;
+                MantisRig.of(player.getId()).thrust();
                 strike(mc, self, player.getId());
                 ClientPlayNetworking.send(MantisThrust.INSTANCE);
             }

@@ -1,0 +1,2 @@
+v0.4: SAT/OBB en 1362 poses: soportes y hoja frente a cubiertas superiores, todas las piezas de piel y mano de referencia, sin penetraciones >=0.005 unidades en las muestras.
+Muestras de despliegue cada 0.005 s y ambos ataques cada 0.05 s; repliegue es la secuencia inversa. No certifica contactos entre todas las piezas metálicas ni colisiones con torso/armadura dentro del juego.

@@ -6,7 +6,7 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": ["dev.apogee.gametest.SandevistanGameTests"],
-    "client": ["dev.apogee.gametest.ApogeeClientSmoke"]
+    "client": ["dev.apogee.gametest.ApogeeClientSmoke", "dev.apogee.gametest.MantisClientSmoke"]
   },
   "mixins": ["apogee_gametest.mixins.json"],
   "depends": {
