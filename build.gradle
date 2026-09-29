@@ -24,6 +24,16 @@ repositories {
         name = 'Ladysnake'
         url = 'https://maven.ladysnake.org/releases'
     }
+    // GeckoLib: models and animations authored in Blockbench.
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'GeckoLib'
+                url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+            }
+        }
+        filter { includeGroup 'software.bernie.geckolib' }
+    }
     mavenCentral()
 }
 
@@ -81,6 +91,9 @@ dependencies {
     modImplementation "maven.modrinth:trinkets:${trinkets_version}"
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${cca_version}"
     modRuntimeOnly "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cca_version}"
+
+    // Required dependency, installed separately by every player and server (not bundled).
+    modImplementation "software.bernie.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
 
     // Client tooltip stack. Simply Tooltips is compiled against but never bundled.
     modImplementation "maven.modrinth:simply-tooltips:${simply_tooltips_version}"

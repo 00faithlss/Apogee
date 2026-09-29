@@ -106,12 +106,13 @@ Todos deben usar **exactamente** estas versiones:
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
+| GeckoLib | 4.9.3 para Fabric 1.21.1 | Todos (obligatorio, se instala aparte) |
 | Simply Tooltips | 0.1.5 | Clientes |
 | Architectury API | 13.0.11+fabric | Clientes (dependencia de Simply Tooltips) |
 | Fzzy Config | 0.7.6+1.21 | Clientes (dependencia de Simply Tooltips) |
 | Fabric Language Kotlin | 1.13.13+kotlin.2.4.10 | Clientes (dependencia de Fzzy Config) |
 
-No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric API y Trinkets. Sin Simply Tooltips el cliente arranca y muestra un tooltip simple.
+No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric API, Trinkets y GeckoLib. Sin Simply Tooltips el cliente arranca y muestra un tooltip simple.
 
 **Con Essential:** el anfitrión abre su mundo con *Host World* de Essential ([guía oficial](https://essential.gg/wiki/start-hosting)); el mundo se ejecuta en su ordenador, así que su `config/apogee-server.json` define las reglas. Los invitados deben tener la misma lista de mods antes de unirse.
 
@@ -138,7 +139,10 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 - `runGametest`: 18 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltip, activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
-El modelo de las Cuchillas Mantis se edita en `tools/mantis_model.py` (requiere Pillow) y se regenera con `python3 tools/mantis_model.py`, que reescribe `MantisMechanismMesh.java` y las texturas `mantis_blades*.png`.
+El modelo y las animaciones de las Cuchillas Mantis están en formato GeckoLib para editarlos en Blockbench (con el plugin *GeckoLib Animation Utils*): `assets/apogee/geo/mantis_blades.geo.json` y `assets/apogee/animations/mantis_blades.animation.json` (animaciones `deploy`, `deployed`, `slash`, `thrust` y `retract`). El modelo está al doble de tamaño de un brazo; el hueso `reference_arm` es solo una guía para modelar y los huesos `skin_*` se dibujan con la skin del portador. Se exportaron una vez con `tools/mantis_to_geckolib.py`; desde que se editen en Blockbench son la fuente del modelo.
+
+> [!NOTE]
+> Mientras se conecta el render de GeckoLib, el juego sigue dibujando las cuchillas con `MantisMechanismMesh`, generado por `tools/mantis_model.py`.
 
 Estructura principal: `dev.apogee.sandevistan.SandevistanManager` (autoridad del servidor), `dev.apogee.mixin` (salto de ticks, daño, anti-vuelo), `dev.apogee.client` (estado sincronizado, efectos, estelas, renderizado y tooltip).
 

@@ -19,7 +19,8 @@
     "minecraft": "~1.21.1",
     "java": ">=21",
     "fabric-api": ">=0.116.17",
-    "trinkets": ">=3.10.0"
+    "trinkets": ">=3.10.0",
+    "geckolib": ">=4.9.3"
   },
   "custom": {
     "apogee:client_requirements": "Simply Tooltips 0.1.5 with Architectury API and Fzzy Config"

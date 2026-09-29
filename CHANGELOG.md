@@ -6,6 +6,8 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ### Añadido (Cuchillas Mantis, sin compilar ni probar todavía)
 
+- GeckoLib 4.9.3 como dependencia obligatoria (se instala aparte, no va dentro del JAR). El modelo de las Cuchillas Mantis y sus animaciones (`deploy`, `deployed`, `slash`, `thrust`, `retract`) se exportaron a `geo/mantis_blades.geo.json` y `animations/mantis_blades.animation.json` para editarlos en Blockbench. El render con GeckoLib todavía no está conectado.
+
 - Implante «Cuchillas Mantis» en la nueva ranura Trinkets `cyberware/arms`, con receta con forma simétrica y logro de desafío «Mantis religiosa».
 - Tecla R (configurable) para desplegar o guardar las cuchillas. Salen del antebrazo en forma de Z: riel sobre el antebrazo, tramo medio con bisagra en la muñeca que se abre hacia el codo y hoja que vuelve hacia adelante sobre la mano.
 - La carcasa sobre el antebrazo copia los píxeles de la skin de quien las porta (brazo normal o slim).
