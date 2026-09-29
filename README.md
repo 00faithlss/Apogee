@@ -50,7 +50,7 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 - Equípalas en la ranura **Brazos** de Trinkets. **R** (configurable) las despliega o las guarda.
 - Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
 - Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
-- La carcasa del antebrazo toma los colores de tu skin, sea normal o slim.
+- Equipadas y guardadas se ven plegadas sobre el antebrazo. Al desplegarlas la muñeca se abre y el mecanismo sube. La piel que cubre la muñeca y el antebrazo toma los colores de tu skin, sea normal o slim.
 - Los sonidos son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
 
 ### Mecánica del Sandevistan (valores por defecto)

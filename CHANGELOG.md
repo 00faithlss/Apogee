@@ -15,6 +15,9 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 - Con las cuchillas desplegadas la ranura de la hotbar queda fija (rueda y teclas 1-9), el inventario no se puede abrir y el clic derecho no usa objetos. El servidor también fija la ranura y cierra contenedores.
 - Mecanismo rehecho a doble resolución con textura pixelada: marco oscuro, abrazaderas grises y cables rojos sobre el antebrazo, soporte articulado que sale de la muñeca, cabeza en gancho con ojo rojo y hoja con carcasa oscura de la que se desliza el filo aserrado. Plegado, todo queda recostado sobre el antebrazo.
 - La bisagra del mecanismo queda en la muñeca (antes estaba en la punta de la mano).
+- La muñeca se abre: dos tapas con la piel del portador se separan hacia los lados antes de que suban los dos eslabones (`link_lower` y `link_upper`), gire la hoja y se deslice el filo.
+- Con las cuchillas equipadas pero guardadas, el mecanismo se ve plegado sobre el antebrazo, en primera y tercera persona.
+- Variante eléctrica con cables azules y electrodos cian; variante térmica con el filo naranja. El filo, los electrodos y el ojo brillan siempre en la oscuridad (pasada emisiva `mantis_blades*_glow.png`).
 - `tools/mantis_model.py` genera la malla (`MantisMechanismMesh`) y las texturas `mantis_blades*.png` desde una sola lista de piezas.
 - Variantes: **térmicas** (brillan al rojo vivo al atacar y prenden fuego, `mantis_blades_thermal`) y **eléctricas** (crepitan con chispas azules al atacar y aturden un momento, `mantis_blades_electric`). Se fabrican rodeando las Cuchillas Mantis con bloques de magma y varas de blaze, o con bloques de redstone y pararrayos.
 - Sonidos provisionales (reutilizan eventos de Minecraft) hasta contar con grabaciones propias.

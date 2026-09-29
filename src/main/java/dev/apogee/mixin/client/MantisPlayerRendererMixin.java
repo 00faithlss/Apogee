@@ -38,9 +38,6 @@ public abstract class MantisPlayerRendererMixin {
     private void drawBlades(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player, boolean right) {
         MantisClient.firstPersonRendering = false;
         float progress = MantisClient.deployProgress(player, 1.0F);
-        if (progress <= 0.0F) {
-            return;
-        }
         PlayerModel<AbstractClientPlayer> model = ((PlayerRenderer) (Object) this).getModel();
         poseStack.pushPose();
         (right ? model.rightArm : model.leftArm).translateAndRotate(poseStack);

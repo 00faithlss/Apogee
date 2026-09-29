@@ -21,6 +21,9 @@ public final class MantisArmRenderer {
     private static final ResourceLocation THERMAL_HOT = Apogee.id("textures/entity/mantis_blades_thermal_hot.png");
     private static final ResourceLocation ELECTRIC = Apogee.id("textures/entity/mantis_blades_electric.png");
     private static final ResourceLocation ELECTRIC_HOT = Apogee.id("textures/entity/mantis_blades_electric_hot.png");
+    private static final ResourceLocation GLOW = Apogee.id("textures/entity/mantis_blades_glow.png");
+    private static final ResourceLocation THERMAL_GLOW = Apogee.id("textures/entity/mantis_blades_thermal_glow.png");
+    private static final ResourceLocation ELECTRIC_GLOW = Apogee.id("textures/entity/mantis_blades_electric_glow.png");
 
     private static MantisArmModel model;
 
@@ -40,33 +43,41 @@ public final class MantisArmRenderer {
     }
 
     /**
-     * Renders one arm's blade. The pose stack must already be at the arm's pivot, as left by
+     * Renders one arm's blade, folded at progress 0 and open at 1. Nothing is drawn unless the
+     * player wears Mantis Blades. The pose stack must already be at the arm's pivot, as left by
      * {@code ModelPart.translateAndRotate} on the player model's arm.
      */
     public static void render(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player,
                               boolean right, float progress) {
-        if (progress <= 0.0F) {
+        MantisVariant variant = MantisClient.variant(player);
+        if (variant == null) {
             return;
         }
         MantisArmModel arm = model();
         boolean slim = player.getSkin().model() == PlayerSkin.Model.SLIM;
+        arm.setDeployment(right, slim, progress);
         arm.plate(right, slim).render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(player.getSkin().texture())),
                 light, OverlayTexture.NO_OVERLAY);
 
-        MantisVariant variant = MantisClient.variant(player);
         boolean hot = MantisClient.glowing(player);
         ResourceLocation texture = switch (variant) {
             case THERMAL -> hot ? THERMAL_HOT : THERMAL;
             case ELECTRIC -> hot ? ELECTRIC_HOT : ELECTRIC;
             default -> TEXTURE;
         };
-        arm.setDeployment(progress);
+        ResourceLocation glow = switch (variant) {
+            case THERMAL -> THERMAL_GLOW;
+            case ELECTRIC -> ELECTRIC_GLOW;
+            default -> GLOW;
+        };
         poseStack.pushPose();
         poseStack.translate(MantisArmModel.centerX(right, slim) / 16.0F, 0.0F, 0.0F);
         float scale = MantisArmModel.MECHANISM_SCALE;
         poseStack.scale(scale * MantisArmModel.widthScale(slim), scale, scale);
         arm.mechanism().render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(texture)),
                 hot ? LightTexture.FULL_BRIGHT : light, OverlayTexture.NO_OVERLAY);
+        // Emissive pass: the heated edge, the electrodes and the eye stay lit in the dark.
+        arm.mechanism().render(poseStack, buffers.getBuffer(RenderType.eyes(glow)), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
     }
 }

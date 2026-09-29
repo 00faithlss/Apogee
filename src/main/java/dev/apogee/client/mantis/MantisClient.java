@@ -1,5 +1,6 @@
 package dev.apogee.client.mantis;
 
+import dev.apogee.mantis.MantisManager;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.MantisVariant;
 import dev.apogee.network.ApogeeNetworking.MantisSwing;
@@ -15,6 +16,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 /**
  * Client view of who has the Mantis Blades out: unfold progress, the arm that slashed last,
@@ -139,9 +141,9 @@ public final class MantisClient {
         return raw * raw * (3.0F - 2.0F * raw);
     }
 
+    /** Variant of the Mantis Blades the entity wears (Trinkets syncs worn items), or null. */
     public static MantisVariant variant(Entity entity) {
-        Anim anim = ANIMS.get(entity.getId());
-        return anim == null ? MantisVariant.STANDARD : anim.variant;
+        return entity instanceof LivingEntity living ? MantisManager.equippedVariant(living) : null;
     }
 
     /** True while a thermal or electric blade is lit up from an attack. */

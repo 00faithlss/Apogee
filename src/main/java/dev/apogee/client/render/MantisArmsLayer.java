@@ -19,7 +19,7 @@ public final class MantisArmsLayer extends RenderLayer<AbstractClientPlayer, Pla
                        float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks,
                        float netHeadYaw, float headPitch) {
         float progress = MantisClient.deployProgress(player, partialTick);
-        if (progress <= 0.0F || player.isInvisible()) {
+        if (player.isInvisible() || MantisClient.variant(player) == null) {
             return;
         }
         PlayerModel<AbstractClientPlayer> model = getParentModel();

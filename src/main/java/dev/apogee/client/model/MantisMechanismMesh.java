@@ -18,43 +18,47 @@ final class MantisMechanismMesh {
     @SuppressWarnings("unused")
     static void build(PartDefinition parent) {
         PartDefinition mech = parent.addOrReplaceChild("mech", CubeListBuilder.create()
-                        .texOffs(0, 0).addBox(-3.0F, 6.0F, -8.0F, 6.0F, 11.0F, 2.0F)
-                        .texOffs(16, 0).addBox(-2.0F, 6.0F, -9.0F, 1.0F, 11.0F, 1.0F)
-                        .texOffs(20, 0).addBox(1.0F, 6.0F, -9.0F, 1.0F, 11.0F, 1.0F)
-                        .texOffs(24, 0).addBox(-4.0F, 7.0F, -9.0F, 8.0F, 2.0F, 3.0F)
-                        .texOffs(46, 0).addBox(-4.0F, 12.0F, -9.0F, 8.0F, 2.0F, 3.0F)
-                        .texOffs(68, 0).addBox(-5.0F, 6.0F, -5.0F, 1.0F, 10.0F, 1.0F)
-                        .texOffs(72, 0).addBox(-5.0F, 6.0F, -2.0F, 1.0F, 10.0F, 1.0F)
-                        .texOffs(76, 0).addBox(4.0F, 6.0F, -5.0F, 1.0F, 10.0F, 1.0F)
-                        .texOffs(80, 0).addBox(4.0F, 6.0F, -2.0F, 1.0F, 10.0F, 1.0F)
-                        .texOffs(84, 0).addBox(-6.0F, 9.0F, -6.0F, 1.0F, 3.0F, 6.0F)
-                        .texOffs(98, 0).addBox(5.0F, 9.0F, -6.0F, 1.0F, 3.0F, 6.0F)
-                        .texOffs(0, 13).addBox(-5.0F, 15.0F, -8.0F, 10.0F, 2.0F, 3.0F)
-                        .texOffs(26, 13).addBox(-2.0F, 15.0F, -10.0F, 4.0F, 2.0F, 2.0F),
+                        .texOffs(0, 0).addBox(-3.0F, 6.0F, -8.0F, 6.0F, 8.0F, 2.0F)
+                        .texOffs(16, 0).addBox(-2.0F, 6.0F, -9.0F, 1.0F, 8.0F, 1.0F)
+                        .texOffs(20, 0).addBox(1.0F, 6.0F, -9.0F, 1.0F, 8.0F, 1.0F)
+                        .texOffs(24, 0).addBox(-4.0F, 6.0F, -9.0F, 8.0F, 2.0F, 3.0F)
+                        .texOffs(46, 0).addBox(-4.0F, 11.0F, -9.0F, 8.0F, 2.0F, 3.0F)
+                        .texOffs(68, 0).addBox(-5.0F, 6.0F, -5.0F, 1.0F, 8.0F, 1.0F)
+                        .texOffs(72, 0).addBox(-5.0F, 6.0F, -2.0F, 1.0F, 8.0F, 1.0F)
+                        .texOffs(76, 0).addBox(4.0F, 6.0F, -5.0F, 1.0F, 8.0F, 1.0F)
+                        .texOffs(80, 0).addBox(4.0F, 6.0F, -2.0F, 1.0F, 8.0F, 1.0F)
+                        .texOffs(84, 0).addBox(-6.0F, 8.0F, -6.0F, 1.0F, 3.0F, 6.0F)
+                        .texOffs(98, 0).addBox(5.0F, 8.0F, -6.0F, 1.0F, 3.0F, 6.0F)
+                        .texOffs(112, 0).addBox(-2.0F, 13.0F, -10.0F, 4.0F, 2.0F, 2.0F),
                 PartPose.offset(0.0F, 0.0F, 0.0F));
-        PartDefinition support = mech.addOrReplaceChild("support", CubeListBuilder.create()
-                        .texOffs(38, 13).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 14.0F, 2.0F)
-                        .texOffs(46, 13).addBox(1.0F, 2.0F, -1.0F, 1.0F, 10.0F, 2.0F)
-                        .texOffs(52, 13).addBox(-2.0F, 2.0F, -1.0F, 1.0F, 10.0F, 2.0F)
-                        .texOffs(58, 13).addBox(-1.0F, 4.0F, -2.0F, 2.0F, 6.0F, 1.0F)
-                        .texOffs(64, 13).addBox(-2.0F, 12.0F, -2.0F, 4.0F, 3.0F, 3.0F),
-                PartPose.offset(0.0F, 16.0F, -9.0F));
-        PartDefinition blade = support.addOrReplaceChild("blade", CubeListBuilder.create()
-                        .texOffs(78, 13).addBox(-2.0F, -4.0F, -2.0F, 4.0F, 5.0F, 3.0F)
-                        .texOffs(92, 13).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 2.0F, 2.0F)
-                        .texOffs(100, 13).addBox(-1.0F, -4.0F, 1.0F, 2.0F, 2.0F, 2.0F)
-                        .texOffs(108, 13).addBox(-1.0F, 1.0F, -1.0F, 2.0F, 14.0F, 2.0F)
-                        .texOffs(116, 13).addBox(-1.0F, 3.0F, -2.0F, 2.0F, 10.0F, 1.0F),
-                PartPose.offset(0.0F, 14.0F, 0.0F));
+        PartDefinition link_lower = mech.addOrReplaceChild("link_lower", CubeListBuilder.create()
+                        .texOffs(0, 10).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 8.0F, 2.0F)
+                        .texOffs(8, 10).addBox(1.0F, 1.0F, -1.0F, 1.0F, 6.0F, 2.0F)
+                        .texOffs(14, 10).addBox(-2.0F, 1.0F, -1.0F, 1.0F, 6.0F, 2.0F)
+                        .texOffs(20, 10).addBox(-1.0F, 2.0F, -2.0F, 2.0F, 4.0F, 1.0F)
+                        .texOffs(26, 10).addBox(-2.0F, 7.0F, -2.0F, 4.0F, 2.0F, 3.0F),
+                PartPose.offset(0.0F, 14.0F, -9.0F));
+        PartDefinition link_upper = link_lower.addOrReplaceChild("link_upper", CubeListBuilder.create()
+                        .texOffs(40, 10).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 7.0F, 2.0F)
+                        .texOffs(48, 10).addBox(-2.0F, 1.0F, -2.0F, 4.0F, 5.0F, 1.0F)
+                        .texOffs(58, 10).addBox(-1.0F, 2.0F, -3.0F, 2.0F, 3.0F, 1.0F),
+                PartPose.offset(0.0F, 8.0F, 0.0F));
+        PartDefinition blade = link_upper.addOrReplaceChild("blade", CubeListBuilder.create()
+                        .texOffs(64, 10).addBox(-2.0F, -4.0F, -2.0F, 4.0F, 5.0F, 3.0F)
+                        .texOffs(78, 10).addBox(-1.0F, -6.0F, -1.0F, 2.0F, 2.0F, 2.0F)
+                        .texOffs(86, 10).addBox(-1.0F, -4.0F, 1.0F, 2.0F, 2.0F, 2.0F)
+                        .texOffs(94, 10).addBox(-1.0F, 1.0F, -1.0F, 2.0F, 14.0F, 2.0F)
+                        .texOffs(102, 10).addBox(-1.0F, 3.0F, -2.0F, 2.0F, 10.0F, 1.0F),
+                PartPose.offset(0.0F, 7.0F, 0.0F));
         PartDefinition edge = blade.addOrReplaceChild("edge", CubeListBuilder.create()
-                        .texOffs(122, 13).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 22.0F, 2.0F)
-                        .texOffs(0, 37).addBox(-0.5F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F)
-                        .texOffs(4, 37).addBox(-0.5F, 3.0F, 1.0F, 1.0F, 1.0F, 1.0F)
-                        .texOffs(8, 37).addBox(-0.5F, 5.0F, 1.0F, 1.0F, 1.0F, 1.0F)
-                        .texOffs(12, 37).addBox(-0.5F, 7.0F, 1.0F, 1.0F, 1.0F, 1.0F)
-                        .texOffs(16, 37).addBox(-0.5F, 9.0F, 1.0F, 1.0F, 1.0F, 1.0F)
-                        .texOffs(20, 37).addBox(-0.5F, 22.0F, -1.0F, 1.0F, 2.0F, 1.0F)
-                        .texOffs(24, 37).addBox(-0.5F, 24.0F, -1.0F, 1.0F, 1.0F, 1.0F),
+                        .texOffs(108, 10).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 22.0F, 2.0F)
+                        .texOffs(114, 10).addBox(-0.5F, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F)
+                        .texOffs(118, 10).addBox(-0.5F, 3.0F, 1.0F, 1.0F, 1.0F, 1.0F)
+                        .texOffs(122, 10).addBox(-0.5F, 5.0F, 1.0F, 1.0F, 1.0F, 1.0F)
+                        .texOffs(0, 34).addBox(-0.5F, 7.0F, 1.0F, 1.0F, 1.0F, 1.0F)
+                        .texOffs(4, 34).addBox(-0.5F, 9.0F, 1.0F, 1.0F, 1.0F, 1.0F)
+                        .texOffs(8, 34).addBox(-0.5F, 22.0F, -1.0F, 1.0F, 2.0F, 1.0F)
+                        .texOffs(12, 34).addBox(-0.5F, 24.0F, -1.0F, 1.0F, 1.0F, 1.0F),
                 PartPose.offset(0.0F, 15.0F, 0.0F));
     }
 }

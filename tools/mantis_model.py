@@ -15,30 +15,35 @@ TEX = ROOT / "src/main/resources/assets/apogee/textures/entity"
 SIZE = 128
 
 # (part, parent, pivot, [(material, x, y, z, w, h, d, marks)])
+# The wrist (y 14..18) is left clear: the skin covers there open to let the links out.
 PARTS = [
     ("mech", None, (0, 0, 0), [
-        ("dark", -3, 6, -8, 6, 11, 2, ""),          # frame on the forearm
-        ("red", -2, 6, -9, 1, 11, 1, ""),           # cables over the frame
-        ("red", 1, 6, -9, 1, 11, 1, ""),
-        ("light", -4, 7, -9, 8, 2, 3, "bolt"),      # clamps
-        ("light", -4, 12, -9, 8, 2, 3, "bolt"),
-        ("red", -5, 6, -5, 1, 10, 1, ""),           # cables along the sides of the arm
-        ("red", -5, 6, -2, 1, 10, 1, ""),
-        ("red", 4, 6, -5, 1, 10, 1, ""),
-        ("red", 4, 6, -2, 1, 10, 1, ""),
-        ("light", -6, 9, -6, 1, 3, 6, ""),          # side plates
-        ("light", 5, 9, -6, 1, 3, 6, ""),
-        ("dark", -5, 15, -8, 10, 2, 3, ""),         # wrist collar
-        ("light", -2, 15, -10, 4, 2, 2, "bolt"),    # hinge seat
+        ("dark", -3, 6, -8, 6, 8, 2, ""),           # housing on the forearm
+        ("red", -2, 6, -9, 1, 8, 1, "cable"),       # cables over the housing
+        ("red", 1, 6, -9, 1, 8, 1, "cable"),
+        ("light", -4, 6, -9, 8, 2, 3, "bolt"),      # clamps
+        ("light", -4, 11, -9, 8, 2, 3, "bolt"),
+        ("red", -5, 6, -5, 1, 8, 1, "cable"),       # cables along the sides of the arm
+        ("red", -5, 6, -2, 1, 8, 1, "cable"),
+        ("red", 4, 6, -5, 1, 8, 1, "cable"),
+        ("red", 4, 6, -2, 1, 8, 1, "cable"),
+        ("light", -6, 8, -6, 1, 3, 6, ""),          # side plates
+        ("light", 5, 8, -6, 1, 3, 6, ""),
+        ("dark", -2, 13, -10, 4, 2, 2, "core"),     # hinge seat, glowing core
     ]),
-    ("support", "mech", (0, 16, -9), [
-        ("dark", -1, 0, -1, 2, 14, 2, ""),
-        ("light", 1, 2, -1, 1, 10, 2, ""),
-        ("light", -2, 2, -1, 1, 10, 2, ""),
-        ("red", -1, 4, -2, 2, 6, 1, ""),
-        ("light", -2, 12, -2, 4, 3, 3, "bolt"),     # knuckle
+    ("link_lower", "mech", (0, 14, -9), [
+        ("dark", -1, 0, -1, 2, 8, 2, ""),
+        ("light", 1, 1, -1, 1, 6, 2, ""),
+        ("light", -2, 1, -1, 1, 6, 2, ""),
+        ("red", -1, 2, -2, 2, 4, 1, "cable"),
+        ("light", -2, 7, -2, 4, 2, 3, "core"),      # knuckle
     ]),
-    ("blade", "support", (0, 14, 0), [
+    ("link_upper", "link_lower", (0, 8, 0), [
+        ("dark", -1, 0, -1, 2, 7, 2, ""),
+        ("light", -2, 1, -2, 4, 5, 1, ""),
+        ("red", -1, 2, -3, 2, 3, 1, "cable"),
+    ]),
+    ("blade", "link_upper", (0, 7, 0), [
         ("light", -2, -4, -2, 4, 5, 3, "eye"),      # hooked head
         ("light", -1, -6, -1, 2, 2, 2, ""),
         ("dark", -1, -4, 1, 2, 2, 2, ""),           # beak of the hook, towards the arm
@@ -60,12 +65,15 @@ PARTS = [
 PALETTES = {
     "": {"dark": (52, 55, 63), "light": (178, 181, 186), "red": (158, 26, 34),
          "housing": (38, 40, 46), "steel": (150, 156, 166), "accent": (214, 40, 48), "shine": (226, 232, 240)},
-    "_thermal": {"steel": (120, 70, 50), "shine": (255, 150, 60), "accent": (255, 110, 30)},
+    "_thermal": {"steel": (84, 56, 50), "shine": (255, 150, 40), "accent": (255, 120, 30), "housing": (44, 36, 36)},
     "_thermal_hot": {"steel": (255, 140, 40), "shine": (255, 236, 150), "accent": (255, 200, 80), "housing": (70, 40, 34)},
-    "_electric": {"steel": (60, 80, 110), "shine": (90, 200, 255), "accent": (60, 170, 255)},
-    "_electric_hot": {"steel": (120, 215, 255), "shine": (240, 252, 255), "accent": (190, 240, 255), "housing": (30, 44, 70)},
+    "_electric": {"steel": (56, 64, 84), "shine": (90, 210, 255), "accent": (70, 200, 255), "red": (34, 72, 200),
+                  "housing": (30, 34, 46)},
+    "_electric_hot": {"steel": (120, 215, 255), "shine": (240, 252, 255), "accent": (190, 240, 255), "red": (60, 120, 255),
+                      "housing": (30, 44, 70)},
 }
-
+# Emissive pass: which marks glow for each base variant (drawn full bright on top of the model).
+GLOW = {"": {"eye"}, "_thermal": {"eye", "edge", "stripe", "core"}, "_electric": {"eye", "edge", "stripe", "core", "cable"}}
 
 def pack():
     """Shelf-packs every box's UV net; returns {(part, index): (u, v)}."""
@@ -85,7 +93,8 @@ def shade(c, k):
     return tuple(max(0, min(255, int(v * k))) for v in c)
 
 
-def paint(suffix, uv):
+def paint(suffix, uv, glow=None):
+    """Paints the atlas; with glow set, only the texels of those marks, for the emissive pass."""
     pal = dict(PALETTES[""])
     pal.update(PALETTES[suffix])
     img = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
@@ -106,18 +115,30 @@ def paint(suffix, uv):
                         if border:
                             k *= 0.72
                         c = shade(base, k)
+                        lit = None
                         if mat == "red" and xx == fw // 2 and fw > 0 and yy % 3 == 0:
                             c = shade(base, 1.35)
-                        if marks == "edge" and yy >= 0 and xx == 0 and mat == "steel":
+                            lit = "cable"
+                        if marks == "edge" and xx == 0 and mat == "steel":
                             c = pal["shine"]
+                            lit = "edge"
                         if marks == "stripe" and xx == fw // 2 and yy % 4 == 1:
                             c = pal["accent"]
+                            lit = "stripe"
+                        if marks == "core" and xx == fw // 2 and yy == fh // 2:
+                            c = pal["accent"]
+                            lit = "core"
                         if marks == "bolt" and xx == fw // 2 and yy == fh // 2:
                             c = shade(pal["dark"], 0.8)
                         if marks == "eye" and xx == fw // 2 and yy == 1 and (fw, fh) == (d, h):
                             c = pal["accent"]
-                        px[fx + xx, fy + yy] = c + (255,)
-    img.save(TEX / f"mantis_blades{suffix}.png")
+                            lit = "eye"
+                        if glow is None:
+                            px[fx + xx, fy + yy] = c + (255,)
+                        elif lit in glow:
+                            px[fx + xx, fy + yy] = c + (255,)
+    name = f"mantis_blades{suffix}{'_glow' if glow is not None else ''}.png"
+    img.save(TEX / name)
 
 
 def fmt(n):
@@ -164,6 +185,8 @@ def main():
     uv = pack()
     for suffix in PALETTES:
         paint(suffix, uv)
+    for suffix, marks in GLOW.items():
+        paint(suffix, uv, marks)
     JAVA.write_text(java(uv))
 
 

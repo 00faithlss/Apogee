@@ -107,7 +107,7 @@ public final class MantisManager {
     }
 
     /** Variant of the equipped Mantis Blades, or null when none are worn. */
-    private static MantisVariant equippedVariant(LivingEntity entity) {
+    public static MantisVariant equippedVariant(LivingEntity entity) {
         return TrinketsApi.getTrinketComponent(entity)
                 .flatMap(component -> component.getEquipped(stack -> stack.getItem() instanceof MantisBladesItem).stream()
                         .map(pair -> ((MantisBladesItem) pair.getB().getItem()).variant())
