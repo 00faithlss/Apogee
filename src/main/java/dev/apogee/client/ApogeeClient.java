@@ -56,7 +56,8 @@ public final class ApogeeClient implements ClientModInitializer {
         dev.apogee.client.compat.immersivearmors.SteamDashClient.register();
 
         EntityModelLayerRegistry.registerModelLayer(SandevistanModel.LAYER, SandevistanModel::createLayer);
-        EntityModelLayerRegistry.registerModelLayer(MantisArmModel.LAYER, MantisArmModel::createLayer);
+        EntityModelLayerRegistry.registerModelLayer(MantisArmModel.PLATE_LAYER, MantisArmModel::createPlateLayer);
+        EntityModelLayerRegistry.registerModelLayer(MantisArmModel.MECHANISM_LAYER, MantisArmModel::createMechanismLayer);
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((type, renderer, helper, context) -> {
             if (renderer instanceof net.minecraft.client.renderer.entity.player.PlayerRenderer playerRenderer) {
                 helper.register(new MantisArmsLayer(playerRenderer));

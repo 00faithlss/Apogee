@@ -7,8 +7,8 @@ import dev.apogee.client.model.MantisArmModel;
 import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +33,8 @@ public final class MantisArmRenderer {
 
     private static MantisArmModel model() {
         if (model == null) {
-            model = new MantisArmModel(Minecraft.getInstance().getEntityModels().bakeLayer(MantisArmModel.LAYER));
+            var models = Minecraft.getInstance().getEntityModels();
+            model = new MantisArmModel(models.bakeLayer(MantisArmModel.PLATE_LAYER), models.bakeLayer(MantisArmModel.MECHANISM_LAYER));
         }
         return model;
     }
@@ -49,9 +50,9 @@ public final class MantisArmRenderer {
         }
         MantisArmModel arm = model();
         boolean slim = player.getSkin().model() == PlayerSkin.Model.SLIM;
-        arm.setDeployment(right, slim, progress);
         arm.plate(right, slim).render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(player.getSkin().texture())),
                 light, OverlayTexture.NO_OVERLAY);
+
         MantisVariant variant = MantisClient.variant(player);
         boolean hot = MantisClient.glowing(player);
         ResourceLocation texture = switch (variant) {
@@ -59,7 +60,13 @@ public final class MantisArmRenderer {
             case ELECTRIC -> hot ? ELECTRIC_HOT : ELECTRIC;
             default -> TEXTURE;
         };
-        arm.mechanism(right, slim).render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(texture)),
+        arm.setDeployment(progress);
+        poseStack.pushPose();
+        poseStack.translate(MantisArmModel.centerX(right, slim) / 16.0F, 0.0F, 0.0F);
+        float scale = MantisArmModel.MECHANISM_SCALE;
+        poseStack.scale(scale * MantisArmModel.widthScale(slim), scale, scale);
+        arm.mechanism().render(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(texture)),
                 hot ? LightTexture.FULL_BRIGHT : light, OverlayTexture.NO_OVERLAY);
+        poseStack.popPose();
     }
 }

@@ -138,6 +138,8 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 - `runGametest`: 18 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltip, activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
+El modelo de las Cuchillas Mantis se edita en `tools/mantis_model.py` (requiere Pillow) y se regenera con `python3 tools/mantis_model.py`, que reescribe `MantisMechanismMesh.java` y las texturas `mantis_blades*.png`.
+
 Estructura principal: `dev.apogee.sandevistan.SandevistanManager` (autoridad del servidor), `dev.apogee.mixin` (salto de ticks, daño, anti-vuelo), `dev.apogee.client` (estado sincronizado, efectos, estelas, renderizado y tooltip).
 
 Ramas: `main` estable, `develop` integración. Commits con Conventional Commits. Cambios en [CHANGELOG.md](CHANGELOG.md).

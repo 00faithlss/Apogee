@@ -11,56 +11,44 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
 /**
- * Mantis Blade mechanism for one forearm, in arm-local model pixels (origin at the shoulder
- * pivot, +Y towards the hand, -Z out of the back of the forearm).
+ * Mantis Blade on one forearm, in arm-local space (origin at the shoulder pivot, +Y towards the
+ * hand, which ends at y=10, and -Z out of the forearm's front face).
  *
- * <p>Each variant (right/left arm, wide/slim skin) has a skin-textured plate that copies the
- * wearer's own forearm pixels, and a steel mechanism that folds out into a Z: a rail on the
- * forearm, a segment hinged at the wrist that swings back towards the elbow, and a blade hinged
- * at its tip that points forward again over the hand.
+ * <p>Two layers: a skin plate per arm variant (right/left, wide/slim) that copies the wearer's own
+ * forearm pixels, and the steel mechanism, built at twice the resolution (see
+ * {@link MantisMechanismMesh}) and shared by every arm. Folded, the mechanism lies flat on the
+ * forearm; deployed, the support rises from the wrist towards the elbow, the blade swings forward
+ * over the hand and its edge slides out of the housing.
  */
 public final class MantisArmModel {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(Apogee.id("mantis_arm"), "main");
+    public static final ModelLayerLocation PLATE_LAYER = new ModelLayerLocation(Apogee.id("mantis_arm"), "plate");
+    public static final ModelLayerLocation MECHANISM_LAYER = new ModelLayerLocation(Apogee.id("mantis_arm"), "mechanism");
 
-    /*
-     * Proportions read off the official renders. The support leaves the rail at the wrist and
-     * rises about 38 degrees towards the elbow; the blade starts over the forearm and is a
-     * katana-like arc: it lifts a little at the hinge, then the tip drops back towards the hand,
-     * ending a few pixels past the fingers. The arc is a chain of short pieces, each turned a
-     * little further than the last.
-     */
-    private static final float WRIST_Y = 10.0F;
-    private static final float HINGE_Z = -3.6F;
-    private static final float SEGMENT_LENGTH = 4.8F;
-    /** A long, slender blade: about one and a half times the length of the forearm and hand. */
-    private static final float[] PIECE_LENGTH = {2.0F, 2.0F, 2.0F, 2.0F, 1.8F, 1.4F};
-    /** In-plane width of each blade piece: a thin, even strip that only narrows at the very tip. */
-    private static final float[] PIECE_WIDTH = {0.7F, 0.7F, 0.65F, 0.6F, 0.5F, 0.25F};
-    private static final float BLADE_THICKNESS = 0.4F;
-    /** Angle of the support off the forearm axis when open. */
-    private static final float OPEN_SEGMENT = (float) Math.toRadians(42.0);
-    /** Angle of the first blade piece past parallel, and the extra turn added at every joint after it. */
-    private static final float OPEN_BLADE = (float) Math.toRadians(6.0);
-    private static final float BLADE_CURVE = (float) Math.toRadians(3.0);
+    /** The mechanism mesh is authored in texels, half a model pixel each. */
+    public static final float MECHANISM_SCALE = 0.5F;
+
+    /** Direction of the support when open, measured from +Y towards -Z (180 degrees points at the elbow). */
+    private static final float SUPPORT_OPEN = (float) Math.toRadians(140.0);
+    /** Direction of the blade when open: forward over the hand, rising away from the arm. */
+    private static final float BLADE_OPEN = (float) Math.toRadians(15.0);
+    /** How far the edge slides out of the housing, in texels. */
+    private static final float EDGE_TRAVEL = 14.0F;
+    private static final float EDGE_HOME = 15.0F;
 
     private final ModelPart[] plates = new ModelPart[4];
-    private final ModelPart[] mechanisms = new ModelPart[4];
-    private final ModelPart[] segments = new ModelPart[4];
-    private final ModelPart[][] blades = new ModelPart[4][PIECE_LENGTH.length];
+    private final ModelPart mechanism;
+    private final ModelPart support;
+    private final ModelPart blade;
+    private final ModelPart edge;
 
-    public MantisArmModel(ModelPart root) {
+    public MantisArmModel(ModelPart plateRoot, ModelPart mechanismRoot) {
         for (int i = 0; i < 4; i++) {
-            String key = key(i);
-            plates[i] = root.getChild("plate_" + key);
-            mechanisms[i] = root.getChild("mech_" + key);
-            segments[i] = mechanisms[i].getChild("segment");
-            ModelPart piece = segments[i].getChild("blade");
-            blades[i][0] = piece;
-            for (int k = 1; k < PIECE_LENGTH.length; k++) {
-                piece = piece.getChild("next");
-                blades[i][k] = piece;
-            }
+            plates[i] = plateRoot.getChild("plate_" + key(i));
         }
+        mechanism = mechanismRoot.getChild("mech");
+        support = mechanism.getChild("support");
+        blade = support.getChild("blade");
+        edge = blade.getChild("edge");
     }
 
     private static int index(boolean right, boolean slim) {
@@ -71,83 +59,70 @@ public final class MantisArmModel {
         return (index < 2 ? "right" : "left") + (index % 2 == 1 ? "_slim" : "_wide");
     }
 
-    public static LayerDefinition createLayer() {
+    private static float minX(boolean right, boolean slim) {
+        return right ? (slim ? -2.0F : -3.0F) : -1.0F;
+    }
+
+    private static float width(boolean slim) {
+        return slim ? 3.0F : 4.0F;
+    }
+
+    /** Centre of the forearm on the X axis, in model pixels. */
+    public static float centerX(boolean right, boolean slim) {
+        return minX(right, slim) + width(slim) / 2.0F;
+    }
+
+    /** Slim arms are three pixels wide instead of four; the mechanism narrows to match. */
+    public static float widthScale(boolean slim) {
+        return slim ? 0.75F : 1.0F;
+    }
+
+    public static LayerDefinition createPlateLayer() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         for (int i = 0; i < 4; i++) {
             boolean right = i < 2;
             boolean slim = i % 2 == 1;
-            float width = slim ? 3.0F : 4.0F;
-            float minX = right ? (slim ? -2.0F : -3.0F) : -1.0F;
-            float centerX = minX + width / 2.0F;
-            // Forearm pixels of the standard 64x64 skin: right arm at (40,16), left arm at (32,48).
-            int u = right ? 40 : 32;
-            int v = right ? 16 : 48;
-            String key = key(i);
-
-            // A one pixel plate over the lower forearm. With depth 1 the front face reads the
-            // arm's own front face, so the plate takes the colours of the wearer's skin.
-            root.addOrReplaceChild("plate_" + key,
-                    CubeListBuilder.create().texOffs(u + 3, v + 8).addBox(minX, 5.0F, -3.0F, width, 6.0F, 1.0F),
+            // Front face of the forearm in the 64x64 skin: right arm box at (40,16), left at (32,48).
+            // A depth-1 cube reads its front face at (u+1, v+1), so offset by one to land on it,
+            // then skip the five rows of the upper arm.
+            int u = (right ? 44 : 36) - 1;
+            int v = (right ? 20 : 52) + 5 - 1;
+            root.addOrReplaceChild("plate_" + key(i),
+                    CubeListBuilder.create().texOffs(u, v).addBox(minX(right, slim), 3.0F, -3.0F, width(slim), 5.0F, 1.0F),
                     PartPose.ZERO);
-
-            PartDefinition mech = root.addOrReplaceChild("mech_" + key,
-                    CubeListBuilder.create()
-                            // rail along the forearm
-                            .texOffs(0, 0).addBox(centerX - 0.75F, 3.0F, -3.6F, 1.5F, 7.5F, 0.6F)
-                            // exposed muscle on both sides of the plate
-                            .texOffs(32, 0).addBox(minX - 0.5F, 5.0F, -3.0F, 0.5F, 6.0F, 1.0F)
-                            .texOffs(32, 0).addBox(minX + width, 5.0F, -3.0F, 0.5F, 6.0F, 1.0F),
-                    PartPose.ZERO);
-
-            PartDefinition segment = mech.addOrReplaceChild("segment",
-                    CubeListBuilder.create()
-                            .texOffs(0, 32).addBox(-0.5F, -0.4F, -0.4F, 1.0F, 0.8F, 0.8F)
-                            .texOffs(0, 0).addBox(-0.5F, 0.0F, -0.3F, 1.0F, SEGMENT_LENGTH, 0.6F),
-                    PartPose.offset(centerX, WRIST_Y, HINGE_Z));
-
-            PartDefinition piece = segment.addOrReplaceChild("blade", pieceCubes(0), PartPose.offset(0.0F, SEGMENT_LENGTH, 0.0F));
-            for (int k = 1; k < PIECE_LENGTH.length; k++) {
-                piece = piece.addOrReplaceChild("next", pieceCubes(k), PartPose.offset(0.0F, PIECE_LENGTH[k - 1], 0.0F));
-            }
         }
         return LayerDefinition.create(mesh, 64, 64);
     }
 
-    private static CubeListBuilder pieceCubes(int k) {
-        float w = PIECE_WIDTH[k];
-        CubeListBuilder cubes = CubeListBuilder.create()
-                .texOffs(0, 16).addBox(-BLADE_THICKNESS / 2.0F, 0.0F, -w / 2.0F, BLADE_THICKNESS, PIECE_LENGTH[k], w);
-        if (k == 0) {
-            // Small hinge pin, no bulkier than the blade itself.
-            cubes.texOffs(0, 32).addBox(-0.5F, -0.4F, -0.4F, 1.0F, 0.8F, 0.8F);
-        }
-        return cubes;
+    public static LayerDefinition createMechanismLayer() {
+        MeshDefinition mesh = new MeshDefinition();
+        MantisMechanismMesh.build(mesh.getRoot());
+        return LayerDefinition.create(mesh, MantisMechanismMesh.TEXTURE_SIZE, MantisMechanismMesh.TEXTURE_SIZE);
     }
 
     public ModelPart plate(boolean right, boolean slim) {
         return plates[index(right, slim)];
     }
 
-    public ModelPart mechanism(boolean right, boolean slim) {
-        return mechanisms[index(right, slim)];
+    public ModelPart mechanism() {
+        return mechanism;
     }
 
     /**
-     * Folds or unfolds the mechanism. The segment opens first and the blade follows; both angles
-     * are measured in the YZ plane, so a positive X rotation turns +Y towards +Z.
+     * Poses the mechanism for an unfold progress from 0 (flat on the forearm) to 1 (open). The
+     * support rises first, the blade swings forward over it, and the edge slides out last.
      */
-    public void setDeployment(boolean right, boolean slim, float progress) {
-        int i = index(right, slim);
-        float segmentOpen = Mth.clamp(progress / 0.6F, 0.0F, 1.0F);
-        float bladeOpen = Mth.clamp((progress - 0.3F) / 0.7F, 0.0F, 1.0F);
-        // Direction angles measured from +Y towards -Z: 180 degrees points at the elbow.
-        float segmentAngle = Mth.PI - segmentOpen * OPEN_SEGMENT;
-        float bladeAngle = bladeOpen * OPEN_BLADE;
-        segments[i].xRot = -segmentAngle;
-        blades[i][0].xRot = segmentAngle - bladeAngle;
-        for (int k = 1; k < PIECE_LENGTH.length; k++) {
-            blades[i][k].xRot = bladeOpen * BLADE_CURVE;
-        }
+    public void setDeployment(float progress) {
+        float rise = Mth.clamp(progress / 0.6F, 0.0F, 1.0F);
+        float swing = Mth.clamp((progress - 0.2F) / 0.6F, 0.0F, 1.0F);
+        float slide = Mth.clamp((progress - 0.5F) / 0.5F, 0.0F, 1.0F);
+        // Direction angles are measured from +Y towards -Z; a positive xRot turns +Y towards +Z.
+        float supportAngle = Mth.lerp(rise, Mth.PI, SUPPORT_OPEN);
+        float bladeAngle = swing * BLADE_OPEN;
+        support.xRot = -supportAngle;
+        blade.xRot = supportAngle - bladeAngle;
+        edge.visible = slide > 0.0F;
+        edge.y = EDGE_HOME - EDGE_TRAVEL * (1.0F - slide);
     }
 }
