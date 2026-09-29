@@ -43,6 +43,10 @@ public abstract class MantisItemInHandRendererMixin {
             float side = right ? 1.0F : -1.0F;
             float swing = (right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT) == slashArm && thrust < 0.0F ? slash : 0.0F;
             poseStack.pushPose();
+            // Guard stance: both forearms come in towards the centre so the blades cross in front.
+            float guard = MantisClient.deployProgress(player, partialTick);
+            poseStack.translate(-side * 0.10F * guard, 0.04F * guard, -0.08F * guard);
+            poseStack.mulPose(Axis.YP.rotationDegrees(side * 10.0F * guard));
             if (thrust >= 0.0F) {
                 float lunge = Mth.sin(thrust * Mth.PI);
                 poseStack.translate(-side * 0.30F * lunge, 0.12F * lunge, -0.60F * lunge);

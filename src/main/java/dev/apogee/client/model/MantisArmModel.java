@@ -23,23 +23,28 @@ public final class MantisArmModel {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Apogee.id("mantis_arm"), "main");
 
     /*
-     * Proportions read off the official arm renders: a stretched, shallow Z that hugs the arm.
-     * The support leaves the rail at the wrist and rises only about 21 degrees towards the elbow;
-     * the blade starts over the forearm, climbs about 15 degrees and ends a little past the hand.
+     * Proportions read off the official renders. The support leaves the rail at the wrist and
+     * rises about 38 degrees towards the elbow; the blade starts over the forearm and is a
+     * katana-like arc: it lifts a little at the hinge, then the tip drops back towards the hand,
+     * ending a few pixels past the fingers. The arc is a chain of short pieces, each turned a
+     * little further than the last.
      */
     private static final float WRIST_Y = 10.0F;
     private static final float HINGE_Z = -3.6F;
-    private static final float SEGMENT_LENGTH = 3.2F;
-    private static final float BLADE_LENGTH = 7.6F;
-    private static final float BLADE_TIP_LENGTH = 1.4F;
-    /** Angle of the support off the forearm axis when open, and of the blade past parallel. */
-    private static final float OPEN_SEGMENT = (float) Math.toRadians(21.0);
-    private static final float OPEN_BLADE = (float) Math.toRadians(15.0);
+    private static final float SEGMENT_LENGTH = 4.6F;
+    private static final float[] PIECE_LENGTH = {2.0F, 2.0F, 2.0F, 1.8F, 1.4F};
+    /** In-plane width of each blade piece: broad near the hinge, tapering to a point. */
+    private static final float[] PIECE_WIDTH = {1.7F, 1.4F, 1.1F, 0.8F, 0.4F};
+    /** Angle of the support off the forearm axis when open. */
+    private static final float OPEN_SEGMENT = (float) Math.toRadians(38.0);
+    /** Angle of the first blade piece past parallel, and the extra turn added at every joint after it. */
+    private static final float OPEN_BLADE = (float) Math.toRadians(10.0);
+    private static final float BLADE_CURVE = (float) Math.toRadians(5.5);
 
     private final ModelPart[] plates = new ModelPart[4];
     private final ModelPart[] mechanisms = new ModelPart[4];
     private final ModelPart[] segments = new ModelPart[4];
-    private final ModelPart[] blades = new ModelPart[4];
+    private final ModelPart[][] blades = new ModelPart[4][PIECE_LENGTH.length];
 
     public MantisArmModel(ModelPart root) {
         for (int i = 0; i < 4; i++) {
@@ -47,7 +52,12 @@ public final class MantisArmModel {
             plates[i] = root.getChild("plate_" + key);
             mechanisms[i] = root.getChild("mech_" + key);
             segments[i] = mechanisms[i].getChild("segment");
-            blades[i] = segments[i].getChild("blade");
+            ModelPart piece = segments[i].getChild("blade");
+            blades[i][0] = piece;
+            for (int k = 1; k < PIECE_LENGTH.length; k++) {
+                piece = piece.getChild("next");
+                blades[i][k] = piece;
+            }
         }
     }
 
@@ -94,12 +104,17 @@ public final class MantisArmModel {
                             .texOffs(0, 0).addBox(-0.8F, 0.0F, -0.4F, 1.6F, SEGMENT_LENGTH, 0.8F),
                     PartPose.offset(centerX, WRIST_Y, HINGE_Z));
 
-            segment.addOrReplaceChild("blade",
+            PartDefinition piece = segment.addOrReplaceChild("blade",
                     CubeListBuilder.create()
-                            .texOffs(0, 32).addBox(-1.0F, -0.9F, -0.9F, 2.0F, 1.8F, 1.8F)
-                            .texOffs(0, 16).addBox(-0.3F, 0.0F, -0.6F, 0.6F, BLADE_LENGTH, 1.1F)
-                            .texOffs(0, 16).addBox(-0.3F, BLADE_LENGTH, -0.4F, 0.6F, BLADE_TIP_LENGTH, 0.7F),
+                            .texOffs(0, 32).addBox(-1.1F, -1.0F, -1.0F, 2.2F, 2.0F, 2.0F)
+                            .texOffs(0, 16).addBox(-0.3F, 0.0F, -PIECE_WIDTH[0] / 2.0F, 0.6F, PIECE_LENGTH[0], PIECE_WIDTH[0]),
                     PartPose.offset(0.0F, SEGMENT_LENGTH, 0.0F));
+            for (int k = 1; k < PIECE_LENGTH.length; k++) {
+                piece = piece.addOrReplaceChild("next",
+                        CubeListBuilder.create()
+                                .texOffs(0, 16).addBox(-0.3F, 0.0F, -PIECE_WIDTH[k] / 2.0F, 0.6F, PIECE_LENGTH[k], PIECE_WIDTH[k]),
+                        PartPose.offset(0.0F, PIECE_LENGTH[k - 1], 0.0F));
+            }
         }
         return LayerDefinition.create(mesh, 64, 64);
     }
@@ -124,6 +139,9 @@ public final class MantisArmModel {
         float segmentAngle = Mth.PI - segmentOpen * OPEN_SEGMENT;
         float bladeAngle = bladeOpen * OPEN_BLADE;
         segments[i].xRot = -segmentAngle;
-        blades[i].xRot = segmentAngle - bladeAngle;
+        blades[i][0].xRot = segmentAngle - bladeAngle;
+        for (int k = 1; k < PIECE_LENGTH.length; k++) {
+            blades[i][k].xRot = bladeOpen * BLADE_CURVE;
+        }
     }
 }
