@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -12,7 +13,8 @@ import org.joml.Vector3f;
 
 /**
  * Heat coming off open thermal blades: red and white-hot specks rising from the blade, and short
- * horizontal streaks of specks like signal noise. Spawned along the blade as it was last drawn.
+ * horizontal streaks of specks like signal noise. Open electric blades throw off sparks.
+ * Spawned along the blade as it was last drawn.
  */
 public final class MantisBladeFx {
     private static final DustParticleOptions HOT = new DustParticleOptions(new Vector3f(1.0F, 0.18F, 0.10F), 0.55F);
@@ -30,11 +32,20 @@ public final class MantisBladeFx {
         long now = MantisClient.clientTicks();
         RandomSource random = level.random;
         MantisRig.forEachArm((entityId, arm) -> {
-            if (arm.variant() != MantisVariant.THERMAL || arm.bladeSegmentCount == 0 || now - arm.bladeTick > 1) {
+            if (arm.variant() == MantisVariant.STANDARD || arm.bladeSegmentCount == 0 || now - arm.bladeTick > 1) {
                 return;
             }
             Entity entity = level.getEntity(entityId);
             if (entity == null || !MantisClient.isDeployed(entity) || MantisClient.deployProgress(entity, 1.0F) < 0.95F) {
+                return;
+            }
+            if (arm.variant() == MantisVariant.ELECTRIC) {
+                // Now and then a spark jumps off the blade.
+                if (random.nextInt(arm.bladeFirstPerson ? 6 : 3) == 0) {
+                    Vec3 at = pointOnBlade(arm, random);
+                    level.addParticle(ParticleTypes.ELECTRIC_SPARK, at.x, at.y, at.z,
+                            (random.nextDouble() - 0.5) * 0.2, random.nextDouble() * 0.1, (random.nextDouble() - 0.5) * 0.2);
+                }
                 return;
             }
             // Fewer in first person, where they pass right in front of the camera.

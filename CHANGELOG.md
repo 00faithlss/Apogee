@@ -4,6 +4,18 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.2+1.21.1] — 2026-09-30
+
+### Cambiado (Cuchillas Mantis)
+
+- En primera persona, con el implante plegado solo se ve la mano principal, como en vanilla. Al desplegar, el otro brazo sube desde abajo de la pantalla, y al guardar baja hasta salir de ella.
+- Hoja térmica de un rojo puro y uniforme, sin ruido ni tonos anaranjados, con el lado del filo difuminado a blanco por el calor.
+- La eléctrica suelta pequeños rayos que recorren la hoja o saltan de ella, con otra forma en cada tick, y chispas eléctricas. Se dibujan con la hoja, así que la siguen en primera y tercera persona.
+
+### Corregido (Cuchillas Mantis)
+
+- Con shaders, la hoja térmica se veía naranja. GeckoLib recortaba de la textura base las zonas emisivas y la hoja quedaba transparente bajo la capa emisiva, que se sumaba al fondo. Ahora la base queda entera y la máscara `_glowmask` se dibuja con el tipo emisivo de vanilla (el de los ojos de araña), con su propio color.
+
 ## [0.2.1+1.21.1] — 2026-09-29
 
 ### Cambiado (Cuchillas Mantis)

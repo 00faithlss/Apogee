@@ -17,15 +17,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * While the blades are out, while they unfold or fold away, and while folded with empty hands,
- * the first-person view shows both implants and no held item. Each slash swings the arm that
- * cuts (they alternate), and a lunge brings both arms forward together.
+ * While the blades are out or unfold or fold away, the first-person view shows both implants
+ * and no held item; the other arm rises into view as they unfold and sinks away as they fold.
+ * Each slash swings the arm that cuts (they alternate), and a lunge brings both arms forward
+ * together.
  * Low priority so this runs before other first-person animation mods and takes over the view.
  */
 @Mixin(value = ItemInHandRenderer.class, priority = 500)
 public abstract class MantisItemInHandRendererMixin {
     /** Extra sideways offset of each forearm while the blades are out, in screen units. */
     private static final float ARM_SPREAD = 0.22F;
+    /** How far below its place the other forearm starts and ends while unfolding or folding. */
+    private static final float OFF_ARM_DROP = 0.9F;
 
     @Shadow
     private void renderPlayerArm(PoseStack poseStack, MultiBufferSource buffer, int light, float equippedProgress,
@@ -36,11 +39,7 @@ public abstract class MantisItemInHandRendererMixin {
     @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void apogee$mantisHands(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource buffers,
                                     LocalPlayer player, int light, CallbackInfo ci) {
-        boolean out = MantisClient.isOut(player);
-        // Folded with nothing in either hand, both implant arms stay on screen too, so folding them
-        // away ends where it started instead of cutting to another mod's bare hands.
-        boolean bare = MantisClient.variant(player) != null && player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty();
-        if (!(out || bare) || player.isScoping()) {
+        if (!MantisClient.isOut(player) || player.isScoping()) {
             return;
         }
         ci.cancel();
@@ -53,6 +52,11 @@ public abstract class MantisItemInHandRendererMixin {
             // an item in each hand; the implants' blades then rise clear of the view's centre.
             float guard = MantisClient.deployProgress(player, partialTick);
             poseStack.translate(side * ARM_SPREAD * guard, 0.0F, 0.0F);
+            if (arm != player.getMainArm()) {
+                // The other arm rises into view as the blades unfold and sinks out as they fold,
+                // so folded only the main hand is left, as in vanilla.
+                poseStack.translate(0.0F, -OFF_ARM_DROP * (1.0F - guard), 0.0F);
+            }
             if (!right && MantisClient.variant(player) == MantisVariant.THERMAL) {
                 // More of the left implant faces the camera, without resizing the skin hand.
                 poseStack.translate(0.10F * guard, 0.12F * guard, 0.10F * guard);
@@ -73,9 +77,6 @@ public abstract class MantisItemInHandRendererMixin {
                 poseStack.mulPose(Axis.ZP.rotationDegrees(side * 28.0F * reach));
             }
             float swing = Math.max(slash, 0.0F);
-            if (!out && arm == player.getMainArm()) {
-                swing = player.getAttackAnim(partialTick); // a plain punch while folded
-            }
             // The vanilla swing, on whichever hand cuts; the implant's attack clip adds the blade's arc.
             renderPlayerArm(poseStack, buffers, light, 0.0F, swing, arm);
             poseStack.popPose();

@@ -36,8 +36,8 @@ import software.bernie.geckolib.util.RenderUtil;
  * layout, so every panel shows the patch of skin it covers when the arm is closed and carries it
  * along as it opens.
  *
- * <p>The thermal blade also gets glitch ghosts, and every blade's position is recorded for
- * {@link MantisBladeFx}.
+ * <p>The thermal blade also gets glitch ghosts, the electric one arcs, and every blade's position
+ * is recorded for {@link MantisBladeFx}.
  */
 public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
     /** The kit's {@code skin} material cell in its 64x64 atlas, as UV bounds. */
@@ -56,6 +56,8 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
     private boolean bladeOnly;
     /** Set during the main pass, while the blade's cubes are recorded for its effects. */
     private boolean recording;
+    /** The blade's cubes from the main pass, in their own pose, for the electric arcs. */
+    private final MantisArcs.Blade arcBlade = new MantisArcs.Blade();
 
     public MantisArmGeoRenderer() {
         super(new MantisArmGeoModel());
@@ -88,6 +90,7 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
         // Afterimages draw the wearer again in past poses; only the live model feeds the effects.
         recording = !isReRender && !AfterimageRenderer.isRendering();
         if (recording) {
+            arcBlade.clear();
             animatable.bladeSegmentCount = 0;
             animatable.bladeTick = MantisClient.clientTicks();
             animatable.bladeFirstPerson = firstPerson;
@@ -206,6 +209,7 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
         bounds(cube, min, max);
         float x = (min.x() + max.x()) * 0.5F;
         float y = (min.y() + max.y()) * 0.5F;
+        arcBlade.add(poseStack.last().pose(), x, y, min.z(), max.z());
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
         Matrix4f pose = poseStack.last().pose();
         int at = arm.bladeSegmentCount * 6;
@@ -295,14 +299,27 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
 
     /**
      * Emissive mask ({@code *_glowmask.png}), drawn only while the implant is open. The standard
-     * variant has nothing that glows, and GeckoLib rejects an empty mask, so it is skipped.
+     * variant has nothing that glows, so it is skipped.
      *
-     * <p>Now and then a displaced copy of the thermal blade flickers beside it like signal noise.
+     * <p>Now and then a displaced copy of the thermal blade flickers beside it like signal noise,
+     * and the electric blade gives off small arcs ({@link MantisArcs}).
      * The glow itself is only the mask: shader packs add their own bloom to emissive pixels.
      */
     private static final class GlowLayer extends AutoGlowingGeoLayer<MantisArm> {
         GlowLayer(GeoRenderer<MantisArm> renderer) {
             super(renderer);
+        }
+
+        /**
+         * The mask as a plain texture with the vanilla spider-eyes type. GeckoLib's own glow
+         * texture cuts the glowing pixels out of the base texture, which left the blade see-through
+         * under the additive glow: with shader packs the red blade took the colour of what was
+         * behind it and looked orange.
+         */
+        @Override
+        protected RenderType getRenderType(MantisArm animatable, @Nullable MultiBufferSource bufferSource) {
+            ResourceLocation texture = getTextureResource(animatable);
+            return RenderType.eyes(texture.withPath(path -> path.replace(".png", "_glowmask.png")));
         }
 
         @Override
@@ -316,6 +333,9 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
             super.render(poseStack, animatable, bakedModel, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
             if (animatable.variant() == MantisVariant.THERMAL && !AfterimageRenderer.isRendering()) {
                 glitch(poseStack, animatable, bakedModel, bufferSource, partialTick, packedOverlay);
+            }
+            if (animatable.variant() == MantisVariant.ELECTRIC && !AfterimageRenderer.isRendering()) {
+                MantisArcs.draw(renderer.arcBlade, bufferSource, MantisClient.clientTicks(), System.identityHashCode(animatable));
             }
         }
 
