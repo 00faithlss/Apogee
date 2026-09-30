@@ -57,6 +57,8 @@ public final class MantisMotionStudy implements ClientModInitializer {
     /** With -Dapogee.motionSprint=true: the empty hand and the held implant, sprinting instead of walking. */
     private static final boolean SPRINT = Boolean.getBoolean("apogee.motionSprint");
     private static final String[] SPRINT_SCENARIOS = {"empty-sprint-bob-off", "held-sprint-bob-off"};
+    /** With -Dapogee.motionItem=true: deploying and folding with a sword in hand, every tick. */
+    private static final boolean ITEM = Boolean.getBoolean("apogee.motionItem");
     private static boolean equipped;
     private static final int START = 40;
     private static int worldTicks = -1;
@@ -108,6 +110,10 @@ public final class MantisMotionStudy implements ClientModInitializer {
         int step = worldTicks - START;
         if (CALIBRATE) {
             MantisFoldCalibration.tick(mc, step);
+            return;
+        }
+        if (ITEM) {
+            itemSwap(mc, step);
             return;
         }
         int scenario = step / SCENARIO;
@@ -171,6 +177,40 @@ public final class MantisMotionStudy implements ClientModInitializer {
             mc.options.keyUp.setDown(false);
             mc.options.keySprint.setDown(false);
             shot(mc, name + "-stop-" + String.format("%03d", t - SETTLE - IDLE - WALK));
+        }
+    }
+
+    /** Deploys and folds the blades with a sword in the main hand, filming every tick. */
+    private static void itemSwap(Minecraft mc, int t) {
+        if (t == 0) {
+            mc.options.bobView().set(false);
+            server(mc, (level, player) -> {
+                player.teleportTo(0.5, -60.0, 0.5);
+                player.setYRot(0.0F);
+                player.setXRot(10.0F);
+                player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new ItemStack(net.minecraft.world.item.Items.IRON_SWORD));
+                TrinketItem.equipItem(player, new ItemStack(ApogeeItems.MANTIS_BLADES));
+            });
+        }
+        if (t == 5) {
+            mc.player.setYRot(0.0F);
+            mc.player.setXRot(10.0F);
+        }
+        if (t == 40) {
+            ClientPlayNetworking.send(ToggleMantis.INSTANCE);
+        }
+        if (t >= 38 && t < 70) {
+            shot(mc, "deploy-" + String.format("%03d", t - 38));
+        }
+        if (t == 100) {
+            ClientPlayNetworking.send(ToggleMantis.INSTANCE);
+        }
+        if (t >= 98 && t < 140) {
+            shot(mc, "fold-" + String.format("%03d", t - 98));
+        }
+        if (t == 150) {
+            LOGGER.info("Mantis motion study done");
+            mc.stop();
         }
     }
 

@@ -4,6 +4,16 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.6+1.21.1] — 2026-09-30
+
+### Corregido (Cuchillas Mantis)
+
+- Desplegar o guardar las cuchillas con un objeto en la mano cambiaba de golpe entre el objeto y el implante. Ahora funciona como un cambio de objeto: al desplegar, el objeto baja con la animación de vanilla o, con Punchy, con su animación de salida (`hand_out`), y después suben los brazos del implante. Al guardar, los brazos bajan y el objeto vuelve a subir con la animación de equipar de vanilla o con la de entrada de Punchy (`hand_in`). Para lograrlo, mientras el implante está en pantalla, el seguimiento de objetos de primera persona ve las manos vacías.
+
+### Añadido (pruebas)
+
+- `MOTION_ITEM=true tools/mantis_tests.sh motion` graba cada tick del despliegue y el repliegue con una espada en la mano, en vanilla y con Punchy.
+
 ## [0.2.5+1.21.1] — 2026-09-30
 
 ### Corregido (Cuchillas Mantis)

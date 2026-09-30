@@ -103,7 +103,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.2.5+1.21.1 (`build/libs/apogee-0.2.5+1.21.1.jar`) | Todos |
+| Apogee | 0.2.6+1.21.1 (`build/libs/apogee-0.2.6+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -156,7 +156,7 @@ tools/mantis_tests.sh calibrate
 
 - `mp`: servidor dedicado y dos clientes (`Observer` y `Wearer`). El servidor equipa al portador y dirige despliegue, corte, estocada y repliegue; cada cliente comprueba lo que ve y captura en `build/mantis-mp/<cliente>/screenshots`.
 - `compat`: `runMantisSmoke` con Punchy 2.8c, Entity Model Features 3.3.9, Entity Texture Features 7.2.4 y Fresh Animations 1.10.4 con sus packs *Extensions* y *Player Extension*, descargados en `build/mantis-compat`.
-- `motion`: captura cada tick de la primera persona (quieto, caminando, deteniéndose y guardando las cuchillas), en vanilla y con Punchy, en `build/mantis-motion`; con `MOTION_SPRINT=true`, corriendo. `python3 tools/mantis_motion.py` resume el movimiento de las manos.
+- `motion`: captura cada tick de la primera persona (quieto, caminando, deteniéndose y guardando las cuchillas), en vanilla y con Punchy, en `build/mantis-motion`; con `MOTION_SPRINT=true`, corriendo, y con `MOTION_ITEM=true`, desplegando y guardando con una espada en la mano. `python3 tools/mantis_motion.py` resume el movimiento de las manos.
 - `calibrate`: ajusta la pose en que termina el repliegue sobre la mano que aparece después (vanilla o Punchy) y la registra en `build/mantis-calibrate/<caso>/run.out`.
 - `iris`: `runMantisSmoke` con Sodium 0.8.13, Iris 1.8.14 y el shader MakeUp UltraFast 9.5e, en una instancia como la de un launcher armada en `build/mantis-iris` (Iris no arranca en el entorno de desarrollo).
 - Todos requieren Linux con Xvfb.

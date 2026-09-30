@@ -15,6 +15,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -39,6 +40,22 @@ public final class MantisClient {
     private static long ticks;
     private static int lockedSlot = -1;
     private static long localThrustReady;
+    /** Client tick the local player's blades were last deployed on. */
+    private static long localDeployTick = Long.MIN_VALUE / 2;
+    /** Whether that deploy had to put a held item away first. */
+    private static boolean stowingItems;
+    /** Whether the local implant view was up last tick. */
+    private static boolean localOut;
+
+    /**
+     * Vanilla's item swap, from {@code ItemInHandRenderer}: the hand height falls or rises by 0.4 a
+     * tick and a lowered hand sits 0.6 below its place. Deploying with an item in hand first lets
+     * that item go down this way; folding sends the implant down before the item comes back up.
+     */
+    public static final float EQUIP_SPEED = 0.4F;
+    public static final float EQUIP_DROP = 0.6F;
+    /** Ticks vanilla takes to lower a held item out of view. */
+    public static final int STOW_TICKS = 3;
 
     /** True while the first-person hands are drawn, so the third-person pose is not applied to them. */
     public static boolean firstPersonRendering;
@@ -51,6 +68,9 @@ public final class MantisClient {
         MantisRig.clear();
         lockedSlot = -1;
         localThrustReady = 0L;
+        localDeployTick = Long.MIN_VALUE / 2;
+        stowingItems = false;
+        localOut = false;
         firstPersonRendering = false;
     }
 
@@ -63,6 +83,10 @@ public final class MantisClient {
     public static void accept(MantisSync payload) {
         Minecraft mc = Minecraft.getInstance();
         Anim anim = anim(payload.entityId());
+        if (mc.player != null && payload.entityId() == mc.player.getId() && payload.deployed() && !anim.deployed) {
+            localDeployTick = ticks;
+            stowingItems = holdsItems(mc.player);
+        }
         anim.deployed = payload.deployed();
         if (payload.deployed()) {
             anim.variant = MantisVariant.byId(payload.variant());
@@ -150,6 +174,42 @@ public final class MantisClient {
         return anim != null && (anim.deployed || anim.progress > 0.0F || anim.previous > 0.0F);
     }
 
+    private static boolean holdsItems(LocalPlayer player) {
+        return !player.getMainHandItem().isEmpty() || !player.getOffhandItem().isEmpty();
+    }
+
+    /**
+     * True while the held items must look put away to the first-person renderers (vanilla's and
+     * other mods'): whenever the implant view is up, so they lower the item before it and raise it
+     * after it the same way as when swapping items.
+     */
+    public static boolean hideHeldItems(LocalPlayer player) {
+        return isOut(player);
+    }
+
+    /** True once the implant view may take over: at once with empty hands, else once the item is down. */
+    public static boolean implantViewReady(LocalPlayer player) {
+        return isOut(player) && (!stowingItems || ticks - localDeployTick >= STOW_TICKS);
+    }
+
+    /**
+     * How far the implant arms are raised into view, 0 (a whole equip drop below) to 1. With an
+     * item that was put away they rise after it like a swapped-in item, and sink at the end of the
+     * fold before the item comes back; with empty hands they stay in place.
+     */
+    public static float implantLift(LocalPlayer player, float partialTick) {
+        Anim anim = ANIMS.get(player.getId());
+        if (anim == null || !(stowingItems || holdsItems(player))) {
+            return 1.0F;
+        }
+        float rise = stowingItems ? Mth.clamp((ticks - localDeployTick - STOW_TICKS + partialTick) * EQUIP_SPEED, 0.0F, 1.0F) : 1.0F;
+        if (anim.deployed) {
+            return rise;
+        }
+        float remaining = Mth.lerp(partialTick, anim.previous, anim.progress) * MantisRules.DEPLOY_TICKS;
+        return Math.min(rise, Mth.clamp(remaining * EQUIP_SPEED, 0.0F, 1.0F));
+    }
+
     /** Eased unfold progress, 0 folded to 1 fully open. */
     public static float deployProgress(Entity entity, float partialTick) {
         Anim anim = ANIMS.get(entity.getId());
@@ -210,6 +270,21 @@ public final class MantisClient {
         MantisBladeFx.tick(mc);
         MantisHandPose.tick(mc.player);
         LocalPlayer player = mc.player;
+        if (player != null) {
+            boolean out = isOut(player);
+            if (localOut && !out) {
+                // The implant has sunk out of view: bring the held items up from below at once,
+                // instead of first lowering the empty hand vanilla thinks was there.
+                if (!player.getMainHandItem().isEmpty()) {
+                    mc.gameRenderer.itemInHandRenderer.itemUsed(InteractionHand.MAIN_HAND);
+                }
+                if (!player.getOffhandItem().isEmpty()) {
+                    mc.gameRenderer.itemInHandRenderer.itemUsed(InteractionHand.OFF_HAND);
+                }
+                stowingItems = false;
+            }
+            localOut = out;
+        }
         if (player == null || !isDeployed(player)) {
             return;
         }

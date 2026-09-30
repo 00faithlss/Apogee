@@ -1,16 +1,19 @@
 package dev.apogee.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.mantis.MantisHandPose;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.MantisVariant;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,10 +41,28 @@ public abstract class MantisItemInHandRendererMixin {
         throw new AssertionError();
     }
 
+    /**
+     * While the implant view is up, the hands count as empty for vanilla's item-swap tracking (and
+     * for other mods reading the same calls): deploying lowers the held item, folding raises it.
+     */
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/player/LocalPlayer;getMainHandItem()Lnet/minecraft/world/item/ItemStack;"))
+    private ItemStack apogee$stowMainHand(ItemStack stack) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        return player != null && MantisClient.hideHeldItems(player) ? ItemStack.EMPTY : stack;
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/player/LocalPlayer;getOffhandItem()Lnet/minecraft/world/item/ItemStack;"))
+    private ItemStack apogee$stowOffHand(ItemStack stack) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        return player != null && MantisClient.hideHeldItems(player) ? ItemStack.EMPTY : stack;
+    }
+
     @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void apogee$mantisHands(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource buffers,
                                     LocalPlayer player, int light, CallbackInfo ci) {
-        if (!(MantisClient.isOut(player) || MantisHandPose.holdFolded) || player.isScoping()) {
+        if (!(MantisClient.implantViewReady(player) || MantisHandPose.holdFolded) || player.isScoping()) {
             return;
         }
         ci.cancel();
@@ -59,6 +80,8 @@ public abstract class MantisItemInHandRendererMixin {
             poseStack.pushPose();
             float guard = MantisClient.deployProgress(player, partialTick);
             MantisHandPose.apply(poseStack, player, partialTick, right, guard);
+            // After a put-away item the arms come up like a swapped-in one, and go down likewise.
+            poseStack.translate(0.0F, -MantisClient.EQUIP_DROP * (1.0F - MantisClient.implantLift(player, partialTick)), 0.0F);
             // Spread the forearms out towards the screen edges, level with where vanilla holds
             // an item in each hand; the implants' blades then rise clear of the view's centre.
             poseStack.translate(side * ARM_SPREAD * guard, 0.0F, 0.0F);
