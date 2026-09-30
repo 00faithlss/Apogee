@@ -4,6 +4,17 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.5+1.21.1] — 2026-09-30
+
+### Corregido (Cuchillas Mantis)
+
+- Al mantener el clic sobre un bloque, Minecraft repite el golpe en cada tick mientras lo rompe, y cada repetición disparaba un corte alternando brazo y un sonido: los brazos golpeaban a toda velocidad. Ahora un corte empieza solo cuando terminó el anterior (7 ticks), en el cliente y en el servidor.
+- Con Punchy, corriendo, los brazos iban de lado a lado demasiado rápido: se usaba el vaivén de caminar a la velocidad de la carrera. Ahora la carrera tiene su propio movimiento, medido sobre la mano de Punchy: vaivén lateral más corto, rebote vertical una vez por ciclo y menos bajada. La transición entre caminar y correr es suave.
+
+### Añadido (pruebas)
+
+- `MOTION_SPRINT=true tools/mantis_tests.sh motion` mide la carrera en lugar de la caminata.
+
 ## [0.2.4+1.21.1] — 2026-09-30
 
 ### Cambiado (Cuchillas Mantis)

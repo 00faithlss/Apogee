@@ -54,6 +54,9 @@ public final class MantisMotionStudy implements ClientModInitializer {
      */
     private static final String[] SCENARIOS = {"empty-bob-off", "empty-bob-on", "held-bob-off", "held-bob-on", "mantis-bob-off",
             "mantis-bob-on"};
+    /** With -Dapogee.motionSprint=true: the empty hand and the held implant, sprinting instead of walking. */
+    private static final boolean SPRINT = Boolean.getBoolean("apogee.motionSprint");
+    private static final String[] SPRINT_SCENARIOS = {"empty-sprint-bob-off", "held-sprint-bob-off"};
     private static boolean equipped;
     private static final int START = 40;
     private static int worldTicks = -1;
@@ -108,6 +111,15 @@ public final class MantisMotionStudy implements ClientModInitializer {
             return;
         }
         int scenario = step / SCENARIO;
+        if (SPRINT) {
+            if (scenario < SPRINT_SCENARIOS.length) {
+                run(mc, SPRINT_SCENARIOS[scenario], scenario == 1, false, false, step % SCENARIO);
+                return;
+            }
+            LOGGER.info("Mantis motion study done");
+            mc.stop();
+            return;
+        }
         if (scenario < SCENARIOS.length) {
             run(mc, SCENARIOS[scenario], scenario >= 2, scenario >= 4, scenario % 2 == 1, step % SCENARIO);
             return;
@@ -153,9 +165,11 @@ public final class MantisMotionStudy implements ClientModInitializer {
             }
         } else if (t >= SETTLE + IDLE && t < SETTLE + IDLE + WALK) {
             mc.options.keyUp.setDown(true);
+            mc.options.keySprint.setDown(SPRINT);
             shot(mc, name + "-walk-" + String.format("%03d", t - SETTLE - IDLE));
         } else if (t >= SETTLE + IDLE + WALK) {
             mc.options.keyUp.setDown(false);
+            mc.options.keySprint.setDown(false);
             shot(mc, name + "-stop-" + String.format("%03d", t - SETTLE - IDLE - WALK));
         }
     }

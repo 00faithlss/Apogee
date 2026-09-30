@@ -98,7 +98,7 @@ motion|calibrate)
         fi
         client_options "$base"
         xvfb-run -a -s "-screen 0 960x540x24" java -Xmx3G -Dfabric.dli.config="$CFG" -Dfabric.dli.env=client \
-            -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Dapogee.mantis$PROP=true -cp "$CP" \
+            -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Dapogee.mantis$PROP=true -Dapogee.motionSprint=${MOTION_SPRINT:-false} -cp "$CP" \
             net.fabricmc.devlaunchinjector.Main --username "${MOTION_NAME:-Dev}" --gameDir "$ROOT/$base" --width 960 --height 540 > "$base/run.out" 2>&1 || true
         grep -h -E 'Loading [0-9]+ mods|motion study done|calibrate (start|best)' "$base/run.out" || true
     done

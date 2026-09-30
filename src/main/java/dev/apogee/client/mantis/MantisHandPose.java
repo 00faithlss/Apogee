@@ -13,7 +13,7 @@ import net.minecraft.util.Mth;
  *
  * <p>Vanilla hands have no motion of their own: only the view bob (when enabled), which moves the
  * whole first-person scene, and the lag as the view turns (applied by the caller). With Punchy the
- * hands breathe, sway with the steps and dip while walking, and Punchy keeps the view bob off
+ * hands breathe, sway with the steps and dip while walking (differently when sprinting), and Punchy keeps the view bob off
  * them, so it is undone here too. Its figures here come from tracking its hands frame by frame
  * ({@code tools/mantis_tests.sh motion} and {@code tools/mantis_motion.py}, 960x540, fov 70, where
  * one unit of hand translation is about 400 pixels); the pose its hand enters with after the
@@ -30,6 +30,14 @@ public final class MantisHandPose {
     private static final float WALK_X = 0.92F;
     private static final float WALK_Y = 0.175F;
     private static final float WALK_DIP = 0.975F;
+    /** Punchy's sprint, per unit of bob, from the same tracking. */
+    private static final float SPRINT_X = 0.33F;
+    private static final float SPRINT_Y = 0.46F;
+    private static final float SPRINT_Y_LEAD = 0.22F;
+    private static final float SPRINT_DIP = 0.5F;
+    /** Eased 0..1 blend from walking to sprinting, this tick and the last. */
+    private static float sprint;
+    private static float sprintO;
 
     /**
      * Pose the main arm ends the fold in, relative to vanilla's, as translation (x, y, z) and
@@ -47,6 +55,12 @@ public final class MantisHandPose {
     public static boolean holdFolded;
 
     private MantisHandPose() {
+    }
+
+    /** Eases into and out of the sprint motion; once a client tick. */
+    public static void tick(LocalPlayer player) {
+        sprintO = sprint;
+        sprint += ((player != null && player.isSprinting() ? 1.0F : 0.0F) - sprint) * 0.35F;
     }
 
     /**
@@ -70,10 +84,15 @@ public final class MantisHandPose {
         float idle = Mth.sin(time);
         poseStack.translate(side * IDLE_X * idle, IDLE_Y * idle, 0.0F);
         // Vanilla's step phase, a tick ahead of the interpolated one, as measured.
-        float walk = -(player.walkDistO + (player.walkDist - player.walkDistO) * (partialTick + 1.0F));
-        float step = Mth.sin(walk * Mth.PI);
+        float phase = (player.walkDistO + (player.walkDist - player.walkDistO) * (partialTick + 1.0F)) * Mth.PI;
         float bob = Mth.lerp(partialTick, player.oBob, player.bob);
-        poseStack.translate(-side * WALK_X * bob * step, -WALK_Y * bob * step - WALK_DIP * bob, 0.0F);
+        float run = Mth.lerp(partialTick, sprintO, sprint);
+        float sin = Mth.sin(phase);
+        // Walking: a wide sway with a slight tilt, the hand dipped. Sprinting: a narrower sway the
+        // other way round, a stronger bounce once a cycle and a smaller dip.
+        float x = Mth.lerp(run, WALK_X * sin, -SPRINT_X * sin) * bob;
+        float y = Mth.lerp(run, WALK_Y * sin - WALK_DIP, -SPRINT_Y * Mth.sin(phase + SPRINT_Y_LEAD) - SPRINT_DIP) * bob;
+        poseStack.translate(side * x, y, 0.0F);
     }
 
     /**

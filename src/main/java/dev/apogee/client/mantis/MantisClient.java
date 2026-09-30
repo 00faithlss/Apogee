@@ -31,7 +31,7 @@ public final class MantisClient {
         int nextArm = MantisRules.ARM_RIGHT;
         long thrustStart = Long.MIN_VALUE;
         /** Client tick each arm's last slash started on, indexed by {@link MantisRules#ARM_RIGHT}/{@link MantisRules#ARM_LEFT}. */
-        final long[] slashStart = {Long.MIN_VALUE, Long.MIN_VALUE};
+        final long[] slashStart = {Long.MIN_VALUE / 2, Long.MIN_VALUE / 2};
         MantisVariant variant = MantisVariant.STANDARD;
     }
 
@@ -99,6 +99,10 @@ public final class MantisClient {
         }
         Anim anim = ANIMS.get(mc.player.getId());
         if (anim == null || !anim.deployed) {
+            return;
+        }
+        // Holding the button on a block swings every tick; one cut at a time, as on the server.
+        if (ticks - anim.slashStart[anim.swingArm] < MantisRules.SLASH_INTERVAL_TICKS) {
             return;
         }
         anim.swingArm = anim.nextArm;
@@ -169,7 +173,7 @@ public final class MantisClient {
     /** Progress 0..1 of the slash the given arm is making, or -1 when it is not slashing. */
     public static float slashProgress(Entity entity, int arm, float partialTick) {
         Anim anim = ANIMS.get(entity.getId());
-        if (anim == null || anim.slashStart[arm] == Long.MIN_VALUE) {
+        if (anim == null || anim.slashStart[arm] == Long.MIN_VALUE / 2) {
             return -1.0F;
         }
         float t = (ticks - anim.slashStart[arm] + partialTick) / MantisRules.SLASH_ANIMATION_TICKS;
@@ -204,6 +208,7 @@ public final class MantisClient {
             MantisRig.prune(id -> mc.level.getEntity(id) != null);
         }
         MantisBladeFx.tick(mc);
+        MantisHandPose.tick(mc.player);
         LocalPlayer player = mc.player;
         if (player == null || !isDeployed(player)) {
             return;

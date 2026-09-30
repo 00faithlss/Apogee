@@ -58,7 +58,7 @@ public final class MantisManager {
         final int lockedSlot;
         final MantisVariant variant;
         int nextArm = MantisRules.ARM_RIGHT;
-        long lastSwingTick = Long.MIN_VALUE;
+        long lastSwingTick = Long.MIN_VALUE / 2;
 
         Deployment(int lockedSlot, MantisVariant variant) {
             this.lockedSlot = lockedSlot;
@@ -201,7 +201,8 @@ public final class MantisManager {
             return;
         }
         long now = player.level().getGameTime();
-        if (now == deployment.lastSwingTick) {
+        // Mining swings every tick while the button is held: one cut (and sound) at a time.
+        if (now - deployment.lastSwingTick < MantisRules.SLASH_INTERVAL_TICKS) {
             return;
         }
         deployment.lastSwingTick = now;
