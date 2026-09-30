@@ -3,6 +3,7 @@ package dev.apogee.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.apogee.client.mantis.MantisRig;
 import dev.apogee.client.nanowire.NanowireRig;
+import dev.apogee.client.nanowire.NanowireWire;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,5 +33,6 @@ public final class MantisArmsLayer extends RenderLayer<AbstractClientPlayer, Pla
         // The nanowire keeps the player's own arms and rides on them.
         NanowireRig.drawOnArm(poseStack, buffers, light, player, model.rightArm, true, partialTick);
         NanowireRig.drawOnArm(poseStack, buffers, light, player, model.leftArm, false, partialTick);
+        NanowireRig.drawWires(buffers, player, NanowireWire.Frame.of(poseStack.last(), true), partialTick);
     }
 }

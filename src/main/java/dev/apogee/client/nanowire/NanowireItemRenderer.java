@@ -44,16 +44,29 @@ public final class NanowireItemRenderer implements BuiltinItemRendererRegistry.D
         poseStack.translate(0.5F, 0.5F, 0.5F);
         switch (mode) {
             case GUI -> {
-                poseStack.mulPose(Axis.XP.rotationDegrees(40.0F));
-                poseStack.mulPose(Axis.YP.rotationDegrees(-25.0F));
-                poseStack.scale(1.9F, 1.9F, 1.9F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(35.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(-30.0F));
+                poseStack.scale(2.4F, 2.4F, 2.4F);
             }
-            case GROUND -> poseStack.scale(1.2F, 1.2F, 1.2F);
+            case GROUND -> poseStack.scale(0.9F, 0.9F, 0.9F);
             case FIXED -> {
                 poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
                 poseStack.scale(1.8F, 1.8F, 1.8F);
             }
-            default -> poseStack.scale(1.1F, 1.1F, 1.1F);
+            case FIRST_PERSON_RIGHT_HAND, FIRST_PERSON_LEFT_HAND -> {
+                // Vanilla puts the hand's item cube low in the corner, nearly off screen; a flat
+                // item has to be lifted into view and tipped toward the eye, as handheld models do.
+                float side = mode == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND ? 1.0F : -1.0F;
+                poseStack.translate(side * -0.08F, 0.30F, 0.0F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(30.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(side * -25.0F));
+                poseStack.scale(0.6F, 0.6F, 0.6F);
+            }
+            case THIRD_PERSON_RIGHT_HAND, THIRD_PERSON_LEFT_HAND -> {
+                poseStack.translate(0.0F, 0.12F, 0.05F);
+                poseStack.scale(0.5F, 0.5F, 0.5F);
+            }
+            default -> poseStack.scale(0.55F, 0.55F, 0.55F);
         }
         poseStack.translate(0.0F, -3.0F / 16.0F, -3.5F / 16.0F);
         renderer.renderInto(poseStack, display, buffers, light);

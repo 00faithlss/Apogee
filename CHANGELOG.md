@@ -2,16 +2,21 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
-## [Unreleased]
+## [0.4.0+1.21.1] — 2026-09-30
 
-### Añadido (Nanocable, en desarrollo en `feat/nanowire`)
+### Añadido (Nanocable)
 
 - Nuevo implante de brazos `apogee:nanowire` (Nanocable) para la ranura `cyberware/arms`, con el paquete de modelos y animaciones del autor del proyecto. Comparte con las Cuchillas Mantis el despliegue con R, el bloqueo de la barra y el inventario, la alternancia derecha/izquierda del clic izquierdo y la sincronización con otros jugadores.
 - La carcasa va en la cara interna de cada antebrazo, sobre el brazo del propio jugador (no lo reemplaza), con máscara emisiva roja.
-- Primera persona desplegado: los dos brazos con la piel del jugador, posados por las pistas de brazos del rig de dos brazos del paquete; en reposo el cable va de una mano a la otra.
-- Clic izquierdo: latigazo con el brazo que toca (8 de daño, alcance de 5 bloques). Clic derecho: latigazo doble a todo lo que haya delante en un arco de 140° dentro del alcance (12 de daño, recarga de 3 s). Valores provisionales.
+- El cable lo dibuja el mod en cada fotograma como una curva continua: núcleo rojo emisivo, halo y estelas de luz. En reposo va tenso de una mano a la otra. Las exportaciones del paquete quedan solo con la carcasa (de 8,3 MB a 36 KB de animación por brazo).
+- Primera persona desplegado: los dos brazos con la piel del jugador en la posición de Minecraft, con el balanceo al caminar de las Cuchillas Mantis. La coreografía y sus tiempos se compararon fotograma a fotograma con un video del Monowire de Cyberpunk 2077:
+  - el latigazo cruza el brazo por la vista en 0,2 s y el cable cierra un lazo amplio hacia los 0,35 s antes de volver a la mano;
+  - el golpe doble lleva el brazo derecho adelante y hace girar el cable en espirales durante medio segundo; dura 0,9 s en total;
+  - al soltarse, la punta se devuelve en un lazo redondo; al recogerse, el cable se tensa y llega recto a las manos, sin saltos.
+- Clic izquierdo: latigazo con el brazo que toca (8 de daño, alcance de 5 bloques, uno cada 0,75 s). Clic derecho: latigazo doble a todo lo que haya delante en un arco de 140° dentro del alcance (12 de daño, recarga de 3 s). Valores provisionales.
+- El objeto muestra las dos carcasas con el cable enrollado, en el inventario y en la mano.
 - Sonidos provisionales de Minecraft hasta tener grabaciones propias.
-- Prueba de cliente que filma cada movimiento tick a tick en primera y tercera persona.
+- Prueba de cliente `runNanowireSmoke`: filma tick a tick cada movimiento en primera y tercera persona, y captura el objeto en la mano.
 
 ## [0.3.0+1.21.1] — 2026-09-30
 

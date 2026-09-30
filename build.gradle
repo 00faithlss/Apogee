@@ -87,6 +87,14 @@ loom {
             vmArg '-Dapogee.mantisSmoke=true'
             programArgs '--width', '1600', '--height', '900'
         }
+        nanowireSmoke {
+            client()
+            name 'Apogee Nanowire smoke run'
+            source sourceSets.gametest
+            runDir 'build/nanowire-smoke'
+            vmArg '-Dapogee.nanowireSmoke=true'
+            programArgs '--width', '1280', '--height', '720'
+        }
     }
 }
 

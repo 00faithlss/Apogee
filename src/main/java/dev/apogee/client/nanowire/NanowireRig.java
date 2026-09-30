@@ -38,6 +38,8 @@ public final class NanowireRig {
 
     private final NanowireArm[] arms = {new NanowireArm(true), new NanowireArm(false)};
     private final NanowireArmGeoRenderer[] renderers = {new NanowireArmGeoRenderer(), new NanowireArmGeoRenderer()};
+    /** Where each wire's lead runs, captured as each housing is drawn. */
+    private final NanowireWire.Anchors[] anchors = {new NanowireWire.Anchors(), new NanowireWire.Anchors()};
 
     private NanowireRig() {
     }
@@ -53,6 +55,17 @@ public final class NanowireRig {
     /** Drops the rigs of players no longer in the level. */
     public static void prune(IntPredicate present) {
         RIGS.int2ObjectEntrySet().removeIf(entry -> !present.test(entry.getIntKey()));
+    }
+
+    /**
+     * Draws both of the wearer's wires, once both housings have been drawn in this pass; {@code frame}
+     * is the wearer's frame in the same render space.
+     */
+    public static void drawWires(MultiBufferSource buffers, AbstractClientPlayer player, NanowireWire.Frame frame, float partialTick) {
+        NanowireRig rig = RIGS.get(player.getId());
+        if (rig != null) {
+            NanowireWire.draw(buffers, player, rig.anchors, frame, partialTick);
+        }
     }
 
     /** A lash by one arm: both housings play the clip, each moving its own wire. */
@@ -91,6 +104,7 @@ public final class NanowireRig {
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
         rig.renderers[right ? 0 : 1].renderInto(poseStack, arm, buffers, light, partialTick);
+        rig.anchors[right ? 0 : 1].capture(poseStack.last(), right);
         poseStack.popPose();
     }
 }

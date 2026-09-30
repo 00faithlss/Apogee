@@ -93,8 +93,17 @@ public final class NanowireClientSmoke implements ClientModInitializer {
         }
         if (t == 30) {
             shot(mc, "00-item-held-and-hotbar");
+            mc.options.hideGui = true;
+            mc.options.fov().set(30);
+            mc.options.setCameraType(CameraType.THIRD_PERSON_FRONT);
         }
-        if (t == 31) {
+        if (t == 35) {
+            shot(mc, "00-item-held-third-person");
+        }
+        if (t == 36) {
+            mc.options.hideGui = false;
+            mc.options.fov().set(70);
+            mc.options.setCameraType(CameraType.FIRST_PERSON);
             server(mc, (level, player) -> {
                 player.getInventory().setItem(0, ItemStack.EMPTY);
                 check(TrinketItem.equipItem(player, new ItemStack(ApogeeItems.NANOWIRE)), "equip the nanowire");

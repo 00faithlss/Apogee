@@ -50,7 +50,7 @@ public final class MantisRules {
 
     /** Client-side length of one arm's attack animation, in ticks. */
     public static int slashAnimationTicks(MantisVariant variant) {
-        return variant == MantisVariant.NANOWIRE ? NanowireRules.LASH_TICKS : SLASH_ANIMATION_TICKS;
+        return variant == MantisVariant.NANOWIRE ? NanowireRules.LASH_ANIMATION_TICKS : SLASH_ANIMATION_TICKS;
     }
 
     /** Cooldown of the two-arm attack (lunge or two-wire lash), in ticks. */

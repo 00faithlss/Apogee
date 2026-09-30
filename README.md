@@ -2,7 +2,7 @@
 
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
-Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, tres componentes T5 y siete piezas para armar las Cuchillas Mantis.
+Contiene tres implantes, el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**, tres componentes T5 y siete piezas para armar las Cuchillas Mantis.
 
 > Estado: primera versión compilable y probada de forma automatizada. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -14,6 +14,7 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, tres comp
 | `apogee:mantis_blades` | Cuchillas Mantis | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:mantis_blades_thermal` | Cuchillas Mantis térmicas | Variante que prende fuego al objetivo. |
 | `apogee:mantis_blades_electric` | Cuchillas Mantis eléctricas | Variante que aturde al objetivo. |
+| `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. Aún sin receta: se obtiene del inventario creativo o con `/give`. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
@@ -77,6 +78,14 @@ Todas con forma; dan 1 unidad salvo el cable neural. Se arman en este orden: cab
 - Tooltip al estilo de las armas de Cyberpunk 2077 (con Simply Tooltips): fondo rojo translúcido, marco rojo salmón con la esquina y el detalle cian del juego, textos amarillos, daño por golpe y ataques por segundo en grande junto al tipo de daño (físico, térmico o eléctrico). **G** alterna la vista Descripción (controles y habilidad de la variante) y Estadísticas. Las teclas que muestra (la de desplegar y la de pestañas) siguen la configuración de controles del juego. Sin Simply Tooltips se muestra un tooltip simple.
 - Sonidos propios de despliegue, corte al aire y golpe para la normal (que la térmica comparte) y para la eléctrica; la estocada suena como un corte con un golpe más grave encima (eléctricos en la eléctrica). Guardar es provisional; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
 
+### Nanocable
+
+- Equípalo en la ranura **Brazos** de Trinkets (la misma de las Cuchillas Mantis). **R** (configurable) saca el cable o lo recoge.
+- La carcasa del cable va en la cara interna de cada antebrazo; guardada, queda casi oculta junto al torso. Fuera, el cable rojo brillante va tenso de una mano a la otra.
+- Desplegado: **clic izquierdo** da latigazos alternados (derecho, izquierdo...) de **8 de daño** con **5 bloques** de alcance. **Clic derecho** da un latigazo doble que golpea a todo lo que haya delante, en un arco de 140° dentro del alcance (**12 de daño**, recarga de 3 s). Valores provisionales.
+- Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, y tampoco se puede encantar.
+- Sonidos provisionales de Minecraft hasta tener grabaciones propias (eventos `nanowire_*` en `assets/apogee/sounds.json`).
+
 ### Mecánica del Sandevistan (valores por defecto)
 
 | Regla | Valor |
@@ -119,6 +128,7 @@ Si Immersive Armors está instalado, los **pantalones Steampunk** (que ya dan do
 
 - **Varios portadores en juego:** la regla ya está comprobada con pruebas automáticas (ver *Varios portadores*); falta confirmarla en una partida real con Essential.
 - **Tooltip en juego:** revisar dentro de Minecraft la fuente Rajdhani y el borde eléctrico en distintas escalas de interfaz y en español.
+- **Nanocable:** faltan su receta, su tooltip y sonidos propios; los valores de combate son provisionales.
 
 ## Instalación para anfitrión e invitados
 
@@ -160,7 +170,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```
 
 - `build`: genera el JAR de entrega en `build/libs`. Las pruebas no se incluyen en él.
-- `runGametest`: 18 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
+- `runGametest`: 23 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltip, activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
 ```bash
@@ -168,6 +178,12 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```
 
 - `runMantisSmoke`: abre el cliente, equipa cada variante de las Cuchillas Mantis y captura plegada, desplegando, desplegada, atacando, primeros planos y primera persona (también caminando) en `build/mantis-smoke/screenshots`.
+
+```bash
+./gradlew runNanowireSmoke
+```
+
+- `runNanowireSmoke`: abre el cliente, equipa el Nanocable y filma cada tick de los latigazos y del latigazo doble, en tercera y primera persona, y el repliegue, en `build/nanowire-smoke/screenshots`.
 
 ```bash
 tools/mantis_tests.sh mp
@@ -186,7 +202,9 @@ tools/mantis_tests.sh calibrate
 
 El modelo de las Cuchillas Mantis viene del kit Mantis v0.4: los proyectos de Blockbench y su documentación están en [`art/mantis-kit/`](art/mantis-kit/LEEME.md). Tras exportar desde Blockbench con el flujo de GeckoLib, `python3 tools/mantis_kit_import.py <carpeta del kit>` copia geometrías, animaciones y texturas a `assets/apogee` y añade la mano y el tope del hombro que el kit deja fuera de su exportación. Los recursos actuales ya incluyen revisiones posteriores al kit v0.4 (cyberware inferior, hoja y riel separados, alcance de la hoja, colores); volver a importar el kit v0.4 las desharía.
 
-Estructura principal: `dev.apogee.sandevistan.SandevistanManager` y `dev.apogee.mantis.MantisManager` (autoridad del servidor), `dev.apogee.client.mantis` (modelo GeckoLib de las Cuchillas Mantis), `dev.apogee.mixin` (salto de ticks, daño, anti-vuelo), `dev.apogee.client` (estado sincronizado, efectos, estelas, renderizado y tooltip).
+El Nanocable usa el paquete `nanocable-rojo-geckolib-assets` v0.3: fuentes y notas en [`art/nanowire/`](art/nanowire/NOTA.md). El mod dibuja el cable por código (`dev.apogee.client.nanowire`), así que `python3 tools/nanowire_strip_wire.py <paquete>/src/main/resources/assets/apogee` copia las exportaciones de cada brazo sin los huesos del cable.
+
+Estructura principal: `dev.apogee.sandevistan.SandevistanManager` y `dev.apogee.mantis.MantisManager` (autoridad del servidor), `dev.apogee.client.mantis` (modelo GeckoLib de las Cuchillas Mantis), `dev.apogee.client.nanowire` (carcasas, brazos y cable del Nanocable), `dev.apogee.mixin` (salto de ticks, daño, anti-vuelo), `dev.apogee.client` (estado sincronizado, efectos, estelas, renderizado y tooltip).
 
 Ramas: `main` estable, `develop` integración. Commits con Conventional Commits. Cambios en [CHANGELOG.md](CHANGELOG.md).
 
