@@ -174,5 +174,55 @@
         "pitch": 0.8
       }
     ]
+  },
+  "nanowire_deploy": {
+    "subtitle": "subtitles.apogee.nanowire_deploy",
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.place",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ]
+  },
+  "nanowire_retract": {
+    "subtitle": "subtitles.apogee.nanowire_retract",
+    "sounds": [
+      {
+        "name": "minecraft:entity.fishing_bobber.retrieve",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ]
+  },
+  "nanowire_swing": {
+    "subtitle": "subtitles.apogee.nanowire_swing",
+    "sounds": [
+      {
+        "name": "minecraft:entity.fishing_bobber.throw",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ]
+  },
+  "nanowire_hit": {
+    "subtitle": "subtitles.apogee.nanowire_hit",
+    "sounds": [
+      {
+        "name": "minecraft:entity.sheep.shear",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ]
+  },
+  "nanowire_heavy": {
+    "subtitle": "subtitles.apogee.nanowire_heavy",
+    "sounds": [
+      {
+        "name": "minecraft:entity.fishing_bobber.throw",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ]
   }
 }

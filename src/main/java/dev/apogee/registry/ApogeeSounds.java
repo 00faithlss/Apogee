@@ -18,6 +18,11 @@ public final class ApogeeSounds {
     public static final SoundEvent MANTIS_ELECTRIC_SWING = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_electric_swing"));
     public static final SoundEvent MANTIS_ELECTRIC_HIT = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_electric_hit"));
     public static final SoundEvent MANTIS_ELECTRIC_THRUST = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_electric_thrust"));
+    public static final SoundEvent NANOWIRE_DEPLOY = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_deploy"));
+    public static final SoundEvent NANOWIRE_RETRACT = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_retract"));
+    public static final SoundEvent NANOWIRE_SWING = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_swing"));
+    public static final SoundEvent NANOWIRE_HIT = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_hit"));
+    public static final SoundEvent NANOWIRE_HEAVY = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_heavy"));
 
     private ApogeeSounds() {
     }
@@ -35,5 +40,10 @@ public final class ApogeeSounds {
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_ELECTRIC_SWING.getLocation(), MANTIS_ELECTRIC_SWING);
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_ELECTRIC_HIT.getLocation(), MANTIS_ELECTRIC_HIT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_ELECTRIC_THRUST.getLocation(), MANTIS_ELECTRIC_THRUST);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_DEPLOY.getLocation(), NANOWIRE_DEPLOY);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_RETRACT.getLocation(), NANOWIRE_RETRACT);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_SWING.getLocation(), NANOWIRE_SWING);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HIT.getLocation(), NANOWIRE_HIT);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HEAVY.getLocation(), NANOWIRE_HEAVY);
     }
 }

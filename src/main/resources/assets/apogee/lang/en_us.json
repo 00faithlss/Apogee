@@ -52,6 +52,7 @@
   "subtitles.apogee.mantis_electric_hit": "Electric Mantis Blades shock",
   "item.apogee.mantis_blades_thermal": "Thermal Mantis Blades",
   "item.apogee.mantis_blades_electric": "Electric Mantis Blades",
+  "item.apogee.nanowire": "Nanowire",
   "item.apogee.neural_cable": "Neural Cable",
   "item.apogee.control_chip": "Control Chip",
   "item.apogee.blade_actuator": "Blade Actuator",
@@ -90,5 +91,10 @@
   "tooltip.apogee.mantis_blades.note": "Held item adds nothing · No enchants",
   "tooltip.apogee.mantis_blades.plain_stats": "Damage %s · %s attacks/s · %s",
   "tooltip.apogee.mantis_blades.plain_section": "%s: %s",
-  "subtitles.apogee.mantis_electric_thrust": "Electric Mantis Blades lunge"
+  "subtitles.apogee.mantis_electric_thrust": "Electric Mantis Blades lunge",
+  "subtitles.apogee.nanowire_deploy": "Nanowire deploys",
+  "subtitles.apogee.nanowire_retract": "Nanowire retracts",
+  "subtitles.apogee.nanowire_swing": "Nanowire lashes",
+  "subtitles.apogee.nanowire_hit": "Nanowire cuts",
+  "subtitles.apogee.nanowire_heavy": "Nanowire double lash"
 }

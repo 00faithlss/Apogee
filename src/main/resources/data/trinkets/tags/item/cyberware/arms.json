@@ -3,6 +3,7 @@
   "values": [
     "apogee:mantis_blades",
     "apogee:mantis_blades_thermal",
-    "apogee:mantis_blades_electric"
+    "apogee:mantis_blades_electric",
+    "apogee:nanowire"
   ]
 }

@@ -52,6 +52,7 @@
   "subtitles.apogee.mantis_electric_hit": "Las Cuchillas Mantis eléctricas electrocutan",
   "item.apogee.mantis_blades_thermal": "Cuchillas Mantis térmicas",
   "item.apogee.mantis_blades_electric": "Cuchillas Mantis eléctricas",
+  "item.apogee.nanowire": "Nanocable",
   "item.apogee.neural_cable": "Cable neural",
   "item.apogee.control_chip": "Chip de control",
   "item.apogee.blade_actuator": "Actuador de cuchilla",
@@ -90,5 +91,10 @@
   "tooltip.apogee.mantis_blades.note": "El objeto en mano no suma · Sin encantar",
   "tooltip.apogee.mantis_blades.plain_stats": "Daño %s · %s ataques/s · %s",
   "tooltip.apogee.mantis_blades.plain_section": "%s: %s",
-  "subtitles.apogee.mantis_electric_thrust": "Estocada de Cuchillas Mantis eléctricas"
+  "subtitles.apogee.mantis_electric_thrust": "Estocada de Cuchillas Mantis eléctricas",
+  "subtitles.apogee.nanowire_deploy": "Nanocable se despliega",
+  "subtitles.apogee.nanowire_retract": "Nanocable se recoge",
+  "subtitles.apogee.nanowire_swing": "Latigazo de nanocable",
+  "subtitles.apogee.nanowire_hit": "Corte de nanocable",
+  "subtitles.apogee.nanowire_heavy": "Latigazo doble de nanocable"
 }

@@ -87,3 +87,8 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 - Fuentes editables en `art/mantis-kit/` (proyectos completos en `blockbench/` y piezas de hoja y riel por separado en `modular/`).
 - Revisiones posteriores, también del autor del proyecto: metal oscuro, hoja térmica ensanchada, filo eléctrico azul, hoja y riel en grupos independientes. En el repositorio se añadieron el cyberware inferior, el mayor alcance de la hoja y la corrección de fotogramas clave duplicados que impedían cargar el repliegue en GeckoLib.
 
+## Nanocable rojo v0.3 — diseño propio del proyecto
+
+- Origen: paquete `nanocable-rojo-geckolib-assets` aportado por el autor del proyecto: modelos y animaciones generados por código (`art/nanowire/source/build.py`), inspirados en el Monowire de Cyberpunk 2077 sin copiar modelos, texturas ni animaciones del juego.
+- Usado: `geo/nanowire_{left,right}_attachment.geo.json`, `geo/nanowire_item.geo.json`, `animations/nanowire_{left,right}_attachment.animation.json` y `textures/nanowire/nanowire_red{,_glowmask}.png` sin cambios; `nanowire/arm_motion.json` extraído de `nanowire_arms.animation.json`. Detalle en `art/nanowire/NOTA.md`.
+- Sonidos provisionales del nanocable: eventos de Minecraft (cadena, caña de pescar, tijeras) hasta tener grabaciones propias.

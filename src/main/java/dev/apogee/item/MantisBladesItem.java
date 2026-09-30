@@ -12,7 +12,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
  * Reusable arm implant with no durability; equipped in the Trinkets slot cyberware/arms. Its
  * tooltip is drawn on the client (MantisTooltipPanel, or plain lines without Simply Tooltips).
  */
-public class MantisBladesItem extends TrinketItem {
+public class MantisBladesItem extends TrinketItem implements ArmCyberwareItem {
     private final MantisVariant variant;
 
     public MantisBladesItem(Item.Properties properties, MantisVariant variant) {
@@ -20,6 +20,7 @@ public class MantisBladesItem extends TrinketItem {
         this.variant = variant;
     }
 
+    @Override
     public MantisVariant variant() {
         return variant;
     }

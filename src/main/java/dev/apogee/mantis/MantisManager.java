@@ -5,7 +5,7 @@ import dev.apogee.network.ApogeeNetworking.MantisSwing;
 import dev.apogee.network.ApogeeNetworking.MantisSync;
 import dev.apogee.network.ApogeeNetworking.MantisThrust;
 import dev.apogee.network.ApogeeNetworking.ToggleMantis;
-import dev.apogee.item.MantisBladesItem;
+import dev.apogee.item.ArmCyberwareItem;
 import dev.apogee.registry.ApogeeSounds;
 import dev.emi.trinkets.api.TrinketsApi;
 import java.util.HashMap;
@@ -48,10 +48,13 @@ import net.minecraft.world.phys.Vec3;
 public final class MantisManager {
     public static final ResourceLocation DAMAGE_MODIFIER = Apogee.id("mantis_damage");
     public static final ResourceLocation SPEED_MODIFIER = Apogee.id("mantis_attack_speed");
+    public static final ResourceLocation REACH_MODIFIER = Apogee.id("nanowire_reach");
 
     private static final Map<UUID, Deployment> DEPLOYED = new HashMap<>();
     /** Game time before which the wearer cannot lunge again. Kept across deploy cycles. */
     private static final Map<UUID, Long> THRUST_READY = new HashMap<>();
+    /** Game time each wearer's two-wire lash reaches its targets. */
+    private static final Map<UUID, Long> PENDING_LASHES = new HashMap<>();
 
     private MantisManager() {
     }
@@ -82,6 +85,7 @@ public final class MantisManager {
             }
             DEPLOYED.clear();
             THRUST_READY.clear();
+            PENDING_LASHES.clear();
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> retract(handler.getPlayer(), false));
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> retract(player, false));
@@ -111,8 +115,8 @@ public final class MantisManager {
     /** Variant of the equipped Mantis Blades, or null when none are worn. */
     public static MantisVariant equippedVariant(LivingEntity entity) {
         return TrinketsApi.getTrinketComponent(entity)
-                .flatMap(component -> component.getEquipped(stack -> stack.getItem() instanceof MantisBladesItem).stream()
-                        .map(pair -> ((MantisBladesItem) pair.getB().getItem()).variant())
+                .flatMap(component -> component.getEquipped(stack -> stack.getItem() instanceof ArmCyberwareItem).stream()
+                        .map(pair -> ((ArmCyberwareItem) pair.getB().getItem()).variant())
                         .findFirst())
                 .orElse(null);
     }
@@ -130,18 +134,24 @@ public final class MantisManager {
         }
         DEPLOYED.put(player.getUUID(), new Deployment(player.getInventory().selected, variant));
         addModifiers(player);
-        play(player, variant == MantisVariant.ELECTRIC ? ApogeeSounds.MANTIS_ELECTRIC_DEPLOY : ApogeeSounds.MANTIS_DEPLOY);
+        play(player, switch (variant) {
+            case ELECTRIC -> ApogeeSounds.MANTIS_ELECTRIC_DEPLOY;
+            case NANOWIRE -> ApogeeSounds.NANOWIRE_DEPLOY;
+            default -> ApogeeSounds.MANTIS_DEPLOY;
+        });
         broadcast(player, true, variant);
     }
 
     /** Folds the blades away (manual, unequip, death, dimension change, disconnect). */
     public static void retract(ServerPlayer player, boolean audible) {
-        if (DEPLOYED.remove(player.getUUID()) == null) {
+        Deployment deployment = DEPLOYED.remove(player.getUUID());
+        if (deployment == null) {
             return;
         }
+        PENDING_LASHES.remove(player.getUUID());
         removeModifiers(player);
         if (audible) {
-            play(player, ApogeeSounds.MANTIS_RETRACT);
+            play(player, deployment.variant == MantisVariant.NANOWIRE ? ApogeeSounds.NANOWIRE_RETRACT : ApogeeSounds.MANTIS_RETRACT);
         }
         broadcast(player, false, MantisVariant.STANDARD);
     }
@@ -153,9 +163,18 @@ public final class MantisManager {
      * locked slot can still change, for instance when an item is picked up into it).
      */
     private static void addModifiers(ServerPlayer player) {
+        Deployment deployment = DEPLOYED.get(player.getUUID());
+        boolean wire = deployment != null && deployment.variant == MantisVariant.NANOWIRE;
         double[] held = heldBonuses(player);
-        setModifier(player.getAttribute(Attributes.ATTACK_DAMAGE), DAMAGE_MODIFIER, MantisRules.ATTACK_DAMAGE - held[0]);
-        setModifier(player.getAttribute(Attributes.ATTACK_SPEED), SPEED_MODIFIER, MantisRules.ATTACK_SPEED - held[1]);
+        setModifier(player.getAttribute(Attributes.ATTACK_DAMAGE), DAMAGE_MODIFIER,
+                (wire ? NanowireRules.ATTACK_DAMAGE : MantisRules.ATTACK_DAMAGE) - held[0]);
+        setModifier(player.getAttribute(Attributes.ATTACK_SPEED), SPEED_MODIFIER,
+                (wire ? NanowireRules.ATTACK_SPEED : MantisRules.ATTACK_SPEED) - held[1]);
+        AttributeInstance reach = player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE);
+        if (wire && reach != null && reach.getModifier(REACH_MODIFIER) == null) {
+            // The wire lashes further than an arm reaches.
+            reach.addTransientModifier(new AttributeModifier(REACH_MODIFIER, NanowireRules.REACH_BONUS, AttributeModifier.Operation.ADD_VALUE));
+        }
     }
 
     /** Flat attack damage and speed the main-hand item adds on top of the attributes' base values. */
@@ -195,6 +214,10 @@ public final class MantisManager {
     }
 
     private static void removeModifiers(ServerPlayer player) {
+        AttributeInstance reach = player.getAttribute(Attributes.ENTITY_INTERACTION_RANGE);
+        if (reach != null) {
+            reach.removeModifier(REACH_MODIFIER);
+        }
         AttributeInstance damage = player.getAttribute(Attributes.ATTACK_DAMAGE);
         if (damage != null) {
             damage.removeModifier(DAMAGE_MODIFIER);
@@ -209,6 +232,7 @@ public final class MantisManager {
         if (DEPLOYED.isEmpty()) {
             return;
         }
+        lashes(server);
         for (Map.Entry<UUID, Deployment> entry : List.copyOf(DEPLOYED.entrySet())) {
             ServerPlayer player = server.getPlayerList().getPlayer(entry.getKey());
             if (player == null || !player.isAlive() || player.isSpectator() || !isEquipped(player)) {
@@ -241,13 +265,17 @@ public final class MantisManager {
         }
         long now = player.level().getGameTime();
         // Mining swings every tick while the button is held: one cut (and sound) at a time.
-        if (now - deployment.lastSwingTick < MantisRules.SLASH_INTERVAL_TICKS) {
+        if (now - deployment.lastSwingTick < MantisRules.slashIntervalTicks(deployment.variant)) {
             return;
         }
         deployment.lastSwingTick = now;
         int arm = deployment.nextArm;
         deployment.nextArm = arm == MantisRules.ARM_RIGHT ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT;
-        play(player, deployment.variant == MantisVariant.ELECTRIC ? ApogeeSounds.MANTIS_ELECTRIC_SWING : ApogeeSounds.MANTIS_SWING);
+        play(player, switch (deployment.variant) {
+            case ELECTRIC -> ApogeeSounds.MANTIS_ELECTRIC_SWING;
+            case NANOWIRE -> ApogeeSounds.NANOWIRE_SWING;
+            default -> ApogeeSounds.MANTIS_SWING;
+        });
         sendToTrackers(player, new MantisSwing(player.getId(), arm), false);
     }
 
@@ -255,9 +283,11 @@ public final class MantisManager {
         if (source.is(DamageTypes.PLAYER_ATTACK) && source.getEntity() instanceof ServerPlayer attacker) {
             Deployment deployment = DEPLOYED.get(attacker.getUUID());
             if (deployment != null) {
-                victim.level().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
-                        deployment.variant == MantisVariant.ELECTRIC ? ApogeeSounds.MANTIS_ELECTRIC_HIT : ApogeeSounds.MANTIS_HIT,
-                        SoundSource.PLAYERS, 1.0F, 1.0F);
+                victim.level().playSound(null, victim.getX(), victim.getY(), victim.getZ(), switch (deployment.variant) {
+                            case ELECTRIC -> ApogeeSounds.MANTIS_ELECTRIC_HIT;
+                            case NANOWIRE -> ApogeeSounds.NANOWIRE_HIT;
+                            default -> ApogeeSounds.MANTIS_HIT;
+                        }, SoundSource.PLAYERS, 1.0F, 1.0F);
                 applyVariantEffect(victim, deployment.variant);
             }
         }
@@ -272,16 +302,27 @@ public final class MantisManager {
         }
     }
 
-    /** Two-blade lunge: a short forward impulse and a piercing cut along the line of sight. */
+    /**
+     * The two-arm attack: the blades' lunge (a short forward impulse and a piercing cut along the
+     * line of sight) or the nanowire's two-wire lash (both wires sweep the arc in front).
+     */
     public static void thrust(ServerPlayer player) {
-        if (!DEPLOYED.containsKey(player.getUUID()) || !player.isAlive()) {
+        Deployment deployment = DEPLOYED.get(player.getUUID());
+        if (deployment == null || !player.isAlive()) {
             return;
         }
         long now = player.level().getGameTime();
         if (now < THRUST_READY.getOrDefault(player.getUUID(), 0L)) {
             return;
         }
-        THRUST_READY.put(player.getUUID(), now + MantisRules.THRUST_COOLDOWN_TICKS);
+        THRUST_READY.put(player.getUUID(), now + MantisRules.thrustCooldownTicks(deployment.variant));
+        if (deployment.variant == MantisVariant.NANOWIRE) {
+            // The wires reach the targets partway through the lash.
+            PENDING_LASHES.put(player.getUUID(), now + NanowireRules.HEAVY_HIT_DELAY_TICKS);
+            play(player, ApogeeSounds.NANOWIRE_HEAVY);
+            sendToTrackers(player, new MantisSwing(player.getId(), MantisRules.ARM_BOTH), false);
+            return;
+        }
 
         Vec3 look = player.getLookAngle();
         Vec3 flat = new Vec3(look.x, 0.0, look.z);
@@ -310,6 +351,43 @@ public final class MantisManager {
             play(player, ApogeeSounds.MANTIS_THRUST);
         }
         sendToTrackers(player, new MantisSwing(player.getId(), MantisRules.ARM_BOTH), false);
+    }
+
+    /** Lands the two-wire lashes that are due: every living target in the arc in front, within reach. */
+    private static void lashes(MinecraftServer server) {
+        if (PENDING_LASHES.isEmpty()) {
+            return;
+        }
+        for (Map.Entry<UUID, Long> entry : List.copyOf(PENDING_LASHES.entrySet())) {
+            ServerPlayer player = server.getPlayerList().getPlayer(entry.getKey());
+            if (player == null || !DEPLOYED.containsKey(entry.getKey())) {
+                PENDING_LASHES.remove(entry.getKey());
+                continue;
+            }
+            if (player.level().getGameTime() < entry.getValue()) {
+                continue;
+            }
+            PENDING_LASHES.remove(entry.getKey());
+            double reach = player.entityInteractionRange();
+            Vec3 eye = player.getEyePosition();
+            Vec3 flat = new Vec3(player.getLookAngle().x, 0.0, player.getLookAngle().z);
+            if (flat.lengthSqr() < 1.0E-4) {
+                flat = Vec3.directionFromRotation(0.0F, player.getYRot());
+            }
+            flat = flat.normalize();
+            double minCos = Math.cos(Math.toRadians(NanowireRules.HEAVY_HALF_ANGLE));
+            DamageSource source = player.damageSources().playerAttack(player);
+            for (LivingEntity target : player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(reach),
+                    e -> e != player && e.isAlive() && !e.isSpectator() && e.isPickable() && !player.isAlliedTo(e))) {
+                Vec3 to = target.getBoundingBox().getCenter().subtract(eye);
+                Vec3 toFlat = new Vec3(to.x, 0.0, to.z);
+                double distance = target.getBoundingBox().distanceToSqr(eye);
+                if (distance > reach * reach || toFlat.lengthSqr() < 1.0E-4 || toFlat.normalize().dot(flat) < minCos) {
+                    continue;
+                }
+                target.hurt(source, NanowireRules.HEAVY_DAMAGE);
+            }
+        }
     }
 
     // ------------------------------------------------------------------ sync

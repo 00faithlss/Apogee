@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.mantis.MantisHandPose;
+import dev.apogee.client.nanowire.NanowireHands;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.player.LocalPlayer;
@@ -51,6 +52,11 @@ public abstract class MantisItemInHandRendererMixin {
             return;
         }
         ci.cancel();
+        if (MantisClient.variant(player) == MantisVariant.NANOWIRE) {
+            NanowireHands.render(poseStack, buffers, player, light, partialTick);
+            buffers.endBatch();
+            return;
+        }
         poseStack.pushPose();
         MantisHandPose.undoViewBob(poseStack, player, partialTick);
         // Vanilla's lag as the view turns: the hands trail a little behind the camera.

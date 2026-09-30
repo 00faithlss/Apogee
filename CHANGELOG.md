@@ -4,6 +4,15 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+### Añadido (Nanocable, en desarrollo en `feat/nanowire`)
+
+- Nuevo implante de brazos `apogee:nanowire` (Nanocable) para la ranura `cyberware/arms`, con el paquete de modelos y animaciones del autor del proyecto. Comparte con las Cuchillas Mantis el despliegue con R, el bloqueo de la barra y el inventario, la alternancia derecha/izquierda del clic izquierdo y la sincronización con otros jugadores.
+- La carcasa va en la cara interna de cada antebrazo, sobre el brazo del propio jugador (no lo reemplaza), con máscara emisiva roja.
+- Primera persona desplegado: los dos brazos con la piel del jugador, posados por las pistas de brazos del rig de dos brazos del paquete; en reposo el cable va de una mano a la otra.
+- Clic izquierdo: latigazo con el brazo que toca (8 de daño, alcance de 5 bloques). Clic derecho: latigazo doble a todo lo que haya delante en un arco de 140° dentro del alcance (12 de daño, recarga de 3 s). Valores provisionales.
+- Sonidos provisionales de Minecraft hasta tener grabaciones propias.
+- Prueba de cliente que filma cada movimiento tick a tick en primera y tercera persona.
+
 ## [0.3.0+1.21.1] — 2026-09-30
 
 ### Añadido (Cuchillas Mantis)

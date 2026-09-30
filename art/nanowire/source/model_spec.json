@@ -1,0 +1,6540 @@
+{
+  "bones": [
+    {
+      "name": "root",
+      "parent": null,
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "left_arm",
+      "parent": "root",
+      "pivot": [
+        -6,
+        0,
+        7
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "left_inner_mount",
+      "parent": "left_arm",
+      "pivot": [
+        -6,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        -90
+      ]
+    },
+    {
+      "name": "left_housing",
+      "parent": "left_inner_mount",
+      "pivot": [
+        -6,
+        2,
+        3
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "left_service_cover",
+      "parent": "left_housing",
+      "pivot": [
+        -6,
+        2.45,
+        5.4
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "left_spool",
+      "parent": "left_housing",
+      "pivot": [
+        -6,
+        2.56,
+        3.15
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "left_port_shutter",
+      "parent": "left_housing",
+      "pivot": [
+        -6,
+        2.63,
+        0.24
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "reference_left",
+      "parent": "left_arm",
+      "pivot": [
+        -6,
+        0,
+        7
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "right_arm",
+      "parent": "root",
+      "pivot": [
+        6,
+        0,
+        7
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "right_inner_mount",
+      "parent": "right_arm",
+      "pivot": [
+        6,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        90
+      ]
+    },
+    {
+      "name": "right_housing",
+      "parent": "right_inner_mount",
+      "pivot": [
+        6,
+        2,
+        3
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "right_service_cover",
+      "parent": "right_housing",
+      "pivot": [
+        6,
+        2.45,
+        5.4
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "right_spool",
+      "parent": "right_housing",
+      "pivot": [
+        6,
+        2.56,
+        3.15
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "right_port_shutter",
+      "parent": "right_housing",
+      "pivot": [
+        6,
+        2.63,
+        0.24
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "reference_right",
+      "parent": "right_arm",
+      "pivot": [
+        6,
+        0,
+        7
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_00",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_01",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_02",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_03",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_04",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_05",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_06",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_07",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_08",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_09",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_10",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_11",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_12",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_13",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_14",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_15",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_16",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_17",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_18",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_19",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_20",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_21",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_22",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_23",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_24",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_25",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_26",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_27",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_28",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_29",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_30",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_31",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_32",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_33",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_34",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_35",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_36",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_37",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_38",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_39",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_40",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_41",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_42",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_43",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_44",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_45",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_46",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_47",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_48",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_49",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_50",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_51",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_52",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_53",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_54",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_55",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_56",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_57",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_58",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_59",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_60",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_61",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_62",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_left_63",
+      "parent": "left_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_00",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_01",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_02",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_03",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_04",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_05",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_06",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_07",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_08",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_09",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_10",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_11",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_12",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_13",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_14",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_15",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_16",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_17",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_18",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_19",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_20",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_21",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_22",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_23",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_24",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_25",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_26",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_27",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_28",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_29",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_30",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_31",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_32",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_33",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_34",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_35",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_36",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_37",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_38",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_39",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_40",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_41",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_42",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_43",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_44",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_45",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_46",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_47",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_48",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_49",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_50",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_51",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_52",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_53",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_54",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_55",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_56",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_57",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_58",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_59",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_60",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_61",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_62",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "wire_right_63",
+      "parent": "right_arm",
+      "pivot": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "cubes": [
+    {
+      "name": "forearm",
+      "origin": [
+        -8,
+        -2,
+        -0.4
+      ],
+      "size": [
+        4,
+        4,
+        8.8
+      ],
+      "material": 8,
+      "bone": "reference_left"
+    },
+    {
+      "name": "hand",
+      "origin": [
+        -8,
+        -1.8,
+        -4.5
+      ],
+      "size": [
+        4,
+        3.6,
+        4.1
+      ],
+      "material": 8,
+      "bone": "reference_left"
+    },
+    {
+      "name": "cuff",
+      "origin": [
+        -8.08,
+        -2.08,
+        7.7
+      ],
+      "size": [
+        4.16,
+        4.16,
+        1.4
+      ],
+      "material": 9,
+      "bone": "reference_left"
+    },
+    {
+      "name": "rubber_gasket",
+      "origin": [
+        -7.12,
+        2.015,
+        0.65
+      ],
+      "size": [
+        2.24,
+        0.14,
+        5.6
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "black_lower_housing",
+      "origin": [
+        -7.04,
+        2.15,
+        0.72
+      ],
+      "size": [
+        2.08,
+        0.3,
+        5.42
+      ],
+      "material": 0,
+      "bone": "left_housing"
+    },
+    {
+      "name": "recess",
+      "origin": [
+        -6.77,
+        2.46,
+        1.05
+      ],
+      "size": [
+        1.54,
+        0.09,
+        4.75
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "chamfered_shell",
+      "origin": [
+        -7.05,
+        2.44,
+        1.0
+      ],
+      "size": [
+        0.26,
+        0.3,
+        4.9
+      ],
+      "material": 1,
+      "bone": "left_housing",
+      "rotation": [
+        0,
+        0,
+        -15
+      ],
+      "pivot": [
+        -6.92,
+        2.59,
+        3.45
+      ]
+    },
+    {
+      "name": "recessed_seam",
+      "origin": [
+        -6.945,
+        2.75,
+        1.45
+      ],
+      "size": [
+        0.07,
+        0.025,
+        3.8
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "rear_anchor",
+      "origin": [
+        -6.69,
+        2.15,
+        6.0
+      ],
+      "size": [
+        0.32,
+        0.2,
+        0.65
+      ],
+      "material": 0,
+      "bone": "left_housing",
+      "rotation": [
+        0,
+        -12,
+        0
+      ],
+      "pivot": [
+        -6.53,
+        2.25,
+        6.325
+      ]
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        -6.93,
+        2.76,
+        1.35
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        -6.854,
+        2.824,
+        1.3800000000000001
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        -6.93,
+        2.76,
+        2.25
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        -6.854,
+        2.824,
+        2.28
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        -6.93,
+        2.76,
+        4.45
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        -6.854,
+        2.824,
+        4.48
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        -6.93,
+        2.76,
+        5.6
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        -6.854,
+        2.824,
+        5.63
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "chamfered_shell",
+      "origin": [
+        -5.21,
+        2.44,
+        1.0
+      ],
+      "size": [
+        0.26,
+        0.3,
+        4.9
+      ],
+      "material": 1,
+      "bone": "left_housing",
+      "rotation": [
+        0,
+        0,
+        15
+      ],
+      "pivot": [
+        -5.08,
+        2.59,
+        3.45
+      ]
+    },
+    {
+      "name": "recessed_seam",
+      "origin": [
+        -5.125,
+        2.75,
+        1.45
+      ],
+      "size": [
+        0.07,
+        0.025,
+        3.8
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "rear_anchor",
+      "origin": [
+        -5.63,
+        2.15,
+        6.0
+      ],
+      "size": [
+        0.32,
+        0.2,
+        0.65
+      ],
+      "material": 0,
+      "bone": "left_housing",
+      "rotation": [
+        0,
+        12,
+        0
+      ],
+      "pivot": [
+        -5.47,
+        2.25,
+        6.325
+      ]
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        -5.25,
+        2.76,
+        1.35
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        -5.174,
+        2.824,
+        1.3800000000000001
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        -5.25,
+        2.76,
+        2.25
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        -5.174,
+        2.824,
+        2.28
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        -5.25,
+        2.76,
+        4.45
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        -5.174,
+        2.824,
+        4.48
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        -5.25,
+        2.76,
+        5.6
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        -5.174,
+        2.824,
+        5.63
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -5.56,
+        2.52,
+        3.15
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047055
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        -15.000000000000078,
+        0
+      ],
+      "pivot": [
+        -5.51,
+        2.57,
+        3.15
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -5.625647552145625,
+        2.52,
+        3.395
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420046994
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        -45.0,
+        0
+      ],
+      "pivot": [
+        -5.575647552145625,
+        2.57,
+        3.395
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -5.805,
+        2.52,
+        3.5743524478543747
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047044
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        -75.00000000000001,
+        0
+      ],
+      "pivot": [
+        -5.755,
+        2.57,
+        3.5743524478543747
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -6.05,
+        2.52,
+        3.6399999999999997
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.2536426642004703
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        -104.9999999999999,
+        0
+      ],
+      "pivot": [
+        -6.0,
+        2.57,
+        3.6399999999999997
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -6.295,
+        2.52,
+        3.574352447854375
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047027
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        -135.00000000000009,
+        0
+      ],
+      "pivot": [
+        -6.245,
+        2.57,
+        3.574352447854375
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -6.474352447854375,
+        2.52,
+        3.395
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047055
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        -164.99999999999991,
+        0
+      ],
+      "pivot": [
+        -6.424352447854375,
+        2.57,
+        3.395
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -6.54,
+        2.52,
+        3.15
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047016
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        164.9999999999999,
+        0
+      ],
+      "pivot": [
+        -6.49,
+        2.57,
+        3.15
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -6.474352447854375,
+        2.52,
+        2.9050000000000002
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047027
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        135.00000000000009,
+        0
+      ],
+      "pivot": [
+        -6.424352447854375,
+        2.57,
+        2.9050000000000002
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -6.295,
+        2.52,
+        2.725647552145625
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047044
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        104.99999999999999,
+        0
+      ],
+      "pivot": [
+        -6.245,
+        2.57,
+        2.725647552145625
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -6.05,
+        2.52,
+        2.66
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047044
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        75.00000000000001,
+        0
+      ],
+      "pivot": [
+        -6.0,
+        2.57,
+        2.66
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -5.805,
+        2.52,
+        2.725647552145625
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420046994
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        45.0,
+        0
+      ],
+      "pivot": [
+        -5.755,
+        2.57,
+        2.725647552145625
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        -5.625647552145625,
+        2.52,
+        2.905
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047055
+      ],
+      "material": 2,
+      "bone": "left_spool",
+      "rotation": [
+        -0.0,
+        15.000000000000078,
+        0
+      ],
+      "pivot": [
+        -5.575647552145625,
+        2.57,
+        2.905
+      ]
+    },
+    {
+      "name": "reel_hub",
+      "origin": [
+        -6.15,
+        2.55,
+        3.0
+      ],
+      "size": [
+        0.3,
+        0.1,
+        0.3
+      ],
+      "material": 1,
+      "bone": "left_spool"
+    },
+    {
+      "name": "feed_roller",
+      "origin": [
+        -6.4,
+        2.48,
+        1.35
+      ],
+      "size": [
+        0.8,
+        0.2,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "feed_roller",
+      "origin": [
+        -6.4,
+        2.48,
+        1.78
+      ],
+      "size": [
+        0.8,
+        0.2,
+        0.18
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "feed_channel",
+      "origin": [
+        -6.14,
+        2.47,
+        0.9
+      ],
+      "size": [
+        0.28,
+        0.04,
+        1.9
+      ],
+      "material": 4,
+      "bone": "left_housing"
+    },
+    {
+      "name": "rear_shell",
+      "origin": [
+        -6.73,
+        2.68,
+        4.0
+      ],
+      "size": [
+        1.46,
+        0.16,
+        1.85
+      ],
+      "material": 0,
+      "bone": "left_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        -6.55,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "left_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        -6.35,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "left_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        -6.1499999999999995,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "left_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        -5.949999999999999,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "left_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        -5.75,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "left_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        -5.55,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "left_service_cover"
+    },
+    {
+      "name": "front_shell_left",
+      "origin": [
+        -6.72,
+        2.69,
+        1.1
+      ],
+      "size": [
+        0.47,
+        0.14,
+        1.4
+      ],
+      "material": 0,
+      "bone": "left_housing"
+    },
+    {
+      "name": "front_shell_right",
+      "origin": [
+        -5.75,
+        2.69,
+        1.1
+      ],
+      "size": [
+        0.47,
+        0.14,
+        1.4
+      ],
+      "material": 0,
+      "bone": "left_housing"
+    },
+    {
+      "name": "status_bezel",
+      "origin": [
+        -5.71,
+        2.855,
+        4.0
+      ],
+      "size": [
+        0.31,
+        0.04,
+        0.65
+      ],
+      "material": 2,
+      "bone": "left_housing"
+    },
+    {
+      "name": "red_status",
+      "origin": [
+        -5.65,
+        2.9,
+        4.05
+      ],
+      "size": [
+        0.19,
+        0.015,
+        0.22
+      ],
+      "material": 6,
+      "bone": "left_housing"
+    },
+    {
+      "name": "red_status",
+      "origin": [
+        -5.65,
+        2.9,
+        4.38
+      ],
+      "size": [
+        0.19,
+        0.015,
+        0.22
+      ],
+      "material": 6,
+      "bone": "left_housing"
+    },
+    {
+      "name": "nozzle_neck",
+      "origin": [
+        -6.49,
+        2.28,
+        0.68
+      ],
+      "size": [
+        0.98,
+        0.53,
+        0.42
+      ],
+      "material": 0,
+      "bone": "left_housing"
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        -5.819999999999999,
+        2.56,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.17603437888794146
+      ],
+      "material": 2,
+      "bone": "left_housing",
+      "rotation": [
+        -67.4999999999999,
+        -90.0,
+        0
+      ],
+      "pivot": [
+        -5.77,
+        2.61,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        -5.887365440327094,
+        2.722634559672906,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1760343788879413
+      ],
+      "material": 2,
+      "bone": "left_housing",
+      "rotation": [
+        -22.499999999999982,
+        -90.0,
+        0
+      ],
+      "pivot": [
+        -5.837365440327094,
+        2.772634559672906,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        -6.05,
+        2.79,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1760343788879413
+      ],
+      "material": 2,
+      "bone": "left_housing",
+      "rotation": [
+        22.499999999999982,
+        -90.0,
+        0
+      ],
+      "pivot": [
+        -6.0,
+        2.84,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        -6.212634559672906,
+        2.722634559672906,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.17603437888794146
+      ],
+      "material": 2,
+      "bone": "left_housing",
+      "rotation": [
+        67.4999999999999,
+        -90.0,
+        0
+      ],
+      "pivot": [
+        -6.162634559672906,
+        2.772634559672906,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        -6.28,
+        2.56,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.17603437888794146
+      ],
+      "material": 2,
+      "bone": "left_housing",
+      "rotation": [
+        67.4999999999999,
+        90.0,
+        0
+      ],
+      "pivot": [
+        -6.23,
+        2.61,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        -6.212634559672906,
+        2.397365440327094,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1760343788879413
+      ],
+      "material": 2,
+      "bone": "left_housing",
+      "rotation": [
+        22.499999999999982,
+        90.0,
+        0
+      ],
+      "pivot": [
+        -6.162634559672906,
+        2.447365440327094,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        -6.05,
+        2.33,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1760343788879413
+      ],
+      "material": 2,
+      "bone": "left_housing",
+      "rotation": [
+        -22.499999999999982,
+        90.0,
+        0
+      ],
+      "pivot": [
+        -6.0,
+        2.38,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        -5.887365440327094,
+        2.397365440327094,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.17603437888794146
+      ],
+      "material": 2,
+      "bone": "left_housing",
+      "rotation": [
+        -67.4999999999999,
+        90.0,
+        0
+      ],
+      "pivot": [
+        -5.837365440327094,
+        2.447365440327094,
+        0.34
+      ]
+    },
+    {
+      "name": "nozzle_side",
+      "origin": [
+        -6.4399999999999995,
+        2.26,
+        0.36
+      ],
+      "size": [
+        0.2,
+        0.68,
+        0.5
+      ],
+      "material": 0,
+      "bone": "left_housing"
+    },
+    {
+      "name": "nozzle_lip",
+      "origin": [
+        -6.24,
+        2.255,
+        0.36
+      ],
+      "size": [
+        0.48,
+        0.13,
+        0.5
+      ],
+      "material": 1,
+      "bone": "left_housing"
+    },
+    {
+      "name": "nozzle_side",
+      "origin": [
+        -5.76,
+        2.26,
+        0.36
+      ],
+      "size": [
+        0.2,
+        0.68,
+        0.5
+      ],
+      "material": 0,
+      "bone": "left_housing"
+    },
+    {
+      "name": "nozzle_lip",
+      "origin": [
+        -6.24,
+        2.835,
+        0.36
+      ],
+      "size": [
+        0.48,
+        0.13,
+        0.5
+      ],
+      "material": 1,
+      "bone": "left_housing"
+    },
+    {
+      "name": "sliding_shutter",
+      "origin": [
+        -6.18,
+        2.43,
+        0.29
+      ],
+      "size": [
+        0.36,
+        0.36,
+        0.035
+      ],
+      "material": 1,
+      "bone": "left_port_shutter"
+    },
+    {
+      "name": "forearm",
+      "origin": [
+        4,
+        -2,
+        -0.4
+      ],
+      "size": [
+        4,
+        4,
+        8.8
+      ],
+      "material": 8,
+      "bone": "reference_right"
+    },
+    {
+      "name": "hand",
+      "origin": [
+        4,
+        -1.8,
+        -4.5
+      ],
+      "size": [
+        4,
+        3.6,
+        4.1
+      ],
+      "material": 8,
+      "bone": "reference_right"
+    },
+    {
+      "name": "cuff",
+      "origin": [
+        3.92,
+        -2.08,
+        7.7
+      ],
+      "size": [
+        4.16,
+        4.16,
+        1.4
+      ],
+      "material": 9,
+      "bone": "reference_right"
+    },
+    {
+      "name": "rubber_gasket",
+      "origin": [
+        4.88,
+        2.015,
+        0.65
+      ],
+      "size": [
+        2.24,
+        0.14,
+        5.6
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "black_lower_housing",
+      "origin": [
+        4.96,
+        2.15,
+        0.72
+      ],
+      "size": [
+        2.08,
+        0.3,
+        5.42
+      ],
+      "material": 0,
+      "bone": "right_housing"
+    },
+    {
+      "name": "recess",
+      "origin": [
+        5.23,
+        2.46,
+        1.05
+      ],
+      "size": [
+        1.54,
+        0.09,
+        4.75
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "chamfered_shell",
+      "origin": [
+        4.95,
+        2.44,
+        1.0
+      ],
+      "size": [
+        0.26,
+        0.3,
+        4.9
+      ],
+      "material": 1,
+      "bone": "right_housing",
+      "rotation": [
+        0,
+        0,
+        -15
+      ],
+      "pivot": [
+        5.08,
+        2.59,
+        3.45
+      ]
+    },
+    {
+      "name": "recessed_seam",
+      "origin": [
+        5.055,
+        2.75,
+        1.45
+      ],
+      "size": [
+        0.07,
+        0.025,
+        3.8
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "rear_anchor",
+      "origin": [
+        5.31,
+        2.15,
+        6.0
+      ],
+      "size": [
+        0.32,
+        0.2,
+        0.65
+      ],
+      "material": 0,
+      "bone": "right_housing",
+      "rotation": [
+        0,
+        -12,
+        0
+      ],
+      "pivot": [
+        5.47,
+        2.25,
+        6.325
+      ]
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        5.07,
+        2.76,
+        1.35
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        5.146,
+        2.824,
+        1.3800000000000001
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        5.07,
+        2.76,
+        2.25
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        5.146,
+        2.824,
+        2.28
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        5.07,
+        2.76,
+        4.45
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        5.146,
+        2.824,
+        4.48
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        5.07,
+        2.76,
+        5.6
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        5.146,
+        2.824,
+        5.63
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "chamfered_shell",
+      "origin": [
+        6.79,
+        2.44,
+        1.0
+      ],
+      "size": [
+        0.26,
+        0.3,
+        4.9
+      ],
+      "material": 1,
+      "bone": "right_housing",
+      "rotation": [
+        0,
+        0,
+        15
+      ],
+      "pivot": [
+        6.92,
+        2.59,
+        3.45
+      ]
+    },
+    {
+      "name": "recessed_seam",
+      "origin": [
+        6.875,
+        2.75,
+        1.45
+      ],
+      "size": [
+        0.07,
+        0.025,
+        3.8
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "rear_anchor",
+      "origin": [
+        6.37,
+        2.15,
+        6.0
+      ],
+      "size": [
+        0.32,
+        0.2,
+        0.65
+      ],
+      "material": 0,
+      "bone": "right_housing",
+      "rotation": [
+        0,
+        12,
+        0
+      ],
+      "pivot": [
+        6.53,
+        2.25,
+        6.325
+      ]
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        6.75,
+        2.76,
+        1.35
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        6.826,
+        2.824,
+        1.3800000000000001
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        6.75,
+        2.76,
+        2.25
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        6.826,
+        2.824,
+        2.28
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        6.75,
+        2.76,
+        4.45
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        6.826,
+        2.824,
+        4.48
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "black_oxide_screw",
+      "origin": [
+        6.75,
+        2.76,
+        5.6
+      ],
+      "size": [
+        0.18,
+        0.06,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "screw_slot",
+      "origin": [
+        6.826,
+        2.824,
+        5.63
+      ],
+      "size": [
+        0.028,
+        0.008,
+        0.12
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        6.44,
+        2.52,
+        3.15
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047055
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        -15.000000000000078,
+        0
+      ],
+      "pivot": [
+        6.49,
+        2.57,
+        3.15
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        6.374352447854375,
+        2.52,
+        3.395
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420046994
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        -45.0,
+        0
+      ],
+      "pivot": [
+        6.424352447854375,
+        2.57,
+        3.395
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        6.195,
+        2.52,
+        3.5743524478543747
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047044
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        -75.00000000000001,
+        0
+      ],
+      "pivot": [
+        6.245,
+        2.57,
+        3.5743524478543747
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        5.95,
+        2.52,
+        3.6399999999999997
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.2536426642004703
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        -104.9999999999999,
+        0
+      ],
+      "pivot": [
+        6.0,
+        2.57,
+        3.6399999999999997
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        5.705,
+        2.52,
+        3.574352447854375
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047027
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        -135.00000000000009,
+        0
+      ],
+      "pivot": [
+        5.755,
+        2.57,
+        3.574352447854375
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        5.525647552145625,
+        2.52,
+        3.395
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047055
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        -164.99999999999991,
+        0
+      ],
+      "pivot": [
+        5.575647552145625,
+        2.57,
+        3.395
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        5.46,
+        2.52,
+        3.15
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047016
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        164.9999999999999,
+        0
+      ],
+      "pivot": [
+        5.51,
+        2.57,
+        3.15
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        5.525647552145625,
+        2.52,
+        2.9050000000000002
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047027
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        135.00000000000009,
+        0
+      ],
+      "pivot": [
+        5.575647552145625,
+        2.57,
+        2.9050000000000002
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        5.705,
+        2.52,
+        2.725647552145625
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047044
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        104.99999999999999,
+        0
+      ],
+      "pivot": [
+        5.755,
+        2.57,
+        2.725647552145625
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        5.95,
+        2.52,
+        2.66
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047044
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        75.00000000000001,
+        0
+      ],
+      "pivot": [
+        6.0,
+        2.57,
+        2.66
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        6.195,
+        2.52,
+        2.725647552145625
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420046994
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        45.0,
+        0
+      ],
+      "pivot": [
+        6.245,
+        2.57,
+        2.725647552145625
+      ]
+    },
+    {
+      "name": "reel_edge",
+      "origin": [
+        6.374352447854375,
+        2.52,
+        2.905
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.25364266420047055
+      ],
+      "material": 2,
+      "bone": "right_spool",
+      "rotation": [
+        -0.0,
+        15.000000000000078,
+        0
+      ],
+      "pivot": [
+        6.424352447854375,
+        2.57,
+        2.905
+      ]
+    },
+    {
+      "name": "reel_hub",
+      "origin": [
+        5.85,
+        2.55,
+        3.0
+      ],
+      "size": [
+        0.3,
+        0.1,
+        0.3
+      ],
+      "material": 1,
+      "bone": "right_spool"
+    },
+    {
+      "name": "feed_roller",
+      "origin": [
+        5.6,
+        2.48,
+        1.35
+      ],
+      "size": [
+        0.8,
+        0.2,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "feed_roller",
+      "origin": [
+        5.6,
+        2.48,
+        1.78
+      ],
+      "size": [
+        0.8,
+        0.2,
+        0.18
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "feed_channel",
+      "origin": [
+        5.86,
+        2.47,
+        0.9
+      ],
+      "size": [
+        0.28,
+        0.04,
+        1.9
+      ],
+      "material": 4,
+      "bone": "right_housing"
+    },
+    {
+      "name": "rear_shell",
+      "origin": [
+        5.27,
+        2.68,
+        4.0
+      ],
+      "size": [
+        1.46,
+        0.16,
+        1.85
+      ],
+      "material": 0,
+      "bone": "right_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        5.45,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "right_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        5.65,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "right_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        5.8500000000000005,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "right_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        6.050000000000001,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "right_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        6.25,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "right_service_cover"
+    },
+    {
+      "name": "heat_vent",
+      "origin": [
+        6.45,
+        2.845,
+        4.65
+      ],
+      "size": [
+        0.08,
+        0.014,
+        0.65
+      ],
+      "material": 4,
+      "bone": "right_service_cover"
+    },
+    {
+      "name": "front_shell_left",
+      "origin": [
+        5.28,
+        2.69,
+        1.1
+      ],
+      "size": [
+        0.47,
+        0.14,
+        1.4
+      ],
+      "material": 0,
+      "bone": "right_housing"
+    },
+    {
+      "name": "front_shell_right",
+      "origin": [
+        6.25,
+        2.69,
+        1.1
+      ],
+      "size": [
+        0.47,
+        0.14,
+        1.4
+      ],
+      "material": 0,
+      "bone": "right_housing"
+    },
+    {
+      "name": "status_bezel",
+      "origin": [
+        6.29,
+        2.855,
+        4.0
+      ],
+      "size": [
+        0.31,
+        0.04,
+        0.65
+      ],
+      "material": 2,
+      "bone": "right_housing"
+    },
+    {
+      "name": "red_status",
+      "origin": [
+        6.35,
+        2.9,
+        4.05
+      ],
+      "size": [
+        0.19,
+        0.015,
+        0.22
+      ],
+      "material": 6,
+      "bone": "right_housing"
+    },
+    {
+      "name": "red_status",
+      "origin": [
+        6.35,
+        2.9,
+        4.38
+      ],
+      "size": [
+        0.19,
+        0.015,
+        0.22
+      ],
+      "material": 6,
+      "bone": "right_housing"
+    },
+    {
+      "name": "nozzle_neck",
+      "origin": [
+        5.51,
+        2.28,
+        0.68
+      ],
+      "size": [
+        0.98,
+        0.53,
+        0.42
+      ],
+      "material": 0,
+      "bone": "right_housing"
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        6.180000000000001,
+        2.56,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.17603437888794146
+      ],
+      "material": 2,
+      "bone": "right_housing",
+      "rotation": [
+        -67.4999999999999,
+        -90.0,
+        0
+      ],
+      "pivot": [
+        6.23,
+        2.61,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        6.112634559672906,
+        2.722634559672906,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1760343788879413
+      ],
+      "material": 2,
+      "bone": "right_housing",
+      "rotation": [
+        -22.499999999999982,
+        -90.0,
+        0
+      ],
+      "pivot": [
+        6.162634559672906,
+        2.772634559672906,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        5.95,
+        2.79,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1760343788879413
+      ],
+      "material": 2,
+      "bone": "right_housing",
+      "rotation": [
+        22.499999999999982,
+        -90.0,
+        0
+      ],
+      "pivot": [
+        6.0,
+        2.84,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        5.787365440327094,
+        2.722634559672906,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.17603437888794146
+      ],
+      "material": 2,
+      "bone": "right_housing",
+      "rotation": [
+        67.4999999999999,
+        -90.0,
+        0
+      ],
+      "pivot": [
+        5.837365440327094,
+        2.772634559672906,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        5.72,
+        2.56,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.17603437888794146
+      ],
+      "material": 2,
+      "bone": "right_housing",
+      "rotation": [
+        67.4999999999999,
+        90.0,
+        0
+      ],
+      "pivot": [
+        5.77,
+        2.61,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        5.787365440327094,
+        2.397365440327094,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1760343788879413
+      ],
+      "material": 2,
+      "bone": "right_housing",
+      "rotation": [
+        22.499999999999982,
+        90.0,
+        0
+      ],
+      "pivot": [
+        5.837365440327094,
+        2.447365440327094,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        5.95,
+        2.33,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1760343788879413
+      ],
+      "material": 2,
+      "bone": "right_housing",
+      "rotation": [
+        -22.499999999999982,
+        90.0,
+        0
+      ],
+      "pivot": [
+        6.0,
+        2.38,
+        0.34
+      ]
+    },
+    {
+      "name": "exit_ring",
+      "origin": [
+        6.112634559672906,
+        2.397365440327094,
+        0.34
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.17603437888794146
+      ],
+      "material": 2,
+      "bone": "right_housing",
+      "rotation": [
+        -67.4999999999999,
+        90.0,
+        0
+      ],
+      "pivot": [
+        6.162634559672906,
+        2.447365440327094,
+        0.34
+      ]
+    },
+    {
+      "name": "nozzle_side",
+      "origin": [
+        5.5600000000000005,
+        2.26,
+        0.36
+      ],
+      "size": [
+        0.2,
+        0.68,
+        0.5
+      ],
+      "material": 0,
+      "bone": "right_housing"
+    },
+    {
+      "name": "nozzle_lip",
+      "origin": [
+        5.76,
+        2.255,
+        0.36
+      ],
+      "size": [
+        0.48,
+        0.13,
+        0.5
+      ],
+      "material": 1,
+      "bone": "right_housing"
+    },
+    {
+      "name": "nozzle_side",
+      "origin": [
+        6.24,
+        2.26,
+        0.36
+      ],
+      "size": [
+        0.2,
+        0.68,
+        0.5
+      ],
+      "material": 0,
+      "bone": "right_housing"
+    },
+    {
+      "name": "nozzle_lip",
+      "origin": [
+        5.76,
+        2.835,
+        0.36
+      ],
+      "size": [
+        0.48,
+        0.13,
+        0.5
+      ],
+      "material": 1,
+      "bone": "right_housing"
+    },
+    {
+      "name": "sliding_shutter",
+      "origin": [
+        5.82,
+        2.43,
+        0.29
+      ],
+      "size": [
+        0.36,
+        0.36,
+        0.035
+      ],
+      "material": 1,
+      "bone": "right_port_shutter"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_00"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_01"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_02"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_03"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_04"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_05"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_06"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_07"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_08"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_09"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_10"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_11"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_12"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_13"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_14"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_15"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_16"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_17"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_18"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_19"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_20"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_21"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_22"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_23"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_24"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_25"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_26"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_27"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_28"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_29"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_30"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_31"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_32"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_33"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_34"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_35"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_36"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_37"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_38"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_39"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_40"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_41"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_42"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_43"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_44"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_45"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_46"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_47"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_48"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_49"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_50"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_51"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_52"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_53"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_54"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_55"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_56"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_57"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_58"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_59"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_60"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_61"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_62"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_left_63"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_00"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_01"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_02"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_03"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_04"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_05"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_06"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_07"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_08"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_09"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_10"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_11"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_12"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_13"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_14"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_15"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_16"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_17"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_18"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_19"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_20"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_21"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_22"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_23"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_24"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_25"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_26"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_27"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_28"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_29"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_30"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_31"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_32"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_33"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_34"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_35"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_36"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_37"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_38"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_39"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_40"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_41"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_42"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_43"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_44"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_45"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_46"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_47"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_48"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_49"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_50"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_51"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_52"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_53"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_54"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_55"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_56"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_57"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_58"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_59"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_60"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_61"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_62"
+    },
+    {
+      "name": "filament",
+      "origin": [
+        -0.065,
+        -0.065,
+        0
+      ],
+      "size": [
+        0.13,
+        0.13,
+        1
+      ],
+      "material": 6,
+      "bone": "wire_right_63"
+    }
+  ],
+  "clips": {
+    "stowed": [
+      0.1,
+      true
+    ],
+    "deploy": [
+      1.1,
+      false
+    ],
+    "idle": [
+      2.0,
+      true
+    ],
+    "attack_right": [
+      0.72,
+      false
+    ],
+    "attack_left": [
+      0.72,
+      false
+    ],
+    "heavy": [
+      1.15,
+      false
+    ],
+    "retract": [
+      1.0,
+      false
+    ]
+  },
+  "segment_count_per_half": 64,
+  "red": "#FF0000"
+}

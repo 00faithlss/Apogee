@@ -122,7 +122,7 @@ public final class MantisRig {
     public static void drawOnArm(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player,
                                  ModelPart armPart, boolean right, float partialTick, boolean enforceStance) {
         MantisVariant variant = MantisClient.variant(player);
-        if (variant == null) {
+        if (variant == null || !variant.isBlades()) {
             return;
         }
         MantisRig rig = of(player.getId());

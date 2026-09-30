@@ -42,4 +42,24 @@ public final class MantisRules {
 
     private MantisRules() {
     }
+
+    /** Fewest ticks between two attacks of one arm for the given arm cyberware. */
+    public static int slashIntervalTicks(MantisVariant variant) {
+        return variant == MantisVariant.NANOWIRE ? NanowireRules.LASH_TICKS : SLASH_INTERVAL_TICKS;
+    }
+
+    /** Client-side length of one arm's attack animation, in ticks. */
+    public static int slashAnimationTicks(MantisVariant variant) {
+        return variant == MantisVariant.NANOWIRE ? NanowireRules.LASH_TICKS : SLASH_ANIMATION_TICKS;
+    }
+
+    /** Cooldown of the two-arm attack (lunge or two-wire lash), in ticks. */
+    public static int thrustCooldownTicks(MantisVariant variant) {
+        return variant == MantisVariant.NANOWIRE ? NanowireRules.HEAVY_COOLDOWN_TICKS : THRUST_COOLDOWN_TICKS;
+    }
+
+    /** Client-side length of the two-arm attack animation, in ticks. */
+    public static int thrustAnimationTicks(MantisVariant variant) {
+        return variant == MantisVariant.NANOWIRE ? NanowireRules.HEAVY_TICKS : THRUST_ANIMATION_TICKS;
+    }
 }

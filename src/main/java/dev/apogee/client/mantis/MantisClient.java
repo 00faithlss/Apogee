@@ -1,5 +1,6 @@
 package dev.apogee.client.mantis;
 
+import dev.apogee.client.nanowire.NanowireRig;
 import dev.apogee.mantis.MantisManager;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.MantisVariant;
@@ -69,6 +70,7 @@ public final class MantisClient {
     public static void reset() {
         ANIMS.clear();
         MantisRig.clear();
+        NanowireRig.clear();
         lockedSlot = -1;
         localThrustReady = 0L;
         localDeployTick = Long.MIN_VALUE / 2;
@@ -110,11 +112,11 @@ public final class MantisClient {
         Anim anim = anim(payload.entityId());
         if (payload.arm() == MantisRules.ARM_BOTH) {
             anim.thrustStart = ticks;
-            MantisRig.of(payload.entityId()).thrust();
+            rigThrust(payload.entityId(), anim);
         } else {
             anim.swingArm = payload.arm();
             anim.slashStart[payload.arm()] = ticks;
-            MantisRig.of(payload.entityId()).attack(payload.arm());
+            rigAttack(payload.entityId(), anim, payload.arm());
         }
         strike(mc, anim, payload.entityId());
     }
@@ -130,19 +132,37 @@ public final class MantisClient {
             return;
         }
         // Holding the button on a block swings every tick; one cut at a time, as on the server.
-        if (ticks - anim.slashStart[anim.swingArm] < MantisRules.SLASH_INTERVAL_TICKS) {
+        if (ticks - anim.slashStart[anim.swingArm] < MantisRules.slashIntervalTicks(anim.variant)) {
             return;
         }
         anim.swingArm = anim.nextArm;
         anim.nextArm = anim.nextArm == MantisRules.ARM_RIGHT ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT;
         anim.slashStart[anim.swingArm] = ticks;
-        MantisRig.of(mc.player.getId()).attack(anim.swingArm);
+        rigAttack(mc.player.getId(), anim, anim.swingArm);
         strike(mc, anim, mc.player.getId());
+    }
+
+    /** Starts one arm's attack clip on whichever arm cyberware the entity wears. */
+    private static void rigAttack(int entityId, Anim anim, int arm) {
+        if (anim.variant == MantisVariant.NANOWIRE) {
+            NanowireRig.of(entityId).attack(arm);
+        } else {
+            MantisRig.of(entityId).attack(arm);
+        }
+    }
+
+    /** Starts the two-arm attack clip: the blades' lunge or the two-wire lash. */
+    private static void rigThrust(int entityId, Anim anim) {
+        if (anim.variant == MantisVariant.NANOWIRE) {
+            NanowireRig.of(entityId).heavy();
+        } else {
+            MantisRig.of(entityId).thrust();
+        }
     }
 
     /** Throws sparks or embers from thermal and electric blades as they strike. */
     private static void strike(Minecraft mc, Anim anim, int entityId) {
-        if (anim.variant == MantisVariant.STANDARD) {
+        if (anim.variant == MantisVariant.STANDARD || anim.variant == MantisVariant.NANOWIRE) {
             return;
         }
         Entity entity = mc.level == null ? null : mc.level.getEntity(entityId);
@@ -252,7 +272,7 @@ public final class MantisClient {
         if (anim == null || anim.slashStart[arm] == Long.MIN_VALUE / 2) {
             return -1.0F;
         }
-        float t = (ticks - anim.slashStart[arm] + partialTick) / MantisRules.SLASH_ANIMATION_TICKS;
+        float t = (ticks - anim.slashStart[arm] + partialTick) / MantisRules.slashAnimationTicks(anim.variant);
         return t >= 0.0F && t <= 1.0F ? t : -1.0F;
     }
 
@@ -262,7 +282,7 @@ public final class MantisClient {
         if (anim == null || anim.thrustStart == Long.MIN_VALUE) {
             return -1.0F;
         }
-        float t = (ticks - anim.thrustStart + partialTick) / MantisRules.THRUST_ANIMATION_TICKS;
+        float t = (ticks - anim.thrustStart + partialTick) / MantisRules.thrustAnimationTicks(anim.variant);
         return t >= 0.0F && t <= 1.0F ? t : -1.0F;
     }
 
@@ -282,6 +302,7 @@ public final class MantisClient {
         }
         if (mc.level != null && ticks % 100 == 0) {
             MantisRig.prune(id -> mc.level.getEntity(id) != null);
+            NanowireRig.prune(id -> mc.level.getEntity(id) != null);
         }
         MantisBladeFx.tick(mc);
         MantisHandPose.tick(mc.player);
@@ -311,10 +332,10 @@ public final class MantisClient {
         }
         while (options.keyUse.consumeClick()) {
             if (mc.screen == null && ticks >= localThrustReady && ClientPlayNetworking.canSend(MantisThrust.TYPE)) {
-                localThrustReady = ticks + MantisRules.THRUST_COOLDOWN_TICKS;
                 Anim self = anim(player.getId());
+                localThrustReady = ticks + MantisRules.thrustCooldownTicks(self.variant);
                 self.thrustStart = ticks;
-                MantisRig.of(player.getId()).thrust();
+                rigThrust(player.getId(), self);
                 strike(mc, self, player.getId());
                 ClientPlayNetworking.send(MantisThrust.INSTANCE);
             }

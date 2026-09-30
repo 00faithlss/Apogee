@@ -1,0 +1,32 @@
+{
+  "status": "proposed integration markers; no damage code included",
+  "deploy": {
+    "wire_starts": 0.22,
+    "ready": 1.1
+  },
+  "attack_left": {
+    "active_window": [
+      0.22,
+      0.46
+    ],
+    "end": 0.72
+  },
+  "attack_right": {
+    "active_window": [
+      0.22,
+      0.46
+    ],
+    "end": 0.72
+  },
+  "heavy": {
+    "active_window": [
+      0.3,
+      0.95
+    ],
+    "end": 1.15
+  },
+  "retract": {
+    "hidden": 0.68,
+    "end": 1.0
+  }
+}

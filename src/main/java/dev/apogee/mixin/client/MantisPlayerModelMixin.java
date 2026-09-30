@@ -2,6 +2,8 @@ package dev.apogee.mixin.client;
 
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.mantis.MantisRig;
+import dev.apogee.client.nanowire.NanowireStance;
+import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +19,12 @@ public abstract class MantisPlayerModelMixin<T extends LivingEntity> {
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
     private void apogee$mantisPose(T entity, float limbSwing, float limbSwingAmount, float ageInTicks,
                                    float netHeadYaw, float headPitch, CallbackInfo ci) {
-        if (MantisClient.variant(entity) == null) {
+        MantisVariant variant = MantisClient.variant(entity);
+        if (variant == null) {
+            return;
+        }
+        if (!variant.isBlades()) {
+            NanowireStance.apply((PlayerModel<?>) (Object) this, entity, ageInTicks - entity.tickCount);
             return;
         }
         PlayerModel<T> model = (PlayerModel<T>) (Object) this;

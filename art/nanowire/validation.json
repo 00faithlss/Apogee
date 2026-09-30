@@ -1,0 +1,26 @@
+{
+  "checks": [
+    "nanowire_right_attachment.geo.json: bone hierarchy, UVs and positive cube dimensions OK",
+    "nanowire_left_attachment.geo.json: bone hierarchy, UVs and positive cube dimensions OK",
+    "nanowire_arms.geo.json: bone hierarchy, UVs and positive cube dimensions OK",
+    "nanowire_item.geo.json: bone hierarchy, UVs and positive cube dimensions OK",
+    "7 animations: matching bones, finite channels, valid time ranges and nonnegative scales",
+    "Cable continuity sampled across 7 clips: maximum endpoint offset 0.0621 model units; wire diameter 0.13",
+    "Initial forearm separation exceeds 4-unit arm width",
+    "Attack clips return to their common idle pose",
+    "All emissive pixels are exactly #FF0000",
+    "Blockbench IDs and animation targets OK",
+    "No inspection/guard clips or palm hardware; mirrored medial mounts and per-arm cable parents OK",
+    "Wire roots remain in nozzles (max offset 0.00000000); no proxy hand/forearm penetrations at sampled points",
+    "Double attack tips stay separated during active stroke (minimum 8.402 units over sampled frames)",
+    "Idle cable meets between both hands throughout its loop",
+    "Single attacks cross opposite directions: right +X to -X; left -X to +X",
+    "Both double-attack filaments show opposing curvature lobes (S shape)",
+    "Independent attachment exports match bilateral rig in arm-local coordinates; no skin pose tracks"
+  ],
+  "limits": [
+    "CPU evaluator, not GeckoLib runtime",
+    "No collision/damage implementation",
+    "No Blockbench WebGL or Minecraft playtest"
+  ]
+}

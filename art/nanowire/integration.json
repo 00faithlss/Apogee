@@ -1,0 +1,104 @@
+{
+  "status": "assets_and_standalone_input_state_not_registered_in_mod",
+  "minecraft": "1.21.1",
+  "loader": "Fabric",
+  "geckolib_target": "4.x; local project declares 4.9.3",
+  "proposed_item_id": "apogee:nanowire",
+  "resources": {
+    "combat_geometry": "apogee:geo/nanowire_arms.geo.json",
+    "item_geometry": "apogee:geo/nanowire_item.geo.json",
+    "animations": "apogee:animations/nanowire_arms.animation.json",
+    "texture": "apogee:textures/nanowire/nanowire_red.png",
+    "emissive": "apogee:textures/nanowire/nanowire_red_glowmask.png"
+  },
+  "emissive_layer": "AutoGlowingGeoLayer",
+  "rgb": [
+    255,
+    0,
+    0
+  ],
+  "paired_clock": true,
+  "skin_reference_exported": false,
+  "punchy_hook_implemented": false,
+  "coordinates": {
+    "units_per_block": 16,
+    "up": "+Y",
+    "forward": "-Z",
+    "left_arm_pivot": [
+      -6,
+      0,
+      7
+    ],
+    "right_arm_pivot": [
+      6,
+      0,
+      7
+    ]
+  },
+  "wire": {
+    "segments_per_half": 64,
+    "width": 0.13,
+    "animation_sample_rate": 60,
+    "physics_simulation": false,
+    "parent": "owning arm",
+    "idle_joined": true,
+    "deploy": "arc_length_feed_after_shutter_open",
+    "idle_contact": "both bare hand front faces",
+    "punchy_idle_bridge_requires_live_two_hand_anchors": true,
+    "double_shape": "two separate S curves"
+  },
+  "animations": [
+    "animation.nanowire.stowed",
+    "animation.nanowire.deploy",
+    "animation.nanowire.idle",
+    "animation.nanowire.attack_right",
+    "animation.nanowire.attack_left",
+    "animation.nanowire.heavy",
+    "animation.nanowire.retract"
+  ],
+  "revision": "0.3",
+  "inspection_enabled": false,
+  "hand_hardware": false,
+  "mount": "mirrored medial forearm side facing torso; BB local Z rotation left -90, right +90",
+  "controls": {
+    "left_click_sequence": [
+      "attack_right",
+      "attack_left"
+    ],
+    "right_click": "heavy",
+    "busy_press": "ignored; does not advance combo",
+    "right_click_changes_alternation": false,
+    "reactivation_resets_to": "right",
+    "adapter_implemented": false,
+    "left_attack_directions": [
+      "physical right: +X to -X",
+      "physical left: -X to +X"
+    ]
+  },
+  "input_logic_java": "integration/java/dev/apogee/nanowire/NanowireInputState.java",
+  "punchy_analyzed_version": "2.8c Fabric 1.21.1",
+  "punchy_installed_version_confirmed": false,
+  "punchy_report": "COMPATIBILIDAD-PUNCHY.md",
+  "attachments": {
+    "left": {
+      "geometry": "apogee:geo/nanowire_left_attachment.geo.json",
+      "animations": "apogee:animations/nanowire_left_attachment.animation.json",
+      "author_pivot": [
+        0,
+        0,
+        0
+      ],
+      "skin_pose_tracks": false
+    },
+    "right": {
+      "geometry": "apogee:geo/nanowire_right_attachment.geo.json",
+      "animations": "apogee:animations/nanowire_right_attachment.animation.json",
+      "author_pivot": [
+        0,
+        0,
+        0
+      ],
+      "skin_pose_tracks": false
+    }
+  }
+}

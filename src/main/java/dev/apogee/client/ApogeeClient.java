@@ -64,6 +64,7 @@ public final class ApogeeClient implements ClientModInitializer {
         });
         TrinketRendererRegistry.registerRenderer(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.NANOWIRE, dev.apogee.client.nanowire.NanowireItemRenderer.INSTANCE);
 
         ClientPlayNetworking.registerGlobalReceiver(RulesSync.TYPE, (payload, context) -> ApogeeClientState.acceptRules(payload.rules()));
         ClientPlayNetworking.registerGlobalReceiver(WearerStatus.TYPE, (payload, context) -> {
