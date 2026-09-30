@@ -170,7 +170,7 @@ public final class MantisGameTests implements FabricGameTest {
         expect(helper, craft(helper, Items.REDSTONE_BLOCK, Items.LIGHTNING_ROD, Items.REDSTONE_BLOCK, copper, ApogeeItems.MANTIS_BLADE, copper,
                 Items.REDSTONE_BLOCK, cable, Items.REDSTONE_BLOCK), ApogeeItems.ELECTRIC_BLADE, 1, "Electric blade");
 
-        expect(helper, craft(helper, Items.NETHERITE_SCRAP, Items.REDSTONE_BLOCK, Items.NETHERITE_SCRAP, cable, Items.NETHER_STAR, cable,
+        expect(helper, craft(helper, Items.NETHERITE_SCRAP, Items.REDSTONE_BLOCK, Items.NETHERITE_SCRAP, cable, Items.DIAMOND, cable,
                 Items.NETHERITE_SCRAP, Items.REDSTONE_BLOCK, Items.NETHERITE_SCRAP), power, 1, "Arm power core");
         Item[][] implants = {
                 {ApogeeItems.MANTIS_BLADE, ApogeeItems.MANTIS_BLADES},

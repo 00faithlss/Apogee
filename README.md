@@ -51,7 +51,7 @@ Todas con forma; dan 1 unidad salvo el cable neural. Se arman en este orden: cab
 | Hoja mantis | vacío, hierro, vacío · hierro, espada de netherita, hierro · vacío, lingote de netherita, vacío |
 | Hoja térmica | polvo de blaze, bloque de magma, polvo de blaze · bloque de magma, hoja mantis, bloque de magma · polvo de blaze, cable neural, polvo de blaze |
 | Hoja eléctrica | bloque de redstone, pararrayos, bloque de redstone · cobre, hoja mantis, cobre · bloque de redstone, cable neural, bloque de redstone |
-| Núcleo de potencia de brazos | chatarra de netherita, bloque de redstone, chatarra de netherita · cable neural, estrella del Nether, cable neural · chatarra de netherita, bloque de redstone, chatarra de netherita |
+| Núcleo de potencia de brazos | chatarra de netherita, bloque de redstone, chatarra de netherita · cable neural, diamante, cable neural · chatarra de netherita, bloque de redstone, chatarra de netherita |
 | Cuchillas Mantis | hoja mantis, núcleo de potencia de brazos, hoja mantis · riel de despliegue, Núcleo T5, riel de despliegue · actuador de cuchilla, cable neural, actuador de cuchilla |
 | Cuchillas Mantis térmicas | igual, con dos hojas térmicas |
 | Cuchillas Mantis eléctricas | igual, con dos hojas eléctricas |
@@ -152,7 +152,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.6.0+1.21.1 (`build/libs/apogee-0.6.0+1.21.1.jar`) | Todos |
+| Apogee | 0.6.1+1.21.1 (`build/libs/apogee-0.6.1+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |

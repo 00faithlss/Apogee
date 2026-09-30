@@ -2,6 +2,12 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.6.1+1.21.1] — 2026-09-30
+
+### Cambiado
+
+- El núcleo de potencia de brazos lleva un diamante al centro en lugar de una estrella del Nether, que encarecía demasiado las Cuchillas Mantis y el Nanocable.
+
 ## [0.6.0+1.21.1] — 2026-09-30
 
 ### Añadido
