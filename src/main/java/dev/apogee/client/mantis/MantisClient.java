@@ -15,7 +15,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -46,16 +45,20 @@ public final class MantisClient {
     private static boolean stowingItems;
     /** Whether the local implant view was up last tick. */
     private static boolean localOut;
+    /** Client tick the local implant view ended on, when an item has to come back up after it. */
+    private static long localUnstowTick = Long.MIN_VALUE / 2;
 
     /**
-     * Vanilla's item swap, from {@code ItemInHandRenderer}: the hand height falls or rises by 0.4 a
-     * tick and a lowered hand sits 0.6 below its place. Deploying with an item in hand first lets
-     * that item go down this way; folding sends the implant down before the item comes back up.
+     * Deploying or folding with an item in hand works like an item swap, the same with vanilla's
+     * hands and another mod's: the whole hand view (arm and item, however they are drawn) eases
+     * down out of sight, the implant arms rise, and the reverse on folding. How far down, in hand
+     * units (vanilla's own swap lowers the hand 0.6; a tall item needs a little more).
      */
-    public static final float EQUIP_SPEED = 0.4F;
-    public static final float EQUIP_DROP = 0.6F;
-    /** Ticks vanilla takes to lower a held item out of view. */
-    public static final int STOW_TICKS = 3;
+    public static final float HANDS_DROP = 0.9F;
+    /** Ticks the held item takes to ease down before the implant rises. */
+    public static final int STOW_TICKS = 5;
+    /** Ticks the implant arms take to rise into view, sink out of it, or let the item back up. */
+    public static final float IMPLANT_RISE_TICKS = 7.0F;
 
     /** True while the first-person hands are drawn, so the third-person pose is not applied to them. */
     public static boolean firstPersonRendering;
@@ -71,6 +74,7 @@ public final class MantisClient {
         localDeployTick = Long.MIN_VALUE / 2;
         stowingItems = false;
         localOut = false;
+        localUnstowTick = Long.MIN_VALUE / 2;
         firstPersonRendering = false;
     }
 
@@ -179,12 +183,17 @@ public final class MantisClient {
     }
 
     /**
-     * True while the held items must look put away to the first-person renderers (vanilla's and
-     * other mods'): whenever the implant view is up, so they lower the item before it and raise it
-     * after it the same way as when swapping items.
+     * How far the regular hand view (not the implant's) is lowered, 0 in place to 1 out of sight:
+     * while a held item goes down before the implant rises, and while it comes back up after the
+     * implant sinks.
      */
-    public static boolean hideHeldItems(LocalPlayer player) {
-        return isOut(player);
+    public static float handsDrop(LocalPlayer player, float partialTick) {
+        if (isOut(player)) {
+            // Going away: slow to leave, then quicker.
+            return stowingItems ? 1.0F - arrive(1.0F - (ticks - localDeployTick + partialTick) / STOW_TICKS) : 0.0F;
+        }
+        // Coming in: quick at first, settling gently.
+        return 1.0F - arrive((ticks - localUnstowTick + partialTick) / IMPLANT_RISE_TICKS);
     }
 
     /** True once the implant view may take over: at once with empty hands, else once the item is down. */
@@ -194,20 +203,27 @@ public final class MantisClient {
 
     /**
      * How far the implant arms are raised into view, 0 (a whole equip drop below) to 1. With an
-     * item that was put away they rise after it like a swapped-in item, and sink at the end of the
-     * fold before the item comes back; with empty hands they stay in place.
+     * item that was put away they rise after it like a swapped-in item, only slower and eased, and
+     * sink over the end of the fold before the item comes back; with empty hands they stay in place.
      */
     public static float implantLift(LocalPlayer player, float partialTick) {
         Anim anim = ANIMS.get(player.getId());
         if (anim == null || !(stowingItems || holdsItems(player))) {
             return 1.0F;
         }
-        float rise = stowingItems ? Mth.clamp((ticks - localDeployTick - STOW_TICKS + partialTick) * EQUIP_SPEED, 0.0F, 1.0F) : 1.0F;
+        float rise = stowingItems ? arrive((ticks - localDeployTick - STOW_TICKS + partialTick) / IMPLANT_RISE_TICKS) : 1.0F;
         if (anim.deployed) {
             return rise;
         }
+        // Sinking at the end of the fold: the mirror of rising, slow to leave and then quicker.
         float remaining = Mth.lerp(partialTick, anim.previous, anim.progress) * MantisRules.DEPLOY_TICKS;
-        return Math.min(rise, Mth.clamp(remaining * EQUIP_SPEED, 0.0F, 1.0F));
+        return Math.min(rise, arrive(remaining / IMPLANT_RISE_TICKS));
+    }
+
+    /** Cubic ease-out of {@code t} clamped to 0..1: quick at first, settling gently at 1. */
+    private static float arrive(float t) {
+        t = 1.0F - Mth.clamp(t, 0.0F, 1.0F);
+        return 1.0F - t * t * t;
     }
 
     /** Eased unfold progress, 0 folded to 1 fully open. */
@@ -273,13 +289,9 @@ public final class MantisClient {
         if (player != null) {
             boolean out = isOut(player);
             if (localOut && !out) {
-                // The implant has sunk out of view: bring the held items up from below at once,
-                // instead of first lowering the empty hand vanilla thinks was there.
-                if (!player.getMainHandItem().isEmpty()) {
-                    mc.gameRenderer.itemInHandRenderer.itemUsed(InteractionHand.MAIN_HAND);
-                }
-                if (!player.getOffhandItem().isEmpty()) {
-                    mc.gameRenderer.itemInHandRenderer.itemUsed(InteractionHand.OFF_HAND);
+                // The implant has sunk out of view: the held items come back up from below.
+                if (holdsItems(player)) {
+                    localUnstowTick = ticks;
                 }
                 stowingItems = false;
             }

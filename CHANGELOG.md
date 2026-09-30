@@ -4,6 +4,13 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.7+1.21.1] — 2026-09-30
+
+### Cambiado (Cuchillas Mantis)
+
+- Modelos 3D de inventario para las tres variantes (normal, térmica y eléctrica), aportados por el autor del proyecto. Reemplazan a los íconos planos, que se eliminaron.
+- Desplegar o guardar con un objeto en la mano ya no depende de la animación de cambio de objeto de cada mod. Punchy no la reproducía en este caso, así que el objeto aparecía y desaparecía de golpe. Ahora toda la vista de las manos (brazo y objeto, los dibuje vanilla o Punchy) baja suave fuera de la pantalla, y después suben los brazos del implante; al guardar, lo inverso. Cada tramo dura entre 5 y 7 ticks con curvas suaves, así que el cambio se ve más pausado que el cambio de objeto de vanilla.
+
 ## [0.2.6+1.21.1] — 2026-09-30
 
 ### Corregido (Cuchillas Mantis)

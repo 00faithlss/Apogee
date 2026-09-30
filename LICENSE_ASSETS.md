@@ -57,6 +57,11 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
 
 Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 
+## Modelos 3D de inventario de las Cuchillas Mantis — diseño propio del proyecto
+
+- Origen: paquete de recursos `mantis-items-resourcepack-1.21.1` aportado por el autor del proyecto: modelos de objeto 3D y sus texturas, hechos a partir de una referencia propia.
+- Usado sin cambios: `models/item/mantis_blades{,_thermal,_electric}.json` y `textures/item/mantis_blades{,_thermal,_electric}_3d.png`.
+
 ## Kit Mantis v0.4 — diseño propio del proyecto
 
 - Origen: kit `mantis-modelos-fabric-1.21.1` aportado por el autor del proyecto (proyectos de Blockbench, exportaciones GeckoLib, texturas y máscaras emisivas). Diseño fan-made inspirado en las Mantis Blades de Cyberpunk 2077, sin recursos copiados del juego.

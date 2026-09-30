@@ -105,13 +105,26 @@ public final class MantisClientSmoke implements ClientModInitializer {
                 mc.options.setCameraType(CameraType.FIRST_PERSON);
             }
             case 45 -> shot(mc, "reference-items-first-person");
-            case 46 -> {
+            case 46 -> server(mc, (level, player) -> {
+                // The three implants' 3D inventory models, in the hotbar and held.
+                player.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                player.getInventory().setItem(0, new ItemStack(ApogeeItems.MANTIS_BLADES));
+                player.getInventory().setItem(1, new ItemStack(ApogeeItems.MANTIS_BLADES_THERMAL));
+                player.getInventory().setItem(2, new ItemStack(ApogeeItems.MANTIS_BLADES_ELECTRIC));
+                player.getInventory().selected = 1;
+            });
+            case 48 -> mc.player.getInventory().selected = 1;
+            case 54 -> shot(mc, "reference-inventory-models");
+            case 55 -> {
                 mc.options.hideGui = true;
                 mc.options.fov().set(30);
                 server(mc, (level, player) -> {
-                    player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                    player.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                    for (int slot = 0; slot < 3; slot++) {
+                        player.getInventory().setItem(slot, ItemStack.EMPTY);
+                    }
+                    player.getInventory().selected = 0;
                 });
+                mc.player.getInventory().selected = 0;
             }
             default -> {
             }
