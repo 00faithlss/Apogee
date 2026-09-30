@@ -4,6 +4,30 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.3.0+1.21.1] — 2026-09-30
+
+### Añadido (Cuchillas Mantis)
+
+- Las Cuchillas Mantis se arman por partes, según la propuesta del banco de piezas aprobada por el autor del proyecto. Siete piezas nuevas:
+  - cable neural (4 por receta);
+  - chip de control, con la textura `axolotl_item` de Project: Edgerunner;
+  - actuador de cuchilla, con la textura `arms_actuator_matrix_t4_item` de Project: Edgerunner;
+  - riel de despliegue;
+  - hoja mantis, con la receta del autor: hierro alrededor de una espada de netherita y un lingote de netherita abajo;
+  - hoja térmica y hoja eléctrica, hechas desde la hoja mantis.
+- Cada implante se arma con dos hojas de su tipo, el Overdrive Kernel T5, el Núcleo T5, dos rieles, dos actuadores y un cable neural. Recetas completas en el README.
+- Las texturas de las piezas vienen de Zoe Isn't Cyberpunk (Apache 2.0), Cyberware: Reforged (MIT) y Project: Edgerunner; procedencia en `LICENSE_ASSETS.md` y textos de licencia en `src/main/resources/licenses/`.
+
+### Cambiado (Cuchillas Mantis)
+
+- Se quitaron las recetas anteriores: la de netherita con dos Núcleos T5 y las mejoras de las Cuchillas Mantis terminadas a térmicas o eléctricas.
+- El logro «Mantis religiosa» se obtiene al craftear cualquiera de las tres variantes, y la pestaña Apogee también aparece al conseguir cualquier pieza.
+
+### Añadido (pruebas)
+
+- Prueba de servidor que arma cada receta en una mesa de crafteo simulada, del cable al implante, y comprueba que las recetas anteriores ya no funcionan.
+- La prueba de cliente pone las siete piezas en la barra, comprueba que cada una tiene modelo y la captura.
+
 ## [0.2.11+1.21.1] — 2026-09-30
 
 ### Cambiado (Cuchillas Mantis)

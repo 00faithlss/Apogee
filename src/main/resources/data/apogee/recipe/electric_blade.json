@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "RLR",
+    "CHC",
+    "RNR"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "L": {
+      "item": "minecraft:lightning_rod"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "H": {
+      "item": "apogee:mantis_blade"
+    },
+    "N": {
+      "item": "apogee:neural_cable"
+    }
+  },
+  "result": {
+    "id": "apogee:electric_blade",
+    "count": 1
+  }
+}

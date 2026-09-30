@@ -22,7 +22,25 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
   - `textures/item/quantum_sync_lattice_t5_item.png` → `assets/apogee/textures/item/quantum_sync_lattice_t5.png`.
   - `sounds/sandevistan_activation.ogg` → `assets/apogee/sounds/sandevistan_activate.ogg`.
   - `sounds/sandevistan_exit.ogg` → `assets/apogee/sounds/sandevistan_deactivate.ogg`.
+  - `textures/item/axolotl_item.png` → `assets/apogee/textures/item/control_chip.png` (Chip de control), elegido por el autor del proyecto. Tomado de `project_edgerunner-1.1.2.jar` descargado de [Modrinth](https://modrinth.com/mod/project-edgerunner), SHA-1 `3dc5ef442f443bee2c1c0f79c0b50a301767a7cc`.
+  - `textures/item/arms_actuator_matrix_t4_item.png` → `assets/apogee/textures/item/blade_actuator.png` (Actuador de cuchilla), elegido por el autor del proyecto, del mismo JAR.
 - Solo referencia (sin copiar código): duración y colores de la transición radial y del tinte, cadencia, cantidad, alcance y desvanecimiento de las estelas.
+
+## Zoe Isn't Cyberpunk 2.2.5 — vami
+
+- Origen: `zoe-2.2.5-forge-1.20.1.jar`, [Modrinth](https://modrinth.com/mod/zoe-isnt-cyberpunk), SHA-1 `d88b631e5008ed315d1701311a9f0c084ffea589`.
+- Licencia declarada en el JAR: Apache License 2.0 (el JAR no trae archivo NOTICE). Texto completo en `src/main/resources/licenses/zoe-isnt-cyberpunk-Apache-2.0.txt` (viaja dentro del JAR).
+- Usado sin cambios, como texturas de piezas de las Cuchillas Mantis:
+  - `textures/item/flux_wire.png` → `assets/apogee/textures/item/neural_cable.png` (Cable neural).
+  - `textures/item/titanium_rod.png` → `assets/apogee/textures/item/deploy_rail.png` (Riel de despliegue).
+  - `textures/item/plasma_splicer.png` y su `.mcmeta` (animación de 4 cuadros) → `assets/apogee/textures/item/thermal_blade.png` (Hoja térmica).
+  - `textures/item/voidsplitter.png` y su `.mcmeta` (animación de 4 cuadros) → `assets/apogee/textures/item/electric_blade.png` (Hoja eléctrica).
+
+## Cyberware: Reforged — w1shadel
+
+- Origen: [github.com/w1shadel/Cyberware-Reforged](https://github.com/w1shadel/Cyberware-Reforged), commit `e2e59bd311a7ec5cffbd1417f477253206f6266c`. Es un port del Cyberware de Flaxbeard; no se confirmó si su arte original tiene la misma licencia.
+- Licencia: MIT, © 2025 w1shadel. Texto completo en `src/main/resources/licenses/cyberware-reforged-MIT.txt` (viaja dentro del JAR).
+- Usado sin cambios: `assets/cyber_ware_port/textures/item/katana.png` → `assets/apogee/textures/item/mantis_blade.png` (Hoja mantis).
 
 ## Rajdhani SemiBold — Indian Type Foundry
 

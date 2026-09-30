@@ -48,6 +48,9 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
     private static final net.minecraft.world.item.Item[] MANTIS = {
             ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC};
     private static final int MANTIS_TOOLTIPS = 272;
+    private static final net.minecraft.world.item.Item[] PARTS = {
+            ApogeeItems.NEURAL_CABLE, ApogeeItems.CONTROL_CHIP, ApogeeItems.BLADE_ACTUATOR, ApogeeItems.DEPLOY_RAIL,
+            ApogeeItems.MANTIS_BLADE, ApogeeItems.THERMAL_BLADE, ApogeeItems.ELECTRIC_BLADE};
     private static int zombieId = -1;
 
     @Override
@@ -156,7 +159,22 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
                 player.inventoryMenu.broadcastChanges();
             });
             case 262 -> shot(mc, "07-challenge-toast");
-            case MANTIS_TOOLTIPS + 20 * 3 + 5 -> {
+            case MANTIS_TOOLTIPS + 20 * 3 + 1 -> server(mc, (level, player) -> {
+                // The Mantis Blades parts in the hotbar, in crafting order, then the implant.
+                for (int slot = 0; slot < PARTS.length; slot++) {
+                    player.getInventory().setItem(slot, new ItemStack(PARTS[slot]));
+                }
+                player.getInventory().setItem(PARTS.length, new ItemStack(ApogeeItems.MANTIS_BLADES));
+            });
+            case MANTIS_TOOLTIPS + 20 * 3 + 6 -> {
+                var missing = mc.getModelManager().getMissingModel();
+                for (net.minecraft.world.item.Item part : PARTS) {
+                    check(mc.getItemRenderer().getItemModelShaper().getItemModel(part) != missing, part + " has an item model");
+                }
+                mc.options.setCameraType(CameraType.FIRST_PERSON);
+            }
+            case MANTIS_TOOLTIPS + 20 * 3 + 12 -> shot(mc, "09-mantis-parts");
+            case MANTIS_TOOLTIPS + 20 * 3 + 16 -> {
                 LOGGER.info(FAILURES.isEmpty() ? "APOGEE_SMOKE_PASSED" : "APOGEE_SMOKE_FAILED " + FAILURES);
                 mc.stop();
             }

@@ -1,8 +1,14 @@
 {
   "display": {
-    "icon": { "id": "apogee:os_core_t5" },
-    "title": { "translate": "advancements.apogee.root.title" },
-    "description": { "translate": "advancements.apogee.root.description" },
+    "icon": {
+      "id": "apogee:os_core_t5"
+    },
+    "title": {
+      "translate": "advancements.apogee.root.title"
+    },
+    "description": {
+      "translate": "advancements.apogee.root.description"
+    },
     "background": "minecraft:textures/block/black_concrete.png",
     "frame": "task",
     "show_toast": false,
@@ -13,7 +19,24 @@
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
-          { "items": ["apogee:os_core_t5", "apogee:apogee_overdrive_kernel_t5", "apogee:quantum_sync_lattice_t5", "apogee:sandevistan", "apogee:mantis_blades", "apogee:mantis_blades_thermal", "apogee:mantis_blades_electric"] }
+          {
+            "items": [
+              "apogee:os_core_t5",
+              "apogee:apogee_overdrive_kernel_t5",
+              "apogee:quantum_sync_lattice_t5",
+              "apogee:sandevistan",
+              "apogee:mantis_blades",
+              "apogee:mantis_blades_thermal",
+              "apogee:mantis_blades_electric",
+              "apogee:neural_cable",
+              "apogee:control_chip",
+              "apogee:blade_actuator",
+              "apogee:deploy_rail",
+              "apogee:mantis_blade",
+              "apogee:thermal_blade",
+              "apogee:electric_blade"
+            ]
+          }
         ]
       }
     }

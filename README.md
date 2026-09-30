@@ -2,7 +2,7 @@
 
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
-Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres componentes para fabricarlos.
+Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, tres componentes T5 y siete piezas para armar las Cuchillas Mantis.
 
 > Estado: primera versión compilable y probada de forma automatizada. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -17,8 +17,15 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
+| `apogee:neural_cable` | Cable neural | Pieza de las Cuchillas Mantis; la usan casi todas las demás. |
+| `apogee:control_chip` | Chip de control | Pieza del actuador. |
+| `apogee:blade_actuator` | Actuador de cuchilla | Abre las cubiertas y empuja la hoja. |
+| `apogee:deploy_rail` | Riel de despliegue | Guía la hoja por el antebrazo. |
+| `apogee:mantis_blade` | Hoja mantis | Hoja de las Cuchillas Mantis normales y base de las otras dos. Apila hasta 16. |
+| `apogee:thermal_blade` | Hoja térmica | Hoja de las Cuchillas Mantis térmicas. Apila hasta 16. |
+| `apogee:electric_blade` | Hoja eléctrica | Hoja de las Cuchillas Mantis eléctricas. Apila hasta 16. |
 
-### Recetas (mesa de crafteo, 1 unidad)
+### Recetas (mesa de crafteo)
 
 | Resultado | Ingredientes |
 |---|---|
@@ -27,15 +34,28 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 | Quantum Sync Lattice T5 (con forma) | 2 cristales del End, 2 bloques de amatista, 1 frasco de experiencia, 4 bloques de redstone: redstone en esquinas, cristales arriba y abajo, amatista a los lados, frasco al centro |
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
 
-| Cuchillas Mantis (con forma) | Fila 1: lingote de netherita, espada de netherita, lingote de netherita · Fila 2: Núcleo T5, Overdrive Kernel T5, Núcleo T5 · Fila 3: igual que la fila 1 |
+#### Cuchillas Mantis por partes
 
-| Cuchillas Mantis térmicas | Vara de blaze en las esquinas, bloque de magma en los lados y Cuchillas Mantis al centro |
-| Cuchillas Mantis eléctricas | Bloque de redstone en las esquinas, pararrayos en los lados y Cuchillas Mantis al centro |
+Todas con forma; dan 1 unidad salvo el cable neural. Se arman en este orden: cables y chips, mecanismos, hojas e implante.
+
+| Resultado | Fila 1 · Fila 2 · Fila 3 |
+|---|---|
+| 4 Cables neurales | cobre, redstone, cobre · redstone, lingote de oro, redstone · cobre, redstone, cobre |
+| Chip de control | cuarzo, redstone, cuarzo · cable neural, fragmento de amatista, cable neural · cuarzo, redstone, cuarzo |
+| Actuador de cuchilla | hierro, cable neural, hierro · cable neural, bloque de redstone, cable neural · hierro, chip de control, hierro |
+| Riel de despliegue | hierro, cable neural, hierro · hierro, actuador de cuchilla, hierro · hierro, cable neural, hierro |
+| Hoja mantis | vacío, hierro, vacío · hierro, espada de netherita, hierro · vacío, lingote de netherita, vacío |
+| Hoja térmica | polvo de blaze, bloque de magma, polvo de blaze · bloque de magma, hoja mantis, bloque de magma · polvo de blaze, cable neural, polvo de blaze |
+| Hoja eléctrica | bloque de redstone, pararrayos, bloque de redstone · cobre, hoja mantis, cobre · bloque de redstone, cable neural, bloque de redstone |
+| Cuchillas Mantis | hoja mantis, Overdrive Kernel T5, hoja mantis · riel de despliegue, Núcleo T5, riel de despliegue · actuador de cuchilla, cable neural, actuador de cuchilla |
+| Cuchillas Mantis térmicas | igual, con dos hojas térmicas |
+| Cuchillas Mantis eléctricas | igual, con dos hojas eléctricas |
 
 ### Logros
 
-- Pestaña **Apogee**: aparece al conseguir cualquier componente o el implante.
+- Pestaña **Apogee**: aparece al conseguir cualquier componente, pieza o implante.
 - **Un implante rudimentario** (desafío, marco morado): conseguir el Sandevistan de cualquier forma (crafteándolo, de un cofre o de otro jugador). Muestra el aviso de desafío completado y se anuncia en el chat.
+- **Mantis religiosa** (desafío): craftear cualquiera de las tres Cuchillas Mantis.
 - Cuando un jugador consigue el Sandevistan por primera vez (al completar ese logro, sea crafteándolo, de un cofre o de otro jugador), todos los jugadores del servidor oyen a Adam Smasher decir «A rudimentary implant», estén donde estén.
 
 ## Uso

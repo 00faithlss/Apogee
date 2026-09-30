@@ -2,19 +2,28 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "RLR",
-    "LML",
-    "RLR"
+    "HKH",
+    "ROR",
+    "ANA"
   ],
   "key": {
+    "H": {
+      "item": "apogee:electric_blade"
+    },
+    "K": {
+      "item": "apogee:apogee_overdrive_kernel_t5"
+    },
     "R": {
-      "item": "minecraft:redstone_block"
+      "item": "apogee:deploy_rail"
     },
-    "L": {
-      "item": "minecraft:lightning_rod"
+    "O": {
+      "item": "apogee:os_core_t5"
     },
-    "M": {
-      "item": "apogee:mantis_blades"
+    "A": {
+      "item": "apogee:blade_actuator"
+    },
+    "N": {
+      "item": "apogee:neural_cable"
     }
   },
   "result": {

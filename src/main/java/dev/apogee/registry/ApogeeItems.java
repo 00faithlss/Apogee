@@ -24,8 +24,21 @@ public final class ApogeeItems {
     public static final Item OS_CORE_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
     public static final Item OVERDRIVE_KERNEL_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
     public static final Item QUANTUM_SYNC_LATTICE_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
+    // Mantis Blades parts, in crafting order: cables and chips, mechanisms, blades.
+    public static final Item NEURAL_CABLE = new Item(new Item.Properties());
+    public static final Item CONTROL_CHIP = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item BLADE_ACTUATOR = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item DEPLOY_RAIL = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item MANTIS_BLADE = blade();
+    public static final Item THERMAL_BLADE = blade();
+    public static final Item ELECTRIC_BLADE = blade();
 
     private ApogeeItems() {
+    }
+
+    /** Netherite-based blade part: does not burn, like the netherite sword it is made from. */
+    private static Item blade() {
+        return new Item(new Item.Properties().stacksTo(16).rarity(Rarity.RARE).fireResistant());
     }
 
     private static Item mantis(MantisVariant variant) {
@@ -40,6 +53,13 @@ public final class ApogeeItems {
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("os_core_t5"), OS_CORE_T5);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("apogee_overdrive_kernel_t5"), OVERDRIVE_KERNEL_T5);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("quantum_sync_lattice_t5"), QUANTUM_SYNC_LATTICE_T5);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("neural_cable"), NEURAL_CABLE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("control_chip"), CONTROL_CHIP);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("blade_actuator"), BLADE_ACTUATOR);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("deploy_rail"), DEPLOY_RAIL);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("mantis_blade"), MANTIS_BLADE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("thermal_blade"), THERMAL_BLADE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("electric_blade"), ELECTRIC_BLADE);
 
         CreativeModeTab tab = FabricItemGroup.builder()
                 .icon(() -> new ItemStack(SANDEVISTAN))
@@ -52,6 +72,13 @@ public final class ApogeeItems {
                     output.accept(OS_CORE_T5);
                     output.accept(OVERDRIVE_KERNEL_T5);
                     output.accept(QUANTUM_SYNC_LATTICE_T5);
+                    output.accept(NEURAL_CABLE);
+                    output.accept(CONTROL_CHIP);
+                    output.accept(BLADE_ACTUATOR);
+                    output.accept(DEPLOY_RAIL);
+                    output.accept(MANTIS_BLADE);
+                    output.accept(THERMAL_BLADE);
+                    output.accept(ELECTRIC_BLADE);
                 })
                 .build();
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Apogee.id("apogee"), tab);

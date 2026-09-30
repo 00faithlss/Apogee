@@ -22,6 +22,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.RecipeType;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -118,6 +122,68 @@ public final class MantisGameTests implements FabricGameTest {
             cleanup(helper, electric);
             helper.succeed();
         });
+    }
+
+    /** Result of crafting a 3x3 grid (row by row, null for an empty cell), or EMPTY when nothing matches. */
+    private static ItemStack craft(GameTestHelper helper, Item... grid) {
+        List<ItemStack> cells = new ArrayList<>();
+        for (Item item : grid) {
+            cells.add(item == null ? ItemStack.EMPTY : new ItemStack(item));
+        }
+        CraftingInput input = CraftingInput.of(3, 3, cells);
+        return helper.getLevel().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, helper.getLevel())
+                .map(recipe -> recipe.value().assemble(input, helper.getLevel().registryAccess()))
+                .orElse(ItemStack.EMPTY);
+    }
+
+    private static void expect(GameTestHelper helper, ItemStack result, Item item, int count, String what) {
+        helper.assertTrue(result.is(item) && result.getCount() == count,
+                what + " should give " + count + " " + item + ", got " + result);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_mantis_recipes")
+    public void mantisBladesAreBuiltFromParts(GameTestHelper helper) {
+        Item copper = Items.COPPER_INGOT;
+        Item redstone = Items.REDSTONE;
+        Item iron = Items.IRON_INGOT;
+        Item cable = ApogeeItems.NEURAL_CABLE;
+        Item chip = ApogeeItems.CONTROL_CHIP;
+        Item actuator = ApogeeItems.BLADE_ACTUATOR;
+        Item rail = ApogeeItems.DEPLOY_RAIL;
+        Item kernel = ApogeeItems.OVERDRIVE_KERNEL_T5;
+        Item core = ApogeeItems.OS_CORE_T5;
+
+        expect(helper, craft(helper, copper, redstone, copper, redstone, Items.GOLD_INGOT, redstone, copper, redstone, copper),
+                cable, 4, "Neural cable");
+        expect(helper, craft(helper, Items.QUARTZ, redstone, Items.QUARTZ, cable, Items.AMETHYST_SHARD, cable, Items.QUARTZ, redstone, Items.QUARTZ),
+                chip, 1, "Control chip");
+        expect(helper, craft(helper, iron, cable, iron, cable, Items.REDSTONE_BLOCK, cable, iron, chip, iron),
+                actuator, 1, "Blade actuator");
+        expect(helper, craft(helper, iron, cable, iron, iron, actuator, iron, iron, cable, iron),
+                rail, 1, "Deployment rail");
+        // The project author's recipe: iron around a netherite sword, a netherite ingot below.
+        expect(helper, craft(helper, null, iron, null, iron, Items.NETHERITE_SWORD, iron, null, Items.NETHERITE_INGOT, null),
+                ApogeeItems.MANTIS_BLADE, 1, "Mantis blade");
+        expect(helper, craft(helper, Items.BLAZE_POWDER, Items.MAGMA_BLOCK, Items.BLAZE_POWDER, Items.MAGMA_BLOCK, ApogeeItems.MANTIS_BLADE,
+                Items.MAGMA_BLOCK, Items.BLAZE_POWDER, cable, Items.BLAZE_POWDER), ApogeeItems.THERMAL_BLADE, 1, "Thermal blade");
+        expect(helper, craft(helper, Items.REDSTONE_BLOCK, Items.LIGHTNING_ROD, Items.REDSTONE_BLOCK, copper, ApogeeItems.MANTIS_BLADE, copper,
+                Items.REDSTONE_BLOCK, cable, Items.REDSTONE_BLOCK), ApogeeItems.ELECTRIC_BLADE, 1, "Electric blade");
+
+        Item[][] implants = {
+                {ApogeeItems.MANTIS_BLADE, ApogeeItems.MANTIS_BLADES},
+                {ApogeeItems.THERMAL_BLADE, ApogeeItems.MANTIS_BLADES_THERMAL},
+                {ApogeeItems.ELECTRIC_BLADE, ApogeeItems.MANTIS_BLADES_ELECTRIC}};
+        for (Item[] implant : implants) {
+            expect(helper, craft(helper, implant[0], kernel, implant[0], rail, core, rail, actuator, cable, actuator),
+                    implant[1], 1, implant[1] + " from its blades");
+        }
+        // The old recipes are gone: no netherite-only implant, no upgrade of the finished implant.
+        Item netherite = Items.NETHERITE_INGOT;
+        helper.assertTrue(craft(helper, netherite, Items.NETHERITE_SWORD, netherite, core, kernel, core, netherite, Items.NETHERITE_SWORD, netherite).isEmpty(),
+                "The pre-parts Mantis Blades recipe no longer works");
+        helper.assertTrue(craft(helper, Items.BLAZE_ROD, Items.MAGMA_BLOCK, Items.BLAZE_ROD, Items.MAGMA_BLOCK, ApogeeItems.MANTIS_BLADES,
+                Items.MAGMA_BLOCK, Items.BLAZE_ROD, Items.MAGMA_BLOCK, Items.BLAZE_ROD).isEmpty(), "The finished implant is not upgraded any more");
+        helper.succeed();
     }
 
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_mantis_enchant")

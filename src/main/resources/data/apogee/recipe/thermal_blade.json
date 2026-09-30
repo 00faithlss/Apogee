@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "BMB",
+    "MHM",
+    "BNB"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "M": {
+      "item": "minecraft:magma_block"
+    },
+    "H": {
+      "item": "apogee:mantis_blade"
+    },
+    "N": {
+      "item": "apogee:neural_cable"
+    }
+  },
+  "result": {
+    "id": "apogee:thermal_blade",
+    "count": 1
+  }
+}

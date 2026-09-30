@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " I ",
+    "INI",
+    " E "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "minecraft:netherite_sword"
+    },
+    "E": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "id": "apogee:mantis_blade",
+    "count": 1
+  }
+}

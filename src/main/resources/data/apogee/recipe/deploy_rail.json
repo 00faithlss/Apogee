@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "INI",
+    "IAI",
+    "INI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "apogee:neural_cable"
+    },
+    "A": {
+      "item": "apogee:blade_actuator"
+    }
+  },
+  "result": {
+    "id": "apogee:deploy_rail",
+    "count": 1
+  }
+}
