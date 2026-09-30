@@ -4,25 +4,19 @@
   "item.apogee.os_core_t5": "Núcleo T5",
   "item.apogee.apogee_overdrive_kernel_t5": "Overdrive Kernel T5",
   "item.apogee.quantum_sync_lattice_t5": "Quantum Sync Lattice T5",
-
   "advancements.apogee.root.title": "Apogee",
   "advancements.apogee.root.description": "Consigue componentes de cyberware",
   "advancements.apogee.craft_sandevistan.title": "Un implante rudimentario",
   "advancements.apogee.craft_sandevistan.description": "Consigue el Sandevistan. A Adam Smasher no le impresionó",
-
   "key.categories.apogee": "Apogee",
   "key.apogee.steam_dash": "Dash aéreo (pantalones Steampunk)",
   "key.apogee.activate_sandevistan": "Activar / terminar Sandevistan",
-
   "trinkets.slot.cyberware.os": "Sistema operativo",
-
   "subtitles.apogee.sandevistan_activate": "Sandevistan se activa",
   "subtitles.apogee.sandevistan_deactivate": "Sandevistan se apaga",
   "subtitles.apogee.rudimentary_implant": "Adam Smasher: \"Un implante rudimentario\"",
-
   "hud.apogee.sandevistan.active": "SANDEVISTAN %s s",
   "hud.apogee.sandevistan.cooldown": "Recarga %s s",
-
   "tooltip.apogee.brand": "Apogee",
   "tooltip.apogee.sandevistan.badge": "IMPLANTE",
   "tooltip.apogee.sandevistan.description_header": "Descripción",
@@ -43,16 +37,11 @@
   "tooltip.apogee.value.blocks": "%s bloques",
   "tooltip.apogee.value.seconds": "%s s",
   "tooltip.apogee.value.bonus_seconds": "+%s s",
-
   "item.apogee.mantis_blades": "Cuchillas Mantis",
-
   "advancements.apogee.craft_mantis_blades.title": "Mantis religiosa",
   "advancements.apogee.craft_mantis_blades.description": "Craftea las Cuchillas Mantis",
-
   "key.apogee.toggle_mantis": "Desplegar / guardar Cuchillas Mantis",
-
   "trinkets.slot.cyberware.arms": "Brazos",
-
   "subtitles.apogee.mantis_deploy": "Las Cuchillas Mantis se despliegan",
   "subtitles.apogee.mantis_retract": "Las Cuchillas Mantis se guardan",
   "subtitles.apogee.mantis_swing": "Las Cuchillas Mantis cortan el aire",
@@ -61,13 +50,41 @@
   "subtitles.apogee.mantis_electric_deploy": "Las Cuchillas Mantis eléctricas se despliegan",
   "subtitles.apogee.mantis_electric_swing": "Las Cuchillas Mantis eléctricas cortan el aire",
   "subtitles.apogee.mantis_electric_hit": "Las Cuchillas Mantis eléctricas electrocutan",
-
-  "tooltip.apogee.mantis_blades.line.0": "Cuchillas que se despliegan desde el antebrazo.",
-  "tooltip.apogee.mantis_blades.line.1": "Clic izquierdo: cortes alternados.",
-  "tooltip.apogee.mantis_blades.line.2": "Clic derecho: estocada con ambas cuchillas.",
-  "tooltip.apogee.mantis_blades.line.3": "Desplegadas: hotbar e inventario bloqueados.",
   "item.apogee.mantis_blades_thermal": "Cuchillas Mantis térmicas",
   "item.apogee.mantis_blades_electric": "Cuchillas Mantis eléctricas",
-  "tooltip.apogee.mantis_blades.variant.thermal": "Brillan al rojo vivo y prenden fuego a los objetivos.",
-  "tooltip.apogee.mantis_blades.variant.electric": "Crepitan de corriente y aturden un momento a los objetivos."
+  "tooltip.apogee.tier": "TIER %s",
+  "tooltip.apogee.value.bonus": "+%s",
+  "tooltip.apogee.mantis_blades.badge": "CIBERWARE · BRAZOS",
+  "tooltip.apogee.mantis_blades.damage_per_hit": "DAÑO POR GOLPE",
+  "tooltip.apogee.mantis_blades.attacks_per_second": "ATAQUES POR SEGUNDO",
+  "tooltip.apogee.mantis_blades.damage_type": "TIPO DE DAÑO",
+  "tooltip.apogee.mantis_blades.damage_type.standard": "Físico",
+  "tooltip.apogee.mantis_blades.damage_type.thermal": "Térmico",
+  "tooltip.apogee.mantis_blades.damage_type.electric": "Eléctrico",
+  "tooltip.apogee.mantis_blades.description.standard.0": "Cuchillas plegadas en el antebrazo que",
+  "tooltip.apogee.mantis_blades.description.standard.1": "se despliegan en un instante. Silenciosas y letales.",
+  "tooltip.apogee.mantis_blades.description.thermal.0": "El filo se calienta hasta brillar al rojo",
+  "tooltip.apogee.mantis_blades.description.thermal.1": "y corta la carne como mantequilla.",
+  "tooltip.apogee.mantis_blades.description.electric.0": "Cuchillas cargadas: cada corte lleva",
+  "tooltip.apogee.mantis_blades.description.electric.1": "una descarga por el cuerpo del objetivo.",
+  "tooltip.apogee.mantis_blades.toggle": "Despliega o pliega las cuchillas.",
+  "tooltip.apogee.mantis_blades.left_click": "Clic izquierdo",
+  "tooltip.apogee.mantis_blades.slash": "Cortes alternados, un brazo cada vez.",
+  "tooltip.apogee.mantis_blades.right_click": "Clic derecho",
+  "tooltip.apogee.mantis_blades.lunge": "Estocada hacia adelante con ambas cuchillas.",
+  "tooltip.apogee.mantis_blades.ability.thermal": "Filo térmico",
+  "tooltip.apogee.mantis_blades.ability.thermal.text": "Cada corte prende fuego al objetivo.",
+  "tooltip.apogee.mantis_blades.ability.electric": "Descarga",
+  "tooltip.apogee.mantis_blades.ability.electric.text": "Aturde al objetivo; en el agua hace más daño.",
+  "tooltip.apogee.mantis_blades.stats_header": "Estadísticas",
+  "tooltip.apogee.mantis_blades.stat.critical": "Golpe crítico",
+  "tooltip.apogee.mantis_blades.stat.lunge": "Daño de estocada",
+  "tooltip.apogee.mantis_blades.stat.lunge_reach": "Alcance de estocada",
+  "tooltip.apogee.mantis_blades.stat.lunge_cooldown": "Recarga de estocada",
+  "tooltip.apogee.mantis_blades.stat.burn": "Quemadura",
+  "tooltip.apogee.mantis_blades.stat.stun": "Aturdimiento (Lentitud III)",
+  "tooltip.apogee.mantis_blades.stat.water": "Daño en el agua",
+  "tooltip.apogee.mantis_blades.note": "El objeto en la mano no suma. No se puede encantar.",
+  "tooltip.apogee.mantis_blades.plain_stats": "Daño %s · %s ataques/s · %s",
+  "tooltip.apogee.mantis_blades.plain_section": "%s: %s"
 }

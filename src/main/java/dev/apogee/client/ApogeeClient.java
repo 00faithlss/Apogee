@@ -9,7 +9,9 @@ import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.model.SandevistanModel;
 import dev.apogee.client.render.MantisArmsLayer;
 import dev.apogee.client.render.SandevistanImplantRenderer;
+import dev.apogee.client.tooltip.MantisTooltipContent;
 import dev.apogee.client.tooltip.SandevistanTooltipContent;
+import dev.apogee.item.MantisBladesItem;
 import dev.apogee.network.ApogeeNetworking.MantisSwing;
 import dev.apogee.network.ApogeeNetworking.MantisSync;
 import dev.apogee.network.ApogeeNetworking.RulesSync;
@@ -86,8 +88,13 @@ public final class ApogeeClient implements ClientModInitializer {
         if (FabricLoader.getInstance().isModLoaded("simplytooltips")) {
             dev.apogee.client.compat.simplytooltips.SimplyTooltipsCompat.register();
         } else {
-            Apogee.LOGGER.warn("Simply Tooltips is not installed; the Sandevistan uses a plain tooltip.");
+            Apogee.LOGGER.warn("Simply Tooltips is not installed; the Sandevistan and the Mantis Blades use plain tooltips.");
             ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
+                if (stack.getItem() instanceof MantisBladesItem blades) {
+                    lines.add(MantisTooltipContent.badge().copy().withStyle(ChatFormatting.YELLOW));
+                    MantisTooltipContent.plainLines(blades.variant()).forEach(line -> lines.add(line.copy().withStyle(ChatFormatting.GRAY)));
+                    return;
+                }
                 if (!stack.is(ApogeeItems.SANDEVISTAN)) {
                     return;
                 }

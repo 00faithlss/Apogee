@@ -5,7 +5,7 @@
   "name": "Apogee GameTests",
   "environment": "*",
   "entrypoints": {
-    "fabric-gametest": ["dev.apogee.gametest.SandevistanGameTests"],
+    "fabric-gametest": ["dev.apogee.gametest.SandevistanGameTests", "dev.apogee.gametest.MantisGameTests"],
     "main": ["dev.apogee.gametest.MultiplayerSmokeServer"],
     "client": ["dev.apogee.gametest.ApogeeClientSmoke", "dev.apogee.gametest.MantisClientSmoke", "dev.apogee.gametest.MantisMotionStudy", "dev.apogee.gametest.MultiplayerSmokeClient"]
   },

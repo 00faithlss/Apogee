@@ -31,6 +31,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -144,16 +146,52 @@ public final class MantisManager {
         broadcast(player, false, MantisVariant.STANDARD);
     }
 
+    /**
+     * Sets the wearer's attack damage and speed to the blades' own values. Whatever the item left
+     * in the locked slot adds to them is subtracted, so a sword in hand does not stack on top of
+     * the blades; effects such as Strength still count. Run on deploy and every tick after (the
+     * locked slot can still change, for instance when an item is picked up into it).
+     */
     private static void addModifiers(ServerPlayer player) {
-        removeModifiers(player);
-        AttributeInstance damage = player.getAttribute(Attributes.ATTACK_DAMAGE);
-        if (damage != null) {
-            damage.addTransientModifier(new AttributeModifier(DAMAGE_MODIFIER, MantisRules.DAMAGE_BONUS, AttributeModifier.Operation.ADD_VALUE));
+        double[] held = heldBonuses(player);
+        setModifier(player.getAttribute(Attributes.ATTACK_DAMAGE), DAMAGE_MODIFIER, MantisRules.ATTACK_DAMAGE - held[0]);
+        setModifier(player.getAttribute(Attributes.ATTACK_SPEED), SPEED_MODIFIER, MantisRules.ATTACK_SPEED - held[1]);
+    }
+
+    /** Flat attack damage and speed the main-hand item adds on top of the attributes' base values. */
+    private static double[] heldBonuses(ServerPlayer player) {
+        double[] held = new double[2];
+        player.getMainHandItem().forEachModifier(EquipmentSlot.MAINHAND, (attribute, modifier) -> {
+            if (modifier.operation() != AttributeModifier.Operation.ADD_VALUE) {
+                return;
+            }
+            if (attribute.is(Attributes.ATTACK_DAMAGE)) {
+                held[0] += modifier.amount();
+            } else if (attribute.is(Attributes.ATTACK_SPEED)) {
+                held[1] += modifier.amount();
+            }
+        });
+        return held;
+    }
+
+    private static void setModifier(AttributeInstance instance, ResourceLocation id, double target) {
+        if (instance == null) {
+            return;
         }
-        AttributeInstance speed = player.getAttribute(Attributes.ATTACK_SPEED);
-        if (speed != null) {
-            speed.addTransientModifier(new AttributeModifier(SPEED_MODIFIER, MantisRules.ATTACK_SPEED_BONUS, AttributeModifier.Operation.ADD_VALUE));
+        double amount = target - instance.getBaseValue();
+        AttributeModifier current = instance.getModifier(id);
+        if (current == null || current.amount() != amount) {
+            instance.addOrUpdateTransientModifier(new AttributeModifier(id, amount, AttributeModifier.Operation.ADD_VALUE));
         }
+    }
+
+    /** Damage the blades' variant adds to a cut or lunge against {@code target}. */
+    public static float variantBonus(ServerPlayer attacker, Entity target) {
+        Deployment deployment = DEPLOYED.get(attacker.getUUID());
+        if (deployment != null && deployment.variant == MantisVariant.ELECTRIC && target.isInWater()) {
+            return MantisRules.ELECTRIC_WATER_BONUS;
+        }
+        return 0.0F;
     }
 
     private static void removeModifiers(ServerPlayer player) {
@@ -181,6 +219,7 @@ public final class MantisManager {
                 }
                 continue;
             }
+            addModifiers(player);
             int locked = entry.getValue().lockedSlot;
             if (player.getInventory().selected != locked) {
                 player.getInventory().selected = locked;
@@ -224,12 +263,12 @@ public final class MantisManager {
         }
     }
 
-    /** Thermal blades set targets alight; electric blades stun them briefly. */
+    /** Thermal blades set targets alight; electric blades stun them briefly (and hit harder in water, see {@link #variantBonus}). */
     private static void applyVariantEffect(LivingEntity victim, MantisVariant variant) {
         if (variant == MantisVariant.THERMAL) {
-            victim.igniteForSeconds(4.0F);
+            victim.igniteForSeconds(MantisRules.THERMAL_BURN_SECONDS);
         } else if (variant == MantisVariant.ELECTRIC) {
-            victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 2));
+            victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, MantisRules.ELECTRIC_STUN_TICKS, MantisRules.ELECTRIC_STUN_AMPLIFIER));
         }
     }
 
@@ -259,7 +298,7 @@ public final class MantisManager {
         for (LivingEntity target : player.level().getEntitiesOfClass(LivingEntity.class, sweep,
                 e -> e != player && e.isAlive() && !e.isSpectator() && e.isPickable())) {
             if (target.getBoundingBox().inflate(0.5).clip(eye, end).isPresent()) {
-                target.hurt(source, MantisRules.THRUST_DAMAGE);
+                target.hurt(source, MantisRules.THRUST_DAMAGE + variantBonus(player, target));
             }
         }
         play(player, ApogeeSounds.MANTIS_THRUST);

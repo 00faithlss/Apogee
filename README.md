@@ -36,7 +36,7 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 
 - Pestaña **Apogee**: aparece al conseguir cualquier componente o el implante.
 - **Un implante rudimentario** (desafío, marco morado): conseguir el Sandevistan de cualquier forma (crafteándolo, de un cofre o de otro jugador). Muestra el aviso de desafío completado y se anuncia en el chat.
-- Cada vez que alguien craftea el Sandevistan, todos los jugadores del servidor oyen a Adam Smasher decir «A rudimentary implant», estén donde estén.
+- Cuando un jugador consigue el Sandevistan por primera vez (al completar ese logro, sea crafteándolo, de un cofre o de otro jugador), todos los jugadores del servidor oyen a Adam Smasher decir «A rudimentary implant», estén donde estén.
 
 ## Uso
 
@@ -51,7 +51,10 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 - Cerradas, el brazo se ve como uno normal con tu skin (clásica o Slim). Al desplegarlas se abren las cubiertas del antebrazo, el mecanismo sube por el costado externo y la hoja se extiende.
 - Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
 - Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
-- Variantes: la térmica prende fuego y la eléctrica aturde. La hoja térmica brilla al rojo vivo, con el filo difuminado a blanco, destellos de glitch y partículas de calor; el filo y los electrodos de la eléctrica brillan en azul y sueltan pequeños rayos mientras el implante está abierto. Con shaders, el brillo recibe el bloom del shader.
+- Daño con las cuchillas fuera: **10 por golpe** (15 con golpe crítico) y **2 ataques por segundo**; la estocada hace 9 a todo lo que esté en su línea (4 bloques). El objeto que quede en la mano no suma daño, velocidad, encantamientos, barrido ni pierde durabilidad; los efectos como Fuerza sí cuentan.
+- No se pueden encantar (ni en la mesa, ni con libros en el yunque, ni con `/enchant`).
+- Variantes: la térmica prende fuego 4 s y la eléctrica aplica Lentitud III 1,5 s y hace **+4 de daño** si el objetivo está en el agua. La hoja térmica brilla al rojo vivo, con el filo difuminado a blanco, destellos de glitch y partículas de calor; el filo y los electrodos de la eléctrica brillan en azul y sueltan pequeños rayos mientras el implante está abierto. Con shaders, el brillo recibe el bloom del shader.
+- Tooltip al estilo de las armas de Cyberpunk 2077 (con Simply Tooltips): fondo rojo translúcido, marco rojo salmón con la esquina y el detalle cian del juego, franja de tier, textos amarillos, daño por golpe y ataques por segundo en grande junto al tipo de daño (físico, térmico o eléctrico). **G** alterna la vista Descripción (controles y habilidad de la variante) y Estadísticas. Sin Simply Tooltips se muestra un tooltip simple.
 - Sonidos propios de despliegue, corte al aire y golpe para la normal (que la térmica comparte) y para la eléctrica. Guardar y estocada son provisionales; para cambiarlos hay que reemplazar los eventos `mantis_*` en `assets/apogee/sounds.json` por grabaciones `.ogg`.
 
 ### Mecánica del Sandevistan (valores por defecto)

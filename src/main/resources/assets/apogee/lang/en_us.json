@@ -4,25 +4,19 @@
   "item.apogee.os_core_t5": "OS Core T5",
   "item.apogee.apogee_overdrive_kernel_t5": "Overdrive Kernel T5",
   "item.apogee.quantum_sync_lattice_t5": "Quantum Sync Lattice T5",
-
   "advancements.apogee.root.title": "Apogee",
   "advancements.apogee.root.description": "Get your hands on cyberware components",
   "advancements.apogee.craft_sandevistan.title": "A Rudimentary Implant",
   "advancements.apogee.craft_sandevistan.description": "Obtain the Sandevistan. Adam Smasher was not impressed",
-
   "key.categories.apogee": "Apogee",
   "key.apogee.steam_dash": "Steampunk Leggings air dash",
   "key.apogee.activate_sandevistan": "Activate / end Sandevistan",
-
   "trinkets.slot.cyberware.os": "Operating System",
-
   "subtitles.apogee.sandevistan_activate": "Sandevistan activates",
   "subtitles.apogee.sandevistan_deactivate": "Sandevistan shuts down",
   "subtitles.apogee.rudimentary_implant": "Adam Smasher: \"A rudimentary implant\"",
-
   "hud.apogee.sandevistan.active": "SANDEVISTAN %s s",
   "hud.apogee.sandevistan.cooldown": "Recharging %s s",
-
   "tooltip.apogee.brand": "Apogee",
   "tooltip.apogee.sandevistan.badge": "IMPLANT",
   "tooltip.apogee.sandevistan.description_header": "Description",
@@ -43,16 +37,11 @@
   "tooltip.apogee.value.blocks": "%s blocks",
   "tooltip.apogee.value.seconds": "%s s",
   "tooltip.apogee.value.bonus_seconds": "+%s s",
-
   "item.apogee.mantis_blades": "Mantis Blades",
-
   "advancements.apogee.craft_mantis_blades.title": "Praying Mantis",
   "advancements.apogee.craft_mantis_blades.description": "Craft the Mantis Blades",
-
   "key.apogee.toggle_mantis": "Deploy / retract Mantis Blades",
-
   "trinkets.slot.cyberware.arms": "Arms",
-
   "subtitles.apogee.mantis_deploy": "Mantis Blades deploy",
   "subtitles.apogee.mantis_retract": "Mantis Blades retract",
   "subtitles.apogee.mantis_swing": "Mantis Blades slash",
@@ -61,13 +50,41 @@
   "subtitles.apogee.mantis_electric_deploy": "Electric Mantis Blades deploy",
   "subtitles.apogee.mantis_electric_swing": "Electric Mantis Blades slash",
   "subtitles.apogee.mantis_electric_hit": "Electric Mantis Blades shock",
-
-  "tooltip.apogee.mantis_blades.line.0": "Blades that unfold from the forearm.",
-  "tooltip.apogee.mantis_blades.line.1": "Left click: alternating slashes.",
-  "tooltip.apogee.mantis_blades.line.2": "Right click: lunge with both blades.",
-  "tooltip.apogee.mantis_blades.line.3": "Deployed: hotbar and inventory are locked.",
   "item.apogee.mantis_blades_thermal": "Thermal Mantis Blades",
   "item.apogee.mantis_blades_electric": "Electric Mantis Blades",
-  "tooltip.apogee.mantis_blades.variant.thermal": "Glows white-hot and sets targets on fire.",
-  "tooltip.apogee.mantis_blades.variant.electric": "Crackles with current and briefly stuns targets."
+  "tooltip.apogee.tier": "TIER %s",
+  "tooltip.apogee.value.bonus": "+%s",
+  "tooltip.apogee.mantis_blades.badge": "CYBERWARE · ARMS",
+  "tooltip.apogee.mantis_blades.damage_per_hit": "DAMAGE PER HIT",
+  "tooltip.apogee.mantis_blades.attacks_per_second": "ATTACKS PER SECOND",
+  "tooltip.apogee.mantis_blades.damage_type": "DAMAGE TYPE",
+  "tooltip.apogee.mantis_blades.damage_type.standard": "Physical",
+  "tooltip.apogee.mantis_blades.damage_type.thermal": "Thermal",
+  "tooltip.apogee.mantis_blades.damage_type.electric": "Electrical",
+  "tooltip.apogee.mantis_blades.description.standard.0": "Blades folded into the forearm that",
+  "tooltip.apogee.mantis_blades.description.standard.1": "unfold in an instant. Silent and lethal.",
+  "tooltip.apogee.mantis_blades.description.thermal.0": "The edge heats up until it glows red",
+  "tooltip.apogee.mantis_blades.description.thermal.1": "and cuts through flesh like butter.",
+  "tooltip.apogee.mantis_blades.description.electric.0": "Charged blades: every cut carries",
+  "tooltip.apogee.mantis_blades.description.electric.1": "a discharge through the target's body.",
+  "tooltip.apogee.mantis_blades.toggle": "Deploy or fold the blades.",
+  "tooltip.apogee.mantis_blades.left_click": "Left click",
+  "tooltip.apogee.mantis_blades.slash": "Alternating slashes, one arm at a time.",
+  "tooltip.apogee.mantis_blades.right_click": "Right click",
+  "tooltip.apogee.mantis_blades.lunge": "Lunge forward with both blades.",
+  "tooltip.apogee.mantis_blades.ability.thermal": "Thermal Edge",
+  "tooltip.apogee.mantis_blades.ability.thermal.text": "Every cut sets the target on fire.",
+  "tooltip.apogee.mantis_blades.ability.electric": "Discharge",
+  "tooltip.apogee.mantis_blades.ability.electric.text": "Stuns the target; deals more damage in water.",
+  "tooltip.apogee.mantis_blades.stats_header": "Statistics",
+  "tooltip.apogee.mantis_blades.stat.critical": "Critical hit",
+  "tooltip.apogee.mantis_blades.stat.lunge": "Lunge damage",
+  "tooltip.apogee.mantis_blades.stat.lunge_reach": "Lunge reach",
+  "tooltip.apogee.mantis_blades.stat.lunge_cooldown": "Lunge cooldown",
+  "tooltip.apogee.mantis_blades.stat.burn": "Burn",
+  "tooltip.apogee.mantis_blades.stat.stun": "Stun (Slowness III)",
+  "tooltip.apogee.mantis_blades.stat.water": "Damage in water",
+  "tooltip.apogee.mantis_blades.note": "The held item adds nothing. Cannot be enchanted.",
+  "tooltip.apogee.mantis_blades.plain_stats": "Damage %s · %s attacks/s · %s",
+  "tooltip.apogee.mantis_blades.plain_section": "%s: %s"
 }

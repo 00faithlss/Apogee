@@ -43,6 +43,11 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
     private static int worldTicks = -1;
     private static boolean worldRequested;
     private static boolean drawTooltip;
+    private static net.minecraft.world.item.Item tooltipItem = ApogeeItems.SANDEVISTAN;
+    /** The Mantis Blades tooltips, filmed in both views after the Sandevistan run. */
+    private static final net.minecraft.world.item.Item[] MANTIS = {
+            ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC};
+    private static final int MANTIS_TOOLTIPS = 272;
     private static int zombieId = -1;
 
     @Override
@@ -53,7 +58,7 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(ApogeeClientSmoke::tick);
         HudRenderCallback.EVENT.register((graphics, delta) -> {
             if (drawTooltip) {
-                graphics.renderTooltip(Minecraft.getInstance().font, new ItemStack(ApogeeItems.SANDEVISTAN), 24, 40);
+                graphics.renderTooltip(Minecraft.getInstance().font, new ItemStack(tooltipItem), 24, 40);
             }
         });
     }
@@ -146,16 +151,20 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
                 check(horizontal > 0.6, "steam dash launches the player forward");
             }
             case 244 -> server(mc, (level, player) -> {
-                net.minecraft.advancements.CriteriaTriggers.RECIPE_CRAFTED.trigger(player, dev.apogee.Apogee.id("sandevistan"), List.of());
-                ItemStack crafted = new ItemStack(ApogeeItems.SANDEVISTAN);
-                crafted.onCraftedBy(level, player, 1); // plays Adam Smasher's voice line to everyone
+                // Getting the implant completes the advancement, which plays Adam Smasher's voice line to everyone.
+                player.getInventory().add(new ItemStack(ApogeeItems.SANDEVISTAN));
+                player.inventoryMenu.broadcastChanges();
             });
             case 262 -> shot(mc, "07-challenge-toast");
-            case 270 -> {
+            case MANTIS_TOOLTIPS + 20 * 3 + 5 -> {
                 LOGGER.info(FAILURES.isEmpty() ? "APOGEE_SMOKE_PASSED" : "APOGEE_SMOKE_FAILED " + FAILURES);
                 mc.stop();
             }
             default -> {
+                int step = worldTicks - MANTIS_TOOLTIPS;
+                if (step >= 0 && step < 20 * MANTIS.length) {
+                    mantisTooltip(mc, MANTIS[step / 20], step % 20);
+                }
             }
         }
         if (worldTicks > 120 && worldTicks < 200 && mc.player != null) {
@@ -176,6 +185,23 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
             ServerPlayer player = server.getPlayerList().getPlayer(id);
             action.run(player.serverLevel(), player);
         });
+    }
+
+    /** Description view, then stats view, of one Mantis Blades tooltip. */
+    private static void mantisTooltip(Minecraft mc, net.minecraft.world.item.Item item, int t) {
+        String name = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item).getPath();
+        switch (t) {
+            case 0 -> {
+                tooltipItem = item;
+                drawTooltip = true;
+            }
+            case 6 -> shot(mc, "08-" + name + "-description");
+            case 7 -> TabState.cycleNext();
+            case 13 -> shot(mc, "08-" + name + "-stats");
+            case 14 -> drawTooltip = false;
+            default -> {
+            }
+        }
     }
 
     private static void check(boolean condition, String what) {

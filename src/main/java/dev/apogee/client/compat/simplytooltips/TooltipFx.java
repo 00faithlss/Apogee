@@ -25,22 +25,27 @@ final class TooltipFx {
 
     /** Pixel sparks drifting downward inside the panel. Draw before the content. */
     static void particles(GuiGraphics graphics, int x, int y, int w, int h, long nowMs) {
+        particles(graphics, x, y, w, h, nowMs, PARTICLE_COLORS, PARTICLES, false);
+    }
+
+    /** Pixel sparks in the given colors, falling or (for embers) rising. Draw before the content. */
+    static void particles(GuiGraphics graphics, int x, int y, int w, int h, long nowMs, int[] colors, int count, boolean rising) {
         int innerW = w - 6;
         int innerH = h - 6;
-        for (int i = 0; i < PARTICLES; i++) {
+        for (int i = 0; i < count; i++) {
             long lifeMs = 2200L + hash(i, 0) % 2600L;
             long clock = nowMs + hash(i, 1) % lifeMs;
             long cycle = clock / lifeMs;
             float age = (clock % lifeMs) / (float) lifeMs;
             float fall = innerH * (0.35F + (hash(i, cycle + 2) % 60) / 100.0F);
             float px = x + 3 + (hash(i, cycle + 3) % innerW) + Mth.sin(age * 6.0F + i) * 1.5F;
-            float py = y + 3 + age * fall;
-            if (py > y + h - 3) {
+            float py = rising ? y + h - 3 - age * fall : y + 3 + age * fall;
+            if (py > y + h - 3 || py < y + 3) {
                 continue;
             }
             float twinkle = 0.55F + 0.45F * Mth.sin(nowMs * 0.012F + i * 1.7F);
             float fade = Math.min(1.0F, (1.0F - age) * 1.6F) * Math.min(1.0F, age * 8.0F);
-            int rgb = PARTICLE_COLORS[i % PARTICLE_COLORS.length];
+            int rgb = colors[i % colors.length];
             int size = hash(i, cycle + 4) % 6 == 0 ? 2 : 1;
             int ix = Math.round(px);
             int iy = Math.round(py);
@@ -53,6 +58,11 @@ final class TooltipFx {
 
     /** Faint scanlines plus a cyan band sweeping downward. Draw after the content. */
     static void scan(GuiGraphics graphics, int x, int y, int w, int h, long nowMs) {
+        scan(graphics, x, y, w, h, nowMs, CYAN);
+    }
+
+    /** Faint scanlines plus a band of {@code sweepRgb} sweeping downward. Draw after the content. */
+    static void scan(GuiGraphics graphics, int x, int y, int w, int h, long nowMs, int sweepRgb) {
         int left = x + 2;
         int right = x + w - 2;
         for (int row = y + 2; row < y + h - 2; row += 2) {
@@ -66,7 +76,7 @@ final class TooltipFx {
                 continue;
             }
             float strength = i == 0 ? 0.42F : 0.13F * (1.0F - i / (float) SWEEP_H);
-            graphics.fill(left, row, right, row + 1, argb(CYAN, strength));
+            graphics.fill(left, row, right, row + 1, argb(sweepRgb, strength));
         }
     }
 
@@ -119,7 +129,7 @@ final class TooltipFx {
         return r << 16 | g << 8 | b;
     }
 
-    private static int argb(int rgb, float alpha) {
+    static int argb(int rgb, float alpha) {
         // Font treats alpha below 4 as opaque, so keep a small floor.
         return Mth.clamp(Math.round(alpha * 255.0F), 5, 255) << 24 | rgb & 0xFFFFFF;
     }

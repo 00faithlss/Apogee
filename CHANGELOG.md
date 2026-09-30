@@ -4,14 +4,25 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.8+1.21.1] — 2026-09-30
+
 ### Cambiado (Sandevistan)
 
-- El logro «Un implante rudimentario» se obtiene al conseguir el Sandevistan de cualquier forma (crafteo, cofre, otro jugador), no solo al craftearlo. Se mantiene su id `apogee:craft_sandevistan`, así que quien ya lo tenía no lo pierde. La frase de Adam Smasher sigue sonando solo al craftearlo.
+- El logro «Un implante rudimentario» se obtiene al conseguir el Sandevistan de cualquier forma (crafteo, cofre, otro jugador), no solo al craftearlo. Se mantiene su id `apogee:craft_sandevistan`, así que quien ya lo tenía no lo pierde.
+- La frase de Adam Smasher suena al conseguir el Sandevistan, no al craftearlo: se reproduce para todo el servidor cuando un jugador completa ese logro, así que una vez por jugador.
 
 ### Cambiado (Cuchillas Mantis)
 
+- Daño: 10 por golpe (15 con crítico) y 2 ataques por segundo, antes 7 y 5,5. El objeto que quede en la mano al desplegar ya no suma: su daño y velocidad se descuentan, y no aporta encantamientos, barrido, bonificaciones propias (como la maza) ni pierde durabilidad con los cortes.
+- Las cuchillas eléctricas hacen +4 de daño (cortes y estocada) si el objetivo está en el agua.
+- No se pueden encantar: ni en la mesa de encantamientos, ni con libros en el yunque, ni con `/enchant`.
+- Tooltip nuevo al estilo de las armas de Cyberpunk 2077: fondo rojo translúcido, marco rojo salmón con la esquina y el detalle cian del juego (colores tomados de su inventario), franja de tier, textos amarillos y título con glitch cromático. Arriba, en grande, el daño por golpe y los ataques por segundo junto al tipo de daño con su ícono. La vista Descripción lista los controles y la habilidad de la variante (como las armas únicas de Simply Swords) y la vista Estadísticas los valores exactos; se alternan con **G**. La térmica suelta brasas, la eléctrica lleva arcos en el borde.
 - El modelo 3D de las Cuchillas Mantis en la mano (primera persona) se ve completo: se ajustó su posición y escala, que lo dejaban casi fuera de la pantalla. En el suelo se ve con la pose del modelo.
-- La prueba de cliente captura los tres modelos en la barra de objetos, en la mano y tirados en el suelo.
+
+### Añadido (pruebas)
+
+- Pruebas de servidor de las Cuchillas Mantis: daño y velocidad con una espada de netherita con Filo V en la mano, golpe crítico, bonificación eléctrica en el agua y rechazo de todos los encantamientos.
+- La prueba de cliente captura los tres modelos en la barra de objetos, en la mano y tirados en el suelo, y los tooltips de las tres variantes en ambas vistas.
 
 ## [0.2.7+1.21.1] — 2026-09-30
 

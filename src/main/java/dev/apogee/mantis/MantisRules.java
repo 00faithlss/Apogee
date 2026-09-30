@@ -2,10 +2,20 @@ package dev.apogee.mantis;
 
 /** Fixed balance values for the Mantis Blades. */
 public final class MantisRules {
-    /** Added to the wearer's attack damage while the blades are out. */
-    public static final double DAMAGE_BONUS = 6.0;
-    /** Added to the wearer's attack speed while the blades are out (base 4.0). */
-    public static final double ATTACK_SPEED_BONUS = 1.5;
+    /**
+     * Attack damage of a fully charged cut (a critical hit deals 1.5 times as much, 15). The
+     * bonus added to the player's base of 1 makes up for whatever the item left in hand adds.
+     */
+    public static final double ATTACK_DAMAGE = 10.0;
+    /** Attack speed while the blades are out: two full-strength cuts per second (base 4.0). */
+    public static final double ATTACK_SPEED = 2.0;
+    /** Seconds a target hit by the thermal blades burns. */
+    public static final float THERMAL_BURN_SECONDS = 4.0F;
+    /** Slowness the electric blades leave on a target: length in ticks and amplifier (2 is Slowness III). */
+    public static final int ELECTRIC_STUN_TICKS = 30;
+    public static final int ELECTRIC_STUN_AMPLIFIER = 2;
+    /** Extra damage of the electric blades against a target standing or swimming in water. */
+    public static final float ELECTRIC_WATER_BONUS = 4.0F;
     /** Damage of the two-blade lunge to every entity along its path. */
     public static final float THRUST_DAMAGE = 9.0F;
     /** Reach of the lunge, in blocks. */

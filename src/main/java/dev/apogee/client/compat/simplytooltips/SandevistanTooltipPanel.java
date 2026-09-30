@@ -13,14 +13,11 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
 import net.sweenus.simplytooltips.client.TooltipKeybinds;
-import net.sweenus.simplytooltips.client.TooltipNavigationConfig;
-import net.sweenus.simplytooltips.client.render.TabState;
 
 /**
  * The approved Apogee tooltip: translucent black panel, metal frame with cyan details, the 3D
@@ -54,30 +51,16 @@ public final class SandevistanTooltipPanel {
     private static final float TITLE_SCALE = 1.3F;
     private static final ResourceLocation CYBER_FONT = Apogee.id("cyber");
 
-    private static final ResourceLocation RESET_KEY = Apogee.id("tooltip_left");
-    private static final List<TabState.Tab> TABS = List.of(TabState.Tab.LORE, TabState.Tab.STATS);
-    private static final long HIDDEN_AFTER_MS = 150L;
-    private static long lastRenderMs;
-    private static boolean ownsTabs;
-
     private SandevistanTooltipPanel() {
     }
 
     public static void render(GuiGraphics graphics, Font font, ItemStack stack, int mouseX, int mouseY, int screenW, int screenH) {
-        boolean tabsEnabled = TooltipNavigationConfig.tooltipTabs();
         long now = Util.getMillis();
-        if (tabsEnabled) {
-            if (now - lastRenderMs > HIDDEN_AFTER_MS) {
-                // Hovering away and back always opens on the description.
-                TabState.notifyItem(RESET_KEY, TABS);
-            }
-            TabState.notifyItem(BuiltInRegistries.ITEM.getKey(stack.getItem()), TABS);
-            ownsTabs = true;
-        }
-        lastRenderMs = now;
-        boolean statsView = tabsEnabled && TabState.activeTab() == TabState.Tab.STATS;
-        boolean showDescription = !tabsEnabled || !statsView;
-        boolean showStats = !tabsEnabled || statsView;
+        TooltipTabs.View view = TooltipTabs.update(stack);
+        boolean tabsEnabled = view.tabsEnabled();
+        boolean statsView = view.statsView();
+        boolean showDescription = view.showDescription();
+        boolean showStats = view.showStats();
 
         Component title = cyber(SandevistanTooltipContent.title());
         Component badge = cyber(SandevistanTooltipContent.badge());
@@ -196,16 +179,8 @@ public final class SandevistanTooltipPanel {
     }
 
     /** Rajdhani, a Cyberpunk-style typeface, with Minecraft's font as fallback for missing glyphs. */
-    private static Component cyber(Component text) {
+    static Component cyber(Component text) {
         return text.copy().withStyle(style -> style.withFont(CYBER_FONT));
-    }
-
-    /** Clears the shared tab list once the Sandevistan tooltip is gone so G is not swallowed elsewhere. */
-    static void releaseTabsIfHidden() {
-        if (ownsTabs && Util.getMillis() - lastRenderMs > HIDDEN_AFTER_MS) {
-            TabState.notifyItem(RESET_KEY, List.of());
-            ownsTabs = false;
-        }
     }
 
     private static void drawFrame(GuiGraphics graphics, int x, int y, int w, int h) {

@@ -8,6 +8,8 @@
     "EntityTimeMixin",
     "LivingEntityMixin",
     "MantisSwingMixin",
+    "MantisAttackMixin",
+    "PlayerAdvancementsMixin",
     "PlayerTickMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerLevelMixin"
