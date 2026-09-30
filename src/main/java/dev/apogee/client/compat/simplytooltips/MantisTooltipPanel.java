@@ -10,12 +10,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.sweenus.simplytooltips.client.TooltipKeybinds;
 
 /**
  * Cyberpunk 2077 style weapon card for the Mantis Blades: translucent red panel, salmon-red frame
- * with the game's cyan corner and tier strip, yellow text, damage per hit and attacks per second
+ * with the game's cyan corner, yellow text, damage per hit and attacks per second
  * in large type with the damage type beside them. Below, the Description view lists the controls
  * and the variant's ability under their own headers (as Simply Swords does for its unique
  * weapons) and the Stats view the exact numbers; Simply Tooltips' cycle key switches them.
@@ -34,8 +33,6 @@ public final class MantisTooltipPanel {
     private static final int CARD = 0x90100305;
     private static final int DROP_SHADOW = 0xA0050102;
     private static final int TAG_TEXT = 0xFF1A0508;
-    /** Cyberpunk 2.0 tier colors, tier 1 to 5: grey, green, blue, purple, orange. */
-    private static final int[] TIER_COLORS = {0xFFB8B8B8, 0xFF4FD26B, 0xFF4AA3FF, 0xFFB45CFF, 0xFFFF9A3C};
 
     private static final int PAD = 9;
     private static final int CARD_SIZE = 36;
@@ -58,10 +55,8 @@ public final class MantisTooltipPanel {
         long now = Util.getMillis();
         TooltipTabs.View view = TooltipTabs.update(stack);
 
-        int tier = tier(stack.getRarity());
         Component title = cyber(stack.getHoverName().copy());
         Component badge = cyber(MantisTooltipContent.badge());
-        Component tierText = cyber(Component.translatable("tooltip.apogee.tier", tier));
         Component damage = cyber(MantisTooltipContent.damagePerHit());
         Component damageLabel = cyber(MantisTooltipContent.damagePerHitLabel());
         Component speed = cyber(MantisTooltipContent.attacksPerSecond());
@@ -84,7 +79,7 @@ public final class MantisTooltipPanel {
         // ---- measure
         int titleW = Math.round(font.width(title) * TITLE_SCALE);
         int tagW = font.width(badge) + 8;
-        int contentW = Math.max(MIN_WIDTH - PAD * 2, CARD_SIZE + 7 + Math.max(titleW, tagW + 6 + font.width(tierText)));
+        int contentW = Math.max(MIN_WIDTH - PAD * 2, CARD_SIZE + 7 + Math.max(titleW, tagW));
         int damageW = Math.max(Math.round(font.width(damage) * NUMBER_SCALE), Math.round(font.width(damageLabel) * SMALL));
         int speedW = Math.max(Math.round(font.width(speed) * NUMBER_SCALE), Math.round(font.width(speedLabel) * SMALL));
         int typeW = Math.max(10 + font.width(type), Math.round(font.width(typeLabel) * SMALL));
@@ -144,20 +139,19 @@ public final class MantisTooltipPanel {
         pose.pushPose();
         pose.translate(0.0F, 0.0F, 400.0F);
 
-        drawFrame(graphics, x, y, panelW, panelH, TIER_COLORS[tier - 1]);
+        drawFrame(graphics, x, y, panelW, panelH);
         motif(graphics, variant, x, y, panelW, panelH, now);
 
         int left = x + PAD;
         int right = x + panelW - PAD;
         int top = y + 7;
 
-        // ---- header: item card, name, tag and tier
+        // ---- header: item card, name and tag
         drawItemCard(graphics, stack, left, top);
         int textX = left + CARD_SIZE + 7;
         glitchTitle(graphics, font, title, textX, top + 4, now);
         int tagY = top + 21;
         drawTag(graphics, font, badge, textX, tagY, tagW);
-        graphics.drawString(font, tierText, textX + tagW + 6, tagY + 1, TIER_COLORS[tier - 1], false);
 
         int cursor = top + HEADER_H + 3;
         graphics.fill(left, cursor, right, cursor + 1, RED_DIM);
@@ -236,16 +230,11 @@ public final class MantisTooltipPanel {
         pose.popPose();
     }
 
-    /** Item rarity to Cyberpunk tier: common is tier 1, epic tier 4. */
-    private static int tier(Rarity rarity) {
-        return Math.min(TIER_COLORS.length, rarity.ordinal() + 1);
-    }
-
     private static Component cyber(Component text) {
         return SandevistanTooltipPanel.cyber(text);
     }
 
-    private static void drawFrame(GuiGraphics graphics, int x, int y, int w, int h, int tierColor) {
+    private static void drawFrame(GuiGraphics graphics, int x, int y, int w, int h) {
         graphics.fill(x + 1, y + h, x + w + 1, y + h + 2, DROP_SHADOW);
         graphics.fillGradient(x, y, x + w, y + h, BACKGROUND_TOP, BACKGROUND_BOTTOM);
         // Salmon-red frame.
@@ -253,9 +242,6 @@ public final class MantisTooltipPanel {
         graphics.fill(x, y + h - 1, x + w, y + h, RED);
         graphics.fill(x, y, x + 1, y + h, RED);
         graphics.fill(x + w - 1, y, x + w, y + h, RED);
-        // Tier strip down the left edge, as on the game's item cards.
-        graphics.fill(x + 1, y + 1, x + 4, y + h - 1, tierColor & 0x00FFFFFF | 0x66000000);
-        graphics.fill(x + 1, y + 1, x + 2, y + h - 1, tierColor);
         // Cyan details: a stretch of the right edge and the filled bottom-right corner.
         graphics.fill(x + w - 1, y + 4, x + w, y + 18, CYAN);
         for (int i = 0; i < CORNER; i++) {

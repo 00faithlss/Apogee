@@ -4,6 +4,16 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.9+1.21.1] — 2026-09-30
+
+### Cambiado (Cuchillas Mantis)
+
+- El tooltip ya no muestra el tier ni la franja de color del tier, igual que el del Sandevistan.
+
+### Añadido (pruebas)
+
+- La prueba de cliente cambia la tecla de desplegar las Cuchillas Mantis y comprueba que el tooltip muestra la nueva.
+
 ## [0.2.8+1.21.1] — 2026-09-30
 
 ### Cambiado (Sandevistan)

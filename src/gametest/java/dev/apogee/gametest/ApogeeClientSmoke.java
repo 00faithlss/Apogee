@@ -194,6 +194,14 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
             case 0 -> {
                 tooltipItem = item;
                 drawTooltip = true;
+                if (item == MANTIS[MANTIS.length - 1]) {
+                    // The tooltip names the deploy key as currently bound in the controls menu.
+                    dev.apogee.client.ApogeeClient.TOGGLE_MANTIS.setKey(com.mojang.blaze3d.platform.InputConstants.getKey("key.keyboard.k"));
+                    net.minecraft.client.KeyMapping.resetMapping();
+                    String shown = dev.apogee.client.tooltip.MantisTooltipContent.sections(dev.apogee.mantis.MantisVariant.ELECTRIC)
+                            .get(0).header().getString();
+                    check(shown.equals("K"), "tooltip follows the rebound deploy key, shows " + shown);
+                }
             }
             case 6 -> shot(mc, "08-" + name + "-description");
             case 7 -> TabState.cycleNext();
