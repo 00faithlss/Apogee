@@ -3,10 +3,13 @@
 #
 #   tools/mantis_tests.sh mp      dedicated server + two clients ("Observer", "Wearer")
 #   tools/mantis_tests.sh compat  runMantisSmoke with Punchy, EMF, ETF and Fresh Animations
+#   tools/mantis_tests.sh motion  first-person arm motion, every tick, in vanilla and with Punchy
+#   tools/mantis_tests.sh calibrate  fits the folded implant onto the hand that follows it
 #   tools/mantis_tests.sh iris    the Mantis smoke script with Sodium, Iris and the MakeUp UltraFast
 #                                 shader pack, in a production-like instance (Iris fails in dev runs)
 #
-# Screenshots and logs end up in build/mantis-mp, build/mantis-compat and build/mantis-iris.
+# Screenshots and logs end up in build/mantis-mp, build/mantis-compat, build/mantis-motion and
+# build/mantis-iris.
 set -eu
 cd "$(dirname "$0")/.."
 ROOT=$(pwd)
@@ -78,6 +81,28 @@ compat)
         net.fabricmc.devlaunchinjector.Main --gameDir "$ROOT/$base" --width 1600 --height 900 > "$base/run.out" 2>&1 || true
     grep -h -E 'Loading [0-9]+ mods|MantisSmoke.*(FAILED|passed|failed)' "$base/run.out" || true
     ;;
+motion|calibrate)
+    # The same run twice: vanilla hands, then with Punchy alone. Motion frames are then tracked
+    # with tools/mantis_motion.py; the calibration logs the fitted folded pose.
+    MODE=$1
+    if [ "$MODE" = motion ]; then PROP=Motion; else PROP=Calibrate; fi
+    # Fixed names give fixed default skins: "Dev" wears sleeves.
+    for kind in vanilla punchy; do
+        base=build/mantis-$MODE/$kind
+        rm -rf "$base" && mkdir -p "$base/mods"
+        if [ "$kind" = punchy ]; then
+            mkdir -p build/mantis-compat/mods
+            fetch() { [ -f "$2" ] || curl -sSfL -o "$2" "$1"; }
+            fetch https://cdn.modrinth.com/data/8aoMKplv/versions/80B8c9Qd/punchy-2.8c-fabric-1.21.1.jar build/mantis-compat/mods/punchy-2.8c-fabric-1.21.1.jar
+            cp build/mantis-compat/mods/punchy-2.8c-fabric-1.21.1.jar "$base/mods/"
+        fi
+        client_options "$base"
+        xvfb-run -a -s "-screen 0 960x540x24" java -Xmx3G -Dfabric.dli.config="$CFG" -Dfabric.dli.env=client \
+            -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Dapogee.mantis$PROP=true -cp "$CP" \
+            net.fabricmc.devlaunchinjector.Main --username "${MOTION_NAME:-Dev}" --gameDir "$ROOT/$base" --width 960 --height 540 > "$base/run.out" 2>&1 || true
+        grep -h -E 'Loading [0-9]+ mods|motion study done|calibrate (start|best)' "$base/run.out" || true
+    done
+    ;;
 iris)
     # A production-like instance (intermediary names, as in a launcher), where Iris works:
     # the built mod, its dependencies, Sodium, Iris, a shader pack and the smoke script jar.
@@ -107,7 +132,7 @@ iris)
     grep -h -E 'Loading [0-9]+ mods|Using shaderpack|Mantis smoke run|MantisSmoke.*(FAILED|passed|failed)' "$base/run.out" || true
     ;;
 *)
-    sed -n '2,8p' "$0"
+    sed -n '2,9p' "$0"
     exit 2
     ;;
 esac

@@ -4,6 +4,21 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.4+1.21.1] — 2026-09-30
+
+### Cambiado (Cuchillas Mantis)
+
+- Movimiento de los brazos en primera persona medido, no a ojo. Se quitó el balanceo por paso de 0.2.3.
+  - Sin Punchy: los brazos se mueven exactamente como la mano vanilla. No tienen movimiento propio; solo reciben el balanceo de la vista si está activado, y se retrasan al girar.
+  - Con Punchy: imitan cómo mueve la mano Punchy, medido cuadro a cuadro. Quietos hacen una deriva lenta de unos 4 s; al caminar, un vaivén lateral al ritmo del paso con una bajada suave; y no reciben el balanceo de la vista.
+- Al guardar las cuchillas, el brazo cerrado termina en la misma pose que la mano que aparece después: la de vanilla, o la de Punchy según una pose ajustada en el juego.
+- El implante dibuja la capa exterior de la manga de la skin, igual que el brazo vanilla, así que al guardarlo ya no cambia la manga.
+
+### Añadido (pruebas)
+
+- `tools/mantis_tests.sh motion`: captura cada tick de la primera persona quieto, caminando, deteniéndose y guardando las cuchillas, con y sin balanceo de la vista, en vanilla y con Punchy. `tools/mantis_motion.py` sigue las manos en esos cuadros y resume cuánto y con qué ritmo se mueven.
+- `tools/mantis_tests.sh calibrate`: ajusta en el juego la pose final del repliegue, comparando cuadro a cuadro con la mano que aparece después.
+
 ## [0.2.3+1.21.1] — 2026-09-30
 
 ### Cambiado (Cuchillas Mantis)

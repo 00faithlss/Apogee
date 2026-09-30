@@ -44,8 +44,13 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
     private static final float SKIN_U0 = 48 / 64F;
     private static final float SKIN_V0 = 16 / 64F;
     private static final float SKIN_V1 = 32 / 64F;
+    /** Vanilla's sleeve inflation, a quarter pixel, in blocks. */
+    private static final float SLEEVE_INFLATE = 0.25F / 16.0F;
 
     private boolean skinPass;
+    /** Within the skin pass: the skin's outer layer, the sleeve, a quarter pixel out. */
+    private boolean sleevePass;
+    private boolean sleeve;
     private ResourceLocation skinTexture;
     private boolean slim;
     private boolean glow;
@@ -66,8 +71,9 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
     }
 
     /** Sets up the next {@link #render} call for a given wearer. */
-    public void prepare(ResourceLocation skinTexture, boolean slim, boolean glow, boolean firstPerson) {
+    public void prepare(ResourceLocation skinTexture, boolean slim, boolean sleeve, boolean glow, boolean firstPerson) {
         this.skinTexture = skinTexture;
+        this.sleeve = sleeve;
         this.slim = slim;
         this.glow = glow;
         this.firstPerson = firstPerson;
@@ -176,10 +182,20 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
             }
             Vector3f normal = normalState.transform(new Vector3f(quad.normal()));
             RenderUtil.fixInvertedFlatCube(cube, normal);
+            // The sleeve sits a quarter pixel out, as vanilla's does.
+            float out = sleevePass ? SLEEVE_INFLATE : 0.0F;
+            Vector3f push = new Vector3f(quad.normal()).mul(out);
             for (GeoVertex vertex : quad.vertices()) {
                 Vector3f position = vertex.position();
-                Vector4f transformed = poseState.transform(new Vector4f(position.x(), position.y(), position.z(), 1.0F));
+                Vector4f transformed = poseState.transform(new Vector4f(position.x() + push.x(), position.y() + push.y(),
+                        position.z() + push.z(), 1.0F));
                 float[] uv = skinUv(position, quad.direction());
+                if (sleevePass) {
+                    // The outer layer: below the arm on the right, beside it on the left.
+                    boolean right = animatable.right();
+                    uv[0] += right ? 0.0F : 16.0F / 64.0F;
+                    uv[1] += right ? 16.0F / 64.0F : 0.0F;
+                }
                 buffer.addVertex(transformed.x(), transformed.y(), transformed.z(), colour, uv[0], uv[1],
                         packedOverlay, packedLight, normal.x(), normal.y(), normal.z());
             }
@@ -272,7 +288,7 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
         return new float[]{u / 64.0F, v / 64.0F};
     }
 
-    /** Second pass: only the skin panels, textured with the wearer's skin. */
+    /** Second pass: only the skin panels, textured with the wearer's skin, and its sleeve layer. */
     private static final class SkinLayer extends GeoRenderLayer<MantisArm> {
         SkinLayer(GeoRenderer<MantisArm> renderer) {
             super(renderer);
@@ -291,8 +307,16 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
             try {
                 renderer.reRender(bakedModel, poseStack, bufferSource, animatable, skinType, bufferSource.getBuffer(skinType),
                         partialTick, packedLight, packedOverlay, -1);
+                if (renderer.sleeve) {
+                    // The skin's outer layer over the panels, drawn like vanilla's sleeve.
+                    RenderType sleeveType = RenderType.entityTranslucent(renderer.skinTexture);
+                    renderer.sleevePass = true;
+                    renderer.reRender(bakedModel, poseStack, bufferSource, animatable, sleeveType, bufferSource.getBuffer(sleeveType),
+                            partialTick, packedLight, packedOverlay, -1);
+                }
             } finally {
                 renderer.skinPass = false;
+                renderer.sleevePass = false;
             }
         }
     }

@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.world.entity.player.PlayerModelPart;
 import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 
@@ -156,7 +157,8 @@ public final class MantisRig {
             poseStack.scale(0.75F, 1.0F, 1.0F);
         }
         poseStack.mulPose(right ? RIGHT_SEAT : LEFT_SEAT);
-        renderer.prepare(player.getSkin().texture(), slim, glow, firstPersonPass);
+        boolean sleeve = player.isModelPartShown(right ? PlayerModelPart.RIGHT_SLEEVE : PlayerModelPart.LEFT_SLEEVE);
+        renderer.prepare(player.getSkin().texture(), slim, sleeve, glow, firstPersonPass);
         renderer.renderInto(poseStack, arm, buffers, light, partialTick);
         poseStack.popPose();
     }

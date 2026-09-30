@@ -103,7 +103,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.2.3+1.21.1 (`build/libs/apogee-0.2.3+1.21.1.jar`) | Todos |
+| Apogee | 0.2.4+1.21.1 (`build/libs/apogee-0.2.4+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -150,12 +150,16 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 tools/mantis_tests.sh mp
 tools/mantis_tests.sh compat
 tools/mantis_tests.sh iris
+tools/mantis_tests.sh motion
+tools/mantis_tests.sh calibrate
 ```
 
 - `mp`: servidor dedicado y dos clientes (`Observer` y `Wearer`). El servidor equipa al portador y dirige despliegue, corte, estocada y repliegue; cada cliente comprueba lo que ve y captura en `build/mantis-mp/<cliente>/screenshots`.
 - `compat`: `runMantisSmoke` con Punchy 2.8c, Entity Model Features 3.3.9, Entity Texture Features 7.2.4 y Fresh Animations 1.10.4 con sus packs *Extensions* y *Player Extension*, descargados en `build/mantis-compat`.
+- `motion`: captura cada tick de la primera persona (quieto, caminando, deteniéndose y guardando las cuchillas), en vanilla y con Punchy, en `build/mantis-motion`. `python3 tools/mantis_motion.py` resume el movimiento de las manos.
+- `calibrate`: ajusta la pose en que termina el repliegue sobre la mano que aparece después (vanilla o Punchy) y la registra en `build/mantis-calibrate/<caso>/run.out`.
 - `iris`: `runMantisSmoke` con Sodium 0.8.13, Iris 1.8.14 y el shader MakeUp UltraFast 9.5e, en una instancia como la de un launcher armada en `build/mantis-iris` (Iris no arranca en el entorno de desarrollo).
-- Los tres requieren Linux con Xvfb.
+- Todos requieren Linux con Xvfb.
 
 El modelo de las Cuchillas Mantis viene del kit Mantis v0.4: los proyectos de Blockbench y su documentación están en [`art/mantis-kit/`](art/mantis-kit/LEEME.md). Tras exportar desde Blockbench con el flujo de GeckoLib, `python3 tools/mantis_kit_import.py <carpeta del kit>` copia geometrías, animaciones y texturas a `assets/apogee` y añade la mano y el tope del hombro que el kit deja fuera de su exportación. Los recursos actuales ya incluyen revisiones posteriores al kit v0.4 (cyberware inferior, hoja y riel separados, alcance de la hoja, colores); volver a importar el kit v0.4 las desharía.
 
