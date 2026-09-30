@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.sweenus.simplytooltips.client.TooltipKeybinds;
 
 /**
- * Cyberpunk 2077 style weapon card for the Mantis Blades: translucent red panel, salmon-red frame
+ * Cyberpunk 2077 style weapon card for the arm cyberware (Mantis Blades and nanowire): translucent red panel, salmon-red frame
  * with the game's cyan corner, yellow text, damage per hit and attacks per second
  * in large type with the damage type beside them. Below, the Description view lists the controls
  * and the variant's ability under their own headers (as Simply Swords does for its unique
@@ -58,9 +58,9 @@ public final class MantisTooltipPanel {
 
         Component title = cyber(stack.getHoverName().copy());
         Component badge = cyber(MantisTooltipContent.badge());
-        Component damage = cyber(MantisTooltipContent.damagePerHit());
+        Component damage = cyber(MantisTooltipContent.damagePerHit(variant));
         Component damageLabel = cyber(MantisTooltipContent.damagePerHitLabel());
-        Component speed = cyber(MantisTooltipContent.attacksPerSecond());
+        Component speed = cyber(MantisTooltipContent.attacksPerSecond(variant));
         Component speedLabel = cyber(MantisTooltipContent.attacksPerSecondLabel());
         Component type = cyber(MantisTooltipContent.damageType(variant));
         Component typeLabel = cyber(MantisTooltipContent.damageTypeLabel());
@@ -339,6 +339,7 @@ public final class MantisTooltipPanel {
         return switch (variant) {
             case THERMAL -> 0xFFFF8A3D;
             case ELECTRIC -> 0xFF5BE4FF;
+            case NANOWIRE -> 0xFFFF3B3B;
             default -> 0xFFE8E2C8;
         };
     }
@@ -359,6 +360,14 @@ public final class MantisTooltipPanel {
             ".##.##.",
             ".#...#.",
             "..###.."};
+    private static final String[] WIRE = {
+            ".###...",
+            "#...#..",
+            "#...#..",
+            ".#..#..",
+            "....#..",
+            "...#...",
+            "..#...."};
     private static final String[] BOLT = {
             "....##.",
             "...##..",
@@ -368,11 +377,12 @@ public final class MantisTooltipPanel {
             "..##...",
             ".##...."};
 
-    /** Seven-pixel damage type icon: a cut, a flame or a bolt. */
+    /** Seven-pixel damage type icon: a cut, a flame, a bolt or a looped wire. */
     private static void drawTypeIcon(GuiGraphics graphics, MantisVariant variant, int x, int y, int color) {
         String[] icon = switch (variant) {
             case THERMAL -> FLAME;
             case ELECTRIC -> BOLT;
+            case NANOWIRE -> WIRE;
             default -> SLASH;
         };
         for (int row = 0; row < icon.length; row++) {

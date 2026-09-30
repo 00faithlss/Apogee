@@ -96,5 +96,17 @@
   "subtitles.apogee.nanowire_retract": "Nanowire retracts",
   "subtitles.apogee.nanowire_swing": "Nanowire lashes",
   "subtitles.apogee.nanowire_hit": "Nanowire cuts",
-  "subtitles.apogee.nanowire_heavy": "Nanowire double lash"
+  "subtitles.apogee.nanowire_heavy": "Nanowire double lash",
+  "advancements.apogee.craft_nanowire.title": "Hanging by a Thread",
+  "advancements.apogee.craft_nanowire.description": "Craft the Nanowire",
+  "tooltip.apogee.value.degrees": "%s°",
+  "tooltip.apogee.mantis_blades.damage_type.nanowire": "Physical",
+  "tooltip.apogee.mantis_blades.description.nanowire": "A monofilament that cuts through anything.",
+  "tooltip.apogee.nanowire.toggle": "Draw / retract the wire",
+  "tooltip.apogee.nanowire.lash": "Alternating lashes",
+  "tooltip.apogee.nanowire.heavy": "Two-wire lash in an arc",
+  "tooltip.apogee.mantis_blades.stat.reach": "Reach",
+  "tooltip.apogee.mantis_blades.stat.heavy": "Two-wire lash damage",
+  "tooltip.apogee.mantis_blades.stat.heavy_arc": "Two-wire lash arc",
+  "tooltip.apogee.mantis_blades.stat.heavy_cooldown": "Two-wire lash cooldown"
 }

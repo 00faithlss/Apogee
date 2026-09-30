@@ -1,0 +1,30 @@
+{
+  "parent": "apogee:craft_sandevistan",
+  "display": {
+    "icon": {
+      "id": "apogee:nanowire"
+    },
+    "title": {
+      "translate": "advancements.apogee.craft_nanowire.title"
+    },
+    "description": {
+      "translate": "advancements.apogee.craft_nanowire.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "crafted_nanowire": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipe_id": "apogee:nanowire"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted_nanowire"
+    ]
+  ]
+}

@@ -2,7 +2,7 @@ package dev.apogee.client.compat.simplytooltips;
 
 import dev.apogee.client.tooltip.MantisTooltipContent;
 import dev.apogee.client.tooltip.SandevistanTooltipContent;
-import dev.apogee.item.MantisBladesItem;
+import dev.apogee.item.ArmCyberwareItem;
 import dev.apogee.mantis.MantisVariant;
 import dev.apogee.registry.ApogeeItems;
 import java.util.ArrayList;
@@ -30,16 +30,16 @@ public final class SimplyTooltipsCompat {
         ClientTickEvents.END_CLIENT_TICK.register(client -> TooltipTabs.releaseIfHidden());
     }
 
-    /** Same routing for the Mantis Blades; TooltipRendererMixin draws {@link MantisTooltipPanel}. */
+    /** Same routing for the arm cyberware (Mantis Blades and nanowire); TooltipRendererMixin draws {@link MantisTooltipPanel}. */
     private static final class MantisProvider implements TooltipProvider {
         @Override
         public boolean supports(ItemStack stack) {
-            return stack.getItem() instanceof MantisBladesItem;
+            return stack.getItem() instanceof ArmCyberwareItem;
         }
 
         @Override
         public ModernTooltipModel build(ItemStack stack, List<Component> lines, boolean altDown) {
-            MantisVariant variant = ((MantisBladesItem) stack.getItem()).variant();
+            MantisVariant variant = ((ArmCyberwareItem) stack.getItem()).variant();
             List<String> ability = MantisTooltipContent.descriptionLines(variant).stream().map(Component::getString).toList();
             List<String> body = new ArrayList<>();
             for (MantisTooltipContent.Section section : MantisTooltipContent.sections(variant)) {

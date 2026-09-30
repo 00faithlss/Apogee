@@ -3,14 +3,16 @@ package dev.apogee.client.tooltip;
 import dev.apogee.client.ApogeeClient;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.MantisVariant;
+import dev.apogee.mantis.NanowireRules;
+import java.math.RoundingMode;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 
 /**
- * Tooltip text for the Mantis Blades, read from {@link MantisRules} so the tooltip always shows
- * what the blades actually do. Laid out like a Cyberpunk 2077 weapon card: damage per hit and
+ * Tooltip text for the arm cyberware (the Mantis Blades and the nanowire), read from
+ * {@link MantisRules} and {@link NanowireRules} so the tooltip always shows what it actually does. Laid out like a Cyberpunk 2077 weapon card: damage per hit and
  * attacks per second up top, then the controls and the variant's ability (in the manner of
  * Simply Swords' unique weapons), then the detailed numbers.
  */
@@ -29,16 +31,16 @@ public final class MantisTooltipContent {
         return Component.translatable("tooltip.apogee.mantis_blades.badge");
     }
 
-    public static Component damagePerHit() {
-        return Component.literal(number(MantisRules.ATTACK_DAMAGE));
+    public static Component damagePerHit(MantisVariant variant) {
+        return Component.literal(number(variant == MantisVariant.NANOWIRE ? NanowireRules.ATTACK_DAMAGE : MantisRules.ATTACK_DAMAGE));
     }
 
     public static Component damagePerHitLabel() {
         return Component.translatable("tooltip.apogee.mantis_blades.damage_per_hit");
     }
 
-    public static Component attacksPerSecond() {
-        return Component.literal(number(MantisRules.ATTACK_SPEED));
+    public static Component attacksPerSecond(MantisVariant variant) {
+        return Component.literal(number(variant == MantisVariant.NANOWIRE ? NanowireRules.ATTACK_SPEED : MantisRules.ATTACK_SPEED));
     }
 
     public static Component attacksPerSecondLabel() {
@@ -60,13 +62,14 @@ public final class MantisTooltipContent {
 
     public static List<Section> sections(MantisVariant variant) {
         List<Section> sections = new ArrayList<>();
+        boolean wire = variant == MantisVariant.NANOWIRE;
         sections.add(new Section(ApogeeClient.TOGGLE_MANTIS.getTranslatedKeyMessage().copy(),
-                List.of(Component.translatable("tooltip.apogee.mantis_blades.toggle"))));
+                List.of(Component.translatable(wire ? "tooltip.apogee.nanowire.toggle" : "tooltip.apogee.mantis_blades.toggle"))));
         sections.add(new Section(Component.translatable("tooltip.apogee.mantis_blades.left_click"),
-                List.of(Component.translatable("tooltip.apogee.mantis_blades.slash"))));
+                List.of(Component.translatable(wire ? "tooltip.apogee.nanowire.lash" : "tooltip.apogee.mantis_blades.slash"))));
         sections.add(new Section(Component.translatable("tooltip.apogee.mantis_blades.right_click"),
-                List.of(Component.translatable("tooltip.apogee.mantis_blades.lunge"))));
-        if (variant != MantisVariant.STANDARD) {
+                List.of(Component.translatable(wire ? "tooltip.apogee.nanowire.heavy" : "tooltip.apogee.mantis_blades.lunge"))));
+        if (variant == MantisVariant.THERMAL || variant == MantisVariant.ELECTRIC) {
             sections.add(new Section(Component.translatable("tooltip.apogee.mantis_blades.ability." + key(variant)),
                     List.of(Component.translatable("tooltip.apogee.mantis_blades.ability." + key(variant) + ".text"))));
         }
@@ -80,6 +83,14 @@ public final class MantisTooltipContent {
     public static List<Stat> stats(MantisVariant variant) {
         List<Stat> stats = new ArrayList<>();
         // Damage per hit and attacks per second are already on the card in large type.
+        if (variant == MantisVariant.NANOWIRE) {
+            stats.add(stat("critical", Component.literal(number(NanowireRules.ATTACK_DAMAGE * 1.5)), false));
+            stats.add(stat("reach", Component.translatable("tooltip.apogee.value.blocks", number(3.0 + NanowireRules.REACH_BONUS)), false));
+            stats.add(stat("heavy", Component.literal(number(NanowireRules.HEAVY_DAMAGE)), true));
+            stats.add(stat("heavy_arc", Component.translatable("tooltip.apogee.value.degrees", number(NanowireRules.HEAVY_HALF_ANGLE * 2.0)), false));
+            stats.add(stat("heavy_cooldown", seconds(NanowireRules.HEAVY_COOLDOWN_TICKS), false));
+            return stats;
+        }
         stats.add(stat("critical", Component.literal(number(MantisRules.ATTACK_DAMAGE * 1.5)), false));
         stats.add(stat("lunge", Component.literal(number(MantisRules.THRUST_DAMAGE)), true));
         stats.add(stat("lunge_reach", Component.translatable("tooltip.apogee.value.blocks", number(MantisRules.THRUST_REACH)), false));
@@ -105,7 +116,7 @@ public final class MantisTooltipContent {
     /** Plain lines for when Simply Tooltips is not installed. */
     public static List<Component> plainLines(MantisVariant variant) {
         List<Component> lines = new ArrayList<>(descriptionLines(variant));
-        lines.add(Component.translatable("tooltip.apogee.mantis_blades.plain_stats", damagePerHit(), attacksPerSecond(), damageType(variant)));
+        lines.add(Component.translatable("tooltip.apogee.mantis_blades.plain_stats", damagePerHit(variant), attacksPerSecond(variant), damageType(variant)));
         for (Section section : sections(variant)) {
             lines.add(Component.translatable("tooltip.apogee.mantis_blades.plain_section", section.header(), section.lines().get(0)));
         }
@@ -124,7 +135,8 @@ public final class MantisTooltipContent {
         return Component.translatable("tooltip.apogee.value.seconds", number(ticks / 20.0));
     }
 
+    /** At most two decimals: the nanowire's 1.33 attacks per second, not 1.3333333333333333. */
     private static String number(double value) {
-        return new BigDecimal(Double.toString(value)).stripTrailingZeros().toPlainString();
+        return new BigDecimal(Double.toString(value)).setScale(2, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
     }
 }

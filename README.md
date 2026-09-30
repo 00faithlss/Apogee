@@ -14,7 +14,7 @@ Contiene tres implantes, el **Sandevistan**, las **Cuchillas Mantis** y el **Nan
 | `apogee:mantis_blades` | Cuchillas Mantis | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:mantis_blades_thermal` | Cuchillas Mantis térmicas | Variante que prende fuego al objetivo. |
 | `apogee:mantis_blades_electric` | Cuchillas Mantis eléctricas | Variante que aturde al objetivo. |
-| `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. Aún sin receta: se obtiene del inventario creativo o con `/give`. |
+| `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
@@ -52,11 +52,20 @@ Todas con forma; dan 1 unidad salvo el cable neural. Se arman en este orden: cab
 | Cuchillas Mantis térmicas | igual, con dos hojas térmicas |
 | Cuchillas Mantis eléctricas | igual, con dos hojas eléctricas |
 
+#### Nanocable
+
+| Resultado | Fila 1 · Fila 2 · Fila 3 |
+|---|---|
+| Nanocable (con forma) | cable neural, chip de control, cable neural · lingote de netherita, Overdrive Kernel T5, lingote de netherita · cable neural, Núcleo T5, cable neural |
+
+Usa las mismas piezas que las Cuchillas Mantis: los cables neurales y el chip de control salen de las recetas de arriba.
+
 ### Logros
 
 - Pestaña **Apogee**: aparece al conseguir cualquier componente, pieza o implante.
 - **Un implante rudimentario** (desafío, marco morado): conseguir el Sandevistan de cualquier forma (crafteándolo, de un cofre o de otro jugador). Muestra el aviso de desafío completado y se anuncia en el chat.
 - **Mantis religiosa** (desafío): craftear cualquiera de las tres Cuchillas Mantis.
+- **Pendiendo de un hilo** (desafío): craftear el Nanocable.
 - Cuando un jugador consigue el Sandevistan por primera vez (al completar ese logro, sea crafteándolo, de un cofre o de otro jugador), todos los jugadores del servidor oyen a Adam Smasher decir «A rudimentary implant», estén donde estén.
 
 ## Uso
@@ -84,6 +93,7 @@ Todas con forma; dan 1 unidad salvo el cable neural. Se arman en este orden: cab
 - La carcasa del cable va en la cara interna de cada antebrazo; guardada, queda casi oculta junto al torso. Fuera, el cable rojo brillante va tenso de una mano a la otra.
 - Desplegado: **clic izquierdo** da latigazos alternados (derecho, izquierdo...) de **8 de daño** con **5 bloques** de alcance. **Clic derecho** da un latigazo doble que golpea a todo lo que haya delante, en un arco de 140° dentro del alcance (**12 de daño**, recarga de 3 s). Valores provisionales.
 - Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, y tampoco se puede encantar.
+- Usa la misma tarjeta de tooltip que las Cuchillas Mantis: daño, ataques por segundo y tipo en grande; **G** alterna los controles y las estadísticas del latigazo doble.
 - Sonidos provisionales de Minecraft hasta tener grabaciones propias (eventos `nanowire_*` en `assets/apogee/sounds.json`).
 
 ### Mecánica del Sandevistan (valores por defecto)
@@ -128,7 +138,7 @@ Si Immersive Armors está instalado, los **pantalones Steampunk** (que ya dan do
 
 - **Varios portadores en juego:** la regla ya está comprobada con pruebas automáticas (ver *Varios portadores*); falta confirmarla en una partida real con Essential.
 - **Tooltip en juego:** revisar dentro de Minecraft la fuente Rajdhani y el borde eléctrico en distintas escalas de interfaz y en español.
-- **Nanocable:** faltan su receta, su tooltip y sonidos propios; los valores de combate son provisionales.
+- **Nanocable:** faltan sonidos propios; los valores de combate son provisionales.
 
 ## Instalación para anfitrión e invitados
 
@@ -136,7 +146,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.2.7+1.21.1 (`build/libs/apogee-0.2.7+1.21.1.jar`) | Todos |
+| Apogee | 0.5.0+1.21.1 (`build/libs/apogee-0.5.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -171,7 +181,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 
 - `build`: genera el JAR de entrega en `build/libs`. Las pruebas no se incluyen en él.
 - `runGametest`: 23 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
-- `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltip, activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
+- `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltips (Sandevistan, Cuchillas Mantis y Nanocable), activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
 ```bash
 ./gradlew runMantisSmoke

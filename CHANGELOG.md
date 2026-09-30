@@ -2,6 +2,23 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.5.0+1.21.1] — 2026-09-30
+
+### Añadido (Nanocable)
+
+- Receta del Nanocable con las piezas de las Cuchillas Mantis: cuatro cables neurales, el chip de control, dos lingotes de netherita, el Overdrive Kernel T5 y el Núcleo T5. Detalle en el README.
+- Logro de desafío «Pendiendo de un hilo» al craftearlo; la pestaña Apogee también aparece al conseguirlo.
+- Tooltip con la tarjeta de las Cuchillas Mantis: 8 de daño, 1,33 ataques por segundo y tipo físico en grande, con un ícono de cable. La vista Descripción muestra los controles y la de Estadísticas el golpe crítico, el alcance y el daño, arco y recarga del latigazo doble. Sin Simply Tooltips se muestran líneas simples.
+- La prueba de servidor arma el Nanocable y comprueba que no se puede encantar; la prueba de cliente captura su tooltip.
+
+### Cambiado
+
+- Las cifras del tooltip se redondean a dos decimales.
+
+### Corregido
+
+- La tabla de instalación del README mostraba la versión 0.2.7.
+
 ## [0.4.0+1.21.1] — 2026-09-30
 
 ### Añadido (Nanocable)

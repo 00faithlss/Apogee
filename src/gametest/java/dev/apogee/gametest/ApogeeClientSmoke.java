@@ -44,10 +44,12 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
     private static boolean worldRequested;
     private static boolean drawTooltip;
     private static net.minecraft.world.item.Item tooltipItem = ApogeeItems.SANDEVISTAN;
-    /** The Mantis Blades tooltips, filmed in both views after the Sandevistan run. */
+    /** The arm cyberware tooltips (Mantis Blades and nanowire), filmed in both views after the Sandevistan run. */
     private static final net.minecraft.world.item.Item[] MANTIS = {
-            ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC};
+            ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.NANOWIRE};
     private static final int MANTIS_TOOLTIPS = 272;
+    /** First tick after the arm cyberware tooltips: 20 ticks for each of the four. */
+    private static final int TOOLTIPS_DONE = MANTIS_TOOLTIPS + 20 * 4;
     private static final net.minecraft.world.item.Item[] PARTS = {
             ApogeeItems.NEURAL_CABLE, ApogeeItems.CONTROL_CHIP, ApogeeItems.BLADE_ACTUATOR, ApogeeItems.DEPLOY_RAIL,
             ApogeeItems.MANTIS_BLADE, ApogeeItems.THERMAL_BLADE, ApogeeItems.ELECTRIC_BLADE};
@@ -159,22 +161,22 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
                 player.inventoryMenu.broadcastChanges();
             });
             case 262 -> shot(mc, "07-challenge-toast");
-            case MANTIS_TOOLTIPS + 20 * 3 + 1 -> server(mc, (level, player) -> {
+            case TOOLTIPS_DONE + 1 -> server(mc, (level, player) -> {
                 // The Mantis Blades parts in the hotbar, in crafting order, then the implant.
                 for (int slot = 0; slot < PARTS.length; slot++) {
                     player.getInventory().setItem(slot, new ItemStack(PARTS[slot]));
                 }
                 player.getInventory().setItem(PARTS.length, new ItemStack(ApogeeItems.MANTIS_BLADES));
             });
-            case MANTIS_TOOLTIPS + 20 * 3 + 6 -> {
+            case TOOLTIPS_DONE + 6 -> {
                 var missing = mc.getModelManager().getMissingModel();
                 for (net.minecraft.world.item.Item part : PARTS) {
                     check(mc.getItemRenderer().getItemModelShaper().getItemModel(part) != missing, part + " has an item model");
                 }
                 mc.options.setCameraType(CameraType.FIRST_PERSON);
             }
-            case MANTIS_TOOLTIPS + 20 * 3 + 12 -> shot(mc, "09-mantis-parts");
-            case MANTIS_TOOLTIPS + 20 * 3 + 16 -> {
+            case TOOLTIPS_DONE + 12 -> shot(mc, "09-mantis-parts");
+            case TOOLTIPS_DONE + 16 -> {
                 LOGGER.info(FAILURES.isEmpty() ? "APOGEE_SMOKE_PASSED" : "APOGEE_SMOKE_FAILED " + FAILURES);
                 mc.stop();
             }
@@ -205,14 +207,14 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
         });
     }
 
-    /** Description view, then stats view, of one Mantis Blades tooltip. */
+    /** Description view, then stats view, of one arm cyberware tooltip. */
     private static void mantisTooltip(Minecraft mc, net.minecraft.world.item.Item item, int t) {
         String name = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item).getPath();
         switch (t) {
             case 0 -> {
                 tooltipItem = item;
                 drawTooltip = true;
-                if (item == MANTIS[MANTIS.length - 1]) {
+                if (item == ApogeeItems.MANTIS_BLADES_ELECTRIC) {
                     // The tooltip names the deploy key as currently bound in the controls menu.
                     dev.apogee.client.ApogeeClient.TOGGLE_MANTIS.setKey(com.mojang.blaze3d.platform.InputConstants.getKey("key.keyboard.k"));
                     net.minecraft.client.KeyMapping.resetMapping();

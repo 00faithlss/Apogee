@@ -181,6 +181,9 @@ public final class MantisGameTests implements FabricGameTest {
         Item netherite = Items.NETHERITE_INGOT;
         helper.assertTrue(craft(helper, netherite, Items.NETHERITE_SWORD, netherite, core, kernel, core, netherite, Items.NETHERITE_SWORD, netherite).isEmpty(),
                 "The pre-parts Mantis Blades recipe no longer works");
+        // The nanowire: two netherite housings, the control chip, four neural cables and the T5 parts.
+        expect(helper, craft(helper, cable, chip, cable, netherite, kernel, netherite, cable, core, cable),
+                ApogeeItems.NANOWIRE, 1, "Nanowire");
         helper.assertTrue(craft(helper, Items.BLAZE_ROD, Items.MAGMA_BLOCK, Items.BLAZE_ROD, Items.MAGMA_BLOCK, ApogeeItems.MANTIS_BLADES,
                 Items.MAGMA_BLOCK, Items.BLAZE_ROD, Items.MAGMA_BLOCK, Items.BLAZE_ROD).isEmpty(), "The finished implant is not upgraded any more");
         helper.succeed();
@@ -192,7 +195,7 @@ public final class MantisGameTests implements FabricGameTest {
         Holder<Enchantment> sharpness = enchantments.getHolderOrThrow(Enchantments.SHARPNESS);
         helper.assertTrue(new ItemStack(Items.IRON_SWORD).canBeEnchantedWith(sharpness, EnchantingContext.ACCEPTABLE),
                 "Control: a sword takes Sharpness");
-        for (Item blades : new Item[]{ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC}) {
+        for (Item blades : new Item[]{ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.NANOWIRE}) {
             ItemStack stack = new ItemStack(blades);
             helper.assertTrue(!stack.isEnchantable(), blades + " must not go on the enchanting table");
             enchantments.holders().forEach(enchantment -> {

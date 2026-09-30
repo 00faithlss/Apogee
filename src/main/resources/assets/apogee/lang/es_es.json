@@ -96,5 +96,17 @@
   "subtitles.apogee.nanowire_retract": "Nanocable se recoge",
   "subtitles.apogee.nanowire_swing": "Latigazo de nanocable",
   "subtitles.apogee.nanowire_hit": "Corte de nanocable",
-  "subtitles.apogee.nanowire_heavy": "Latigazo doble de nanocable"
+  "subtitles.apogee.nanowire_heavy": "Latigazo doble de nanocable",
+  "advancements.apogee.craft_nanowire.title": "Pendiendo de un hilo",
+  "advancements.apogee.craft_nanowire.description": "Craftea el Nanocable",
+  "tooltip.apogee.value.degrees": "%s°",
+  "tooltip.apogee.mantis_blades.damage_type.nanowire": "Físico",
+  "tooltip.apogee.mantis_blades.description.nanowire": "Un monofilamento que lo corta todo.",
+  "tooltip.apogee.nanowire.toggle": "Sacar / recoger el cable",
+  "tooltip.apogee.nanowire.lash": "Latigazos alternados",
+  "tooltip.apogee.nanowire.heavy": "Latigazo doble en arco",
+  "tooltip.apogee.mantis_blades.stat.reach": "Alcance",
+  "tooltip.apogee.mantis_blades.stat.heavy": "Daño del latigazo doble",
+  "tooltip.apogee.mantis_blades.stat.heavy_arc": "Arco del latigazo doble",
+  "tooltip.apogee.mantis_blades.stat.heavy_cooldown": "Recarga del latigazo doble"
 }

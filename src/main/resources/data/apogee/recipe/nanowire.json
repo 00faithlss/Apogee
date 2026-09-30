@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "NCN",
+    "HKH",
+    "NON"
+  ],
+  "key": {
+    "N": {
+      "item": "apogee:neural_cable"
+    },
+    "C": {
+      "item": "apogee:control_chip"
+    },
+    "H": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "K": {
+      "item": "apogee:apogee_overdrive_kernel_t5"
+    },
+    "O": {
+      "item": "apogee:os_core_t5"
+    }
+  },
+  "result": {
+    "id": "apogee:nanowire",
+    "count": 1
+  }
+}
