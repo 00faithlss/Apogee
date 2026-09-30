@@ -4,6 +4,11 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+### Cambiado (Cuchillas Mantis)
+
+- El modelo 3D de las Cuchillas Mantis en la mano (primera persona) se ve completo: se ajustó su posición y escala, que lo dejaban casi fuera de la pantalla. En el suelo se ve con la pose del modelo.
+- La prueba de cliente captura los tres modelos en la barra de objetos, en la mano y tirados en el suelo.
+
 ## [0.2.7+1.21.1] — 2026-09-30
 
 ### Cambiado (Cuchillas Mantis)

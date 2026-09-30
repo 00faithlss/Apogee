@@ -20,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +47,7 @@ public final class MantisClientSmoke implements ClientModInitializer {
     /** Ticks each variant's script takes. */
     private static final int ROUND = 280;
     /** Client tick the first variant's round starts on, after the reference shot. */
-    private static final int START = 60;
+    private static final int START = 90;
     /** Third-person camera distance override for close-ups, or 0 for vanilla. */
     public static float cameraDistance;
     private static int worldTicks = -1;
@@ -114,15 +115,31 @@ public final class MantisClientSmoke implements ClientModInitializer {
                 player.getInventory().selected = 1;
             });
             case 48 -> mc.player.getInventory().selected = 1;
-            case 54 -> shot(mc, "reference-inventory-models");
-            case 55 -> {
+            case 60 -> shot(mc, "reference-inventory-models");
+            case 61 -> {
+                // Dropped on the ground: one of each, a little ahead, seen from above.
+                mc.player.setXRot(40.0F);
+                server(mc, (level, player) -> {
+                    Item[] items = {ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC};
+                    for (int i = 0; i < items.length; i++) {
+                        ItemEntity drop = new ItemEntity(level, player.getX() + (i - 1) * 0.8, player.getY(), player.getZ() + 2.2,
+                                new ItemStack(items[i]), 0.0, 0.0, 0.0);
+                        drop.setPickUpDelay(400);
+                        level.addFreshEntity(drop);
+                    }
+                });
+            }
+            case 85 -> shot(mc, "reference-dropped-models");
+            case 86 -> {
                 mc.options.hideGui = true;
                 mc.options.fov().set(30);
+                mc.player.setXRot(0.0F);
                 server(mc, (level, player) -> {
                     for (int slot = 0; slot < 3; slot++) {
                         player.getInventory().setItem(slot, ItemStack.EMPTY);
                     }
                     player.getInventory().selected = 0;
+                    level.getEntitiesOfClass(ItemEntity.class, player.getBoundingBox().inflate(8.0)).forEach(ItemEntity::discard);
                 });
                 mc.player.getInventory().selected = 0;
             }
