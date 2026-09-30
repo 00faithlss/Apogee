@@ -4,6 +4,12 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.11+1.21.1] — 2026-09-30
+
+### Cambiado (Cuchillas Mantis)
+
+- La estocada de la normal y la térmica usa los sonidos de las Mantis: un corte con un golpe más grave encima, como la eléctrica, en lugar del sonido provisional de tridente.
+
 ## [0.2.10+1.21.1] — 2026-09-30
 
 ### Corregido (Sandevistan)

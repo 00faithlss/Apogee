@@ -91,9 +91,24 @@
     "subtitle": "subtitles.apogee.mantis_thrust",
     "sounds": [
       {
-        "name": "minecraft:item.trident.throw",
-        "type": "event",
-        "pitch": 1.5
+        "name": "apogee:mantis/normal_hit1",
+        "stream": false,
+        "pitch": 0.8
+      },
+      {
+        "name": "apogee:mantis/normal_hit2",
+        "stream": false,
+        "pitch": 0.8
+      },
+      {
+        "name": "apogee:mantis/normal_hit3",
+        "stream": false,
+        "pitch": 0.8
+      },
+      {
+        "name": "apogee:mantis/normal_hit4",
+        "stream": false,
+        "pitch": 0.8
       }
     ]
   },

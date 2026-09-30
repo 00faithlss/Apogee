@@ -301,11 +301,12 @@ public final class MantisManager {
                 target.hurt(source, MantisRules.THRUST_DAMAGE + variantBonus(player, target));
             }
         }
+        // A slash with a deeper hit on top, louder than a single cut: electric or plain blades.
         if (DEPLOYED.get(player.getUUID()).variant == MantisVariant.ELECTRIC) {
-            // An electric slash with a deeper discharge on top: louder than a single cut.
             play(player, ApogeeSounds.MANTIS_ELECTRIC_SWING);
             play(player, ApogeeSounds.MANTIS_ELECTRIC_THRUST);
         } else {
+            play(player, ApogeeSounds.MANTIS_SWING);
             play(player, ApogeeSounds.MANTIS_THRUST);
         }
         sendToTrackers(player, new MantisSwing(player.getId(), MantisRules.ARM_BOTH), false);
