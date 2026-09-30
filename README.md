@@ -103,7 +103,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.2.2+1.21.1 (`build/libs/apogee-0.2.2+1.21.1.jar`) | Todos |
+| Apogee | 0.2.3+1.21.1 (`build/libs/apogee-0.2.3+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -144,7 +144,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ./gradlew runMantisSmoke
 ```
 
-- `runMantisSmoke`: abre el cliente, equipa cada variante de las Cuchillas Mantis y captura plegada, desplegando, desplegada, atacando, primeros planos y primera persona en `build/mantis-smoke/screenshots`.
+- `runMantisSmoke`: abre el cliente, equipa cada variante de las Cuchillas Mantis y captura plegada, desplegando, desplegada, atacando, primeros planos y primera persona (también caminando) en `build/mantis-smoke/screenshots`.
 
 ```bash
 tools/mantis_tests.sh mp

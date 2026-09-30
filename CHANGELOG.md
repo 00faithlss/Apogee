@@ -4,6 +4,13 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.3+1.21.1] — 2026-09-30
+
+### Cambiado (Cuchillas Mantis)
+
+- En primera persona, con las cuchillas fuera, los brazos ya no quedan inmóviles: respiran levemente quietos, se balancean con cada paso (alternando derecho e izquierdo) y se retrasan un poco al girar la vista, como las manos con objetos. Así el cambio a las manos normales al guardarlas se nota menos.
+- La prueba de cliente captura la primera persona caminando con las cuchillas desplegadas.
+
 ## [0.2.2+1.21.1] — 2026-09-30
 
 ### Cambiado (Cuchillas Mantis)

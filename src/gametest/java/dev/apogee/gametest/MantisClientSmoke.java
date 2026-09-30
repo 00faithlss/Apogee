@@ -44,7 +44,7 @@ public final class MantisClientSmoke implements ClientModInitializer {
     private static final Item[] VARIANTS = {ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.MANTIS_BLADES};
     private static final String[] NAMES = {"thermal", "electric", "normal"};
     /** Ticks each variant's script takes. */
-    private static final int ROUND = 265;
+    private static final int ROUND = 280;
     /** Client tick the first variant's round starts on, after the reference shot. */
     private static final int START = 60;
     /** Third-person camera distance override for close-ups, or 0 for vanilla. */
@@ -210,9 +210,17 @@ public final class MantisClientSmoke implements ClientModInitializer {
             case 227 -> shot(mc, name + "-15-slash-right-first-person");
             case 234 -> mc.player.swing(InteractionHand.MAIN_HAND);
             case 236 -> shot(mc, name + "-16-slash-left-first-person");
-            case 242 -> ClientPlayNetworking.send(ToggleMantis.INSTANCE);
-            case 249 -> shot(mc, name + "-17-folding-first-person");
-            case 264 -> {
+            // Walk forward once the cut's clip is over: the open arms should swing with the steps.
+            case 247 -> mc.options.keyUp.setDown(true);
+            case 253 -> shot(mc, name + "-16b-walking-first-person-a");
+            case 254 -> shot(mc, name + "-16c-walking-first-person-b");
+            case 255 -> {
+                shot(mc, name + "-16d-walking-first-person-c");
+                mc.options.keyUp.setDown(false);
+            }
+            case 256 -> ClientPlayNetworking.send(ToggleMantis.INSTANCE);
+            case 263 -> shot(mc, name + "-17-folding-first-person");
+            case 279 -> {
                 server(mc, (level, player) -> player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY));
                 mc.options.hideGui = true;
                 mc.options.fov().set(30);
