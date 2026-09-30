@@ -9,9 +9,9 @@
     "announce_to_chat": true
   },
   "criteria": {
-    "crafted_sandevistan": {
-      "trigger": "minecraft:recipe_crafted",
-      "conditions": { "recipe_id": "apogee:sandevistan" }
+    "obtained_sandevistan": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "apogee:sandevistan" } ] }
     }
   }
 }

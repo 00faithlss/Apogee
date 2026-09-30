@@ -4,6 +4,10 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+### Cambiado (Sandevistan)
+
+- El logro «Un implante rudimentario» se obtiene al conseguir el Sandevistan de cualquier forma (crafteo, cofre, otro jugador), no solo al craftearlo. Se mantiene su id `apogee:craft_sandevistan`, así que quien ya lo tenía no lo pierde. La frase de Adam Smasher sigue sonando solo al craftearlo.
+
 ### Cambiado (Cuchillas Mantis)
 
 - El modelo 3D de las Cuchillas Mantis en la mano (primera persona) se ve completo: se ajustó su posición y escala, que lo dejaban casi fuera de la pantalla. En el suelo se ve con la pose del modelo.

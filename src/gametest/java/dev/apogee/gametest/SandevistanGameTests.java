@@ -110,15 +110,18 @@ public final class SandevistanGameTests implements FabricGameTest {
     }
 
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_advancement")
-    public void craftingSandevistanUnlocksChallengeAdvancement(GameTestHelper helper) {
+    public void obtainingSandevistanUnlocksChallengeAdvancement(GameTestHelper helper) {
         ServerPlayer player = player(helper, 1.5, 1.5, GameType.SURVIVAL);
         var advancement = player.getServer().getAdvancements().get(Apogee.id("craft_sandevistan"));
         helper.assertTrue(advancement != null, "Missing advancement apogee:craft_sandevistan");
         helper.assertTrue(advancement.value().display().orElseThrow().getType() == net.minecraft.advancements.AdvancementType.CHALLENGE,
                 "Sandevistan advancement should be a challenge (purple) frame");
         helper.assertTrue(!player.getAdvancements().getOrStartProgress(advancement).isDone(), "Advancement starts locked");
-        net.minecraft.advancements.CriteriaTriggers.RECIPE_CRAFTED.trigger(player, Apogee.id("sandevistan"), List.of());
-        helper.assertTrue(player.getAdvancements().getOrStartProgress(advancement).isDone(), "Crafting the Sandevistan unlocks it");
+        // Any way of getting it counts (crafting, a chest, another player), not only crafting.
+        ItemStack implant = new ItemStack(ApogeeItems.SANDEVISTAN);
+        player.getInventory().add(implant);
+        player.inventoryMenu.broadcastChanges();
+        helper.assertTrue(player.getAdvancements().getOrStartProgress(advancement).isDone(), "Obtaining the Sandevistan unlocks it");
         cleanup(helper, player);
         helper.succeed();
     }

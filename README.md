@@ -35,7 +35,7 @@ Contiene dos implantes, el **Sandevistan** y las **Cuchillas Mantis**, y tres co
 ### Logros
 
 - Pestaña **Apogee**: aparece al conseguir cualquier componente o el implante.
-- **Un implante rudimentario** (desafío, marco morado): craftear el Sandevistan. Muestra el aviso de desafío completado y se anuncia en el chat.
+- **Un implante rudimentario** (desafío, marco morado): conseguir el Sandevistan de cualquier forma (crafteándolo, de un cofre o de otro jugador). Muestra el aviso de desafío completado y se anuncia en el chat.
 - Cada vez que alguien craftea el Sandevistan, todos los jugadores del servidor oyen a Adam Smasher decir «A rudimentary implant», estén donde estén.
 
 ## Uso
