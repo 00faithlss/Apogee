@@ -5,12 +5,16 @@ import com.mojang.math.Axis;
 import dev.apogee.client.ApogeeClientState;
 import dev.apogee.client.config.ApogeeClientConfig;
 import dev.apogee.mixin.client.LivingEntityRendererAccessor;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.Minecraft;
@@ -46,7 +50,7 @@ public final class AfterimageRenderer {
     private AfterimageRenderer() {
     }
 
-    private record Snapshot(double x, double y, double z, float bodyYaw, long tick, float hue, PartPose[] parts) {
+    private record Snapshot(double x, double y, double z, long tick, float hue, BakedSilhouette baked) {
     }
 
     private static final class Trail {
@@ -75,7 +79,7 @@ public final class AfterimageRenderer {
         }
     }
 
-    /** True while afterimages are being drawn. */
+    /** True while afterimages are being baked, so render hooks can skip their own extras. */
     public static boolean isRendering() {
         return rendering;
     }
@@ -111,11 +115,11 @@ public final class AfterimageRenderer {
             if (last != null && player.position().distanceToSqr(last.x, last.y, last.z) < spacing * spacing) {
                 continue;
             }
-            PartPose[] pose = capturePose(player);
-            if (pose == null) {
+            BakedSilhouette baked = bake(player);
+            if (baked == null) {
                 continue;
             }
-            trail.snapshots.addLast(new Snapshot(player.getX(), player.getY(), player.getZ(), player.yBodyRot, clientTick, trail.nextHue, pose));
+            trail.snapshots.addLast(new Snapshot(player.getX(), player.getY(), player.getZ(), clientTick, trail.nextHue, baked));
             trail.nextHue = (trail.nextHue + HUE_SHIFT_PER_IMAGE) % 1.0F;
             while (trail.snapshots.size() > config.afterimageSilhouettes) {
                 trail.snapshots.removeFirst();
@@ -123,6 +127,11 @@ public final class AfterimageRenderer {
         }
     }
 
+    /**
+     * Draws every silhouette from its baked vertices. Render types are visited one at a time
+     * across all silhouettes, so the buffer source switches type (and flushes a batch) only a
+     * handful of times per frame instead of several times per silhouette.
+     */
     public static void render(WorldRenderContext context, long clientTick) {
         if (rendering || TRAILS.isEmpty() || context.consumers() == null || context.matrixStack() == null) {
             return;
@@ -136,87 +145,66 @@ public final class AfterimageRenderer {
         Vec3 camera = context.camera().getPosition();
         boolean firstPerson = minecraft.options.getCameraType().isFirstPerson();
         double minFirstPerson = config.afterimageFirstPersonMinDistance;
+        double range = config.afterimageRangeBlocks;
         float maxAge = (float) (config.afterimageFadeSeconds * 20.0);
         float partialTick = context.tickCounter().getGameTimeDeltaPartialTick(false);
         PoseStack poseStack = context.matrixStack();
         MultiBufferSource buffers = context.consumers();
-        TintedBufferSource tinted = new TintedBufferSource(buffers);
 
-        rendering = true;
-        try {
-            Iterator<Map.Entry<UUID, Trail>> iterator = TRAILS.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<UUID, Trail> entry = iterator.next();
-                if (!(level.getPlayerByUUID(entry.getKey()) instanceof AbstractClientPlayer player)) {
-                    iterator.remove();
-                    continue;
-                }
-                PlayerRenderer renderer = playerRenderer(player);
-                if (renderer == null) {
-                    continue;
-                }
-                PlayerModel<AbstractClientPlayer> model = renderer.getModel();
-                ModelPart[] parts = parts(model);
-                PartPose[] restore = snapshot(parts);
-                try {
-                    for (Snapshot snapshot : entry.getValue().snapshots) {
-                        float age = clientTick - snapshot.tick + partialTick;
-                        float fade = 1.0F - Mth.clamp(age / maxAge, 0.0F, 1.0F);
-                        float alpha = config.afterimageOpacity * fade;
-                        if (alpha <= 0.015F) {
-                            continue;
-                        }
-                        double distanceSqr = camera.distanceToSqr(snapshot.x, snapshot.y + player.getBbHeight() * 0.5, snapshot.z);
-                        if (distanceSqr > config.afterimageRangeBlocks * config.afterimageRangeBlocks) {
-                            continue;
-                        }
-                        if (firstPerson && distanceSqr < minFirstPerson * minFirstPerson) {
-                            continue;
-                        }
-                        int rgb = Mth.hsvToRgb(snapshot.hue, 0.95F, 1.0F);
-                        int argb = Mth.clamp((int) (alpha * 255.0F), 0, 255) << 24 | rgb & 0xFFFFFF;
-                        for (int i = 0; i < parts.length; i++) {
-                            snapshot.parts[i].apply(parts[i]);
-                        }
-                        drawSnapshot(player, renderer, model, snapshot, argb, alpha, camera, poseStack, buffers, tinted);
-                    }
-                } finally {
-                    for (int i = 0; i < parts.length; i++) {
-                        restore[i].apply(parts[i]);
-                    }
-                }
+        // Visible silhouettes with this frame's tint, light and placement.
+        List<Visible> visible = new ArrayList<>();
+        Set<RenderType> types = new LinkedHashSet<>();
+        Iterator<Map.Entry<UUID, Trail>> iterator = TRAILS.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, Trail> entry = iterator.next();
+            if (level.getPlayerByUUID(entry.getKey()) == null) {
+                iterator.remove();
+                continue;
             }
-        } finally {
-            rendering = false;
+            for (Snapshot snapshot : entry.getValue().snapshots) {
+                float age = clientTick - snapshot.tick + partialTick;
+                float fade = 1.0F - Mth.clamp(age / maxAge, 0.0F, 1.0F);
+                float alpha = config.afterimageOpacity * fade;
+                if (alpha <= 0.015F) {
+                    continue;
+                }
+                double distanceSqr = camera.distanceToSqr(snapshot.x, snapshot.y + 0.9, snapshot.z);
+                if (distanceSqr > range * range || firstPerson && distanceSqr < minFirstPerson * minFirstPerson) {
+                    continue;
+                }
+                int rgb = Mth.hsvToRgb(snapshot.hue, 0.95F, 1.0F);
+                int argb = Mth.clamp((int) (alpha * 255.0F), 0, 255) << 24 | rgb & 0xFFFFFF;
+                int light = LevelRenderer.getLightColor(level, BlockPos.containing(snapshot.x, snapshot.y + 1.0, snapshot.z));
+                poseStack.pushPose();
+                poseStack.translate(snapshot.x - camera.x, snapshot.y - camera.y, snapshot.z - camera.z);
+                PoseStack.Pose pose = poseStack.last().copy();
+                poseStack.popPose();
+                visible.add(new Visible(snapshot.baked, pose, argb, light, alpha));
+                types.addAll(snapshot.baked.groups().keySet());
+            }
+        }
+        for (RenderType type : types) {
+            VertexConsumer out = null;
+            for (Visible image : visible) {
+                BakedSilhouette.Group group = image.baked.groups().get(type);
+                // Equipment layers mostly use cutout render types that ignore alpha, so they
+                // drop out before the silhouette has fully faded instead of popping at the end.
+                if (group == null || group.layer && image.alpha <= 0.2F) {
+                    continue;
+                }
+                if (out == null) {
+                    out = buffers.getBuffer(type);
+                }
+                group.replay(out, image.pose, image.argb, image.light);
+            }
         }
     }
 
-    private static void drawSnapshot(AbstractClientPlayer player, PlayerRenderer renderer, PlayerModel<AbstractClientPlayer> model,
-                                     Snapshot snapshot, int argb, float alpha, Vec3 camera, PoseStack poseStack,
-                                     MultiBufferSource buffers, TintedBufferSource tinted) {
-        int light = LevelRenderer.getLightColor(player.level(), BlockPos.containing(snapshot.x, snapshot.y + 1.0, snapshot.z));
-        poseStack.pushPose();
-        poseStack.translate(snapshot.x - camera.x, snapshot.y - camera.y, snapshot.z - camera.z);
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - snapshot.bodyYaw));
-        poseStack.scale(-0.9375F, -0.9375F, 0.9375F);
-        poseStack.translate(0.0F, -1.501F, 0.0F);
-        model.renderToBuffer(poseStack, buffers.getBuffer(RenderType.entityTranslucent(player.getSkin().texture())),
-                light, OverlayTexture.NO_OVERLAY, argb);
-        // Equipment layers mostly use cutout render types that ignore alpha, so they drop out
-        // before the silhouette has fully faded instead of popping at the very end.
-        if (alpha > 0.2F) {
-            tinted.setTint(argb);
-            List<RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>> layers =
-                    ((LivingEntityRendererAccessor<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>) renderer).apogee$layers();
-            float ageInTicks = player.tickCount;
-            for (RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> layer : layers) {
-                layer.render(poseStack, tinted, light, player, 0.0F, 0.0F, 0.0F, ageInTicks, 0.0F, 0.0F);
-            }
-        }
-        poseStack.popPose();
+    private record Visible(BakedSilhouette baked, PoseStack.Pose pose, int argb, int light, float alpha) {
     }
 
-    private static PartPose[] capturePose(AbstractClientPlayer player) {
+    /** Poses the wearer's model as it stands now and records it, with its layers, into vertices. */
+    private static BakedSilhouette bake(AbstractClientPlayer player) {
         PlayerRenderer renderer = playerRenderer(player);
         if (renderer == null) {
             return null;
@@ -224,6 +212,8 @@ public final class AfterimageRenderer {
         PlayerModel<AbstractClientPlayer> model = renderer.getModel();
         ModelPart[] parts = parts(model);
         PartPose[] restore = snapshot(parts);
+        BakedSilhouette baked = new BakedSilhouette();
+        rendering = true;
         try {
             model.setAllVisible(true);
             model.hat.visible = player.isModelPartShown(PlayerModelPart.HAT);
@@ -246,8 +236,24 @@ public final class AfterimageRenderer {
             float limbSwing = riding ? 0.0F : player.walkAnimation.position(1.0F);
             model.prepareMobModel(player, limbSwing, limbSwingAmount, 1.0F);
             model.setupAnim(player, limbSwing, limbSwingAmount, player.tickCount + 1.0F, netHeadYaw, player.getXRot());
-            return snapshot(parts);
+
+            PoseStack poseStack = new PoseStack();
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - player.yBodyRot));
+            poseStack.scale(-0.9375F, -0.9375F, 0.9375F);
+            poseStack.translate(0.0F, -1.501F, 0.0F);
+            model.renderToBuffer(poseStack, baked.getBuffer(RenderType.entityTranslucent(player.getSkin().texture())),
+                    BakedSilhouette.SCENE_LIGHT, OverlayTexture.NO_OVERLAY, -1);
+            baked.startLayers();
+            List<RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>> layers =
+                    ((LivingEntityRendererAccessor<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>) renderer).apogee$layers();
+            float ageInTicks = player.tickCount;
+            for (RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> layer : layers) {
+                layer.render(poseStack, baked, BakedSilhouette.SCENE_LIGHT, player, 0.0F, 0.0F, 0.0F, ageInTicks, 0.0F, 0.0F);
+            }
+            baked.finish();
+            return baked;
         } finally {
+            rendering = false;
             for (int i = 0; i < parts.length; i++) {
                 restore[i].apply(parts[i]);
             }
