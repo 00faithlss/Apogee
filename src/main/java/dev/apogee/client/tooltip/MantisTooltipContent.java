@@ -55,9 +55,7 @@ public final class MantisTooltipContent {
     }
 
     public static List<Component> descriptionLines(MantisVariant variant) {
-        return List.of(
-                Component.translatable("tooltip.apogee.mantis_blades.description." + key(variant) + ".0"),
-                Component.translatable("tooltip.apogee.mantis_blades.description." + key(variant) + ".1"));
+        return List.of(Component.translatable("tooltip.apogee.mantis_blades.description." + key(variant)));
     }
 
     public static List<Section> sections(MantisVariant variant) {

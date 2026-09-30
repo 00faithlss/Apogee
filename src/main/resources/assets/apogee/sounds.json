@@ -139,5 +139,25 @@
         "stream": false
       }
     ]
+  },
+  "mantis_electric_thrust": {
+    "subtitle": "subtitles.apogee.mantis_electric_thrust",
+    "sounds": [
+      {
+        "name": "apogee:mantis/electric_hit1",
+        "stream": false,
+        "pitch": 0.8
+      },
+      {
+        "name": "apogee:mantis/electric_hit2",
+        "stream": false,
+        "pitch": 0.8
+      },
+      {
+        "name": "apogee:mantis/electric_hit3",
+        "stream": false,
+        "pitch": 0.8
+      }
+    ]
   }
 }

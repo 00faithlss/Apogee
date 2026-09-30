@@ -4,6 +4,17 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Unreleased]
 
+## [0.2.10+1.21.1] — 2026-09-30
+
+### Corregido (Sandevistan)
+
+- Las estelas bajaban mucho los FPS después de unos segundos de efecto (de 600 a 30 en el equipo del autor), sobre todo con las Cuchillas Mantis equipadas. Cada silueta volvía a posar y dibujar el modelo del jugador con todas sus capas (armadura, implantes y el modelo GeckoLib de las Mantis) en cada frame. Ahora cada silueta se graba una sola vez como vértices cuando queda atrás y cada frame solo se repiten, agrupados por tipo de render para vaciar el búfer pocas veces. En los modelos muy densos (más de 4.000 vértices, como las Mantis) se descartan las caras de menos de un cuarto de píxel, que en una silueta translúcida no se ven. En la prueba con 25 siluetas, Mantis y armadura de netherita, dibujarlas pasó de 48 ms a 12 ms por frame y de 316.000 a 145.000 vértices.
+
+### Cambiado (Cuchillas Mantis)
+
+- El tooltip tiene el tamaño del del Sandevistan: mismo ancho mínimo, números y título más chicos, una línea de descripción y controles más cortos.
+- La estocada eléctrica suena eléctrica: un corte eléctrico con una descarga grave encima, en lugar del golpe de tridente de la normal.
+
 ## [0.2.9+1.21.1] — 2026-09-30
 
 ### Cambiado (Cuchillas Mantis)

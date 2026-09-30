@@ -34,18 +34,19 @@ public final class MantisTooltipPanel {
     private static final int DROP_SHADOW = 0xA0050102;
     private static final int TAG_TEXT = 0xFF1A0508;
 
-    private static final int PAD = 9;
-    private static final int CARD_SIZE = 36;
-    private static final int HEADER_H = 37;
-    private static final int NUMBERS_H = 27;
+    private static final int PAD = 8;
+    private static final int CARD_SIZE = 30;
+    private static final int HEADER_H = 31;
+    private static final int NUMBERS_H = 21;
     private static final int COLUMN_GAP = 10;
     private static final int LINE_H = 10;
     private static final int STAT_H = 11;
-    private static final int MIN_WIDTH = 200;
+    /** Same as the Sandevistan panel, so both tooltips are the same size. */
+    private static final int MIN_WIDTH = 176;
     private static final int CORNER = 6;
     private static final float SMALL = 0.8F;
-    private static final float TITLE_SCALE = 1.25F;
-    private static final float NUMBER_SCALE = 2.0F;
+    private static final float TITLE_SCALE = 1.15F;
+    private static final float NUMBER_SCALE = 1.5F;
 
     private MantisTooltipPanel() {
     }
@@ -125,7 +126,7 @@ public final class MantisTooltipPanel {
             }
             bodyH += 10;
         }
-        int panelH = 7 + HEADER_H + 8 + NUMBERS_H + 7 + bodyH + 9 + 13 + 5;
+        int panelH = 6 + HEADER_H + 8 + NUMBERS_H + 7 + bodyH + 9 + 13 + 5;
 
         int x = mouseX + 12;
         int y = mouseY - 12;
@@ -144,13 +145,13 @@ public final class MantisTooltipPanel {
 
         int left = x + PAD;
         int right = x + panelW - PAD;
-        int top = y + 7;
+        int top = y + 6;
 
         // ---- header: item card, name and tag
         drawItemCard(graphics, stack, left, top);
         int textX = left + CARD_SIZE + 7;
-        glitchTitle(graphics, font, title, textX, top + 4, now);
-        int tagY = top + 21;
+        glitchTitle(graphics, font, title, textX, top + 2, now);
+        int tagY = top + 17;
         drawTag(graphics, font, badge, textX, tagY, tagW);
 
         int cursor = top + HEADER_H + 3;
@@ -164,9 +165,9 @@ public final class MantisTooltipPanel {
         drawNumber(graphics, font, damage, damageLabel, left, cursor);
         drawNumber(graphics, font, speed, speedLabel, speedX, cursor);
         int typeColor = typeColor(variant);
-        drawTypeIcon(graphics, variant, typeX, cursor + 3, typeColor);
-        graphics.drawString(font, type, typeX + 10, cursor + 3, typeColor, false);
-        drawScaled(graphics, font, typeLabel.getVisualOrderText(), typeX, cursor + 19, RED_SOFT);
+        drawTypeIcon(graphics, variant, typeX, cursor + 2, typeColor);
+        graphics.drawString(font, type, typeX + 10, cursor + 1, typeColor, false);
+        drawScaled(graphics, font, typeLabel.getVisualOrderText(), typeX, cursor + 14, RED_SOFT);
         cursor += NUMBERS_H;
         graphics.fill(left, cursor, right, cursor + 1, RED_DIM);
         cursor += 7;
@@ -261,17 +262,17 @@ public final class MantisTooltipPanel {
         int trace = RED_DARK;
         graphics.fill(left + 4, top + 8, left + 14, top + 9, trace);
         graphics.fill(left + 14, top + 8, left + 15, top + 20, trace);
-        graphics.fill(left + 15, top + 20, left + 31, top + 21, trace);
+        graphics.fill(left + 15, top + 20, left + 27, top + 21, trace);
         graphics.fill(left + 22, top + 4, left + 23, top + 14, trace);
-        graphics.fill(left + 23, top + 14, left + 32, top + 15, trace);
-        graphics.fill(left + 6, top + 27, left + 20, top + 28, trace);
+        graphics.fill(left + 22, top + 14, left + 27, top + 15, trace);
+        graphics.fill(left + 5, top + 25, left + 18, top + 26, trace);
         for (int i = 0; i < 4; i++) {
             graphics.fill(left + size - 1 - i, top + size - 1 - (3 - i), left + size - i, top + size - 1, CYAN);
         }
         PoseStack pose = graphics.pose();
         pose.pushPose();
-        pose.translate(left + 2.0F, top + 2.0F, 0.0F);
-        pose.scale(2.0F, 2.0F, 1.0F);
+        pose.translate(left + 1.0F, top + 1.0F, 0.0F);
+        pose.scale(1.75F, 1.75F, 1.0F);
         graphics.renderItem(stack, 0, 0);
         pose.popPose();
     }
@@ -292,7 +293,7 @@ public final class MantisTooltipPanel {
         pose.scale(NUMBER_SCALE, NUMBER_SCALE, 1.0F);
         graphics.drawString(font, value, 0, 0, YELLOW, false);
         pose.popPose();
-        drawScaled(graphics, font, label.getVisualOrderText(), x, y + 19, RED_SOFT);
+        drawScaled(graphics, font, label.getVisualOrderText(), x, y + 14, RED_SOFT);
     }
 
     /**

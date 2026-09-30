@@ -17,6 +17,7 @@ public final class ApogeeSounds {
     public static final SoundEvent MANTIS_ELECTRIC_DEPLOY = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_electric_deploy"));
     public static final SoundEvent MANTIS_ELECTRIC_SWING = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_electric_swing"));
     public static final SoundEvent MANTIS_ELECTRIC_HIT = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_electric_hit"));
+    public static final SoundEvent MANTIS_ELECTRIC_THRUST = SoundEvent.createVariableRangeEvent(Apogee.id("mantis_electric_thrust"));
 
     private ApogeeSounds() {
     }
@@ -33,5 +34,6 @@ public final class ApogeeSounds {
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_ELECTRIC_DEPLOY.getLocation(), MANTIS_ELECTRIC_DEPLOY);
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_ELECTRIC_SWING.getLocation(), MANTIS_ELECTRIC_SWING);
         Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_ELECTRIC_HIT.getLocation(), MANTIS_ELECTRIC_HIT);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, MANTIS_ELECTRIC_THRUST.getLocation(), MANTIS_ELECTRIC_THRUST);
     }
 }
