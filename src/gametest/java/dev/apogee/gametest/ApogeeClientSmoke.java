@@ -52,7 +52,7 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
     private static final int TOOLTIPS_DONE = MANTIS_TOOLTIPS + 20 * 4;
     private static final net.minecraft.world.item.Item[] PARTS = {
             ApogeeItems.NEURAL_CABLE, ApogeeItems.CONTROL_CHIP, ApogeeItems.BLADE_ACTUATOR, ApogeeItems.DEPLOY_RAIL,
-            ApogeeItems.MANTIS_BLADE, ApogeeItems.THERMAL_BLADE, ApogeeItems.ELECTRIC_BLADE};
+            ApogeeItems.MANTIS_BLADE, ApogeeItems.THERMAL_BLADE, ApogeeItems.ELECTRIC_BLADE, ApogeeItems.ARM_POWER_CORE};
     private static int zombieId = -1;
 
     @Override
@@ -170,7 +170,8 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
             });
             case TOOLTIPS_DONE + 6 -> {
                 var missing = mc.getModelManager().getMissingModel();
-                for (net.minecraft.world.item.Item part : PARTS) {
+                for (net.minecraft.world.item.Item part : java.util.stream.Stream.concat(java.util.Arrays.stream(PARTS),
+                        java.util.stream.Stream.of(ApogeeItems.MONOFILAMENT, ApogeeItems.WIRE_HOUSING)).toList()) {
                     check(mc.getItemRenderer().getItemModelShaper().getItemModel(part) != missing, part + " has an item model");
                 }
                 mc.options.setCameraType(CameraType.FIRST_PERSON);

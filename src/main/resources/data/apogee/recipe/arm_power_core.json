@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SRS",
+    "CEC",
+    "SRS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:netherite_scrap"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "C": {
+      "item": "apogee:neural_cable"
+    },
+    "E": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "result": {
+    "id": "apogee:arm_power_core",
+    "count": 1
+  }
+}

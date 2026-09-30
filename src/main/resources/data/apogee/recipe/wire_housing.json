@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "INI",
+    "IAI",
+    "ICI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "A": {
+      "item": "apogee:blade_actuator"
+    },
+    "C": {
+      "item": "apogee:control_chip"
+    }
+  },
+  "result": {
+    "id": "apogee:wire_housing",
+    "count": 1
+  }
+}

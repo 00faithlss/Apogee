@@ -2,6 +2,22 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.6.0+1.21.1] — 2026-09-30
+
+### Añadido
+
+- Tres piezas nuevas para el ciberware de brazos, con texturas elegidas por el autor del proyecto:
+  - núcleo de potencia de brazos, con la textura `arms_power_core_t4_item` de Project: Edgerunner;
+  - monofilamento, con la textura `component_fiberoptics` de Cyberware: Reforged;
+  - carcasa de nanocable, con la textura `component_plating` de Cyberware: Reforged.
+- Recetas en el README; procedencia en `LICENSE_ASSETS.md`.
+
+### Cambiado
+
+- Las Cuchillas Mantis (las tres variantes) llevan el núcleo de potencia de brazos en lugar del Overdrive Kernel T5, que queda solo para el Sandevistan.
+- El Nanocable se arma con dos carcasas, el monofilamento, el núcleo de potencia de brazos, el Núcleo T5 y cuatro cables neurales. La receta anterior ya no funciona.
+- La prueba de servidor arma las piezas nuevas y comprueba que las recetas con el Overdrive Kernel ya no funcionan.
+
 ## [0.5.1+1.21.1] — 2026-09-30
 
 ### Corregido (Nanocable)

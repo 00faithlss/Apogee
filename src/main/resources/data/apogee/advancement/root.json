@@ -35,7 +35,10 @@
               "apogee:deploy_rail",
               "apogee:mantis_blade",
               "apogee:thermal_blade",
-              "apogee:electric_blade"
+              "apogee:electric_blade",
+              "apogee:arm_power_core",
+              "apogee:monofilament",
+              "apogee:wire_housing"
             ]
           }
         ]

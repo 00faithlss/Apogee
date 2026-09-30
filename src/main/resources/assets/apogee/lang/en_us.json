@@ -108,5 +108,8 @@
   "tooltip.apogee.mantis_blades.stat.reach": "Reach",
   "tooltip.apogee.mantis_blades.stat.heavy": "Two-wire lash damage",
   "tooltip.apogee.mantis_blades.stat.heavy_arc": "Two-wire lash arc",
-  "tooltip.apogee.mantis_blades.stat.heavy_cooldown": "Two-wire lash cooldown"
+  "tooltip.apogee.mantis_blades.stat.heavy_cooldown": "Two-wire lash cooldown",
+  "item.apogee.arm_power_core": "Arm Power Core",
+  "item.apogee.monofilament": "Monofilament",
+  "item.apogee.wire_housing": "Nanowire Housing"
 }

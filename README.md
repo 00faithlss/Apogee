@@ -2,7 +2,7 @@
 
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
-Contiene tres implantes, el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**, tres componentes T5 y siete piezas para armar las Cuchillas Mantis.
+Contiene tres implantes, el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**, tres componentes T5 y diez piezas para armar el ciberware de brazos.
 
 > Estado: primera versión compilable y probada de forma automatizada. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -25,6 +25,9 @@ Contiene tres implantes, el **Sandevistan**, las **Cuchillas Mantis** y el **Nan
 | `apogee:mantis_blade` | Hoja mantis | Hoja de las Cuchillas Mantis normales y base de las otras dos. Apila hasta 16. |
 | `apogee:thermal_blade` | Hoja térmica | Hoja de las Cuchillas Mantis térmicas. Apila hasta 16. |
 | `apogee:electric_blade` | Hoja eléctrica | Hoja de las Cuchillas Mantis eléctricas. Apila hasta 16. |
+| `apogee:arm_power_core` | Núcleo de potencia de brazos | Alimenta las Cuchillas Mantis y el Nanocable. |
+| `apogee:monofilament` | Monofilamento | El cable del Nanocable. |
+| `apogee:wire_housing` | Carcasa de nanocable | Carcasa del antebrazo que guarda y lanza el cable. |
 
 ### Recetas (mesa de crafteo)
 
@@ -48,7 +51,8 @@ Todas con forma; dan 1 unidad salvo el cable neural. Se arman en este orden: cab
 | Hoja mantis | vacío, hierro, vacío · hierro, espada de netherita, hierro · vacío, lingote de netherita, vacío |
 | Hoja térmica | polvo de blaze, bloque de magma, polvo de blaze · bloque de magma, hoja mantis, bloque de magma · polvo de blaze, cable neural, polvo de blaze |
 | Hoja eléctrica | bloque de redstone, pararrayos, bloque de redstone · cobre, hoja mantis, cobre · bloque de redstone, cable neural, bloque de redstone |
-| Cuchillas Mantis | hoja mantis, Overdrive Kernel T5, hoja mantis · riel de despliegue, Núcleo T5, riel de despliegue · actuador de cuchilla, cable neural, actuador de cuchilla |
+| Núcleo de potencia de brazos | chatarra de netherita, bloque de redstone, chatarra de netherita · cable neural, estrella del Nether, cable neural · chatarra de netherita, bloque de redstone, chatarra de netherita |
+| Cuchillas Mantis | hoja mantis, núcleo de potencia de brazos, hoja mantis · riel de despliegue, Núcleo T5, riel de despliegue · actuador de cuchilla, cable neural, actuador de cuchilla |
 | Cuchillas Mantis térmicas | igual, con dos hojas térmicas |
 | Cuchillas Mantis eléctricas | igual, con dos hojas eléctricas |
 
@@ -56,9 +60,11 @@ Todas con forma; dan 1 unidad salvo el cable neural. Se arman en este orden: cab
 
 | Resultado | Fila 1 · Fila 2 · Fila 3 |
 |---|---|
-| Nanocable (con forma) | cable neural, chip de control, cable neural · lingote de netherita, Overdrive Kernel T5, lingote de netherita · cable neural, Núcleo T5, cable neural |
+| Monofilamento | hilo, diamante, hilo · hilo, cable neural, hilo · hilo, diamante, hilo |
+| Carcasa de nanocable | hierro, lingote de netherita, hierro · hierro, actuador de cuchilla, hierro · hierro, chip de control, hierro |
+| Nanocable | carcasa de nanocable, monofilamento, carcasa de nanocable · cable neural, núcleo de potencia de brazos, cable neural · cable neural, Núcleo T5, cable neural |
 
-Usa las mismas piezas que las Cuchillas Mantis: los cables neurales y el chip de control salen de las recetas de arriba.
+Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y el núcleo de potencia salen de las recetas de las Cuchillas Mantis.
 
 ### Logros
 
@@ -146,7 +152,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.5.1+1.21.1 (`build/libs/apogee-0.5.1+1.21.1.jar`) | Todos |
+| Apogee | 0.6.0+1.21.1 (`build/libs/apogee-0.6.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |

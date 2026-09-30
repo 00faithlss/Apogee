@@ -34,6 +34,10 @@ public final class ApogeeItems {
     public static final Item MANTIS_BLADE = blade();
     public static final Item THERMAL_BLADE = blade();
     public static final Item ELECTRIC_BLADE = blade();
+    // Shared by the arm cyberware, then the nanowire's own parts.
+    public static final Item ARM_POWER_CORE = new Item(new Item.Properties().rarity(Rarity.RARE));
+    public static final Item MONOFILAMENT = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item WIRE_HOUSING = new Item(new Item.Properties().rarity(Rarity.UNCOMMON).fireResistant());
 
     private ApogeeItems() {
     }
@@ -63,6 +67,9 @@ public final class ApogeeItems {
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("mantis_blade"), MANTIS_BLADE);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("thermal_blade"), THERMAL_BLADE);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("electric_blade"), ELECTRIC_BLADE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("arm_power_core"), ARM_POWER_CORE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("monofilament"), MONOFILAMENT);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("wire_housing"), WIRE_HOUSING);
 
         CreativeModeTab tab = FabricItemGroup.builder()
                 .icon(() -> new ItemStack(SANDEVISTAN))
@@ -83,6 +90,9 @@ public final class ApogeeItems {
                     output.accept(MANTIS_BLADE);
                     output.accept(THERMAL_BLADE);
                     output.accept(ELECTRIC_BLADE);
+                    output.accept(ARM_POWER_CORE);
+                    output.accept(MONOFILAMENT);
+                    output.accept(WIRE_HOUSING);
                 })
                 .build();
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Apogee.id("apogee"), tab);

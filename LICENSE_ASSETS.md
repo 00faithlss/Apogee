@@ -24,6 +24,7 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
   - `sounds/sandevistan_exit.ogg` → `assets/apogee/sounds/sandevistan_deactivate.ogg`.
   - `textures/item/axolotl_item.png` → `assets/apogee/textures/item/control_chip.png` (Chip de control), elegido por el autor del proyecto. Tomado de `project_edgerunner-1.1.2.jar` descargado de [Modrinth](https://modrinth.com/mod/project-edgerunner), SHA-1 `3dc5ef442f443bee2c1c0f79c0b50a301767a7cc`.
   - `textures/item/arms_actuator_matrix_t4_item.png` → `assets/apogee/textures/item/blade_actuator.png` (Actuador de cuchilla), elegido por el autor del proyecto, del mismo JAR.
+  - `textures/item/arms_power_core_t4_item.png` → `assets/apogee/textures/item/arm_power_core.png` (Núcleo de potencia de brazos), elegido por el autor del proyecto, del mismo JAR.
 - Solo referencia (sin copiar código): duración y colores de la transición radial y del tinte, cadencia, cantidad, alcance y desvanecimiento de las estelas.
 
 ## Zoe Isn't Cyberpunk 2.2.5 — vami
@@ -40,7 +41,10 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
 
 - Origen: [github.com/w1shadel/Cyberware-Reforged](https://github.com/w1shadel/Cyberware-Reforged), commit `e2e59bd311a7ec5cffbd1417f477253206f6266c`. Es un port del Cyberware de Flaxbeard; no se confirmó si su arte original tiene la misma licencia.
 - Licencia: MIT, © 2025 w1shadel. Texto completo en `src/main/resources/licenses/cyberware-reforged-MIT.txt` (viaja dentro del JAR).
-- Usado sin cambios: `assets/cyber_ware_port/textures/item/katana.png` → `assets/apogee/textures/item/mantis_blade.png` (Hoja mantis).
+- Usado sin cambios, elegidos por el autor del proyecto:
+  - `assets/cyber_ware_port/textures/item/katana.png` → `assets/apogee/textures/item/mantis_blade.png` (Hoja mantis).
+  - `assets/cyber_ware_port/textures/item/component_fiberoptics.png` → `assets/apogee/textures/item/monofilament.png` (Monofilamento).
+  - `assets/cyber_ware_port/textures/item/component_plating.png` → `assets/apogee/textures/item/wire_housing.png` (Carcasa de nanocable).
 
 ## Rajdhani SemiBold — Indian Type Foundry
 

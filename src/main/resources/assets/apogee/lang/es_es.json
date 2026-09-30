@@ -108,5 +108,8 @@
   "tooltip.apogee.mantis_blades.stat.reach": "Alcance",
   "tooltip.apogee.mantis_blades.stat.heavy": "Daño del latigazo doble",
   "tooltip.apogee.mantis_blades.stat.heavy_arc": "Arco del latigazo doble",
-  "tooltip.apogee.mantis_blades.stat.heavy_cooldown": "Recarga del latigazo doble"
+  "tooltip.apogee.mantis_blades.stat.heavy_cooldown": "Recarga del latigazo doble",
+  "item.apogee.arm_power_core": "Núcleo de potencia de brazos",
+  "item.apogee.monofilament": "Monofilamento",
+  "item.apogee.wire_housing": "Carcasa de nanocable"
 }

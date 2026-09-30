@@ -2,22 +2,22 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "NCN",
-    "HKH",
-    "NON"
+    "HMH",
+    "CPC",
+    "COC"
   ],
   "key": {
-    "N": {
-      "item": "apogee:neural_cable"
+    "H": {
+      "item": "apogee:wire_housing"
+    },
+    "M": {
+      "item": "apogee:monofilament"
     },
     "C": {
-      "item": "apogee:control_chip"
+      "item": "apogee:neural_cable"
     },
-    "H": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "K": {
-      "item": "apogee:apogee_overdrive_kernel_t5"
+    "P": {
+      "item": "apogee:arm_power_core"
     },
     "O": {
       "item": "apogee:os_core_t5"

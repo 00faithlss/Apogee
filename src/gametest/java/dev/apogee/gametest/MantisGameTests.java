@@ -151,6 +151,7 @@ public final class MantisGameTests implements FabricGameTest {
         Item actuator = ApogeeItems.BLADE_ACTUATOR;
         Item rail = ApogeeItems.DEPLOY_RAIL;
         Item kernel = ApogeeItems.OVERDRIVE_KERNEL_T5;
+        Item power = ApogeeItems.ARM_POWER_CORE;
         Item core = ApogeeItems.OS_CORE_T5;
 
         expect(helper, craft(helper, copper, redstone, copper, redstone, Items.GOLD_INGOT, redstone, copper, redstone, copper),
@@ -169,21 +170,33 @@ public final class MantisGameTests implements FabricGameTest {
         expect(helper, craft(helper, Items.REDSTONE_BLOCK, Items.LIGHTNING_ROD, Items.REDSTONE_BLOCK, copper, ApogeeItems.MANTIS_BLADE, copper,
                 Items.REDSTONE_BLOCK, cable, Items.REDSTONE_BLOCK), ApogeeItems.ELECTRIC_BLADE, 1, "Electric blade");
 
+        expect(helper, craft(helper, Items.NETHERITE_SCRAP, Items.REDSTONE_BLOCK, Items.NETHERITE_SCRAP, cable, Items.NETHER_STAR, cable,
+                Items.NETHERITE_SCRAP, Items.REDSTONE_BLOCK, Items.NETHERITE_SCRAP), power, 1, "Arm power core");
         Item[][] implants = {
                 {ApogeeItems.MANTIS_BLADE, ApogeeItems.MANTIS_BLADES},
                 {ApogeeItems.THERMAL_BLADE, ApogeeItems.MANTIS_BLADES_THERMAL},
                 {ApogeeItems.ELECTRIC_BLADE, ApogeeItems.MANTIS_BLADES_ELECTRIC}};
         for (Item[] implant : implants) {
-            expect(helper, craft(helper, implant[0], kernel, implant[0], rail, core, rail, actuator, cable, actuator),
+            expect(helper, craft(helper, implant[0], power, implant[0], rail, core, rail, actuator, cable, actuator),
                     implant[1], 1, implant[1] + " from its blades");
+            helper.assertTrue(craft(helper, implant[0], kernel, implant[0], rail, core, rail, actuator, cable, actuator).isEmpty(),
+                    implant[1] + " no longer takes the Overdrive Kernel");
         }
         // The old recipes are gone: no netherite-only implant, no upgrade of the finished implant.
         Item netherite = Items.NETHERITE_INGOT;
         helper.assertTrue(craft(helper, netherite, Items.NETHERITE_SWORD, netherite, core, kernel, core, netherite, Items.NETHERITE_SWORD, netherite).isEmpty(),
                 "The pre-parts Mantis Blades recipe no longer works");
-        // The nanowire: two netherite housings, the control chip, four neural cables and the T5 parts.
-        expect(helper, craft(helper, cable, chip, cable, netherite, kernel, netherite, cable, core, cable),
+        // The nanowire: its monofilament and two housings, then the arm power core and the T5 core.
+        Item string = Items.STRING;
+        expect(helper, craft(helper, string, Items.DIAMOND, string, string, cable, string, string, Items.DIAMOND, string),
+                ApogeeItems.MONOFILAMENT, 1, "Monofilament");
+        expect(helper, craft(helper, iron, netherite, iron, iron, actuator, iron, iron, chip, iron),
+                ApogeeItems.WIRE_HOUSING, 1, "Nanowire housing");
+        Item housing = ApogeeItems.WIRE_HOUSING;
+        expect(helper, craft(helper, housing, ApogeeItems.MONOFILAMENT, housing, cable, power, cable, cable, core, cable),
                 ApogeeItems.NANOWIRE, 1, "Nanowire");
+        helper.assertTrue(craft(helper, cable, chip, cable, netherite, kernel, netherite, cable, core, cable).isEmpty(),
+                "The first nanowire recipe no longer works");
         helper.assertTrue(craft(helper, Items.BLAZE_ROD, Items.MAGMA_BLOCK, Items.BLAZE_ROD, Items.MAGMA_BLOCK, ApogeeItems.MANTIS_BLADES,
                 Items.MAGMA_BLOCK, Items.BLAZE_ROD, Items.MAGMA_BLOCK, Items.BLAZE_ROD).isEmpty(), "The finished implant is not upgraded any more");
         helper.succeed();
