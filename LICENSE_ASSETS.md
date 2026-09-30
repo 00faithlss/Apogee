@@ -95,4 +95,12 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 
 - Origen: paquete `nanocable-rojo-geckolib-assets` aportado por el autor del proyecto: modelos y animaciones generados por código (`art/nanowire/source/build.py`), inspirados en el Monowire de Cyberpunk 2077 sin copiar modelos, texturas ni animaciones del juego.
 - Usado: `geo/nanowire_item.geo.json` y `textures/nanowire/nanowire_red{,_glowmask}.png` sin cambios; `geo/nanowire_{left,right}_attachment.geo.json` y `animations/nanowire_{left,right}_attachment.animation.json` sin los huesos del cable, quitados con `tools/nanowire_strip_wire.py` porque el mod dibuja el cable por código. Detalle en `art/nanowire/NOTA.md`.
-- Sonidos provisionales del nanocable: eventos de Minecraft (cadena, caña de pescar, tijeras) hasta tener grabaciones propias.
+
+## Sonidos del Nanocable
+
+- Origen: cuatro MP3 aportados por el autor del proyecto: despliegue, guardado, golpes al aire y golpes (cuatro sonidos cada uno, separados por silencios).
+- Convertidos a Ogg Vorbis mono de 48 kHz, recortados con un fundido de salida y con el pico normalizado a -1 dB.
+- Usado:
+  - `sounds/nanowire/deploy.ogg` (despliegue) y `sounds/nanowire/retract.ogg` (guardado);
+  - `sounds/nanowire/swing{1,2,3,4}.ogg` (latigazo al aire);
+  - `sounds/nanowire/hit{1,2,3,4}.ogg` (golpe al enemigo); el tercero, el de más cuerpo, también es el latigazo doble.

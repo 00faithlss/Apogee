@@ -2,6 +2,16 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.7.0+1.21.1] — 2026-09-30
+
+### Añadido (Nanocable)
+
+- Sonidos propios, aportados por el autor del proyecto, en lugar de los provisionales de Minecraft:
+  - despliegue y guardado;
+  - cuatro latigazos al aire, que se alternan al azar;
+  - cuatro golpes al enemigo, también al azar;
+  - el golpe de más cuerpo para el latigazo doble del clic derecho.
+
 ## [0.6.1+1.21.1] — 2026-09-30
 
 ### Cambiado

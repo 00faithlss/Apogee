@@ -100,7 +100,7 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Desplegado: **clic izquierdo** da latigazos alternados (derecho, izquierdo...) de **8 de daño** con **5 bloques** de alcance. **Clic derecho** da un latigazo doble que golpea a todo lo que haya delante, en un arco de 140° dentro del alcance (**12 de daño**, recarga de 3 s). Valores provisionales.
 - Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, y tampoco se puede encantar.
 - Usa la misma tarjeta de tooltip que las Cuchillas Mantis: daño, ataques por segundo y tipo en grande; **G** alterna los controles y las estadísticas del latigazo doble.
-- Sonidos provisionales de Minecraft hasta tener grabaciones propias (eventos `nanowire_*` en `assets/apogee/sounds.json`).
+- Sonidos propios: despliegue, guardado, latigazo al aire (4 variantes), golpe al enemigo (4 variantes) y latigazo doble, en `assets/apogee/sounds/nanowire/`.
 
 ### Mecánica del Sandevistan (valores por defecto)
 
@@ -144,7 +144,7 @@ Si Immersive Armors está instalado, los **pantalones Steampunk** (que ya dan do
 
 - **Varios portadores en juego:** la regla ya está comprobada con pruebas automáticas (ver *Varios portadores*); falta confirmarla en una partida real con Essential.
 - **Tooltip en juego:** revisar dentro de Minecraft la fuente Rajdhani y el borde eléctrico en distintas escalas de interfaz y en español.
-- **Nanocable:** faltan sonidos propios; los valores de combate son provisionales.
+- **Nanocable:** los valores de combate son provisionales.
 
 ## Instalación para anfitrión e invitados
 
@@ -152,7 +152,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.6.1+1.21.1 (`build/libs/apogee-0.6.1+1.21.1.jar`) | Todos |
+| Apogee | 0.7.0+1.21.1 (`build/libs/apogee-0.7.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
