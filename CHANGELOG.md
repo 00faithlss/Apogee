@@ -2,6 +2,12 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.5.1+1.21.1] — 2026-09-30
+
+### Corregido (Nanocable)
+
+- Al golpear, los cables del Nanocable ya no salen del centro como un solo cable: cada uno sale como un látigo desde su propia mano y se vuelve a unir con el otro en el centro al final. En el golpe doble el cable izquierdo gira más abajo, más a la izquierda y un instante después, así que se ven dos látigos separados.
+
 ## [0.5.0+1.21.1] — 2026-09-30
 
 ### Añadido (Nanocable)

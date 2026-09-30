@@ -22,7 +22,8 @@ import org.joml.Vector3f;
  * <p>Each wire runs from its housing's nozzle along the inside of the hand to the grip on the
  * front of the fist, then on: at rest to the point between both fists, where it meets the other
  * wire (built from the real grips every frame, so it holds whatever poses the arms), and while
- * lashing along the path its free end has just travelled ({@link NanowireMoves}). Fast moves also
+ * lashing along the path its free end has just travelled ({@link NanowireMoves}). A lash lets the
+ * two ends part: each wire whips from its own fist and they join in the middle again at the end. Fast moves also
  * leave fading copies of the wire from a moment before, like the game's light trails.
  *
  * <p>All points are in render space (camera-relative, the camera at the origin), captured from
@@ -118,7 +119,7 @@ public final class NanowireWire {
             float sign = side == 0 ? 1.0F : -1.0F;
             float own = side == 0 ? lashRight : lashLeft;
             float other = side == 0 ? lashLeft : lashRight;
-            Move move = heavy >= 0.0F ? new Move(heavy, true, true)
+            Move move = heavy >= 0.0F ? new Move(NanowireMoves.heavyTime(sign, heavy), true, true)
                     : own >= 0.0F ? new Move(own, false, true)
                     : other >= 0.0F ? new Move(other, false, false)
                     : null;

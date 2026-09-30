@@ -28,7 +28,7 @@ El cable se calcula en cada fotograma (`client/nanowire/NanowireWire` y `Nanowir
 - En reposo va tenso entre las dos manos, con un leve zumbido.
 - Cada golpe sigue una curva por puntos clave (Catmull-Rom centrípeta) que se recorre por longitud de arco con una sola curva de velocidad, así la punta acelera y frena sin tirones.
 - El cable tiene largo fijo y se desliza por el camino de su punta, por eso los lazos se forman solos.
-- Al soltarse, la punta se devuelve en un lazo pequeño y redondo, sin vértices. Al recogerse, el cable se tensa y llega recto a las manos.
+- Al golpear, los dos cables se separan: cada uno sale como un látigo desde su propia mano y, al recogerse, se tensa y vuelve a unirse con el otro en el centro. En el golpe doble el cable izquierdo gira igual que el derecho, más abajo, más a la izquierda y un instante después.
 - Las estelas son el mismo cable unos instantes antes.
 - Se dibuja como cintas orientadas a la cámara: un núcleo rojo emisivo con la textura del paquete y un halo aditivo.
 
