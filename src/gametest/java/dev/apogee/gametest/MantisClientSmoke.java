@@ -15,6 +15,8 @@ import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.AccessibilityOnboardingScreen;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
@@ -24,6 +26,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.item.armortrim.ArmorTrim;
+import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.world.item.armortrim.TrimPatterns;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelSettings;
@@ -44,6 +51,9 @@ public final class MantisClientSmoke implements ClientModInitializer {
     private static final List<String> FAILURES = new ArrayList<>();
     private static final Item[] VARIANTS = {ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.MANTIS_BLADES};
     private static final String[] NAMES = {"thermal", "electric", "normal"};
+    private static final boolean ARMOR = Boolean.getBoolean("apogee.mantisArmorSmoke");
+    private static final Item[] CHESTPLATES = {Items.IRON_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.NETHERITE_CHESTPLATE,
+            Items.LEATHER_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.CHAINMAIL_CHESTPLATE};
     /** Ticks each variant's script takes. */
     private static final int ROUND = 280;
     /** Client tick the first variant's round starts on, after the reference shot. */
@@ -55,7 +65,7 @@ public final class MantisClientSmoke implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        if (!Boolean.getBoolean("apogee.mantisSmoke")) {
+        if (!Boolean.getBoolean("apogee.mantisSmoke") && !ARMOR) {
             return;
         }
         ClientTickEvents.END_CLIENT_TICK.register(MantisClientSmoke::tick);
@@ -83,6 +93,11 @@ public final class MantisClientSmoke implements ClientModInitializer {
         }
         worldTicks++;
         if (worldTicks == 10) {
+            if (ARMOR) {
+                MantisArmorProbe.verify(mc);
+                MantisArmorProbe.clippedCubes = 0;
+                LOGGER.info("armor smoke skin model: {}", mc.player.getSkin().model());
+            }
             mc.options.fov().set(30);
             mc.options.hideGui = true;
             server(mc, (level, player) -> {
@@ -149,12 +164,12 @@ public final class MantisClientSmoke implements ClientModInitializer {
         if (worldTicks < START) {
             return;
         }
-        if (round >= VARIANTS.length) {
+        if (round >= (ARMOR ? Math.min(CHESTPLATES.length, Integer.getInteger("apogee.armorRounds", CHESTPLATES.length)) : VARIANTS.length)) {
             finish(mc);
             return;
         }
-        String name = NAMES[round];
-        Item variant = VARIANTS[round];
+        String name = NAMES[round % VARIANTS.length] + (ARMOR ? "-" + BuiltInRegistries.ITEM.getKey(CHESTPLATES[round]).getPath() : "");
+        Item variant = VARIANTS[round % VARIANTS.length];
         // Three-quarter shots: turn the body 45 degrees from the head (vanilla keeps it within 50).
         boolean turned = (t >= 30 && t <= 45) || (t >= 80 && t <= 95) || (t >= 140 && t <= 147) || (t >= 154 && t <= 157);
         boolean turnedOther = t >= 148 && t <= 153;
@@ -172,6 +187,17 @@ public final class MantisClientSmoke implements ClientModInitializer {
                 var trinkets = dev.emi.trinkets.api.TrinketsApi.getTrinketComponent(player).orElseThrow();
                 trinkets.getInventory().values().forEach(group -> group.values().forEach(inventory -> inventory.clearContent()));
                 check(TrinketItem.equipItem(player, new ItemStack(variant)), "equip " + name);
+                if (ARMOR) {
+                    ItemStack chest = new ItemStack(CHESTPLATES[round]);
+                    if (chest.is(Items.LEATHER_CHESTPLATE)) {
+                        chest.set(DataComponents.DYED_COLOR, new DyedItemColor(0x2688BB, true));
+                    }
+                    chest.set(DataComponents.TRIM, new ArmorTrim(
+                            level.registryAccess().registryOrThrow(Registries.TRIM_MATERIAL).getHolderOrThrow(TrimMaterials.REDSTONE),
+                            level.registryAccess().registryOrThrow(Registries.TRIM_PATTERN).getHolderOrThrow(TrimPatterns.SENTRY)));
+                    chest.enchant(level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.PROTECTION), 1);
+                    player.setItemSlot(EquipmentSlot.CHEST, chest);
+                }
             });
             case 20 -> mc.options.setCameraType(CameraType.THIRD_PERSON_FRONT);
             case 35 -> shot(mc, name + "-01b-folded-three-quarter");
@@ -254,6 +280,12 @@ public final class MantisClientSmoke implements ClientModInitializer {
                 server(mc, (level, player) -> player.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY));
                 mc.options.hideGui = true;
                 mc.options.fov().set(30);
+                if (ARMOR) {
+                    mc.options.setCameraType(CameraType.THIRD_PERSON_FRONT);
+                    shot(mc, name + "-18-restored-armor");
+                    check(MantisArmorProbe.clippedCubes > 0, name + " armor sleeves rendered with clearance");
+                    MantisArmorProbe.clippedCubes = 0;
+                }
             }
             default -> {
             }

@@ -2,6 +2,7 @@ package dev.apogee.client.mantis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.apogee.Apogee;
 import dev.apogee.client.fx.AfterimageRenderer;
 import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.Camera;
@@ -55,6 +56,7 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
     private boolean slim;
     private boolean glow;
     private boolean firstPerson;
+    private float armorDeployment;
     /** Depth inside the blade's bones ({@code blade_slider} and its child {@code cutting_edge}). */
     private int bladeDepth;
     /** While set, only the blade's cubes are drawn. */
@@ -68,6 +70,7 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
         super(new MantisArmGeoModel());
         addRenderLayer(new SkinLayer(this));
         addRenderLayer(new GlowLayer(this));
+        addRenderLayer(new ArmorCuffLayer(this));
     }
 
     /** Sets up the next {@link #render} call for a given wearer. */
@@ -77,6 +80,10 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
         this.slim = slim;
         this.glow = glow;
         this.firstPerson = firstPerson;
+    }
+
+    public void armorDeployment(float progress) {
+        armorDeployment = progress;
     }
 
     /**
@@ -286,6 +293,39 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
             v = baseV + across;
         }
         return new float[]{u / 64.0F, v / 64.0F};
+    }
+
+    private static final class ArmorCuffLayer extends GeoRenderLayer<MantisArm> {
+        private static final ResourceLocation MODEL = Apogee.id("geo/mantis_armor_cuff.geo.json");
+
+        ArmorCuffLayer(GeoRenderer<MantisArm> renderer) {
+            super(renderer);
+        }
+
+        @Override
+        public void render(PoseStack poses, MantisArm arm, BakedGeoModel model, @Nullable RenderType type,
+                           MultiBufferSource buffers, @Nullable VertexConsumer buffer, float partialTick, int light, int overlay) {
+            MantisArmGeoRenderer renderer = (MantisArmGeoRenderer) getRenderer();
+            float progress = renderer.armorDeployment;
+            if (progress <= 0.0F || dev.apogee.client.ripperdoc.RipperdocScreen.xrayPatient()) {
+                return;
+            }
+            BakedGeoModel cuff = renderer.getGeoModel().getBakedModel(MODEL);
+            RenderType cuffType = RenderType.entityCutoutNoCull(getTextureResource(arm));
+            poses.pushPose();
+            try {
+                float opening = Mth.lerp(progress, 11.0F, MantisArmorSleeves.OPENING_Y);
+                poses.translate(0.0F, 0.0F, (4.0F - opening - 4.75F) / 16.0F);
+                // Vanilla armor sleeves are four pixels wide even on a Slim skin.
+                if (renderer.slim) {
+                    poses.translate(0.0F, 0.5F / (0.75F * 16.0F), 0.0F);
+                    poses.scale(1.0F, 4.0F / 3.0F, 1.0F);
+                }
+                renderer.reRender(cuff, poses, buffers, arm, cuffType, buffers.getBuffer(cuffType), partialTick, light, overlay, -1);
+            } finally {
+                poses.popPose();
+            }
+        }
     }
 
     /** Second pass: only the skin panels, textured with the wearer's skin, and its sleeve layer. */

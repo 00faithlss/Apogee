@@ -159,6 +159,8 @@ public final class MantisRig {
         poseStack.mulPose(right ? RIGHT_SEAT : LEFT_SEAT);
         boolean sleeve = player.isModelPartShown(right ? PlayerModelPart.RIGHT_SLEEVE : PlayerModelPart.LEFT_SLEEVE);
         renderer.prepare(player.getSkin().texture(), slim, sleeve, glow, firstPersonPass);
+        renderer.armorDeployment(!firstPersonPass && MantisArmorSleeves.hasVanillaChestplate(player)
+                ? MantisClient.deployProgress(player, partialTick) : 0.0F);
         renderer.renderInto(poseStack, arm, buffers, light, partialTick);
         poseStack.popPose();
     }
