@@ -12,6 +12,28 @@ import org.joml.Vector3f;
  * pull along the cord with a delay towards its tip. Both meet the held point at rest.
  */
 public final class NanowireMoves {
+    static Vector3f heldCurve(Vector3f grip, Vector3f opposite, Vector3f held, float s) {
+        Vector3f sag = new Vector3f(held).sub(new Vector3f(grip).add(opposite).mul(0.5F));
+        return new Vector3f(grip).lerp(held, s).fma(s * (1.0F - s), sag);
+    }
+
+    static List<Vector3f> joinHeld(List<Vector3f> right, List<Vector3f> left) {
+        List<Vector3f> joined = new ArrayList<>(right.size() + left.size() - 1);
+        for (Vector3f point : right) {
+            appendDistinct(joined, point);
+        }
+        for (int i = left.size() - 2; i >= 0; i--) {
+            appendDistinct(joined, left.get(i));
+        }
+        return joined;
+    }
+
+    private static void appendDistinct(List<Vector3f> points, Vector3f point) {
+        if (points.isEmpty() || points.getLast().distanceSquared(point) > 1.0E-12F) {
+            points.add(point);
+        }
+    }
+
     /** Keys of an end path, in frame coordinates for the right arm; the left arm mirrors X. */
     private static final float[][] LASH = {
             {0.85F, -0.12F, 0.75F},

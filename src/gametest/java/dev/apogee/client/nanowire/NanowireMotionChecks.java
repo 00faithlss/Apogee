@@ -6,6 +6,13 @@ import org.joml.Vector3f;
 /** Numerical regressions for the procedural wire, independent of a running world. */
 public final class NanowireMotionChecks {
     public static void main(String[] args) {
+        for (Vector3f[] grips : new Vector3f[][]{
+                {new Vector3f(0.45F, -0.4F, 0.7F), new Vector3f(-0.45F, -0.4F, 0.7F)},
+                {new Vector3f(0.6F, -0.3F, 0.9F), new Vector3f(-0.3F, -0.7F, 0.6F)},
+                {new Vector3f(-0.3F, -0.6F, 0.8F), new Vector3f(0.45F, -0.4F, 0.7F)},
+                {new Vector3f(0.0F, -0.4F, 0.7F), new Vector3f(0.0F, -0.4F, 0.7F)}}) {
+            checkHeld(grips[0], grips[1]);
+        }
         // Include crossed fists and coincident grips: the X attack passes through both poses.
         for (Vector3f grip : new Vector3f[]{new Vector3f(0.45F, -0.4F, 0.7F),
                 new Vector3f(-0.3F, -0.6F, 0.8F), new Vector3f(0.0F, -0.4F, 0.7F)}) {
@@ -56,6 +63,33 @@ public final class NanowireMotionChecks {
             }
         }
         System.out.println("Nanowire motion checks passed: idle joins, mirrored sweeps, finite paths, continuous tips, bounded feed and downward whip propagation.");
+    }
+
+    private static void checkHeld(Vector3f right, Vector3f left) {
+        float tension = Math.min(1.0F, right.distance(left) / 0.5F);
+        Vector3f held = new Vector3f(right).add(left).mul(0.5F).add(0.0F, -0.010F * tension, 0.0F);
+        var r = new java.util.ArrayList<Vector3f>();
+        var l = new java.util.ArrayList<Vector3f>();
+        for (int i = 0; i <= 72; i++) {
+            float s = i / 72.0F;
+            r.add(NanowireMoves.heldCurve(right, left, held, s));
+            l.add(NanowireMoves.heldCurve(left, right, held, s));
+            require(r.getLast().isFinite() && l.getLast().isFinite(), "finite held cable");
+        }
+        close(r.getFirst(), right, "right held cable starts in its fist");
+        close(l.getFirst(), left, "left held cable starts in its fist");
+        close(r.getLast(), l.getLast(), "held cable meets exactly in the middle");
+        Vector3f incoming = new Vector3f(held).sub(NanowireMoves.heldCurve(right, left, held, 0.999F));
+        Vector3f outgoing = NanowireMoves.heldCurve(left, right, held, 0.999F).sub(held);
+        close(incoming, outgoing, "both halves have the same tangent at the join");
+        var joined = NanowireMoves.joinHeld(r, l);
+        close(joined.getFirst(), right, "joined cable starts in the right fist");
+        close(joined.getLast(), left, "joined cable ends in the left fist");
+        long middlePoints = joined.stream().filter(point -> point.distanceSquared(held) < 1.0E-12F).count();
+        require(middlePoints == 1L, "middle must be drawn once without overlapping glow");
+        for (int i = 1; i < joined.size(); i++) {
+            require(joined.get(i).distanceSquared(joined.get(i - 1)) > 1.0E-12F, "joined cable has no zero-length segments");
+        }
     }
 
     private static void checkWhip(float side, int style, Vector3f grip, Vector3f held) {

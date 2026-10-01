@@ -171,7 +171,8 @@ public final class PunchyCompat {
                 var consumer = buffers.getBuffer(RenderType.entitySolid(player.getSkin().texture()));
                 arm.render(poses, consumer, light, OverlayTexture.NO_OVERLAY);
                 if (player.isModelPartShown(right ? PlayerModelPart.RIGHT_SLEEVE : PlayerModelPart.LEFT_SLEEVE)) {
-                    sleeve.render(poses, consumer, light, OverlayTexture.NO_OVERLAY);
+                    sleeve.render(poses, buffers.getBuffer(RenderType.entityTranslucent(player.getSkin().texture())),
+                            light, OverlayTexture.NO_OVERLAY);
                 }
                 NanowireRig.drawOnArm(poses, buffers, light, player, arm, right, partialTick);
             }

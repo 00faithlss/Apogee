@@ -112,12 +112,14 @@ public final class NanowireWire {
 
         // The held point between both fists, a hair below the straight line, with a faint hum.
         Vector3f held = new Vector3f(anchors[0].grip).add(anchors[1].grip).mul(0.5F);
-        held.fma(-0.010F, frame.up()).fma(0.0015F * Mth.sin(time * 44.0F), frame.up());
+        float tension = Math.min(1.0F, anchors[0].grip.distance(anchors[1].grip) / 0.5F);
+        held.fma(tension * (-0.010F + 0.0015F * Mth.sin(time * 44.0F)), frame.up());
 
         VertexConsumer core = buffers.getBuffer(RenderType.entityTranslucentEmissive(NanowireArmGeoModel.TEXTURE));
         List<List<Vector3f>> glow = new ArrayList<>();
         List<List<Vector3f>> trails = new ArrayList<>();
         List<Float> trailAlpha = new ArrayList<>();
+        List<List<Vector3f>> wires = new ArrayList<>(2);
         for (int side = 0; side < 2; side++) {
             float sign = side == 0 ? 1.0F : -1.0F;
             float own = side == 0 ? lashRight : lashLeft;
@@ -133,18 +135,25 @@ public final class NanowireWire {
                 Vector3f between = frame.toFrame(held);
                 path = NanowireMoves.lash(sign, grip, between);
             }
-            List<Vector3f> wire = wire(anchors[side], held, frame, move, path, sign, style, 0.0F, feed);
-            ribbon(core, wire, 1.0F, RED);
-            glow.add(wire);
+            List<Vector3f> wire = wire(anchors[side], anchors[1 - side].grip, held, frame, move, path, sign, style, 0.0F, feed);
+            wires.add(wire);
             float trail = move == null ? 0.0F : NanowireMoves.trail(move.u, move.heavy);
             if (move != null && move.moving && trail > 0.0F) {
                 float duration = (move.heavy ? NanowireRules.HEAVY_TICKS : NanowireRules.LASH_ANIMATION_TICKS) / 20.0F;
                 for (int k = 1; k <= TRAILS; k++) {
-                    trails.add(wire(anchors[side], held, frame, move, path, sign, style, k * TRAIL_SECONDS / duration, feed));
+                    trails.add(wire(anchors[side], anchors[1 - side].grip, held, frame, move, path, sign, style, k * TRAIL_SECONDS / duration, feed));
                     float fade = 1.0F - k / (TRAILS + 1.0F);
                     trailAlpha.add(0.32F * fade * fade * trail);
                 }
             }
+        }
+        if (feed >= 1.0F && heavy < 0.0F && lashRight < 0.0F && lashLeft < 0.0F) {
+            glow.add(NanowireMoves.joinHeld(wires.get(0), wires.get(1)));
+        } else {
+            glow.addAll(wires);
+        }
+        for (List<Vector3f> wire : glow) {
+            ribbon(core, wire, 1.0F, RED);
         }
         VertexConsumer additive = buffers.getBuffer(RenderType.dragonRays());
         for (List<Vector3f> wire : glow) {
@@ -167,7 +176,7 @@ public final class NanowireWire {
      * One wire as a polyline in render space, {@code back} move-time earlier, cut to {@code feed} of
      * its length; {@code path} is its end's path while it lashes, else null.
      */
-    private static List<Vector3f> wire(Anchors anchors, Vector3f held, Frame frame, Move move, NanowireMoves.Path path,
+    private static List<Vector3f> wire(Anchors anchors, Vector3f opposite, Vector3f held, Frame frame, Move move, NanowireMoves.Path path,
                                        float side, int style, float back, float feed) {
         List<Vector3f> points = new ArrayList<>(POINTS + 3);
         points.add(new Vector3f(anchors.nozzle));
@@ -177,8 +186,12 @@ public final class NanowireWire {
         if (move != null && move.heavy) {
             List<Vector3f> stroke = NanowireMoves.heavyWire(side, style, move.u - back,
                     frame.toFrame(grip), frame.toFrame(held), POINTS);
+            float relaxed = 1.0F - NanowireMoves.release(move.u - back, true);
             for (int i = 1; i < stroke.size(); i++) {
-                points.add(frame.toRender(stroke.get(i)));
+                float s = i / (float) POINTS;
+                Vector3f rest = NanowireMoves.heldCurve(grip, opposite, held, s);
+                Vector3f offset = rest.sub(new Vector3f(grip).lerp(held, s));
+                points.add(frame.toRender(stroke.get(i)).fma(relaxed, offset));
             }
             return cut(points, feed);
         }
@@ -186,6 +199,7 @@ public final class NanowireWire {
         float taut = 0.0F;
         float u = 0.0F;
         Vector3f hang = null;
+        float dangling = 0.0F;
         if (move != null) {
             u = move.u - back;
             if (path != null) {
@@ -195,7 +209,8 @@ public final class NanowireWire {
             } else {
                 // The other wire lets go and hangs a little below its own fist until the lash is over.
                 float slack = NanowireMoves.release(u, false);
-                hang = new Vector3f(grip).fma(0.10F, frame.forward()).fma(-0.07F, frame.up()).lerp(held, 1.0F - slack);
+                dangling = slack;
+                hang = new Vector3f(grip).fma(0.10F, frame.forward()).fma(-0.07F, frame.up());
             }
         }
         float tip = path == null ? 0.0F : path.end(u);
@@ -207,7 +222,11 @@ public final class NanowireWire {
         for (int k = 1; k <= POINTS; k++) {
             float s = k / (float) POINTS;
             // At rest: a straight line to the held point, sagging a little in its middle.
-            Vector3f rest = new Vector3f(grip).lerp(hang != null ? hang : held, s).fma(-0.006F * Mth.sin(Mth.PI * s), frame.up());
+            Vector3f rest = NanowireMoves.heldCurve(grip, opposite, held, s);
+            if (hang != null) {
+                Vector3f dropped = new Vector3f(grip).lerp(hang, s).fma(-0.006F * Mth.sin(Mth.PI * s), frame.up());
+                rest.lerp(dropped, dangling);
+            }
             if (release <= 0.0F) {
                 points.add(rest);
                 continue;
