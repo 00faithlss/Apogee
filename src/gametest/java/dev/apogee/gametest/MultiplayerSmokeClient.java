@@ -133,13 +133,13 @@ public final class MultiplayerSmokeClient implements ClientModInitializer {
             return;
         }
         RipperdocMenu menu = screen.getMenu();
-        int arms = RipperdocMenu.Implant.ARMS.ordinal();
+        int arms = RipperdocMenu.slotIndex(RipperdocMenu.Implant.ARMS, 0);
         switch (t) {
             // Shift-click the Mantis Blades out of the arms slot, then the nanowire in.
             case 5 -> mc.gameMode.handleInventoryMouseClick(menu.containerId, arms, 0, ClickType.QUICK_MOVE, mc.player);
             case 15 -> {
                 check(!menu.getSlot(arms).hasItem(), "the Mantis Blades came out of the arms slot");
-                for (int i = RipperdocMenu.Implant.values().length; i < menu.slots.size(); i++) {
+                for (int i = menu.slots.size() - 36; i < menu.slots.size(); i++) {
                     if (menu.getSlot(i).getItem().is(ApogeeItems.NANOWIRE)) {
                         mc.gameMode.handleInventoryMouseClick(menu.containerId, i, 0, ClickType.QUICK_MOVE, mc.player);
                         break;
@@ -148,7 +148,7 @@ public final class MultiplayerSmokeClient implements ClientModInitializer {
             }
             case 25 -> {
                 // The x-ray button, clicked where it is on the screen.
-                double x = (mc.getWindow().getGuiScaledWidth() - RipperdocMenu.WIDTH) / 2.0 + 72;
+                double x = (mc.getWindow().getGuiScaledWidth() - RipperdocMenu.WIDTH) / 2.0 + 88;
                 double y = (mc.getWindow().getGuiScaledHeight() - RipperdocMenu.HEIGHT) / 2.0 + 119;
                 screen.mouseClicked(x, y, 0);
                 screen.mouseReleased(x, y, 0);

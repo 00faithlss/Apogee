@@ -42,6 +42,14 @@
   "advancements.apogee.craft_mantis_blades.description": "Craft the Mantis Blades",
   "key.apogee.toggle_mantis": "Deploy / retract Mantis Blades",
   "trinkets.slot.cyberware.arms": "Arms",
+  "trinkets.slot.cyberware.cortex": "Frontal cortex",
+  "trinkets.slot.cyberware.skeleton": "Skeleton",
+  "trinkets.slot.cyberware.nerves": "Nervous system",
+  "trinkets.slot.cyberware.integumentary": "Integumentary system",
+  "trinkets.slot.cyberware.optics": "Ocular system",
+  "trinkets.slot.cyberware.hands": "Hands",
+  "trinkets.slot.cyberware.circulatory": "Circulatory system",
+  "trinkets.slot.cyberware.legs": "Legs",
   "subtitles.apogee.mantis_deploy": "Mantis Blades deploy",
   "subtitles.apogee.mantis_retract": "Mantis Blades retract",
   "subtitles.apogee.mantis_swing": "Mantis Blades slash",
@@ -119,9 +127,8 @@
   "screen.apogee.ripperdoc.surgery": "Fitting an implant costs 3 hearts",
   "screen.apogee.ripperdoc.rotate": "Drag to rotate",
   "screen.apogee.ripperdoc.xray_empty": "No cyberware detected",
-  "screen.apogee.ripperdoc.slot.arms": "Arms",
-  "screen.apogee.ripperdoc.slot.os": "Operating system",
   "screen.apogee.ripperdoc.empty": "Empty",
   "screen.apogee.ripperdoc.xray": "X-ray",
-  "screen.apogee.ripperdoc.skin": "Skin"
+  "screen.apogee.ripperdoc.skin": "Skin",
+  "screen.apogee.ripperdoc.locked": "No implants for this slot yet"
 }

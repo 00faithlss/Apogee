@@ -1,6 +1,10 @@
 package dev.apogee.client.ripperdoc;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import dev.apogee.Apogee;
 import dev.apogee.ripperdoc.RipperdocMenu;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -20,7 +24,8 @@ import org.joml.Vector3f;
 
 /**
  * The ripperdoc screen, laid out like a chest: on top a dark monitor with a view of the patient
- * between the implant slots, under it the usual inventory. The patient in the view is the player's
+ * between the body systems of the author's design and their implant slots, under it the usual
+ * inventory. The patient in the view is the player's
  * own model with whatever cyberware is fitted, and turns when dragged; in x-ray mode the skin turns
  * see-through and only the cyberware is drawn on it. Everything is drawn at the normal GUI size.
  */
@@ -32,21 +37,19 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
     private static final int MONITOR_Y = 16;
     private static final int MONITOR_W = 162;
     private static final int MONITOR_H = PANEL - MONITOR_Y - 3;
-    /** The patient view in the middle of the monitor. */
-    private static final int VIEW_X = 57;
-    private static final int VIEW_Y = 19;
-    private static final int VIEW_W = 62;
-    private static final int VIEW_H = 92;
-    /** The x-ray and skin buttons under the view. */
-    private static final int BUTTON_Y = VIEW_Y + VIEW_H + 2;
-    private static final int BUTTON_W = 30;
-    private static final int BUTTON_H = 12;
-    private static final int XRAY_X = VIEW_X;
-    private static final int SKIN_X = VIEW_X + VIEW_W - BUTTON_W;
-    /** The side columns, each with one implant slot. */
-    private static final int COLUMN_W = 44;
-    private static final int LEFT_X = 10;
-    private static final int RIGHT_X = 122;
+    /** The patient view in the middle of the monitor, between the two columns of body systems. */
+    private static final int VIEW_X = 65;
+    private static final int VIEW_Y = 18;
+    private static final int VIEW_W = 46;
+    private static final int VIEW_H = 94;
+    /** The x-ray and skin buttons, one over the other under the view. */
+    private static final int BUTTON_X = VIEW_X;
+    private static final int BUTTON_W = VIEW_W;
+    private static final int BUTTON_H = 11;
+    private static final int XRAY_Y = VIEW_Y + VIEW_H + 2;
+    private static final int SKIN_Y = XRAY_Y + BUTTON_H + 2;
+    /** Width of a column of body systems: three slots. */
+    private static final int COLUMN_W = 54;
 
     private static final int MONITOR = 0xFF0B1219;
     private static final int VIEW_BG = 0xFF0F1D26;
@@ -55,6 +58,9 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
     private static final int CYAN = 0xFF7CE0EF;
     private static final int GREY = 0xFF8FA3AD;
     private static final int WHITE = 0xFFE6F1F4;
+    private static final int DIM_PINK = 0xFF7A3346;
+    private static final int LOCKED_BG = 0xFF0C151C;
+    private static final int LOCKED_FRAME = 0xFF1A2E36;
     /** Standing height of a player: the view frames the patient upright whatever their pose. */
     private static final float PATIENT_HEIGHT = EntityType.PLAYER.getHeight();
 
@@ -99,10 +105,17 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
 
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (menu.getCarried().isEmpty() && hoveredSlot instanceof RipperdocMenu.ImplantView && !hoveredSlot.hasItem()) {
-            // An empty implant slot names its body system and what fitting costs.
-            graphics.renderComponentTooltip(font, List.of(slotName(hoveredSlot),
-                    Component.translatable("screen.apogee.ripperdoc.surgery").withStyle(net.minecraft.ChatFormatting.GRAY)), mouseX, mouseY);
+        if (menu.getCarried().isEmpty() && hoveredSlot instanceof RipperdocMenu.ImplantView view && !hoveredSlot.hasItem()) {
+            // An empty implant slot names its body system and what fitting costs, or that nothing
+            // fits there yet.
+            RipperdocMenu.Implant implant = view.implant();
+            graphics.renderComponentTooltip(font, List.of(name(implant),
+                    Component.translatable(available(implant) ? "screen.apogee.ripperdoc.surgery" : "screen.apogee.ripperdoc.locked")
+                            .withStyle(ChatFormatting.GRAY)), mouseX, mouseY);
+            return;
+        }
+        if (menu.getCarried().isEmpty() && hoveredSlot == null && inView(mouseX, mouseY) && !dragging) {
+            graphics.renderTooltip(font, Component.translatable("screen.apogee.ripperdoc.rotate"), mouseX, mouseY);
             return;
         }
         super.renderTooltip(graphics, mouseX, mouseY);
@@ -128,16 +141,34 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
         graphics.renderOutline(x + VIEW_X, y + VIEW_Y, VIEW_W, VIEW_H, FRAME);
         corners(graphics, x + VIEW_X + 2, y + VIEW_Y + 2, VIEW_W - 4, VIEW_H - 4, 4, CYAN);
         renderPatient(graphics);
-        button(graphics, XRAY_X, "screen.apogee.ripperdoc.xray", xray, mouseX, mouseY);
-        button(graphics, SKIN_X, "screen.apogee.ripperdoc.skin", !xray, mouseX, mouseY);
+        button(graphics, XRAY_Y, "screen.apogee.ripperdoc.xray", xray, mouseX, mouseY);
+        button(graphics, SKIN_Y, "screen.apogee.ripperdoc.skin", !xray, mouseX, mouseY);
 
-        // Frames of the implant slots.
+        // Frames of the implant slots, with their body system's icon while empty. Systems with no
+        // implants yet are dimmed.
         for (Slot slot : menu.slots) {
-            if (slot instanceof RipperdocMenu.ImplantView) {
-                graphics.fill(x + slot.x - 1, y + slot.y - 1, x + slot.x + 17, y + slot.y + 17, VIEW_BG);
-                graphics.renderOutline(x + slot.x - 1, y + slot.y - 1, 18, 18, slot.hasItem() ? CYAN : FRAME);
+            if (slot instanceof RipperdocMenu.ImplantView view) {
+                boolean open = available(view.implant());
+                graphics.fill(x + slot.x - 1, y + slot.y - 1, x + slot.x + 17, y + slot.y + 17, open ? VIEW_BG : LOCKED_BG);
+                graphics.renderOutline(x + slot.x - 1, y + slot.y - 1, 18, 18, slot.hasItem() ? CYAN : open ? FRAME : LOCKED_FRAME);
+                if (!slot.hasItem()) {
+                    RenderSystem.enableBlend();
+                    graphics.setColor(1.0F, 1.0F, 1.0F, open ? 0.55F : 0.25F);
+                    graphics.blit(Apogee.id("textures/gui/slots/" + view.implant().slot + ".png"), x + slot.x, y + slot.y, 0, 0, 16, 16, 16, 16);
+                    graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                    RenderSystem.disableBlend();
+                }
             }
         }
+    }
+
+    /** Whether any implant fits a body system yet (its Trinkets tag is not empty). */
+    private static boolean available(RipperdocMenu.Implant implant) {
+        return BuiltInRegistries.ITEM.getTag(implant.tag()).map(tag -> tag.size() > 0).orElse(false);
+    }
+
+    private static Component name(RipperdocMenu.Implant implant) {
+        return Component.translatable("trinkets.slot.cyberware." + implant.slot);
     }
 
     /** Short cyan brackets on the corners of a box, as on the author's design. */
@@ -152,13 +183,13 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
         graphics.fill(x + w - 1, y + h - length, x + w, y + h, color);
     }
 
-    private void button(GuiGraphics graphics, int buttonX, String key, boolean active, int mouseX, int mouseY) {
-        int x = leftPos + buttonX;
-        int y = topPos + BUTTON_Y;
-        boolean hovered = onButton(mouseX, mouseY, buttonX);
+    private void button(GuiGraphics graphics, int buttonY, String key, boolean active, int mouseX, int mouseY) {
+        int x = leftPos + BUTTON_X;
+        int y = topPos + buttonY;
+        boolean hovered = onButton(mouseX, mouseY, buttonY);
         graphics.fill(x, y, x + BUTTON_W, y + BUTTON_H, active ? 0xFF1C4A55 : hovered ? 0xFF16313B : 0xFF112029);
         graphics.renderOutline(x, y, BUTTON_W, BUTTON_H, active ? CYAN : FRAME);
-        small(graphics, Component.translatable(key), x + BUTTON_W / 2.0F, y + 3.5F, 0.65F, active ? WHITE : GREY, true);
+        small(graphics, Component.translatable(key), x + BUTTON_W / 2.0F, y + 3.0F, 0.65F, active ? WHITE : GREY, true);
     }
 
     /** The player's own model in the view, turned by dragging, with the fitted cyberware on it. */
@@ -207,24 +238,17 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
 
         boolean fitted = false;
         for (Slot slot : menu.slots) {
-            if (slot instanceof RipperdocMenu.ImplantView) {
-                int columnX = slot.x < VIEW_X ? LEFT_X : RIGHT_X;
-                // Body system over the slot, what is fitted under it.
-                wrapped(graphics, slotName(slot).copy().withStyle(net.minecraft.ChatFormatting.BOLD), columnX, 22, 0.6F, PINK, true);
-                Component fittedName = slot.hasItem() ? slot.getItem().getHoverName() : Component.translatable("screen.apogee.ripperdoc.empty");
-                wrapped(graphics, fittedName, columnX, slot.y + 20, 0.6F, slot.hasItem() ? CYAN : GREY, true);
-                fitted |= slot.hasItem();
-            }
+            fitted |= slot instanceof RipperdocMenu.ImplantView && slot.hasItem();
         }
-        wrapped(graphics, Component.translatable("screen.apogee.ripperdoc.surgery"), LEFT_X, 98, 0.55F, GREY, false);
-        wrapped(graphics, Component.translatable("screen.apogee.ripperdoc.rotate"), RIGHT_X, 104, 0.55F, GREY, false);
+        // Each body system's name over its slots, shrunk to the column when it is long.
+        for (RipperdocMenu.Implant implant : RipperdocMenu.Implant.values()) {
+            Component name = name(implant);
+            float scale = Math.min(0.6F, COLUMN_W / (float) font.width(name));
+            small(graphics, name, implant.columnX(), implant.rowY() + 0.5F, scale, available(implant) ? PINK : DIM_PINK, false);
+        }
         if (xray && !fitted) {
-            wrapped(graphics, Component.translatable("screen.apogee.ripperdoc.xray_empty"), VIEW_X + 3, VIEW_Y + VIEW_H - 12, 0.55F, PINK, true);
+            wrapped(graphics, Component.translatable("screen.apogee.ripperdoc.xray_empty"), VIEW_X + 3, VIEW_Y + VIEW_H - 14, 0.5F, PINK, true);
         }
-    }
-
-    private Component slotName(Slot slot) {
-        return Component.translatable("screen.apogee.ripperdoc.slot." + ((RipperdocMenu.ImplantView) slot).implant().slot);
     }
 
     /** Small text, centred on {@code x} when asked. */
@@ -236,9 +260,9 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
         graphics.pose().popPose();
     }
 
-    /** Small text wrapped to a side column's width (or the view's), each line centred when asked. */
+    /** Small text wrapped to the view's width, each line centred when asked. */
     private void wrapped(GuiGraphics graphics, Component text, int x, int y, float scale, int color, boolean centred) {
-        int width = x >= VIEW_X && x < VIEW_X + VIEW_W ? VIEW_W - 6 : COLUMN_W;
+        int width = VIEW_W - 6;
         int lineWidth = Math.round(width / scale);
         graphics.pose().pushPose();
         graphics.pose().translate(x, y, 0.0F);
@@ -252,8 +276,8 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
         graphics.pose().popPose();
     }
 
-    private boolean onButton(double x, double y, int buttonX) {
-        return x >= leftPos + buttonX && x < leftPos + buttonX + BUTTON_W && y >= topPos + BUTTON_Y && y < topPos + BUTTON_Y + BUTTON_H;
+    private boolean onButton(double x, double y, int buttonY) {
+        return x >= leftPos + BUTTON_X && x < leftPos + BUTTON_X + BUTTON_W && y >= topPos + buttonY && y < topPos + buttonY + BUTTON_H;
     }
 
     private boolean inView(double x, double y) {
@@ -262,11 +286,11 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0 && onButton(mouseX, mouseY, XRAY_X)) {
+        if (button == 0 && onButton(mouseX, mouseY, XRAY_Y)) {
             setXray(true);
             return true;
         }
-        if (button == 0 && onButton(mouseX, mouseY, SKIN_X)) {
+        if (button == 0 && onButton(mouseX, mouseY, SKIN_Y)) {
             setXray(false);
             return true;
         }

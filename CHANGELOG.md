@@ -2,6 +2,18 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.12.0+1.21.1] — 2026-10-01
+
+### Añadido (Mesa de matasanos)
+
+- Los diez sistemas del diseño del autor son ranuras reales de Trinkets en el grupo de ciberware, con la cantidad del diseño: Corteza frontal (3), Brazos (1), Esqueleto (2), Sistema nervioso (2), Tegumentario (3), Sistema operativo (1), Sistema ocular (1), Manos (2), Circulatorio (3) y Piernas (1). La mesa los muestra todos en dos columnas, con su nombre y el ícono del sistema en cada ranura vacía. Los que todavía no tienen implantes se ven apagados y lo dicen al pasar el mouse; un implante futuro solo tiene que entrar en la etiqueta `trinkets:cyberware/<sistema>`.
+
+### Corregido (Mesa de matasanos)
+
+- El modelo de la camilla se dibujaba girado: el respaldo sobresalía por el lado del pie, fuera de sus dos bloques. Ahora el respaldo queda sobre la mitad de la cabecera.
+- El paciente se orientaba según hacia dónde miraba la cámara, así que podía quedar boca abajo con las piernas metidas en el cojín. Ahora se orienta según la camilla: boca arriba, con la cabeza en el respaldo y las piernas estiradas sobre la parte plana. La cabeza gira desde ahí, hasta 60° a cada lado.
+- Con Entity Model Features (Fresh Animations), las piernas y los brazos del paciente siguen la animación de dormir del pack.
+
 ## [0.11.0+1.21.1] — 2026-10-01
 
 ### Cambiado (Mesa de matasanos)

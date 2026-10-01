@@ -32,15 +32,19 @@ public abstract class RipperdocPatientMixin {
         if (!onCouch && !(RipperdocScreen.renderingPatient && player.hasPose(Pose.SLEEPING))) {
             return;
         }
-        // Upright and turned like any standing player, instead of across a bed.
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yBodyRot));
         if (onCouch && !RipperdocScreen.renderingPatient) {
             RipperdocSeat seat = (RipperdocSeat) player.getVehicle();
-            // Here +Y is up and +Z is in front of the patient, towards the foot end of the couch.
+            // Turned with the couch, not with the body, which follows where the player looks:
+            // facing its foot end, so lying back puts the head on the raised end, face up.
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - seat.getYRot()));
+            // Here +Y is up and -Z is in front of the patient, towards the foot end of the couch.
             float hipsY = (float) (seat.cushionY() + RipperdocSeat.HIPS_OVER_CUSHION - player.getY());
-            poseStack.translate(0.0F, hipsY, -RipperdocSeat.HINGE_BEHIND);
-            poseStack.mulPose(Axis.XP.rotationDegrees(RipperdocSeat.BACKREST - 90.0F));
+            poseStack.translate(0.0F, hipsY, RipperdocSeat.HINGE_BEHIND);
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F - RipperdocSeat.BACKREST));
             poseStack.translate(0.0F, -HIPS, 0.0F);
+        } else {
+            // Upright and turned like any standing player, instead of across a bed.
+            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - yBodyRot));
         }
         ci.cancel();
     }

@@ -28,6 +28,17 @@ public abstract class RipperdocPatientModelMixin<T extends LivingEntity> {
     @Final
     public ModelPart leftLeg;
 
+    /** Entity Model Features animates the player model, sleeping pose included. */
+    private static final boolean ANIMATED = net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("entity_model_features");
+
+    @Shadow
+    @Final
+    public ModelPart head;
+
+    @Shadow
+    @Final
+    public ModelPart hat;
+
     @Shadow
     @Final
     public ModelPart rightArm;
@@ -47,7 +58,17 @@ public abstract class RipperdocPatientModelMixin<T extends LivingEntity> {
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
     private void apogee$lieDown(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
                                 CallbackInfo ci) {
-        if (RipperdocScreen.renderingPatient || !(entity.getVehicle() instanceof RipperdocSeat)) {
+        if (RipperdocScreen.renderingPatient || !(entity.getVehicle() instanceof RipperdocSeat seat)) {
+            return;
+        }
+        // The body lies along the couch whatever way the player looks, so the head turns from there.
+        float headYaw = Mth.clamp(Mth.wrapDegrees(entity.getYHeadRot() - seat.getYRot()), -60.0F, 60.0F);
+        head.yRot = headYaw * Mth.DEG_TO_RAD;
+        head.xRot = Mth.clamp(headPitch, -30.0F, 45.0F) * Mth.DEG_TO_RAD;
+        head.zRot = 0.0F;
+        hat.copyFrom(head);
+        if (ANIMATED) {
+            // Entity Model Features (Fresh Animations) poses the sleeping body itself.
             return;
         }
         float bend = -RipperdocSeat.BACKREST * Mth.DEG_TO_RAD;

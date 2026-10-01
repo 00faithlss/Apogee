@@ -1,0 +1,12 @@
+{
+  "icon": "apogee:gui/slots/skeleton",
+  "order": 2,
+  "amount": 2,
+  "validator_predicates": [
+    "trinkets:tag"
+  ],
+  "quick_move_predicates": [
+    "trinkets:all"
+  ],
+  "drop_rule": "DEFAULT"
+}

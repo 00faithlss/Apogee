@@ -95,6 +95,9 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
                     BlockState state = ApogeeBlocks.RIPPERDOC_TABLE.defaultBlockState().setValue(RipperdocTableBlock.FACING, Direction.SOUTH);
                     level.setBlock(at, state, 3);
                     level.setBlock(at.south(), state.setValue(RipperdocTableBlock.PART, BedPart.HEAD), 3);
+                    // Markers beyond each end: gold past the foot, diamond past the head.
+                    level.setBlock(at.north().east(), net.minecraft.world.level.block.Blocks.GOLD_BLOCK.defaultBlockState(), 3);
+                    level.setBlock(at.south(2).east(), net.minecraft.world.level.block.Blocks.DIAMOND_BLOCK.defaultBlockState(), 3);
                     player.getInventory().setItem(0, new ItemStack(ApogeeItems.MANTIS_BLADES));
                     player.getInventory().setItem(1, new ItemStack(ApogeeItems.SANDEVISTAN));
                     player.getInventory().setItem(2, new ItemStack(ApogeeBlocks.RIPPERDOC_TABLE_ITEM));
@@ -141,8 +144,8 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
             case 55 -> server(mc, (level, player) -> {
                 // Fit the Mantis Blades and the Sandevistan as clicks on their slots would.
                 RipperdocMenu menu = (RipperdocMenu) player.containerMenu;
-                menu.getSlot(1).setByPlayer(player.getInventory().removeItem(0, 1));
-                menu.getSlot(0).setByPlayer(player.getInventory().removeItem(1, 1));
+                menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.ARMS, 0)).setByPlayer(player.getInventory().removeItem(0, 1));
+                menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.OS, 0)).setByPlayer(player.getInventory().removeItem(1, 1));
                 menu.broadcastChanges();
             });
             case 64 -> {
@@ -189,9 +192,14 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
                 mc.player.setYRot(mc.player.getYRot() + 80.0F);
                 mc.player.setXRot(25.0F);
             }
-            case 100 -> shot(mc, "09-patient-side");
-            case 101 -> server(mc, (level, player) -> player.stopRiding());
-            case 107 -> {
+            case 100 -> {
+                shot(mc, "09-patient-side");
+                // Straight down from over the head: the face and the shirt's front must show.
+                mc.player.setXRot(90.0F);
+            }
+            case 105 -> shot(mc, "10-patient-top");
+            case 106 -> server(mc, (level, player) -> player.stopRiding());
+            case 112 -> {
                 if (FAILURES.isEmpty()) {
                     LOGGER.info("Ripperdoc smoke run passed");
                 } else {
@@ -209,8 +217,8 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
     }
 
     /** Centres of the x-ray and skin buttons, from the screen's top left corner. */
-    private static final int[] XRAY = {57 + 15, 113 + 6};
-    private static final int[] SKIN = {89 + 15, 113 + 6};
+    private static final int[] XRAY = {65 + 23, 114 + 5};
+    private static final int[] SKIN = {65 + 23, 127 + 5};
 
     private static int left(Minecraft mc) {
         return (mc.getWindow().getGuiScaledWidth() - RipperdocMenu.WIDTH) / 2;

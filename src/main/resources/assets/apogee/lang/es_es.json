@@ -42,6 +42,14 @@
   "advancements.apogee.craft_mantis_blades.description": "Craftea las Cuchillas Mantis",
   "key.apogee.toggle_mantis": "Desplegar / guardar Cuchillas Mantis",
   "trinkets.slot.cyberware.arms": "Brazos",
+  "trinkets.slot.cyberware.cortex": "Corteza frontal",
+  "trinkets.slot.cyberware.skeleton": "Esqueleto",
+  "trinkets.slot.cyberware.nerves": "Sistema nervioso",
+  "trinkets.slot.cyberware.integumentary": "Tegumentario",
+  "trinkets.slot.cyberware.optics": "Sistema ocular",
+  "trinkets.slot.cyberware.hands": "Manos",
+  "trinkets.slot.cyberware.circulatory": "Circulatorio",
+  "trinkets.slot.cyberware.legs": "Piernas",
   "subtitles.apogee.mantis_deploy": "Las Cuchillas Mantis se despliegan",
   "subtitles.apogee.mantis_retract": "Las Cuchillas Mantis se guardan",
   "subtitles.apogee.mantis_swing": "Las Cuchillas Mantis cortan el aire",
@@ -119,9 +127,8 @@
   "screen.apogee.ripperdoc.surgery": "Instalar un implante cuesta 3 corazones",
   "screen.apogee.ripperdoc.rotate": "Arrastra para rotar",
   "screen.apogee.ripperdoc.xray_empty": "Sin ciberware detectado",
-  "screen.apogee.ripperdoc.slot.arms": "Brazos",
-  "screen.apogee.ripperdoc.slot.os": "Sistema operativo",
   "screen.apogee.ripperdoc.empty": "Vacío",
   "screen.apogee.ripperdoc.xray": "Rayos X",
-  "screen.apogee.ripperdoc.skin": "Skin"
+  "screen.apogee.ripperdoc.skin": "Skin",
+  "screen.apogee.ripperdoc.locked": "Aún no hay implantes para esta ranura"
 }

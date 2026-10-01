@@ -4,7 +4,7 @@ Paquete `mesa-matasanos-edgerunner-assets`, aportado por el autor del proyecto: 
 
 ## Qué usa el mod
 
-La pantalla se armó primero con `textures/mesa_matasanos_gui.png` (480 × 356). El autor pidió después que funcionara como un cofre, con el inventario normal abajo, así que hoy se dibuja con la textura de cofre de Minecraft y un panel con los colores, las esquinas cian y los botones del diseño. De este paquete quedan como referencia la textura, `layout.json` y las maquetas.
+La pantalla se armó primero con `textures/mesa_matasanos_gui.png` (480 × 356). El autor pidió después que funcionara como un cofre, con el inventario normal abajo, así que hoy se dibuja con la textura de cofre de Minecraft y un panel con los colores, las esquinas cian y los botones del diseño. De `layout.json` se toman las diez categorías y cuántas ranuras tiene cada una: cada categoría es una ranura de Trinkets `cyberware/<id>`. Los íconos `textures/item-*.png` se usan, en gris, como fondo de las ranuras vacías. La textura y las maquetas quedan como referencia.
 
 La camilla del bloque no viene de este paquete: es la camilla del conjunto `ripperdoc` de Project: Edgerunner (ver `LICENSE_ASSETS.md`).
 
@@ -15,7 +15,7 @@ El botón Rayos X del visor vuelve translúcida la piel del jugador (opacidad de
 ## Pendiente
 
 - Anatomía en rayos X (huesos, órganos) con los módulos de `modules/`.
-- Las demás categorías (corteza, esqueleto, etc.) son espacios de diseño sin implantes.
+- Implantes para las demás categorías (corteza, esqueleto, etc.): las ranuras ya existen y aceptan lo que entre en su etiqueta `trinkets:cyberware/<id>`.
 
 ## Qué no se incluyó
 

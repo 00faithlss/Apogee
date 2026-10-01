@@ -19,31 +19,71 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * The ripperdoc screen's menu: one slot per implant slot the mod has (operating system and arms),
- * backed straight by the player's Trinkets inventories, and the player's own inventory below, laid
+ * The ripperdoc screen's menu: the places of every body system on the screen, backed straight by
+ * the player's Trinkets inventories, and the player's own inventory below, laid
  * out like a chest: the ripperdoc panel on top, the usual inventory under it.
  */
 public class RipperdocMenu extends AbstractContainerMenu {
-    /** The implant slots shown on the screen: Trinkets slot, and where its item sits on the screen. */
+    /**
+     * The body systems on the screen, after the author's design: each is a Trinkets slot in the
+     * cyberware group with as many places as the design shows, in two columns either side of the
+     * patient view. Implants go in by the Trinkets tag {@code trinkets:cyberware/<slot>}; systems
+     * with no implants yet take nothing until one is added to their tag.
+     */
     public enum Implant {
-        OS("os", 136, 41),
-        ARMS("arms", 24, 41);
+        CORTEX("cortex", 3, 0, 0),
+        ARMS("arms", 1, 0, 1),
+        SKELETON("skeleton", 2, 0, 2),
+        NERVES("nerves", 2, 0, 3),
+        INTEGUMENTARY("integumentary", 3, 0, 4),
+        OS("os", 1, 1, 0),
+        OPTICS("optics", 1, 1, 1),
+        HANDS("hands", 2, 1, 2),
+        CIRCULATORY("circulatory", 3, 1, 3),
+        LEGS("legs", 1, 1, 4);
 
         public final String slot;
-        public final int x;
-        public final int y;
-        final TagKey<Item> tag;
+        public final int count;
+        /** Left (0) or right (1) column, and the row in it. */
+        public final int column;
+        public final int row;
+        private final TagKey<Item> tag;
 
-        Implant(String slot, int x, int y) {
+        Implant(String slot, int count, int column, int row) {
             this.slot = slot;
-            this.x = x;
-            this.y = y;
+            this.count = count;
+            this.column = column;
+            this.row = row;
             this.tag = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("trinkets", "cyberware/" + slot));
+        }
+
+        /** The Trinkets tag of the items that fit this body system. */
+        public TagKey<Item> tag() {
+            return tag;
+        }
+
+        /** Left edge of the column, where its label and first slot frame start. */
+        public int columnX() {
+            return column == 0 ? 9 : 113;
+        }
+
+        /** Top of the row: the label, with the slot frames under it. */
+        public int rowY() {
+            return 18 + row * 24;
+        }
+
+        /** Where the item of place {@code index} sits on the screen. */
+        public int itemX(int index) {
+            return columnX() + 1 + index * 18;
+        }
+
+        public int itemY() {
+            return rowY() + 6;
         }
     }
 
     /** Height of the ripperdoc panel above the inventory; the inventory part is vanilla's. */
-    public static final int PANEL_HEIGHT = 133;
+    public static final int PANEL_HEIGHT = 142;
     public static final int WIDTH = 176;
     public static final int HEIGHT = PANEL_HEIGHT + 96;
     private static final int INVENTORY_X = 8;
@@ -64,7 +104,10 @@ public class RipperdocMenu extends AbstractContainerMenu {
         this.player = inventory.player;
         this.access = table == null ? ContainerLevelAccess.NULL : ContainerLevelAccess.create(player.level(), table);
         for (Implant implant : Implant.values()) {
-            addSlot(new ImplantSlot(container(player, implant), implant, player));
+            Container container = container(player, implant);
+            for (int i = 0; i < implant.count; i++) {
+                addSlot(new ImplantSlot(container, i, implant, player));
+            }
         }
         implantSlots = slots.size();
         for (int row = 0; row < 3; row++) {
@@ -77,13 +120,25 @@ public class RipperdocMenu extends AbstractContainerMenu {
         }
     }
 
-    /** The player's Trinkets inventory for an implant slot, or an empty stand-in if the slot is missing. */
+    /** Menu index of place {@code index} of a body system. */
+    public static int slotIndex(Implant implant, int index) {
+        int first = 0;
+        for (Implant other : Implant.values()) {
+            if (other == implant) {
+                return first + index;
+            }
+            first += other.count;
+        }
+        throw new IllegalArgumentException(implant.name());
+    }
+
+    /** The player's Trinkets inventory for a body system, or an empty stand-in if it is missing. */
     private static Container container(Player player, Implant implant) {
         return TrinketsApi.getTrinketComponent(player)
                 .map(component -> component.getInventory().get("cyberware"))
                 .map(group -> (Container) group.get(implant.slot))
-                .filter(inventory -> inventory != null && inventory.getContainerSize() > 0)
-                .orElseGet(() -> new SimpleContainer(1));
+                .filter(inventory -> inventory != null && inventory.getContainerSize() >= implant.count)
+                .orElseGet(() -> new SimpleContainer(implant.count));
     }
 
     @Override
@@ -143,8 +198,8 @@ public class RipperdocMenu extends AbstractContainerMenu {
         final Implant implant;
         private final Player patient;
 
-        ImplantSlot(Container container, Implant implant, Player patient) {
-            super(container, 0, implant.x, implant.y);
+        ImplantSlot(Container container, int index, Implant implant, Player patient) {
+            super(container, index, implant.itemX(index), implant.itemY());
             this.implant = implant;
             this.patient = patient;
         }
@@ -156,7 +211,7 @@ public class RipperdocMenu extends AbstractContainerMenu {
 
         @Override
         public boolean mayPlace(ItemStack stack) {
-            return stack.is(implant.tag);
+            return stack.is(implant.tag());
         }
 
         @Override

@@ -1,0 +1,12 @@
+{
+  "icon": "apogee:gui/slots/circulatory",
+  "order": 8,
+  "amount": 3,
+  "validator_predicates": [
+    "trinkets:tag"
+  ],
+  "quick_move_predicates": [
+    "trinkets:all"
+  ],
+  "drop_rule": "DEFAULT"
+}

@@ -83,7 +83,8 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Se coloca como una cama: ocupa dos bloques, con el respaldo levantado hacia donde miras.
 - Clic derecho: te acuestas en la camilla (con la pose de dormir de la cama, recostado sobre el respaldo; los demás jugadores te ven así) y se abre la pantalla del matasanos. Al cerrarla (Esc o la tecla de inventario) te levantas.
 - La pantalla funciona como un cofre: arriba el panel del matasanos y abajo tu inventario de siempre.
-- Los implantes **solo** se instalan o quitan aquí: las ranuras de ciberware ya no aparecen en el inventario y usar un implante no lo equipa. Arrastra el implante a su ranura (Sistema operativo o Brazos) o usa Mayús + clic.
+- Los implantes **solo** se instalan o quitan aquí: las ranuras de ciberware ya no aparecen en el inventario y usar un implante no lo equipa. Arrastra el implante a su ranura o usa Mayús + clic.
+- El panel muestra los diez sistemas del diseño, cada uno con sus ranuras: Corteza frontal (3), Brazos, Esqueleto (2), Sistema nervioso (2), Tegumentario (3), Sistema operativo, Sistema ocular, Manos (2), Circulatorio (3) y Piernas. Hoy solo hay implantes para Sistema operativo y Brazos; los demás se ven apagados hasta que exista un implante para ellos. Cada sistema es una ranura de Trinkets (`cyberware/<sistema>`): un implante nuevo solo tiene que entrar en la etiqueta `trinkets:cyberware/<sistema>`.
 - Cada implante que instalas es una cirugía: cuesta **3 corazones**, atraviesa la armadura y nunca te mata (como mucho te deja en medio corazón). Quitarlo es gratis.
 - En el centro del panel aparece tu personaje con los implantes que llevas; arrástralo con el mouse para rotarlo. **Rayos X** vuelve la piel translúcida y deja ver los implantes a través del cuerpo; **Skin** vuelve a la vista normal. Abajo a la izquierda se listan los implantes instalados.
 
@@ -163,7 +164,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.11.0+1.21.1 (`build/libs/apogee-0.11.0+1.21.1.jar`) | Todos |
+| Apogee | 0.12.0+1.21.1 (`build/libs/apogee-0.12.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -214,7 +215,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ./gradlew runRipperdocSmoke
 ```
 
-- `runRipperdocSmoke`: abre el cliente, coloca la mesa de matasanos, acuesta al jugador, instala implantes (comprueba el daño de la cirugía), rota el visor en modo skin y rayos X, filma la pose acostada y comprueba que el inventario ya no muestra las ranuras de ciberware, en `build/ripperdoc-smoke/screenshots`.
+- `runRipperdocSmoke`: abre el cliente, coloca la mesa de matasanos, acuesta al jugador, instala implantes (comprueba el daño de la cirugía), rota el visor en modo skin y rayos X, filma la pose acostada (también desde arriba, con un bloque de oro junto al pie y uno de diamante junto a la cabecera) y comprueba que el inventario ya no muestra las ranuras de ciberware, en `build/ripperdoc-smoke/screenshots`.
 - `runNanowireSmoke`: abre el cliente, equipa el Nanocable y filma cada tick de los latigazos y del latigazo doble, en tercera y primera persona, y el repliegue, en `build/nanowire-smoke/screenshots`.
 
 ```bash

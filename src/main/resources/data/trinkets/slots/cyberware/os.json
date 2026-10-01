@@ -1,8 +1,12 @@
 {
   "icon": "apogee:gui/slots/os",
-  "order": 0,
+  "order": 5,
   "amount": 1,
-  "validator_predicates": ["trinkets:tag"],
-  "quick_move_predicates": ["trinkets:all"],
+  "validator_predicates": [
+    "trinkets:tag"
+  ],
+  "quick_move_predicates": [
+    "trinkets:all"
+  ],
   "drop_rule": "DEFAULT"
 }

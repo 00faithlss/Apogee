@@ -1,4 +1,17 @@
 {
-  "entities": ["player"],
-  "slots": ["cyberware/os", "cyberware/arms"]
+  "entities": [
+    "player"
+  ],
+  "slots": [
+    "cyberware/cortex",
+    "cyberware/arms",
+    "cyberware/skeleton",
+    "cyberware/nerves",
+    "cyberware/integumentary",
+    "cyberware/os",
+    "cyberware/optics",
+    "cyberware/hands",
+    "cyberware/circulatory",
+    "cyberware/legs"
+  ]
 }

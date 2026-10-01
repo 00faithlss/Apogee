@@ -2,7 +2,11 @@
   "icon": "apogee:gui/slots/arms",
   "order": 1,
   "amount": 1,
-  "validator_predicates": ["trinkets:tag"],
-  "quick_move_predicates": ["trinkets:all"],
+  "validator_predicates": [
+    "trinkets:tag"
+  ],
+  "quick_move_predicates": [
+    "trinkets:all"
+  ],
   "drop_rule": "DEFAULT"
 }

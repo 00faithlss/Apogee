@@ -216,6 +216,9 @@ public final class MantisGameTests implements FabricGameTest {
         helper.runAfterDelay(70, () -> ripperdocSurgery(helper, player));
     }
 
+    private static final int ARMS_SLOT = dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.ARMS, 0);
+    private static final int OS_SLOT = dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.OS, 0);
+
     private static void ripperdocSurgery(GameTestHelper helper, ServerPlayer player) {
         // The inventory screens leave the cyberware slots out; the table's menu has them.
         helper.assertTrue(!dev.emi.trinkets.api.TrinketsApi.getPlayerSlots(player).containsKey("cyberware"),
@@ -224,17 +227,24 @@ public final class MantisGameTests implements FabricGameTest {
         helper.assertTrue(player.inventoryMenu.slots.size() == 46,
                 "The inventory menu has no cyberware slots, slots " + player.inventoryMenu.slots.size());
         dev.apogee.ripperdoc.RipperdocMenu menu = new dev.apogee.ripperdoc.RipperdocMenu(1, player.getInventory(), null);
-        helper.assertTrue(!menu.getSlot(1).mayPlace(new ItemStack(ApogeeItems.SANDEVISTAN)), "The arms slot only takes arm cyberware");
-        menu.getSlot(1).setByPlayer(new ItemStack(ApogeeItems.MANTIS_BLADES));
+        // Every body system of the design is a Trinkets slot with its own places.
+        var cyberware = dev.emi.trinkets.api.TrinketsApi.getTrinketComponent(player).orElseThrow().getInventory().get("cyberware");
+        for (dev.apogee.ripperdoc.RipperdocMenu.Implant implant : dev.apogee.ripperdoc.RipperdocMenu.Implant.values()) {
+            helper.assertTrue(cyberware.containsKey(implant.slot) && cyberware.get(implant.slot).getContainerSize() == implant.count,
+                    "The cyberware/" + implant.slot + " slot has " + implant.count + " places");
+        }
+        helper.assertTrue(menu.slots.size() == 19 + 36, "The table shows the 19 implant places and the inventory, " + menu.slots.size());
+        helper.assertTrue(!menu.getSlot(ARMS_SLOT).mayPlace(new ItemStack(ApogeeItems.SANDEVISTAN)), "The arms slot only takes arm cyberware");
+        menu.getSlot(ARMS_SLOT).setByPlayer(new ItemStack(ApogeeItems.MANTIS_BLADES));
         helper.assertTrue(MantisManager.equippedVariant(player) != null, "The table fits the Mantis Blades in the Trinkets slot");
         helper.assertTrue(player.getHealth() == player.getMaxHealth() - 6.0F, "Surgery costs three hearts, health " + player.getHealth());
         // A second implant right after is its own operation.
-        menu.getSlot(1).setByPlayer(ItemStack.EMPTY);
-        menu.getSlot(1).setByPlayer(new ItemStack(ApogeeItems.NANOWIRE));
+        menu.getSlot(ARMS_SLOT).setByPlayer(ItemStack.EMPTY);
+        menu.getSlot(ARMS_SLOT).setByPlayer(new ItemStack(ApogeeItems.NANOWIRE));
         helper.assertTrue(player.getHealth() == player.getMaxHealth() - 12.0F, "Each implant costs three hearts, health " + player.getHealth());
         // Surgery never kills: at two hearts it leaves the patient at half a heart.
         player.setHealth(4.0F);
-        menu.getSlot(0).setByPlayer(new ItemStack(ApogeeItems.SANDEVISTAN));
+        menu.getSlot(OS_SLOT).setByPlayer(new ItemStack(ApogeeItems.SANDEVISTAN));
         helper.assertTrue(player.isAlive() && player.getHealth() == 1.0F, "Surgery is never lethal, health " + player.getHealth());
         // The implants do not equip themselves from the hand any more.
         player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(ApogeeItems.NANOWIRE));
