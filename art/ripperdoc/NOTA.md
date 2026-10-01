@@ -11,9 +11,13 @@ Paquete `mesa-matasanos-edgerunner-assets`, aportado por el autor del proyecto: 
 
 La camilla del bloque no viene de este paquete: es la camilla del conjunto `ripperdoc` de Project: Edgerunner (ver `LICENSE_ASSETS.md`).
 
+## Rayos X
+
+El botón Rayos X del visor vuelve translúcida la piel del jugador (opacidad de un tercio, teñida de cian, sin escribir profundidad) y deja solo las capas de implantes, así que se ven los implantes instalados a través del cuerpo con sus propios modelos. Los módulos de `modules/` (anatomía y Mantis en rayos X) quedan como referencia: no se usan todavía.
+
 ## Pendiente
 
-- Vista de rayos X: piel translúcida, anatomía y los módulos de `modules/` según los implantes instalados. Hoy el visor muestra el modelo del jugador con sus implantes y los botones Rayos X y Skin no hacen nada todavía.
+- Anatomía en rayos X (huesos, órganos) con los módulos de `modules/`.
 - Las demás categorías (corteza, esqueleto, etc.) son espacios de diseño sin implantes.
 
 ## Qué no se incluyó

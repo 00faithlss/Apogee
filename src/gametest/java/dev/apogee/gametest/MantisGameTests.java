@@ -220,6 +220,9 @@ public final class MantisGameTests implements FabricGameTest {
         // The inventory screens leave the cyberware slots out; the table's menu has them.
         helper.assertTrue(!dev.emi.trinkets.api.TrinketsApi.getPlayerSlots(player).containsKey("cyberware"),
                 "The inventory does not show the cyberware slots");
+        ((dev.emi.trinkets.TrinketPlayerScreenHandler) player.inventoryMenu).trinkets$updateTrinketSlots(true);
+        helper.assertTrue(player.inventoryMenu.slots.size() == 46,
+                "The inventory menu has no cyberware slots, slots " + player.inventoryMenu.slots.size());
         dev.apogee.ripperdoc.RipperdocMenu menu = new dev.apogee.ripperdoc.RipperdocMenu(1, player.getInventory(), null);
         helper.assertTrue(!menu.getSlot(1).mayPlace(new ItemStack(ApogeeItems.SANDEVISTAN)), "The arms slot only takes arm cyberware");
         menu.getSlot(1).setByPlayer(new ItemStack(ApogeeItems.MANTIS_BLADES));

@@ -119,5 +119,6 @@
   "screen.apogee.ripperdoc.installed": "Instalado",
   "screen.apogee.ripperdoc.none": "Sin ciberware instalado",
   "screen.apogee.ripperdoc.surgery": "Instalar un implante cuesta 3 corazones",
-  "screen.apogee.ripperdoc.rotate": "Arrastra para rotar"
+  "screen.apogee.ripperdoc.rotate": "Arrastra para rotar",
+  "screen.apogee.ripperdoc.xray_empty": "Sin ciberware detectado"
 }

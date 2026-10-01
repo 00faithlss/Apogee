@@ -84,7 +84,7 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Clic derecho: te acuestas en la camilla y se abre la pantalla del matasanos. Al cerrarla (Esc o la tecla de inventario) te levantas.
 - Los implantes **solo** se instalan o quitan aquí: las ranuras de ciberware ya no aparecen en el inventario y usar un implante no lo equipa. Arrastra el implante a su ranura (Sistema operativo o Brazos) o usa Mayús + clic.
 - Cada implante que instalas es una cirugía: cuesta **3 corazones**, atraviesa la armadura y nunca te mata (como mucho te deja en medio corazón). Quitarlo es gratis.
-- En el centro aparece tu personaje con los implantes que llevas; arrástralo con el mouse para rotarlo. Abajo a la izquierda se listan los implantes instalados.
+- En el centro aparece tu personaje con los implantes que llevas; arrástralo con el mouse para rotarlo. **Rayos X** vuelve la piel translúcida y deja ver los implantes a través del cuerpo; **Skin** vuelve a la vista normal. Abajo a la izquierda se listan los implantes instalados.
 - Las demás categorías de la pantalla (corteza, esqueleto, ojos, etc.) son espacios para implantes futuros.
 
 - Instálalo en la ranura **Sistema operativo** de la mesa de matasanos (la pechera y los élitros siguen libres).
@@ -163,7 +163,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.9.0+1.21.1 (`build/libs/apogee-0.9.0+1.21.1.jar`) | Todos |
+| Apogee | 0.10.0+1.21.1 (`build/libs/apogee-0.10.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -214,7 +214,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ./gradlew runRipperdocSmoke
 ```
 
-- `runRipperdocSmoke`: abre el cliente, coloca la mesa de matasanos, acuesta al jugador, instala implantes (comprueba el daño de la cirugía), rota el visor y comprueba que el inventario ya no muestra las ranuras de ciberware, en `build/ripperdoc-smoke/screenshots`.
+- `runRipperdocSmoke`: abre el cliente, coloca la mesa de matasanos, acuesta al jugador, instala implantes (comprueba el daño de la cirugía), rota el visor en modo skin y rayos X, filma la pose acostada y comprueba que el inventario ya no muestra las ranuras de ciberware, en `build/ripperdoc-smoke/screenshots`.
 - `runNanowireSmoke`: abre el cliente, equipa el Nanocable y filma cada tick de los latigazos y del latigazo doble, en tercera y primera persona, y el repliegue, en `build/nanowire-smoke/screenshots`.
 
 ```bash

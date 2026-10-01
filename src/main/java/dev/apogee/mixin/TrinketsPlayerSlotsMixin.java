@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Leaves the cyberware group out of the slots Trinkets builds into the inventory screens (survival
  * and creative), so implants are only fitted at a ripperdoc table. Only those screens ask for the
  * player's slots this way; the equipped items themselves stay in the player's trinket component.
+ * The slots themselves are left out of the inventory menu by {@link TrinketsComponentMixin}.
  * Trinkets ships intermediary names, while development runs remap it to Mojang names, so both
  * descriptors are listed.
  */

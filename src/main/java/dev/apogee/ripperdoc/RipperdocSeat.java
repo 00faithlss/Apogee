@@ -20,6 +20,14 @@ import net.minecraft.world.phys.Vec3;
 public class RipperdocSeat extends Entity {
     /** Height of the seat over the foot block, where the cushion is. */
     private static final double SEAT_HEIGHT = 0.62;
+    /** Top of the cushion over the foot block (10 px). */
+    public static final double CUSHION = 10.0 / 16.0;
+    /** Height of the patient's hips over the cushion: half a leg's thickness. */
+    public static final double HIPS_OVER_CUSHION = 2.0 / 16.0;
+    /** How far the cushion's hinge lies from the foot block's centre, towards the head end. */
+    public static final float HINGE_BEHIND = 3.0F / 16.0F;
+    /** Tilt of the raised head end over the flat foot end, in degrees. */
+    public static final float BACKREST = 30.0F;
 
     public RipperdocSeat(EntityType<? extends RipperdocSeat> type, Level level) {
         super(type, level);
@@ -47,6 +55,11 @@ public class RipperdocSeat extends Entity {
         level.addFreshEntity(seat);
         player.stopRiding();
         return player.startRiding(seat, true);
+    }
+
+    /** Height of the top of the cushion this seat stands on. */
+    public double cushionY() {
+        return Math.floor(getY() - SEAT_HEIGHT + 1.0E-3) + CUSHION;
     }
 
     @Override

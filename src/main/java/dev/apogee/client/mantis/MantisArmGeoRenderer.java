@@ -302,12 +302,15 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
             if (renderer.skinTexture == null) {
                 return;
             }
-            RenderType skinType = RenderType.entityCutoutNoCull(renderer.skinTexture);
+            // Under the ripperdoc's x-ray the panels are as see-through as the rest of the skin.
+            boolean xray = dev.apogee.client.ripperdoc.RipperdocScreen.xrayPatient();
+            RenderType skinType = xray ? dev.apogee.client.ripperdoc.XrayRenderTypes.skin(renderer.skinTexture)
+                    : RenderType.entityCutoutNoCull(renderer.skinTexture);
             renderer.skinPass = true;
             try {
                 renderer.reRender(bakedModel, poseStack, bufferSource, animatable, skinType, bufferSource.getBuffer(skinType),
-                        partialTick, packedLight, packedOverlay, -1);
-                if (renderer.sleeve) {
+                        partialTick, packedLight, packedOverlay, xray ? dev.apogee.client.ripperdoc.XrayRenderTypes.SKIN_COLOR : -1);
+                if (renderer.sleeve && !xray) {
                     // The skin's outer layer over the panels, drawn like vanilla's sleeve.
                     RenderType sleeveType = RenderType.entityTranslucent(renderer.skinTexture);
                     renderer.sleevePass = true;

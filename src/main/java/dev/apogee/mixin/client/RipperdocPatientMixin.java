@@ -12,23 +12,25 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * A patient on the ripperdoc couch sits in the riding pose leaned back against the raised head
- * end, as if lying on it. The model in the ripperdoc screen's view stands upright instead.
+ * A patient on the ripperdoc couch lies on their back: the hips on the hinge of the cushion, the
+ * body tipped back along the raised head end and the legs flat along the foot end (see
+ * {@link RipperdocPatientModelMixin}). The model in the ripperdoc screen's view stands upright.
  */
 @Mixin(PlayerRenderer.class)
 public abstract class RipperdocPatientMixin {
-    /** How far the patient leans back, and the height (blocks) the lean turns about: the hips. */
-    private static final float LEAN = 50.0F;
-    private static final float HIPS = 0.75F;
+    /** Height of the hips over the feet once the player model is scaled (12 px at 0.9375). */
+    private static final float HIPS = 0.75F * 0.9375F;
 
     @Inject(method = "setupRotations(Lnet/minecraft/client/player/AbstractClientPlayer;Lcom/mojang/blaze3d/vertex/PoseStack;FFFF)V", at = @At("TAIL"))
-    private void apogee$leanOnCouch(AbstractClientPlayer player, PoseStack poseStack, float bob, float yBodyRot, float partialTick, float scale,
+    private void apogee$lieOnCouch(AbstractClientPlayer player, PoseStack poseStack, float bob, float yBodyRot, float partialTick, float scale,
                                    CallbackInfo ci) {
-        if (RipperdocScreen.renderingPatient || !(player.getVehicle() instanceof RipperdocSeat)) {
+        if (RipperdocScreen.renderingPatient || !(player.getVehicle() instanceof RipperdocSeat seat)) {
             return;
         }
-        poseStack.translate(0.0F, HIPS, 0.0F);
-        poseStack.mulPose(Axis.XP.rotationDegrees(-LEAN));
+        // Here +Y is up and +Z is in front of the patient, towards the foot end of the couch.
+        float hipsY = (float) (seat.cushionY() + RipperdocSeat.HIPS_OVER_CUSHION - player.getY());
+        poseStack.translate(0.0F, hipsY, -RipperdocSeat.HINGE_BEHIND);
+        poseStack.mulPose(Axis.XP.rotationDegrees(RipperdocSeat.BACKREST - 90.0F));
         poseStack.translate(0.0F, -HIPS, 0.0F);
     }
 }

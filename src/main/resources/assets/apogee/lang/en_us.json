@@ -119,5 +119,6 @@
   "screen.apogee.ripperdoc.installed": "Installed",
   "screen.apogee.ripperdoc.none": "No cyberware installed",
   "screen.apogee.ripperdoc.surgery": "Fitting an implant costs 3 hearts",
-  "screen.apogee.ripperdoc.rotate": "Drag to rotate"
+  "screen.apogee.ripperdoc.rotate": "Drag to rotate",
+  "screen.apogee.ripperdoc.xray_empty": "No cyberware detected"
 }

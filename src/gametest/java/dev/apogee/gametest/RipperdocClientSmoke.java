@@ -41,8 +41,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Dev-only scripted client run for the ripperdoc table: the couch, lying on it, the screen with
- * and without implants, turning the patient view, the surgery damage, and the inventory without
- * cyberware slots. Disabled unless -Dapogee.ripperdocSmoke=true.
+ * and without implants in skin and x-ray mode, turning the patient view, the surgery damage, the
+ * pose on the couch from three sides, and the inventory without cyberware slots. Disabled unless
+ * -Dapogee.ripperdocSmoke=true.
  */
 public final class RipperdocClientSmoke implements ClientModInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger("RipperdocSmoke");
@@ -113,6 +114,8 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
                 mc.setScreen(new InventoryScreen(mc.player));
             }
             case 42 -> {
+                // Vanilla's inventory menu has 46 slots; Trinkets would add the cyberware ones.
+                check(mc.player.inventoryMenu.slots.size() == 46, "no cyberware slots in the inventory: " + mc.player.inventoryMenu.slots.size());
                 shot(mc, "03-inventory-without-cyberware");
                 mc.setScreen(null);
             }
@@ -127,43 +130,62 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
                 check(mc.screen instanceof RipperdocScreen, "the ripperdoc screen is open");
                 shot(mc, "04-screen-empty");
                 healthBefore = mc.player.getHealth();
+                screen(mc).setXray(true);
             }
-            case 53 -> server(mc, (level, player) -> {
+            case 54 -> {
+                shot(mc, "04b-xray-empty");
+                screen(mc).setXray(false);
+            }
+            case 55 -> server(mc, (level, player) -> {
                 // Fit the Mantis Blades and the Sandevistan as clicks on their slots would.
                 RipperdocMenu menu = (RipperdocMenu) player.containerMenu;
                 menu.getSlot(1).setByPlayer(player.getInventory().removeItem(0, 1));
                 menu.getSlot(0).setByPlayer(player.getInventory().removeItem(1, 1));
                 menu.broadcastChanges();
             });
-            case 62 -> {
+            case 64 -> {
                 check(MantisManager.equippedVariant(mc.player) != null, "the Mantis Blades are fitted");
                 check(mc.player.getHealth() < healthBefore, "surgery hurts: " + healthBefore + " -> " + mc.player.getHealth());
                 shot(mc, "05-screen-fitted");
-                if (mc.screen instanceof RipperdocScreen screen) {
-                    // Drag the patient view round to the back.
-                    double x = mc.getWindow().getGuiScaledWidth() / 2.0;
-                    double y = mc.getWindow().getGuiScaledHeight() / 2.0 - 30;
-                    screen.mouseClicked(x, y, 0);
-                    screen.mouseDragged(x + 60, y, 0, 100, 0);
-                    screen.mouseReleased(x + 60, y, 0);
-                }
+                screen(mc).setXray(true);
             }
-            case 66 -> shot(mc, "06-screen-turned");
-            case 67 -> mc.player.closeContainer();
-            case 72 -> {
+            case 66 -> {
+                check(RipperdocScreen.xray(), "the x-ray button is on");
+                shot(mc, "05b-xray-fitted");
+                // Drag the patient view round to the back.
+                RipperdocScreen screen = screen(mc);
+                double x = mc.getWindow().getGuiScaledWidth() / 2.0;
+                double y = mc.getWindow().getGuiScaledHeight() / 2.0 - 30;
+                screen.mouseClicked(x, y, 0);
+                screen.mouseDragged(x + 60, y, 0, 100, 0);
+                screen.mouseReleased(x + 60, y, 0);
+            }
+            case 70 -> {
+                shot(mc, "06-xray-turned");
+                screen(mc).setXray(false);
+            }
+            case 72 -> shot(mc, "06b-screen-turned");
+            case 73 -> mc.player.closeContainer();
+            case 78 -> {
                 check(!(mc.player.getVehicle() instanceof RipperdocSeat), "closing the screen gets up from the couch");
                 // Lie down again without the screen to film the pose.
                 server(mc, (level, player) -> RipperdocSeat.layDown(level, foot, level.getBlockState(foot), player));
             }
-            case 76 -> {
+            case 82 -> {
                 mc.options.hideGui = true;
                 mc.options.setCameraType(CameraType.THIRD_PERSON_FRONT);
             }
-            case 82 -> shot(mc, "07-patient-front");
-            case 83 -> mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
-            case 88 -> shot(mc, "08-patient-back");
-            case 89 -> server(mc, (level, player) -> player.stopRiding());
+            case 88 -> shot(mc, "07-patient-front");
+            case 89 -> mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            case 94 -> shot(mc, "08-patient-back");
             case 95 -> {
+                // Turn the head aside so the camera behind it sees the patient from the side.
+                mc.player.setYRot(mc.player.getYRot() + 80.0F);
+                mc.player.setXRot(25.0F);
+            }
+            case 100 -> shot(mc, "09-patient-side");
+            case 101 -> server(mc, (level, player) -> player.stopRiding());
+            case 107 -> {
                 if (FAILURES.isEmpty()) {
                     LOGGER.info("Ripperdoc smoke run passed");
                 } else {
@@ -174,6 +196,10 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
             default -> {
             }
         }
+    }
+
+    private static RipperdocScreen screen(Minecraft mc) {
+        return (RipperdocScreen) mc.screen;
     }
 
     private static void check(boolean ok, String what) {

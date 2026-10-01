@@ -20,8 +20,9 @@ import org.joml.Vector3f;
 /**
  * The ripperdoc screen, after the project author's design: implant slots by body system around a
  * view of the patient, the inventory below. The patient in the view is the player's own model with
- * whatever cyberware is fitted, and turns when dragged. The 480 by 356 texture is scaled down when
- * the window is smaller than that.
+ * whatever cyberware is fitted, and turns when dragged; in x-ray mode the skin turns see-through
+ * and only the cyberware is drawn on it. The 480 by 356 texture is scaled down when the window is
+ * smaller than that.
  */
 public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu> {
     private static final ResourceLocation TEXTURE = Apogee.id("textures/gui/ripperdoc.png");
@@ -30,12 +31,20 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
     private static final int VIEW_Y = 50;
     private static final int VIEW_W = 114;
     private static final int VIEW_H = 174;
+    /** The x-ray and skin buttons under the view, as drawn on the texture. */
+    private static final int BUTTON_Y = 228;
+    private static final int BUTTON_W = 55;
+    private static final int BUTTON_H = 17;
+    private static final int XRAY_X = 183;
+    private static final int SKIN_X = 242;
     private static final int PINK = 0xFFE6567A;
     private static final int CYAN = 0xFF7CE0EF;
     private static final int GREY = 0xFF8FA3AD;
 
     /** True while the patient view draws the player, so the couch pose stays off that model. */
     public static boolean renderingPatient;
+    /** Whether the view is in x-ray mode; kept between visits to the table. */
+    private static boolean xray;
 
     private float scale = 1.0F;
     private float yaw = -25.0F;
@@ -81,6 +90,11 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
         renderPatient(graphics);
     }
 
+    /** True while the patient view draws the player under x-ray: see-through skin, cyberware only. */
+    public static boolean xrayPatient() {
+        return renderingPatient && xray;
+    }
+
     /** The player's own model in the view, turned by dragging, with the fitted cyberware on it. */
     private void renderPatient(GuiGraphics graphics) {
         Player player = minecraft.player;
@@ -116,6 +130,15 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
             player.yHeadRot = headRot;
         }
         graphics.disableScissor();
+        highlight(graphics, xray ? XRAY_X : SKIN_X);
+    }
+
+    /** Marks the active mode's button with a cyan frame and a faint fill. */
+    private void highlight(GuiGraphics graphics, int buttonX) {
+        int x = leftPos + buttonX;
+        int y = topPos + BUTTON_Y;
+        graphics.fill(x + 1, y + 1, x + BUTTON_W - 1, y + BUTTON_H - 1, 0x307CE0EF);
+        graphics.renderOutline(x, y, BUTTON_W, BUTTON_H, CYAN);
     }
 
     @Override
@@ -140,15 +163,45 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
             y += 11;
         }
         graphics.pose().pushPose();
-        graphics.pose().translate(x, 330, 0.0F);
+        graphics.pose().translate(x, 322, 0.0F);
         graphics.pose().scale(0.75F, 0.75F, 1.0F);
-        graphics.drawString(font, Component.translatable("screen.apogee.ripperdoc.surgery"), 0, 0, GREY, false);
+        // Wrapped to stay clear of the hotbar on its right.
+        int line = 0;
+        for (var part : font.split(Component.translatable("screen.apogee.ripperdoc.surgery"), Math.round(140 / 0.75F))) {
+            graphics.drawString(font, part, 0, line, GREY, false);
+            line += font.lineHeight + 1;
+        }
         graphics.pose().popPose();
         graphics.pose().pushPose();
         graphics.pose().translate(VIEW_X + 8, VIEW_Y + 6, 0.0F);
         graphics.pose().scale(0.6F, 0.6F, 1.0F);
         graphics.drawString(font, Component.translatable("screen.apogee.ripperdoc.rotate"), 0, 0, GREY, false);
         graphics.pose().popPose();
+        if (xray && fitted.isEmpty()) {
+            Component empty = Component.translatable("screen.apogee.ripperdoc.xray_empty");
+            graphics.pose().pushPose();
+            graphics.pose().translate(VIEW_X + VIEW_W / 2.0F, VIEW_Y + VIEW_H - 14, 0.0F);
+            graphics.pose().scale(0.6F, 0.6F, 1.0F);
+            graphics.drawString(font, empty, -font.width(empty) / 2, 0, PINK, false);
+            graphics.pose().popPose();
+        }
+    }
+
+    private boolean onButton(double x, double y, int buttonX) {
+        return x >= leftPos + buttonX && x < leftPos + buttonX + BUTTON_W && y >= topPos + BUTTON_Y && y < topPos + BUTTON_Y + BUTTON_H;
+    }
+
+    /** Switches the view between x-ray and skin, as the buttons do. */
+    public void setXray(boolean on) {
+        if (xray != on) {
+            xray = on;
+            minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                    net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        }
+    }
+
+    public static boolean xray() {
+        return xray;
     }
 
     private boolean inView(double x, double y) {
@@ -159,6 +212,14 @@ public final class RipperdocScreen extends AbstractContainerScreen<RipperdocMenu
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         double x = mouseX / scale;
         double y = mouseY / scale;
+        if (button == 0 && onButton(x, y, XRAY_X)) {
+            setXray(true);
+            return true;
+        }
+        if (button == 0 && onButton(x, y, SKIN_X)) {
+            setXray(false);
+            return true;
+        }
         if (button == 0 && inView(x, y)) {
             dragging = true;
             return true;

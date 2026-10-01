@@ -2,6 +2,18 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.10.0+1.21.1] — 2026-10-01
+
+### Añadido (Mesa de matasanos)
+
+- Botones **Rayos X** y **Skin** bajo el visor del paciente. En rayos X la piel se vuelve translúcida y teñida de cian, la armadura, la capa y los objetos en mano se ocultan, y se ven los implantes instalados a través del cuerpo (también la piel de los brazos de las Cuchillas Mantis). Si no hay implantes, el visor avisa «Sin ciberware detectado». El botón activo queda marcado y el modo se recuerda entre visitas a la mesa.
+
+### Corregido (Mesa de matasanos)
+
+- El jugador se acuesta de verdad en la camilla: boca arriba, con la cadera en la bisagra del cojín, la espalda sobre el respaldo y las piernas estiradas sobre la parte plana. Antes quedaba en la pose de montar inclinado hacia adelante, como agachado.
+- El botón de los implantes ya no aparece en el inventario. Trinkets armaba esas ranuras desde el componente del jugador, no desde la lista que se filtraba; ahora el grupo de ciberware se deja fuera al armar el inventario, en el servidor y en el cliente.
+- El aviso del costo de la cirugía se parte en dos líneas y ya no se monta sobre la barra rápida.
+
 ## [0.9.0+1.21.1] — 2026-10-01
 
 ### Añadido (Mesa de matasanos)

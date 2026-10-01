@@ -13,6 +13,8 @@
     "PlayerTickMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerLevelMixin",
+    "TrinketsComponentMixin",
+    "TrinketsInventoryMenuMixin",
     "TrinketsPlayerSlotsMixin"
   ],
   "client": [
@@ -33,6 +35,7 @@
     "client.MantisPlayerRendererMixin",
     "client.RipperdocPatientMixin",
     "client.RipperdocPatientModelMixin",
+    "client.RipperdocXrayMixin",
     "client.compat.SimplyTooltipsRendererMixin"
   ],
   "injectors": {
