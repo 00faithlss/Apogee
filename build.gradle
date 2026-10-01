@@ -204,3 +204,13 @@ tasks.register('writeDevRuntimeClasspath') {
         out.get().asFile.text = sourceSets.gametest.runtimeClasspath.asPath
     }
 }
+
+// Procedural animation regressions; no game window and no test classes in the release jar.
+tasks.register('nanowireMotionTest', JavaExec) {
+    dependsOn 'gametestClasses'
+    classpath = sourceSets.gametest.runtimeClasspath
+    mainClass = 'dev.apogee.client.nanowire.NanowireMotionChecks'
+}
+tasks.named('check') {
+    dependsOn 'nanowireMotionTest'
+}

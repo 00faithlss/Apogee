@@ -34,50 +34,50 @@ public final class NanowireStance {
         float rightZ = Mth.lerp(deploy, model.rightArm.zRot, 0.0F);
         float leftZ = Mth.lerp(deploy, model.leftArm.zRot, 0.0F);
 
-        float right = MantisClient.slashProgress(entity, MantisRules.ARM_RIGHT, partialTick);
-        if (right >= 0.0F) {
-            float sweep = lash(right);
-            rightX = Mth.lerp(Mth.sin(right * Mth.PI), rightX, -1.65F);
-            rightY = Mth.lerp(Math.abs(sweep), rightY, sweep > 0.0F ? 0.55F : -1.10F);
-        }
-        float left = MantisClient.slashProgress(entity, MantisRules.ARM_LEFT, partialTick);
-        if (left >= 0.0F) {
-            float sweep = lash(left);
-            leftX = Mth.lerp(Mth.sin(left * Mth.PI), leftX, -1.65F);
-            leftY = Mth.lerp(Math.abs(sweep), leftY, sweep > 0.0F ? -0.55F : 1.10F);
-        }
         float heavy = MantisClient.thrustProgress(entity, partialTick);
-        if (heavy >= 0.0F) {
-            int style = MantisClient.heavyStyle(entity);
-            float raise = NanowireMoves.ease(heavy / 0.15F) * (1.0F - NanowireMoves.ease((heavy - 0.13F) / 0.20F));
-            float strike = NanowireMoves.ease((heavy - 0.13F) / 0.22F) * (1.0F - NanowireMoves.ease((heavy - 0.55F) / 0.35F));
-            float out = Math.max(raise, strike);
-            switch (style) {
-                case NanowireMoves.HEAVY_X -> {
-                    // Up and out to each side, then down across the body, the arms crossing.
-                    rightX = Mth.lerp(out, rightX, Mth.lerp(strike / Math.max(out, 1.0E-3F), -2.6F, -1.1F));
-                    leftX = Mth.lerp(out, leftX, Mth.lerp(strike / Math.max(out, 1.0E-3F), -2.6F, -1.1F));
-                    rightZ = Mth.lerp(raise, rightZ, 0.6F);
-                    leftZ = Mth.lerp(raise, leftZ, -0.6F);
-                    rightY = Mth.lerp(strike, rightY, 0.8F);
-                    leftY = Mth.lerp(strike, leftY, -0.8F);
+        int style = MantisClient.heavyStyle(entity);
+        for (boolean right : new boolean[]{true, false}) {
+            float side = right ? 1.0F : -1.0F;
+            float own = MantisClient.slashProgress(entity, right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT, partialTick);
+            float other = MantisClient.slashProgress(entity, right ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT, partialTick);
+            float x = right ? rightX : leftX;
+            float y = right ? rightY : leftY;
+            float z = right ? rightZ : leftZ;
+            if (heavy >= 0.0F) {
+                NanowireMoves.Motion motion = NanowireMoves.motion(NanowireMoves.heavyTime(side, style, heavy), true);
+                float wind = motion.wind();
+                float strike = motion.strike();
+                float follow = motion.follow();
+                // Raise over the shoulder, then pull down to the hip instead of reaching out.
+                x += -1.65F * wind + 0.70F * strike + 0.10F * follow;
+                if (style == NanowireMoves.HEAVY_X) {
+                    y += side * (-0.15F * wind + 0.80F * strike);
+                    z += side * (0.35F * wind - 0.18F * strike);
+                } else if (style == NanowireMoves.HEAVY_VERTICAL) {
+                    y += side * GUARD_Y * (wind + strike);
+                } else {
+                    y += side * (-0.12F * wind + 0.45F * strike);
+                    z += side * (0.20F * wind - 0.25F * strike);
                 }
-                case NanowireMoves.HEAVY_VERTICAL -> {
-                    // Both over the head, then chopping down together.
-                    float x = Mth.lerp(strike / Math.max(out, 1.0E-3F), -2.9F, -0.9F);
-                    rightX = Mth.lerp(out, rightX, x);
-                    leftX = Mth.lerp(out, leftX, x);
-                    rightY = Mth.lerp(out, rightY, 0.0F);
-                    leftY = Mth.lerp(out, leftY, 0.0F);
-                }
-                default -> {
-                    // The right arm high, the left one low and forward: the two strokes of the S.
-                    float s = Mth.sin(heavy * Mth.PI);
-                    rightX = Mth.lerp(s, rightX, -2.3F);
-                    rightZ = Mth.lerp(s, rightZ, 0.6F);
-                    leftX = Mth.lerp(s, leftX, -1.2F);
-                    leftZ = Mth.lerp(s, leftZ, -0.3F);
-                }
+            } else if (own >= 0.0F) {
+                NanowireMoves.Motion motion = NanowireMoves.motion(own, false);
+                // Continuous signed offsets: crossing zero never switches the target angle.
+                x += -0.25F * motion.wind() - 0.45F * motion.strike() + 0.25F * motion.follow();
+                y += side * (-0.45F * motion.wind() + 1.30F * motion.strike() - 0.20F * motion.follow());
+                z += side * (0.18F * motion.wind() - 0.30F * motion.strike() + 0.16F * motion.follow());
+            } else if (other >= 0.0F) {
+                float give = NanowireMoves.release(other, false);
+                x += 0.12F * give;
+                y -= side * 0.10F * give;
+            }
+            if (right) {
+                rightX = x;
+                rightY = y;
+                rightZ = z;
+            } else {
+                leftX = x;
+                leftY = y;
+                leftZ = z;
             }
         }
         model.rightArm.xRot = rightX;
@@ -88,21 +88,5 @@ public final class NanowireStance {
         model.leftArm.zRot = leftZ;
         model.rightSleeve.copyFrom(model.rightArm);
         model.leftSleeve.copyFrom(model.leftArm);
-    }
-
-    /**
-     * Sideways sweep of a lash over its progress: a short wind-up out to the arm's own side
-     * (positive), then a fast sweep across the body (negative) that eases back to the guard.
-     */
-    private static float lash(float t) {
-        if (t < 0.2F) {
-            return Mth.sin(t / 0.2F * Mth.HALF_PI) * 0.6F;
-        }
-        if (t < 0.45F) {
-            float k = (t - 0.2F) / 0.25F;
-            return Mth.lerp(k * k * (3.0F - 2.0F * k), 0.6F, -1.0F);
-        }
-        float k = (t - 0.45F) / 0.55F;
-        return Mth.lerp(k * k * (3.0F - 2.0F * k), -1.0F, 0.0F);
     }
 }

@@ -160,7 +160,17 @@ public final class NanowireClientSmoke implements ClientModInitializer {
         // the three-second cooldown.
         film(mc, t, firstPerson + 2 * FILM + 85, "14b-first-heavy", () -> KeyMapping.click(KeyBindingHelper.getBoundKeyOf(mc.options.keyUse)));
         film(mc, t, firstPerson + 2 * FILM + 150, "14c-first-heavy", () -> KeyMapping.click(KeyBindingHelper.getBoundKeyOf(mc.options.keyUse)));
-        int retract = firstPerson + 2 * FILM + 150 + FILM + 10;
+        // Start a heavy while a single lash is still recovering: the heavy must own the pose,
+        // rather than adding two skin transforms while its wire plays just one attack.
+        int interrupt = firstPerson + 2 * FILM + 215;
+        if (t == interrupt - 3) {
+            mc.player.swing(InteractionHand.MAIN_HAND);
+        }
+        film(mc, t, interrupt, "14d-first-heavy-interrupt", () -> KeyMapping.click(KeyBindingHelper.getBoundKeyOf(mc.options.keyUse)));
+        if (t == interrupt + 3) {
+            check(MantisClient.thrustProgress(mc.player, 0.0F) >= 0.0F, "heavy starts during a single lash");
+        }
+        int retract = interrupt + FILM + 10;
         if (t == retract) {
             ClientPlayNetworking.send(ToggleMantis.INSTANCE);
         }

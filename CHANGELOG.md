@@ -2,6 +2,25 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [Sin publicar] — 2026-10-01
+
+### Cambiado (Animaciones del Nanocable)
+
+- Barridos de clic izquierdo más amplios, con un tirón corto, golpe rápido, seguimiento y recuperación gradual. Los brazos de primera y tercera persona comparten las fases del movimiento.
+- Clic derecho: ambos brazos preparan arriba y tiran hacia abajo. Se corrigió el signo de la rotación en primera persona que contrarrestaba la subida del brazo; se eliminó el alcance hacia delante de la pose.
+- El cable del ataque doble transmite la curva desde la mano hasta la punta con retraso, con largo limitado y descenso real en sus tres variantes. Reemplaza la trayectoria de punta que hacía parecer que se lanzaba el cable.
+- Cables visuales más largos para cubrir el alcance nominal de 7 bloques: hasta 8,4 bloques de cable en el golpe simple y 9,1 en el doble (antes 5,88 y 7). El tramo extra permite la curvatura del latigazo; el alcance de daño permanece en 7. El punto más adelantado del barrido simple se escala a ese alcance.
+- El cable empieza y termina exactamente en el punto sostenido entre las manos. El tramo desplegado se limita al recorrido de la punta para evitar muestras amontonadas en el agarre.
+- Estelas más breves y suaves: cinco copias espaciadas por tiempo real, con aparición y desaparición progresivas durante el golpe.
+- El ataque doble tiene prioridad sobre la pose de un latigazo simple en curso, para que brazos y cable interpreten el mismo ataque.
+
+### Pruebas
+
+- `nanowireMotionTest`, incluido en `check` y `build`: continuidad al salir y volver al reposo, barridos opuestos simétricos, coordenadas finitas y límites de despliegue, incluso con manos cruzadas o coincidentes; preparación del ataque doble por encima del agarre, golpe por debajo y retraso de la punta respecto de la raíz.
+- Comprobación del alcance visual: el barrido simple llega a 7 bloques hacia delante y ambos cables del ataque doble llegan a esa distancia al momento de impacto en los tres estilos.
+- `runNanowireSmoke`: capturas reales de ambas vistas, tres ataques dobles y clic derecho durante un latigazo simple.
+- `tools/nanowire_review.py`: comparación de capturas antes/después en MP4 y GIF.
+
 ## [0.14.0+1.21.1] — 2026-10-01
 
 ### Cambiado (Nanocable)

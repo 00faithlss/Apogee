@@ -61,15 +61,15 @@ public final class NanowireHands {
             poseStack.translate(-side * GUARD_IN * deploy, GUARD_UP * deploy, 0.0F);
             float own = MantisClient.slashProgress(player, right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT, partialTick);
             float other = MantisClient.slashProgress(player, right ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT, partialTick);
-            if (own >= 0.0F) {
+            if (heavy >= 0.0F) {
+                heavy(poseStack, NanowireMoves.heavyTime(side, style, heavy), side, style);
+            } else if (own >= 0.0F) {
                 lash(poseStack, own, side);
             } else if (other >= 0.0F) {
                 // The other fist lets go of the wire and gives a little.
-                float k = Mth.sin(other * Mth.PI) * 0.6F;
-                poseStack.translate(side * 0.04F * k, -0.05F * k, 0.05F * k);
-            }
-            if (heavy >= 0.0F) {
-                heavy(poseStack, NanowireMoves.heavyTime(side, style, heavy), side, style);
+                float k = NanowireMoves.release(other, false);
+                poseStack.translate(side * 0.08F * k, -0.08F * k, 0.04F * k);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(side * 7.0F * k));
             }
             arm(poseStack, buffers, light, player, renderer, right);
             poseStack.popPose();
@@ -83,49 +83,32 @@ public final class NanowireHands {
      * the camera, easing back to the guard.
      */
     private static void lash(PoseStack poseStack, float u, float side) {
-        float wind = u < 0.10F ? Mth.sin(u / 0.10F * Mth.HALF_PI) : 1.0F - NanowireMoves.ease((u - 0.10F) / 0.12F);
-        float sweep = NanowireMoves.ease((u - 0.10F) / 0.22F) * (1.0F - NanowireMoves.ease((u - 0.36F) / 0.46F));
-        poseStack.translate(side * (0.10F * wind - 0.62F * sweep), 0.06F * wind + 0.18F * sweep, 0.04F * wind - 0.22F * sweep);
-        poseStack.mulPose(Axis.YP.rotationDegrees(side * 30.0F * sweep));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(side * (12.0F * wind - 16.0F * sweep)));
+        NanowireMoves.Motion motion = NanowireMoves.motion(u, false);
+        float wind = motion.wind();
+        float sweep = motion.strike();
+        float follow = motion.follow();
+        poseStack.translate(side * (0.16F * wind - 0.76F * sweep + 0.10F * follow),
+                0.09F * wind + 0.16F * sweep - 0.12F * follow - 0.025F * motion.catchWire(),
+                0.06F * wind - 0.30F * sweep + 0.09F * follow);
+        poseStack.mulPose(Axis.YP.rotationDegrees(side * (-10.0F * wind + 38.0F * sweep - 8.0F * follow)));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(side * (18.0F * wind - 26.0F * sweep + 12.0F * follow)));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-8.0F * wind + 10.0F * follow));
     }
 
-    /**
-     * Both arms in the two-wire lash, each throwing its own wire. X: each arm rises out to its
-     * own upper corner, then slashes down across to the other side, the arms crossing. Vertical:
-     * both rise over the head together and chop straight down. S: the right arm reaches out high
-     * and circles while the left one sweeps across low.
-     */
+    /** Both hands pull up, then snap down; the cable bend follows the hands towards the tip. */
     private static void heavy(PoseStack poseStack, float u, float side, int style) {
-        switch (style) {
-            case NanowireMoves.HEAVY_X -> {
-                float raise = NanowireMoves.ease(u / 0.15F) * (1.0F - NanowireMoves.ease((u - 0.12F) / 0.20F));
-                float slash = NanowireMoves.ease((u - 0.12F) / 0.22F) * (1.0F - NanowireMoves.ease((u - 0.55F) / 0.35F));
-                poseStack.translate(side * (0.14F * raise - 0.22F * slash), 0.40F * raise - 0.18F * slash, -0.15F * raise - 0.25F * slash);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(side * (22.0F * raise - 28.0F * slash)));
-                poseStack.mulPose(Axis.XP.rotationDegrees(-30.0F * raise + 15.0F * slash));
-            }
-            case NanowireMoves.HEAVY_VERTICAL -> {
-                float raise = NanowireMoves.ease(u / 0.15F) * (1.0F - NanowireMoves.ease((u - 0.13F) / 0.18F));
-                float chop = NanowireMoves.ease((u - 0.13F) / 0.20F) * (1.0F - NanowireMoves.ease((u - 0.55F) / 0.35F));
-                poseStack.translate(-side * 0.06F * raise, 0.50F * raise - 0.16F * chop, -0.10F * raise - 0.35F * chop);
-                poseStack.mulPose(Axis.XP.rotationDegrees(-40.0F * raise + 25.0F * chop));
-            }
-            default -> {
-                float reach = NanowireMoves.ease(u / 0.12F) * (1.0F - NanowireMoves.ease((u - 0.62F) / 0.30F));
-                float spin = u * Mth.TWO_PI * 2.0F;
-                if (side > 0.0F) {
-                    poseStack.translate(-0.16F * reach + 0.05F * Mth.sin(spin) * reach, (0.22F + 0.04F * Mth.cos(spin)) * reach, -0.45F * reach);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-25.0F * reach));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(15.0F * reach));
-                } else {
-                    // The left arm mirrors the right one, lower: the bottom stroke of the S.
-                    poseStack.translate(0.10F * reach - 0.05F * Mth.sin(spin) * reach, (-0.06F + 0.04F * Mth.cos(spin)) * reach, -0.38F * reach);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-8.0F * reach));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(-15.0F * reach));
-                }
-            }
-        }
+        NanowireMoves.Motion motion = NanowireMoves.motion(u, true);
+        float raise = motion.wind();
+        float strike = motion.strike();
+        float follow = motion.follow();
+        float cross = style == NanowireMoves.HEAVY_X ? 0.26F : style == NanowireMoves.HEAVY_S ? 0.14F : 0.0F;
+        poseStack.translate(side * (0.06F * raise - cross * strike),
+                0.25F * raise - 0.05F * strike - 0.03F * follow,
+                0.03F * raise);
+        // In view space the hand is at negative Z: positive X rotation raises it.
+        poseStack.mulPose(Axis.XP.rotationDegrees(18.0F * raise - 4.0F * strike - 2.0F * follow));
+        poseStack.mulPose(Axis.YP.rotationDegrees(side * cross * 35.0F * strike));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(side * (12.0F * raise - cross * 55.0F * strike)));
     }
 
     /** Vanilla's first-person arm placement (with no swing or equip offset), then the arm itself. */

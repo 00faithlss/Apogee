@@ -1,107 +1,83 @@
 package dev.apogee.client.nanowire;
 
 import dev.apogee.mantis.NanowireRules;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.util.Mth;
 import org.joml.Vector3f;
 
 /**
- * Paths of the wire's free end for each move, in a frame around the wearer: +X to their right,
- * +Y up, +Z forward, in blocks from the frame's origin (the eye in first person, the neck in third
- * person). The wire is a cord of a set length sliding along the path its end has travelled, the
- * way a lashed cord lies, so loops in the path become loops in the wire.
- *
- * <p>Shaped after a Cyberpunk 2077 monowire clip, frame by frame at 30 fps: the lash's arm crosses
- * the view in about 0.13 s and the wire closes a wide loop around the target right after. The
- * two-wire lash takes turns between three shapes, after the project author's references: an X,
- * a vertical chop with the wires side by side, and an S with the right wire over the left.
- *
- * <p>The end travels its path by distance, following one smooth speed curve per move, so it never
- * speeds up and slows down again between the path's keys. As the wire is reeled in it is pulled
- * taut, so it is already straight when its end is caught between the fists.
+ * Procedural cord motion in the wearer's frame: +X right, +Y up, +Z forward.
+ * Single lashes follow the tip's sampled path; heavy lashes propagate the hand's downward
+ * pull along the cord with a delay towards its tip. Both meet the held point at rest.
  */
 public final class NanowireMoves {
     /** Keys of an end path, in frame coordinates for the right arm; the left arm mirrors X. */
     private static final float[][] LASH = {
-            {0.55F, -0.08F, 0.40F},
-            {1.45F, -0.05F, 1.20F},
-            {1.10F, -0.05F, 2.60F},
-            {-0.50F, -0.08F, 2.90F},
-            {-1.50F, -0.12F, 1.60F},
-            {-0.90F, -0.16F, 0.80F},
-            {0.60F, -0.16F, 1.00F},
-            {0.50F, -0.20F, 2.10F},
-            {0.00F, -0.20F, 1.00F},
+            {0.85F, -0.12F, 0.75F},
+            {2.05F, 0.02F, 1.80F},
+            {1.25F, 0.15F, 3.25F},
+            {-0.65F, 0.02F, 3.55F},
+            {-2.00F, -0.20F, 2.50F},
+            {-1.65F, -0.35F, 1.25F},
+            {0.10F, -0.30F, 1.35F},
+            {0.65F, -0.22F, 2.20F},
+            {0.10F, -0.20F, 1.05F},
     };
 
     /** The two-wire lashes, played in turn: both wires slash down across each other in an X... */
     public static final int HEAVY_X = 0;
     /** ...both arms chop straight down together, the wires falling side by side... */
     public static final int HEAVY_VERTICAL = 1;
-    /** ...or the wires draw an S, the right one over the top and the left one under it. */
+    /** ...or a rolling downward lash, with the left wire following the right one. */
     public static final int HEAVY_S = 2;
     public static final int HEAVY_STYLES = 3;
 
-    /** The right wire of the X: up and out to the upper right, then down across to the lower left. */
-    private static final float[][] HEAVY_X_KEYS = {
-            {0.55F, 0.25F, 0.70F},
-            {1.15F, 0.95F, 1.90F},
-            {0.75F, 1.25F, 3.00F},
-            {-0.20F, 0.35F, 3.30F},
-            {-1.10F, -0.55F, 2.90F},
-            {-1.25F, -0.85F, 2.10F},
-            {-0.50F, -0.40F, 1.20F},
-            {0.00F, -0.10F, 0.90F},
-    };
-
-    /** The right wire of the vertical lash: up over the head, then straight down in front. */
-    private static final float[][] HEAVY_VERTICAL_KEYS = {
-            {0.35F, 0.35F, 0.60F},
-            {0.45F, 1.20F, 1.40F},
-            {0.45F, 1.45F, 2.60F},
-            {0.45F, 0.60F, 3.30F},
-            {0.45F, -0.50F, 3.10F},
-            {0.45F, -0.95F, 2.20F},
-            {0.30F, -0.45F, 1.20F},
-            {0.00F, -0.10F, 0.90F},
-    };
-
-    /**
-     * The right wire of the S, its upper stroke: out and up to the right, a wide sweep across the
-     * top of the view to the left, where it curls down and comes back.
-     */
-    private static final float[][] HEAVY_S_KEYS = {
-            {0.45F, 0.05F, 0.60F},
-            {1.40F, 0.30F, 1.60F},
-            {1.00F, 0.52F, 2.90F},
-            {-0.40F, 0.60F, 3.30F},
-            {-1.45F, 0.45F, 2.40F},
-            {-1.20F, 0.22F, 1.40F},
-            {-0.35F, 0.12F, 1.10F},
-            {0.00F, 0.05F, 0.90F},
-    };
-
-    /**
-     * The left wire mirrors the right one; in the S it is also turned upside down about this
-     * height, so it draws the lower stroke and the two never cross. Except in the vertical chop,
-     * it starts a moment after the right one.
-     */
-    private static final float HEAVY_MIDDLE = -0.12F;
+    /** Except in the parallel chop, the left arm starts just after the right one. */
     private static final float HEAVY_LEFT_LAG = 0.05F;
-    /**
-     * How much the moves are stretched to the wire's reach. The keys and lengths here were shaped
-     * for 5 blocks; across and forward they grow with the reach, and up and down by half as much,
-     * so the drawn wire gets as far as it hits.
-     */
-    private static final float SPREAD = (float) ((3.0 + NanowireRules.REACH_BONUS) / 5.0);
+    /** Nominal survival reach. A curved cord needs more length than this straight-line distance. */
+    private static final float REACH = (float) (3.0 + NanowireRules.REACH_BONUS);
+    private static final float SPREAD = REACH / 5.0F;
+    /** The furthest authored forward key is 3.55: scale that point to the actual hit range. */
+    private static final float FORWARD = REACH / 3.55F;
     private static final float LIFT = 1.0F + (SPREAD - 1.0F) * 0.5F;
     /** Longest the free wire gets, in blocks. */
-    private static final float LASH_LENGTH = 4.2F * SPREAD;
-    private static final float HEAVY_LENGTH = 5.0F * SPREAD;
+    private static final float LASH_LENGTH = 1.2F * REACH;
+    private static final float HEAVY_LENGTH = 1.3F * REACH;
     /** Samples per stretch between two keys when a path is built. */
     private static final int SAMPLES_PER_KEY = 24;
     /** Progress along the path (0..1) against move time, from each move's speed curve. */
-    private static final float[] LASH_PROGRESS = progress(false);
-    private static final float[] HEAVY_PROGRESS = progress(true);
+    private static final float[] LASH_PROGRESS = progress();
+
+    /** Shared accents for the skin poses in both views: pull, snap, follow-through, catch. */
+    record Motion(float wind, float strike, float follow, float catchWire) {
+    }
+
+    static Motion motion(float u, boolean heavy) {
+        float windEnd = heavy ? 0.16F : 0.14F;
+        float strikeEnd = heavy ? 0.30F : 0.34F;
+        float recovery = heavy ? 0.62F : 0.48F;
+        float wind = ease(u / windEnd) * (1.0F - ease((u - windEnd) / (strikeEnd - windEnd)));
+        float strike = ease((u - windEnd) / (strikeEnd - windEnd))
+                * (1.0F - ease((u - recovery) / (arrival(heavy) - recovery)));
+        float follow = ease((u - strikeEnd) / 0.14F)
+                * (1.0F - ease((u - recovery) / (arrival(heavy) - recovery)));
+        float catchWire = ease((u - 0.68F) / 0.10F) * (1.0F - ease((u - 0.80F) / 0.20F));
+        return new Motion(wind, strike, follow, catchWire);
+    }
+
+    static float release(float u, boolean heavy) {
+        return ease(u / 0.12F) * (1.0F - ease((u - arrival(heavy)) / (1.0F - arrival(heavy))));
+    }
+
+    static float reel(float u, boolean heavy) {
+        return ease((u - (heavy ? 0.64F : 0.58F)) / 0.28F);
+    }
+
+    static float trail(float u, boolean heavy) {
+        return ease((u - (heavy ? 0.18F : 0.10F)) / 0.12F)
+                * (1.0F - ease((u - (heavy ? 0.56F : 0.48F)) / 0.22F));
+    }
 
     private NanowireMoves() {
     }
@@ -117,14 +93,12 @@ public final class NanowireMoves {
         private final float[] along;
         private final int count;
         private final float heldLength;
-        private final boolean heavy;
 
-        private Path(int capacity, boolean heavy) {
+        private Path(int capacity) {
             xs = new float[capacity];
             ys = new float[capacity];
             zs = new float[capacity];
             along = new float[capacity];
-            this.heavy = heavy;
             count = 0;
             heldLength = 0.0F;
         }
@@ -134,7 +108,6 @@ public final class NanowireMoves {
             ys = sampled.ys;
             zs = sampled.zs;
             along = sampled.along;
-            heavy = sampled.heavy;
             this.count = count;
             this.heldLength = heldLength;
         }
@@ -145,16 +118,16 @@ public final class NanowireMoves {
 
         /** Distance along the path of the free end at move time {@code u}. */
         float end(float u) {
-            float progress = sample(heavy ? HEAVY_PROGRESS : LASH_PROGRESS, u);
+            float progress = sample(LASH_PROGRESS, u);
             return heldLength + (total() - heldLength) * progress;
         }
 
         /** Length of free wire out at move time {@code u}: the held stretch at first, growing as it is fed out, then reeled in. */
         float length(float u) {
-            float out = ease((u - 0.03F) / 0.15F);
-            float in = ease((u - (heavy ? 0.62F : 0.55F)) / 0.30F);
-            float full = heavy ? HEAVY_LENGTH : LASH_LENGTH;
-            return heldLength + (full - heldLength) * out * (1.0F - in);
+            float out = ease((u - 0.04F) / 0.20F);
+            float in = reel(u, false);
+            // Before the tip has travelled far enough, do not stack samples at the nozzle.
+            return Math.min(end(u), heldLength + (LASH_LENGTH - heldLength) * out * (1.0F - in));
         }
 
         /** The point at distance {@code d} along the path, in frame coordinates. */
@@ -188,18 +161,39 @@ public final class NanowireMoves {
 
     /** The lash path of the arm on {@code side} (+1 right, -1 left). */
     static Path lash(float side, Vector3f grip, Vector3f held) {
-        return build(LASH, side, 1.0F, 0.0F, grip, held, false);
+        return build(side, grip, held);
     }
 
-    /** One wire's path of the two-wire lash in the given style. */
-    static Path heavy(float side, int style, Vector3f grip, Vector3f held) {
-        return switch (style) {
-            case HEAVY_X -> build(HEAVY_X_KEYS, side, 1.0F, 0.0F, grip, held, true);
-            case HEAVY_VERTICAL -> build(HEAVY_VERTICAL_KEYS, side, 1.0F, 0.0F, grip, held, true);
-            default -> side > 0.0F
-                    ? build(HEAVY_S_KEYS, 1.0F, 1.0F, 0.0F, grip, held, true)
-                    : build(HEAVY_S_KEYS, -1.0F, -1.0F, 2.0F * HEAVY_MIDDLE, grip, held, true);
-        };
+    /**
+     * A flexible heavy lash. The hand turns first, then the bend travels towards the tip.
+     * Integrating unit tangents keeps a cord of bounded length attached to its grip, instead
+     * of sliding a cord along a tip trajectory that reads as throwing it forwards.
+     */
+    static List<Vector3f> heavyWire(float side, int style, float u, Vector3f grip, Vector3f held, int segments) {
+        List<Vector3f> points = new ArrayList<>(segments + 1);
+        points.add(new Vector3f(grip));
+        float release = release(u, true);
+        float length = Mth.lerp(ease(u / 0.16F) * (1.0F - reel(u, true)), grip.distance(held), HEAVY_LENGTH);
+        Vector3f current = new Vector3f(grip);
+        for (int i = 1; i <= segments; i++) {
+            float s = i / (float) segments;
+            float phase = u - 0.10F * s;
+            float chop = ease((phase - 0.16F) / 0.14F);
+            float roll = ease((phase - 0.42F) / 0.24F);
+            // Up at preparation, down through impact, then curl back during follow-through.
+            float angle = 0.65F + 1.13F * chop + 0.18F * roll;
+            float across = switch (style) {
+                case HEAVY_X -> side * (0.38F - 0.76F * chop);
+                case HEAVY_VERTICAL -> 0.0F;
+                default -> side * 0.28F * Mth.cos(angle + s * 0.65F);
+            };
+            float plane = (float) Math.sqrt(1.0F - across * across);
+            current.add(across * length / segments, plane * Mth.cos(angle) * length / segments,
+                    plane * Mth.sin(angle) * length / segments);
+            Vector3f rest = new Vector3f(grip).lerp(held, s);
+            points.add(rest.lerp(current, release));
+        }
+        return points;
     }
 
     /** Move time of one wire in the two-wire lash: the left one may start a moment after the right. */
@@ -211,16 +205,19 @@ public final class NanowireMoves {
      * The end's path: out of the fist through the keys and back to the point between the fists.
      * Each wire whips from its own hand, so the two only meet again in the middle at the end.
      */
-    private static Path build(float[][] keys, float side, float flip, float lift, Vector3f grip, Vector3f held, boolean heavy) {
-        Vector3f[] points = new Vector3f[keys.length + 2];
-        points[0] = new Vector3f(grip);
-        for (int i = 0; i < keys.length; i++) {
-            points[i + 1] = new Vector3f(side * keys[i][0] * SPREAD, (flip * keys[i][1] + lift) * LIFT, keys[i][2] * SPREAD);
+    private static Path build(float side, Vector3f grip, Vector3f held) {
+        Vector3f[] points = new Vector3f[LASH.length + 2];
+        points[0] = new Vector3f(held);
+        for (int i = 0; i < LASH.length; i++) {
+            points[i + 1] = new Vector3f(side * LASH[i][0] * SPREAD, LASH[i][1] * LIFT, LASH[i][2] * FORWARD);
         }
         points[points.length - 1] = new Vector3f(held);
         int stretches = points.length - 1;
-        Path path = new Path(1 + stretches * SAMPLES_PER_KEY, heavy);
+        Path path = new Path(2 + stretches * SAMPLES_PER_KEY);
         int n = add(path, 0, grip);
+        // The held segment is exactly straight. end(0) must be the actual point between the
+        // fists, not heldLength metres into a spline that starts off towards the first key.
+        n = add(path, n, held);
         for (int i = 0; i < stretches; i++) {
             Vector3f p0 = points[Math.max(0, i - 1)];
             Vector3f p1 = points[i];
@@ -248,14 +245,16 @@ public final class NanowireMoves {
      * fastest through the sweep, then slowing through the loop and the reel-in, until the end is
      * back between the fists at {@link #arrival}.
      */
-    private static float[] progress(boolean heavy) {
+    private static float[] progress() {
         int steps = 256;
         float[] table = new float[steps + 1];
-        float end = arrival(heavy);
+        float end = arrival(false);
         float sum = 0.0F;
         for (int i = 1; i <= steps; i++) {
             float u = (i - 0.5F) / steps;
-            float speed = u >= end ? 0.0F : ease(u / 0.14F) * (float) Math.pow(1.0F - ease((u - 0.24F) / (end - 0.24F)), 1.4);
+            float wind = 0.14F;
+            float speed = u >= end ? 0.0F : ease(u / wind)
+                    * (float) Math.pow(1.0F - ease((u - 0.30F) / (end - 0.30F)), 1.1);
             sum += speed;
             table[i] = sum;
         }
