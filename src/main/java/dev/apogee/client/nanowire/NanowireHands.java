@@ -2,6 +2,7 @@ package dev.apogee.client.nanowire;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import dev.apogee.client.compat.punchy.PunchyCompat;
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.mantis.MantisHandPose;
 import dev.apogee.mantis.MantisRules;
@@ -9,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 
 /**
@@ -37,12 +37,7 @@ public final class NanowireHands {
             return;
         }
         poseStack.pushPose();
-        MantisHandPose.undoViewBob(poseStack, player, partialTick);
-        // Vanilla's lag as the view turns: the hands trail a little behind the camera.
-        float xBob = Mth.lerp(partialTick, player.xBobO, player.xBob);
-        float yBob = Mth.lerp(partialTick, player.yBobO, player.yBob);
-        poseStack.mulPose(Axis.XP.rotationDegrees((player.getViewXRot(partialTick) - xBob) * 0.1F));
-        poseStack.mulPose(Axis.YP.rotationDegrees((player.getViewYRot(partialTick) - yBob) * 0.1F));
+        MantisHandPose.applyViewLag(poseStack, player, partialTick);
         NanowireWire.Frame frame = NanowireWire.Frame.of(poseStack.last(), false);
         float deploy = MantisClient.deployProgress(player, partialTick);
         float heavy = MantisClient.thrustProgress(player, partialTick);
@@ -50,10 +45,9 @@ public final class NanowireHands {
         for (boolean right : new boolean[]{true, false}) {
             float side = right ? 1.0F : -1.0F;
             poseStack.pushPose();
-            // Breathing and walking sway as the hands that take over when the wire is away move
-            // (Punchy's, measured), and the hand those take over from.
             MantisHandPose.apply(poseStack, player, partialTick, right, deploy);
-            if (right != (player.getMainArm() == HumanoidArm.RIGHT)) {
+            poseStack.translate(0.0F, -MantisClient.HANDS_DROP * (1.0F - MantisClient.implantLift(player, partialTick)), 0.0F);
+            if (right != (player.getMainArm() == HumanoidArm.RIGHT) && PunchyCompat.lowerOffArm(player)) {
                 // The other arm rises into view as the wire deploys and sinks as it retracts, so
                 // with the wire away only the main hand is left, as in vanilla.
                 poseStack.translate(0.0F, -RISE * (1.0F - deploy), 0.0F);
@@ -71,7 +65,7 @@ public final class NanowireHands {
                 poseStack.translate(side * 0.08F * k, -0.08F * k, 0.04F * k);
                 poseStack.mulPose(Axis.ZP.rotationDegrees(side * 7.0F * k));
             }
-            arm(poseStack, buffers, light, player, renderer, right);
+            arm(poseStack, buffers, light, player, renderer, right, partialTick);
             poseStack.popPose();
         }
         NanowireRig.drawWires(buffers, player, frame, partialTick);
@@ -113,7 +107,10 @@ public final class NanowireHands {
 
     /** Vanilla's first-person arm placement (with no swing or equip offset), then the arm itself. */
     private static void arm(PoseStack poseStack, MultiBufferSource buffers, int light, LocalPlayer player, PlayerRenderer renderer,
-                            boolean right) {
+                            boolean right, float partialTick) {
+        if (PunchyCompat.renderArm(poseStack, buffers, light, player, right, partialTick)) {
+            return;
+        }
         float side = right ? 1.0F : -1.0F;
         poseStack.translate(side * 0.64000005F, -0.6F, -0.71999997F);
         poseStack.mulPose(Axis.YP.rotationDegrees(side * 45.0F));

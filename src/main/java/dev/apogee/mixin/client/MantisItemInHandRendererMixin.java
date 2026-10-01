@@ -2,6 +2,8 @@ package dev.apogee.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import dev.apogee.client.compat.punchy.PunchyCompat;
+import dev.apogee.client.mantis.ImplantHandRenderer;
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.mantis.MantisHandPose;
 import dev.apogee.client.nanowire.NanowireHands;
@@ -14,6 +16,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * Low priority so this runs before other first-person animation mods and takes over the view.
  */
 @Mixin(value = ItemInHandRenderer.class, priority = 500)
-public abstract class MantisItemInHandRendererMixin {
+public abstract class MantisItemInHandRendererMixin implements ImplantHandRenderer {
     /** Extra sideways offset of each forearm while the blades are out, in screen units. */
     private static final float ARM_SPREAD = 0.22F;
     /** How far below its place the other forearm starts and ends while unfolding or folding. */
@@ -42,6 +45,13 @@ public abstract class MantisItemInHandRendererMixin {
     @Inject(method = "renderHandsWithItems", at = @At("HEAD"), cancellable = true)
     private void apogee$mantisHands(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource buffers,
                                     LocalPlayer player, int light, CallbackInfo ci) {
+        if (PunchyCompat.active(player)) {
+            float drop = MantisClient.handsDrop(player, partialTick);
+            if (!MantisClient.implantViewReady(player) && drop > 0.0F) {
+                poseStack.translate(0.0F, -MantisClient.HANDS_DROP * drop, 0.0F);
+            }
+            return;
+        }
         if (!(MantisClient.implantViewReady(player) || MantisHandPose.holdFolded) || player.isScoping()) {
             // Around the implant view, a held item eases down out of sight and back up, whoever
             // draws the hands; the rest of this frame's hand rendering inherits the offset.
@@ -52,18 +62,20 @@ public abstract class MantisItemInHandRendererMixin {
             return;
         }
         ci.cancel();
+        apogee$renderImplants(partialTick, poseStack, buffers, player, light);
+    }
+
+    @Unique
+    @Override
+    public void apogee$renderImplants(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource buffers,
+                                      LocalPlayer player, int light) {
         if (MantisClient.variant(player) == MantisVariant.NANOWIRE) {
             NanowireHands.render(poseStack, buffers, player, light, partialTick);
             buffers.endBatch();
             return;
         }
         poseStack.pushPose();
-        MantisHandPose.undoViewBob(poseStack, player, partialTick);
-        // Vanilla's lag as the view turns: the hands trail a little behind the camera.
-        float xBob = Mth.lerp(partialTick, player.xBobO, player.xBob);
-        float yBob = Mth.lerp(partialTick, player.yBobO, player.yBob);
-        poseStack.mulPose(Axis.XP.rotationDegrees((player.getViewXRot(partialTick) - xBob) * 0.1F));
-        poseStack.mulPose(Axis.YP.rotationDegrees((player.getViewYRot(partialTick) - yBob) * 0.1F));
+        MantisHandPose.applyViewLag(poseStack, player, partialTick);
         float thrust = MantisClient.thrustProgress(player, partialTick);
         for (HumanoidArm arm : new HumanoidArm[]{HumanoidArm.RIGHT, HumanoidArm.LEFT}) {
             boolean right = arm == HumanoidArm.RIGHT;
@@ -76,7 +88,7 @@ public abstract class MantisItemInHandRendererMixin {
             // Spread the forearms out towards the screen edges, level with where vanilla holds
             // an item in each hand; the implants' blades then rise clear of the view's centre.
             poseStack.translate(side * ARM_SPREAD * guard, 0.0F, 0.0F);
-            if (arm != player.getMainArm()) {
+            if (arm != player.getMainArm() && PunchyCompat.lowerOffArm(player)) {
                 // The other arm rises into view as the blades unfold and sinks out as they fold,
                 // so folded only the main hand is left, as in vanilla.
                 poseStack.translate(0.0F, -OFF_ARM_DROP * (1.0F - guard), 0.0F);
@@ -102,7 +114,9 @@ public abstract class MantisItemInHandRendererMixin {
             }
             float swing = Math.max(slash, 0.0F);
             // The vanilla swing, on whichever hand cuts; the implant's attack clip adds the blade's arc.
-            renderPlayerArm(poseStack, buffers, light, 0.0F, swing, arm);
+            if (!PunchyCompat.renderArm(poseStack, buffers, light, player, right, partialTick)) {
+                renderPlayerArm(poseStack, buffers, light, 0.0F, swing, arm);
+            }
             poseStack.popPose();
         }
         poseStack.popPose();

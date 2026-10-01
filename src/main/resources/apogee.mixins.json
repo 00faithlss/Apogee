@@ -37,6 +37,8 @@
     "client.RipperdocPatientMixin",
     "client.RipperdocPatientModelMixin",
     "client.RipperdocXrayMixin",
+    "client.compat.PunchyArmRendererMixin",
+    "client.compat.PunchyAttackTrackerMixin",
     "client.compat.SimplyTooltipsRendererMixin"
   ],
   "injectors": {

@@ -80,6 +80,7 @@ public final class MantisClient {
         localOut = false;
         localUnstowTick = Long.MIN_VALUE / 2;
         firstPersonRendering = false;
+        dev.apogee.client.compat.punchy.PunchyCompat.reset();
     }
 
     private static Anim anim(int id) {
@@ -314,7 +315,6 @@ public final class MantisClient {
             NanowireRig.prune(id -> mc.level.getEntity(id) != null);
         }
         MantisBladeFx.tick(mc);
-        MantisHandPose.tick(mc.player);
         LocalPlayer player = mc.player;
         if (player != null) {
             boolean out = isOut(player);

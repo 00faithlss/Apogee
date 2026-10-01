@@ -22,6 +22,10 @@ public final class ApogeeMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (mixinClassName.equals(COMPAT_PACKAGE + "PunchyArmRendererMixin")
+                || mixinClassName.equals(COMPAT_PACKAGE + "PunchyAttackTrackerMixin")) {
+            return FabricLoader.getInstance().isModLoaded("punchy");
+        }
         if (mixinClassName.startsWith(COMPAT_PACKAGE)) {
             return FabricLoader.getInstance().isModLoaded("simplytooltips");
         }
