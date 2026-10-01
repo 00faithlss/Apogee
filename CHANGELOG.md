@@ -4,6 +4,10 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Sin publicar] — 2026-10-01
 
+### Añadido (Compatibilidad con Punchy)
+
+- Compatibilidad de las Cuchillas Mantis y el Nanocable con las animaciones de primera persona de Punchy: caminar, correr, balanceo, giros de cámara y transiciones de despliegue y guardado con retorno al objeto en mano. Respeta la mano principal y la configuración de animaciones de Punchy; el mod sigue siendo opcional.
+
 ### Cambiado (Animaciones del Nanocable)
 
 - Barridos de clic izquierdo más amplios, con un tirón corto, golpe rápido, seguimiento y recuperación gradual. Los brazos de primera y tercera persona comparten las fases del movimiento.
@@ -16,6 +20,7 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ### Pruebas
 
+- Compatibilidad comprobada con Punchy 2.8a para Fabric 1.21.1: movimiento y guardado de ambos implantes, mano principal derecha e izquierda, balanceo de la vista activado y desactivado, y ataques del Nanocable en primera y tercera persona.
 - `nanowireMotionTest`, incluido en `check` y `build`: continuidad al salir y volver al reposo, barridos opuestos simétricos, coordenadas finitas y límites de despliegue, incluso con manos cruzadas o coincidentes; preparación del ataque doble por encima del agarre, golpe por debajo y retraso de la punta respecto de la raíz.
 - Comprobación del alcance visual: el barrido simple llega a 7 bloques hacia delante y ambos cables del ataque doble llegan a esa distancia al momento de impacto en los tres estilos.
 - `runNanowireSmoke`: capturas reales de ambas vistas, tres ataques dobles y clic derecho durante un latigazo simple.

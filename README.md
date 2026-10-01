@@ -142,6 +142,12 @@ Cada entidad lleva un acumulador temporal. Mientras está ralentizada solo ejecu
 
 El servidor (integrado del anfitrión o dedicado) valida la tecla, decide objetivos, daño y temporizadores, y sincroniza con Fabric Networking al entrar, cambiar de dimensión, reaparecer y cada vez que cambia el campo.
 
+## Compatibilidad con Punchy
+
+Las **Cuchillas Mantis** y el **Nanocable** son compatibles con las animaciones de primera persona de Punchy: acompañan el movimiento al caminar y correr, el balanceo y los giros de cámara, y mantienen transiciones suaves al desplegarse, guardarse y volver al objeto en mano.
+
+Punchy es opcional y se instala solo en el cliente. La integración respeta la mano principal elegida y la configuración de animaciones de Punchy. Comprobada con **Punchy 2.8a para Fabric 1.21.1**, incluyendo pruebas con mano principal derecha e izquierda y balanceo de la vista activado y desactivado.
+
 ## Compatibilidad con Immersive Armors
 
 Si Immersive Armors está instalado, los **pantalones Steampunk** (que ya dan doble salto) ganan un **dash aéreo hacia delante**:
