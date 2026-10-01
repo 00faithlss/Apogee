@@ -32,7 +32,7 @@ El cable se calcula en cada fotograma (`client/nanowire/NanowireWire` y `Nanowir
 - Las estelas son el mismo cable unos instantes antes.
 - Se dibuja como cintas orientadas a la cámara: un núcleo rojo emisivo con la textura del paquete y un halo aditivo.
 
-La coreografía (el latigazo que cruza la vista y cierra un lazo, el golpe doble en espirales con el brazo derecho adelante) se comparó fotograma a fotograma con un video del Monowire de Cyberpunk 2077 que aportó el autor. Del video solo se tomaron trayectorias y tiempos medidos; no va al repositorio ni al JAR.
+La coreografía (el latigazo que cruza la vista y cierra un lazo, el golpe doble en S con el brazo derecho adelante) se comparó fotograma a fotograma con un video del Monowire de Cyberpunk 2077 que aportó el autor. Del video solo se tomaron trayectorias y tiempos medidos; no va al repositorio ni al JAR.
 
 ## Qué no se incluyó
 
