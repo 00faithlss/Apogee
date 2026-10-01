@@ -19,8 +19,8 @@ import net.minecraft.world.entity.HumanoidArm;
  *
  * <p>After a Cyberpunk 2077 monowire clip, frame by frame: at rest both fists hold the wire taut
  * across the view; a lash winds the arm out to its side and sweeps it across the view close to
- * the camera in about 0.13 s, then brings it back; the two-wire lash pushes both arms forward
- * while the wires spin.
+ * the camera in about 0.13 s, then brings it back; in the two-wire lash both arms throw their
+ * own wire.
  */
 public final class NanowireHands {
     /** How far below its place the pair of arms starts and ends while the wire deploys or retracts. */
@@ -46,6 +46,7 @@ public final class NanowireHands {
         NanowireWire.Frame frame = NanowireWire.Frame.of(poseStack.last(), false);
         float deploy = MantisClient.deployProgress(player, partialTick);
         float heavy = MantisClient.thrustProgress(player, partialTick);
+        int style = MantisClient.heavyStyle(player);
         for (boolean right : new boolean[]{true, false}) {
             float side = right ? 1.0F : -1.0F;
             poseStack.pushPose();
@@ -68,7 +69,7 @@ public final class NanowireHands {
                 poseStack.translate(side * 0.04F * k, -0.05F * k, 0.05F * k);
             }
             if (heavy >= 0.0F) {
-                heavy(poseStack, heavy, side);
+                heavy(poseStack, NanowireMoves.heavyTime(side, style, heavy), side, style);
             }
             arm(poseStack, buffers, light, player, renderer, right);
             poseStack.popPose();
@@ -90,18 +91,40 @@ public final class NanowireHands {
     }
 
     /**
-     * Both arms in the two-wire lash: the right one reaches out towards the centre of the view and
-     * circles as the wires spin, the left one draws back a little, as in the reference clip.
+     * Both arms in the two-wire lash, each throwing its own wire. X: each arm rises out to its
+     * own upper corner, then slashes down across to the other side, the arms crossing. Vertical:
+     * both rise over the head together and chop straight down. S: the right arm reaches out high
+     * and circles while the left one sweeps across low.
      */
-    private static void heavy(PoseStack poseStack, float u, float side) {
-        float reach = NanowireMoves.ease(u / 0.12F) * (1.0F - NanowireMoves.ease((u - 0.62F) / 0.30F));
-        float spin = u * Mth.TWO_PI * 2.0F;
-        if (side > 0.0F) {
-            poseStack.translate(-0.30F * reach + 0.05F * Mth.sin(spin) * reach, (0.22F + 0.04F * Mth.cos(spin)) * reach, -0.45F * reach);
-            poseStack.mulPose(Axis.XP.rotationDegrees(-25.0F * reach));
-            poseStack.mulPose(Axis.YP.rotationDegrees(15.0F * reach));
-        } else {
-            poseStack.translate(-0.05F * reach, -0.04F * reach, 0.08F * reach);
+    private static void heavy(PoseStack poseStack, float u, float side, int style) {
+        switch (style) {
+            case NanowireMoves.HEAVY_X -> {
+                float raise = NanowireMoves.ease(u / 0.15F) * (1.0F - NanowireMoves.ease((u - 0.12F) / 0.20F));
+                float slash = NanowireMoves.ease((u - 0.12F) / 0.22F) * (1.0F - NanowireMoves.ease((u - 0.55F) / 0.35F));
+                poseStack.translate(side * (0.14F * raise - 0.22F * slash), 0.40F * raise - 0.18F * slash, -0.15F * raise - 0.25F * slash);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(side * (22.0F * raise - 28.0F * slash)));
+                poseStack.mulPose(Axis.XP.rotationDegrees(-30.0F * raise + 15.0F * slash));
+            }
+            case NanowireMoves.HEAVY_VERTICAL -> {
+                float raise = NanowireMoves.ease(u / 0.15F) * (1.0F - NanowireMoves.ease((u - 0.13F) / 0.18F));
+                float chop = NanowireMoves.ease((u - 0.13F) / 0.20F) * (1.0F - NanowireMoves.ease((u - 0.55F) / 0.35F));
+                poseStack.translate(-side * 0.06F * raise, 0.50F * raise - 0.16F * chop, -0.10F * raise - 0.35F * chop);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-40.0F * raise + 25.0F * chop));
+            }
+            default -> {
+                float reach = NanowireMoves.ease(u / 0.12F) * (1.0F - NanowireMoves.ease((u - 0.62F) / 0.30F));
+                float spin = u * Mth.TWO_PI * 2.0F;
+                if (side > 0.0F) {
+                    poseStack.translate(-0.16F * reach + 0.05F * Mth.sin(spin) * reach, (0.22F + 0.04F * Mth.cos(spin)) * reach, -0.45F * reach);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-25.0F * reach));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(15.0F * reach));
+                } else {
+                    // The left arm mirrors the right one, lower: the bottom stroke of the S.
+                    poseStack.translate(0.10F * reach - 0.05F * Mth.sin(spin) * reach, (-0.06F + 0.04F * Mth.cos(spin)) * reach, -0.38F * reach);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-8.0F * reach));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(-15.0F * reach));
+                }
+            }
         }
     }
 

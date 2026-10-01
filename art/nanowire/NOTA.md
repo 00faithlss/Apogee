@@ -28,11 +28,11 @@ El cable se calcula en cada fotograma (`client/nanowire/NanowireWire` y `Nanowir
 - En reposo va tenso entre las dos manos, con un leve zumbido.
 - Cada golpe sigue una curva por puntos clave (Catmull-Rom centrípeta) que se recorre por longitud de arco con una sola curva de velocidad, así la punta acelera y frena sin tirones.
 - El cable tiene largo fijo y se desliza por el camino de su punta, por eso los lazos se forman solos.
-- Al golpear, los dos cables se separan: cada uno sale como un látigo desde su propia mano y, al recogerse, se tensa y vuelve a unirse con el otro en el centro. En el golpe doble los dos cables dibujan una S: el derecho hace el trazo de arriba y el izquierdo el de abajo, sin cruzarse.
+- Al golpear, los dos cables se separan: cada uno sale como un látigo desde su propia mano y, al recogerse, se tensa y vuelve a unirse con el otro en el centro. El golpe doble se turna entre tres formas: una X, un tajo vertical con los cables en paralelo y una S con el cable derecho arriba y el izquierdo abajo.
 - Las estelas son el mismo cable unos instantes antes.
 - Se dibuja como cintas orientadas a la cámara: un núcleo rojo emisivo con la textura del paquete y un halo aditivo.
 
-La coreografía (el latigazo que cruza la vista y cierra un lazo, el golpe doble en S con el brazo derecho adelante) se comparó fotograma a fotograma con un video del Monowire de Cyberpunk 2077 que aportó el autor. Del video solo se tomaron trayectorias y tiempos medidos; no va al repositorio ni al JAR.
+La coreografía (el latigazo que cruza la vista y cierra un lazo, el golpe doble en X, vertical o en S, con los dos brazos) se comparó fotograma a fotograma con un video del Monowire de Cyberpunk 2077 que aportó el autor. Del video solo se tomaron trayectorias y tiempos medidos; no va al repositorio ni al JAR.
 
 ## Qué no se incluyó
 

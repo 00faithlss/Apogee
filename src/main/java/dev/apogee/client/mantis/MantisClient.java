@@ -31,6 +31,8 @@ public final class MantisClient {
         int swingArm = MantisRules.ARM_LEFT;
         int nextArm = MantisRules.ARM_RIGHT;
         long thrustStart = Long.MIN_VALUE;
+        /** Which two-wire lash the nanowire is playing; each one takes the next in turn. */
+        int heavyStyle = -1;
         /** Client tick each arm's last slash started on, indexed by {@link MantisRules#ARM_RIGHT}/{@link MantisRules#ARM_LEFT}. */
         final long[] slashStart = {Long.MIN_VALUE / 2, Long.MIN_VALUE / 2};
         MantisVariant variant = MantisVariant.STANDARD;
@@ -154,6 +156,7 @@ public final class MantisClient {
     /** Starts the two-arm attack clip: the blades' lunge or the two-wire lash. */
     private static void rigThrust(int entityId, Anim anim) {
         if (anim.variant == MantisVariant.NANOWIRE) {
+            anim.heavyStyle = (anim.heavyStyle + 1) % dev.apogee.client.nanowire.NanowireMoves.HEAVY_STYLES;
             NanowireRig.of(entityId).heavy();
         } else {
             MantisRig.of(entityId).thrust();
@@ -274,6 +277,12 @@ public final class MantisClient {
         }
         float t = (ticks - anim.slashStart[arm] + partialTick) / MantisRules.slashAnimationTicks(anim.variant);
         return t >= 0.0F && t <= 1.0F ? t : -1.0F;
+    }
+
+    /** The nanowire's current two-wire lash (see NanowireMoves), 0 when none has played yet. */
+    public static int heavyStyle(Entity entity) {
+        Anim anim = ANIMS.get(entity.getId());
+        return anim == null ? 0 : Math.max(0, anim.heavyStyle);
     }
 
     /** Lunge progress 0..1, or -1 when no lunge is playing. */

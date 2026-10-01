@@ -48,11 +48,37 @@ public final class NanowireStance {
         }
         float heavy = MantisClient.thrustProgress(entity, partialTick);
         if (heavy >= 0.0F) {
-            float raise = Mth.sin(heavy * Mth.PI);
-            rightX = Mth.lerp(raise, rightX, -2.3F);
-            leftX = Mth.lerp(raise, leftX, -2.3F);
-            rightZ = Mth.lerp(raise, rightZ, 0.6F);
-            leftZ = Mth.lerp(raise, leftZ, -0.6F);
+            int style = MantisClient.heavyStyle(entity);
+            float raise = NanowireMoves.ease(heavy / 0.15F) * (1.0F - NanowireMoves.ease((heavy - 0.13F) / 0.20F));
+            float strike = NanowireMoves.ease((heavy - 0.13F) / 0.22F) * (1.0F - NanowireMoves.ease((heavy - 0.55F) / 0.35F));
+            float out = Math.max(raise, strike);
+            switch (style) {
+                case NanowireMoves.HEAVY_X -> {
+                    // Up and out to each side, then down across the body, the arms crossing.
+                    rightX = Mth.lerp(out, rightX, Mth.lerp(strike / Math.max(out, 1.0E-3F), -2.6F, -1.1F));
+                    leftX = Mth.lerp(out, leftX, Mth.lerp(strike / Math.max(out, 1.0E-3F), -2.6F, -1.1F));
+                    rightZ = Mth.lerp(raise, rightZ, 0.6F);
+                    leftZ = Mth.lerp(raise, leftZ, -0.6F);
+                    rightY = Mth.lerp(strike, rightY, 0.8F);
+                    leftY = Mth.lerp(strike, leftY, -0.8F);
+                }
+                case NanowireMoves.HEAVY_VERTICAL -> {
+                    // Both over the head, then chopping down together.
+                    float x = Mth.lerp(strike / Math.max(out, 1.0E-3F), -2.9F, -0.9F);
+                    rightX = Mth.lerp(out, rightX, x);
+                    leftX = Mth.lerp(out, leftX, x);
+                    rightY = Mth.lerp(out, rightY, 0.0F);
+                    leftY = Mth.lerp(out, leftY, 0.0F);
+                }
+                default -> {
+                    // The right arm high, the left one low and forward: the two strokes of the S.
+                    float s = Mth.sin(heavy * Mth.PI);
+                    rightX = Mth.lerp(s, rightX, -2.3F);
+                    rightZ = Mth.lerp(s, rightZ, 0.6F);
+                    leftX = Mth.lerp(s, leftX, -1.2F);
+                    leftZ = Mth.lerp(s, leftZ, -0.3F);
+                }
+            }
         }
         model.rightArm.xRot = rightX;
         model.rightArm.yRot = rightY;

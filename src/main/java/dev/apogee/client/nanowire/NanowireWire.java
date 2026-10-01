@@ -106,6 +106,7 @@ public final class NanowireWire {
         float lashRight = MantisClient.slashProgress(wearer, MantisRules.ARM_RIGHT, partialTick);
         float lashLeft = MantisClient.slashProgress(wearer, MantisRules.ARM_LEFT, partialTick);
         float time = (MantisClient.clientTicks() + partialTick) / 20.0F;
+        int style = MantisClient.heavyStyle(wearer);
 
         // The held point between both fists, a hair below the straight line, with a faint hum.
         Vector3f held = new Vector3f(anchors[0].grip).add(anchors[1].grip).mul(0.5F);
@@ -119,7 +120,7 @@ public final class NanowireWire {
             float sign = side == 0 ? 1.0F : -1.0F;
             float own = side == 0 ? lashRight : lashLeft;
             float other = side == 0 ? lashLeft : lashRight;
-            Move move = heavy >= 0.0F ? new Move(NanowireMoves.heavyTime(sign, heavy), true, true)
+            Move move = heavy >= 0.0F ? new Move(NanowireMoves.heavyTime(sign, style, heavy), true, true)
                     : own >= 0.0F ? new Move(own, false, true)
                     : other >= 0.0F ? new Move(other, false, false)
                     : null;
@@ -128,7 +129,7 @@ public final class NanowireWire {
             if (move != null && move.moving) {
                 Vector3f grip = frame.toFrame(anchors[side].grip);
                 Vector3f between = frame.toFrame(held);
-                path = move.heavy ? NanowireMoves.heavy(sign, grip, between) : NanowireMoves.lash(sign, grip, between);
+                path = move.heavy ? NanowireMoves.heavy(sign, style, grip, between) : NanowireMoves.lash(sign, grip, between);
             }
             List<Vector3f> wire = wire(anchors[side], held, frame, move, path, 0.0F, feed);
             ribbon(core, wire, 1.0F, RED);

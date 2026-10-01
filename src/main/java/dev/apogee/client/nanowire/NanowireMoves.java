@@ -11,14 +11,14 @@ import org.joml.Vector3f;
  *
  * <p>Shaped after a Cyberpunk 2077 monowire clip, frame by frame at 30 fps: the lash's arm crosses
  * the view in about 0.13 s and the wire closes a wide loop around the target right after. The
- * two-wire lash draws an S across the view, as the project author asked: the right wire sweeps
- * over the top from right to left, the left wire under it from left to right.
+ * two-wire lash takes turns between three shapes, after the project author's references: an X,
+ * a vertical chop with the wires side by side, and an S with the right wire over the left.
  *
  * <p>The end travels its path by distance, following one smooth speed curve per move, so it never
  * speeds up and slows down again between the path's keys. As the wire is reeled in it is pulled
  * taut, so it is already straight when its end is caught between the fists.
  */
-final class NanowireMoves {
+public final class NanowireMoves {
     /** Keys of an end path, in frame coordinates for the right arm; the left arm mirrors X. */
     private static final float[][] LASH = {
             {0.55F, -0.08F, 0.40F},
@@ -32,11 +32,43 @@ final class NanowireMoves {
             {0.00F, -0.20F, 1.00F},
     };
 
+    /** The two-wire lashes, played in turn: both wires slash down across each other in an X... */
+    public static final int HEAVY_X = 0;
+    /** ...both arms chop straight down together, the wires falling side by side... */
+    public static final int HEAVY_VERTICAL = 1;
+    /** ...or the wires draw an S, the right one over the top and the left one under it. */
+    public static final int HEAVY_S = 2;
+    public static final int HEAVY_STYLES = 3;
+
+    /** The right wire of the X: up and out to the upper right, then down across to the lower left. */
+    private static final float[][] HEAVY_X_KEYS = {
+            {0.55F, 0.25F, 0.70F},
+            {1.15F, 0.95F, 1.90F},
+            {0.75F, 1.25F, 3.00F},
+            {-0.20F, 0.35F, 3.30F},
+            {-1.10F, -0.55F, 2.90F},
+            {-1.25F, -0.85F, 2.10F},
+            {-0.50F, -0.40F, 1.20F},
+            {0.00F, -0.10F, 0.90F},
+    };
+
+    /** The right wire of the vertical lash: up over the head, then straight down in front. */
+    private static final float[][] HEAVY_VERTICAL_KEYS = {
+            {0.35F, 0.35F, 0.60F},
+            {0.45F, 1.20F, 1.40F},
+            {0.45F, 1.45F, 2.60F},
+            {0.45F, 0.60F, 3.30F},
+            {0.45F, -0.50F, 3.10F},
+            {0.45F, -0.95F, 2.20F},
+            {0.30F, -0.45F, 1.20F},
+            {0.00F, -0.10F, 0.90F},
+    };
+
     /**
-     * The right wire of the two-wire lash, the upper stroke of an S: out and up to the right, a
-     * wide sweep across the top of the view to the left, where it curls down and comes back.
+     * The right wire of the S, its upper stroke: out and up to the right, a wide sweep across the
+     * top of the view to the left, where it curls down and comes back.
      */
-    private static final float[][] HEAVY = {
+    private static final float[][] HEAVY_S_KEYS = {
             {0.45F, 0.05F, 0.60F},
             {1.40F, 0.30F, 1.60F},
             {1.00F, 0.52F, 2.90F},
@@ -48,9 +80,9 @@ final class NanowireMoves {
     };
 
     /**
-     * The left wire is the lower stroke: the right wire's path turned half a turn about the
-     * middle of the view (X mirrored, Y flipped about this height), so the two wires draw one S
-     * and never cross; it also starts a moment later.
+     * The left wire mirrors the right one; in the S it is also turned upside down about this
+     * height, so it draws the lower stroke and the two never cross. Except in the vertical chop,
+     * it starts a moment after the right one.
      */
     private static final float HEAVY_MIDDLE = -0.12F;
     private static final float HEAVY_LEFT_LAG = 0.05F;
@@ -151,16 +183,20 @@ final class NanowireMoves {
         return build(LASH, side, 1.0F, 0.0F, grip, held, false);
     }
 
-    /** One wire's path of the two-wire lash. */
-    static Path heavy(float side, Vector3f grip, Vector3f held) {
-        return side > 0.0F
-                ? build(HEAVY, 1.0F, 1.0F, 0.0F, grip, held, true)
-                : build(HEAVY, -1.0F, -1.0F, 2.0F * HEAVY_MIDDLE, grip, held, true);
+    /** One wire's path of the two-wire lash in the given style. */
+    static Path heavy(float side, int style, Vector3f grip, Vector3f held) {
+        return switch (style) {
+            case HEAVY_X -> build(HEAVY_X_KEYS, side, 1.0F, 0.0F, grip, held, true);
+            case HEAVY_VERTICAL -> build(HEAVY_VERTICAL_KEYS, side, 1.0F, 0.0F, grip, held, true);
+            default -> side > 0.0F
+                    ? build(HEAVY_S_KEYS, 1.0F, 1.0F, 0.0F, grip, held, true)
+                    : build(HEAVY_S_KEYS, -1.0F, -1.0F, 2.0F * HEAVY_MIDDLE, grip, held, true);
+        };
     }
 
-    /** Move time of one wire in the two-wire lash: the left one starts a moment after the right. */
-    static float heavyTime(float side, float u) {
-        return side > 0.0F ? u : Mth.clamp((u - HEAVY_LEFT_LAG) / (1.0F - HEAVY_LEFT_LAG), 0.0F, 1.0F);
+    /** Move time of one wire in the two-wire lash: the left one may start a moment after the right. */
+    static float heavyTime(float side, int style, float u) {
+        return side > 0.0F || style == HEAVY_VERTICAL ? u : Mth.clamp((u - HEAVY_LEFT_LAG) / (1.0F - HEAVY_LEFT_LAG), 0.0F, 1.0F);
     }
 
     /**

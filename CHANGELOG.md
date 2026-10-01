@@ -2,6 +2,19 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.8.0+1.21.1] — 2026-10-01
+
+### Añadido (Nanocable)
+
+- El latigazo doble (clic derecho) tiene tres formas que se turnan en cada golpe, según las referencias del autor del proyecto:
+  - **X:** cada brazo sube a su esquina y baja cruzando hacia el otro lado, y los cables trazan una X;
+  - **vertical:** los dos brazos suben sobre la cabeza y bajan juntos, con los cables cayendo en paralelo;
+  - **S:** el cable derecho por arriba y el izquierdo por abajo.
+
+### Corregido (Nanocable)
+
+- En el latigazo doble el brazo izquierdo casi no se movía. Ahora los dos brazos lanzan su cable, en primera y en tercera persona.
+
 ## [0.7.1+1.21.1] — 2026-10-01
 
 ### Corregido (Nanocable)

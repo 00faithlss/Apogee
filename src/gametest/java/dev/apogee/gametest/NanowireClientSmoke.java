@@ -155,7 +155,12 @@ public final class NanowireClientSmoke implements ClientModInitializer {
         film(mc, t, firstPerson + FILM, "13-first-lash-left", () -> mc.player.swing(InteractionHand.MAIN_HAND));
         // The two-wire lash has a cooldown of three seconds from the one filmed in third person.
         film(mc, t, firstPerson + 2 * FILM + 20, "14-first-heavy", () -> KeyMapping.click(KeyBindingHelper.getBoundKeyOf(mc.options.keyUse)));
-        int retract = firstPerson + 3 * FILM + 30;
+        // The two-wire lash takes turns between three shapes: the one in third person was the X,
+        // the first one in first person the vertical chop; film the S and the X again, each after
+        // the three-second cooldown.
+        film(mc, t, firstPerson + 2 * FILM + 85, "14b-first-heavy", () -> KeyMapping.click(KeyBindingHelper.getBoundKeyOf(mc.options.keyUse)));
+        film(mc, t, firstPerson + 2 * FILM + 150, "14c-first-heavy", () -> KeyMapping.click(KeyBindingHelper.getBoundKeyOf(mc.options.keyUse)));
+        int retract = firstPerson + 2 * FILM + 150 + FILM + 10;
         if (t == retract) {
             ClientPlayNetworking.send(ToggleMantis.INSTANCE);
         }
