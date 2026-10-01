@@ -121,6 +121,7 @@
   "item.apogee.monofilament": "Monofilament",
   "item.apogee.wire_housing": "Nanowire Housing",
   "block.apogee.ripperdoc_table": "Ripperdoc Table",
+  "entity.apogee.ripperdoc_seat": "Ripperdoc seat",
   "block.apogee.ripperdoc_table.occupied": "Someone is already on the table",
   "container.apogee.ripperdoc": "Ripperdoc table",
   "death.attack.apogee.surgery": "%1$s did not survive surgery",

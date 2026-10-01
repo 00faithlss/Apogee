@@ -99,6 +99,7 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Cerradas, el brazo se ve como uno normal con tu skin (clásica o Slim). Al desplegarlas se abren las cubiertas del antebrazo, el mecanismo sube por el costado externo y la hoja se extiende.
 - Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
 - Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
+- Mientras están fuera aparece abajo a la izquierda un recuadro con el ícono del implante, como el del Sandevistan (encima de él si los dos se ven): cian cuando el ataque con clic derecho está listo, magenta con los segundos que faltan mientras recarga.
 - Daño con las cuchillas fuera: **10 por golpe** (15 con golpe crítico) y **2 ataques por segundo**; la estocada hace 9 a todo lo que esté en su línea (4 bloques). El objeto que quede en la mano no suma daño, velocidad, encantamientos, barrido ni pierde durabilidad; los efectos como Fuerza sí cuentan.
 - No se pueden encantar (ni en la mesa, ni con libros en el yunque, ni con `/enchant`).
 - Variantes: la térmica prende fuego 4 s y la eléctrica aplica Lentitud III 1,5 s y hace **+4 de daño** si el objetivo está en el agua. La hoja térmica brilla al rojo vivo, con el filo difuminado a blanco, destellos de glitch y partículas de calor; el filo y los electrodos de la eléctrica brillan en azul y sueltan pequeños rayos mientras el implante está abierto. Con shaders, el brillo recibe el bloom del shader.
@@ -110,7 +111,7 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Instálalo en la ranura **Brazos** de la mesa de matasanos (la misma de las Cuchillas Mantis). **R** (configurable) saca el cable o lo recoge.
 - La carcasa del cable va en la cara interna de cada antebrazo; guardada, queda casi oculta junto al torso. Fuera, el cable rojo brillante va tenso de una mano a la otra.
 - Desplegado: **clic izquierdo** da latigazos alternados (derecho, izquierdo...) de **8 de daño** con **5 bloques** de alcance. **Clic derecho** da un latigazo doble, que se turna entre tres formas (X, vertical y S), y golpea a todo lo que haya delante, en un arco de 140° dentro del alcance (**12 de daño**, recarga de 3 s). Valores provisionales.
-- Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, y tampoco se puede encantar.
+- Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, muestra el mismo recuadro con la recarga del latigazo doble, y tampoco se puede encantar.
 - Usa la misma tarjeta de tooltip que las Cuchillas Mantis: daño, ataques por segundo y tipo en grande; **G** alterna los controles y las estadísticas del latigazo doble.
 - Sonidos propios: despliegue, guardado, latigazo al aire (4 variantes), golpe al enemigo (4 variantes) y latigazo doble, en `assets/apogee/sounds/nanowire/`.
 
@@ -164,7 +165,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.12.0+1.21.1 (`build/libs/apogee-0.12.0+1.21.1.jar`) | Todos |
+| Apogee | 0.13.0+1.21.1 (`build/libs/apogee-0.13.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |

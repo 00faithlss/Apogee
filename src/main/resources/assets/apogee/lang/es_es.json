@@ -121,6 +121,7 @@
   "item.apogee.monofilament": "Monofilamento",
   "item.apogee.wire_housing": "Carcasa de nanocable",
   "block.apogee.ripperdoc_table": "Mesa de matasanos",
+  "entity.apogee.ripperdoc_seat": "Asiento de matasanos",
   "block.apogee.ripperdoc_table.occupied": "Ya hay alguien en la camilla",
   "container.apogee.ripperdoc": "Mesa de matasanos",
   "death.attack.apogee.surgery": "%1$s no sobrevivió a la cirugía",

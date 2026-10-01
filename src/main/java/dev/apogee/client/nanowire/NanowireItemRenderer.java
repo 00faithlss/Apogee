@@ -24,8 +24,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib.util.RenderUtil;
 
 /**
- * The nanowire as an item: both housings side by side with the stored wire coiled over them,
- * from the pack's {@code nanowire_item} export. It has no animation.
+ * The nanowire as an item: both housings side by side, from the pack's {@code nanowire_item}
+ * export, with the wire stretched straight between their ports instead of the pack's coil. It
+ * has no animation.
  */
 public final class NanowireItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
     public static final NanowireItemRenderer INSTANCE = new NanowireItemRenderer();

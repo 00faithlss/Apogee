@@ -94,8 +94,12 @@ public final class ApogeeClient implements ClientModInitializer {
 
         ClientTickEvents.START_CLIENT_TICK.register(MantisClient::tick);
         ClientTickEvents.END_CLIENT_TICK.register(ApogeeClient::onEndTick);
-        HudRenderCallback.EVENT.register((graphics, deltaTracker) ->
-                SandevistanEffects.renderHud(graphics, deltaTracker.getGameTimeDeltaPartialTick(false)));
+        HudRenderCallback.EVENT.register((graphics, deltaTracker) -> {
+            float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
+            SandevistanEffects.renderHud(graphics, partialTick);
+            dev.apogee.client.mantis.ArmCyberwareHud.render(graphics, partialTick);
+        });
+        ClientTickEvents.END_CLIENT_TICK.register(dev.apogee.client.mantis.ArmCyberwareHud::tick);
         WorldRenderEvents.AFTER_ENTITIES.register(context -> AfterimageRenderer.render(context, clientTicks));
 
         if (FabricLoader.getInstance().isModLoaded("simplytooltips")) {

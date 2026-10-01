@@ -354,6 +354,11 @@ public final class MantisClient {
         }
     }
 
+    /** Ticks left before the local player's right-click attack (thrust or two-wire lash) is ready. */
+    public static float heavyCooldownLeft(float partialTick) {
+        return Math.max(0.0F, localThrustReady - ticks - partialTick);
+    }
+
     private static void drain(KeyMapping key) {
         while (key.consumeClick()) {
             // discard

@@ -12,7 +12,7 @@ Paquete `nanocable-rojo-geckolib-assets` v0.3, aportado por el autor del proyect
 En el mod:
 
 - `geo/nanowire_{left,right}_attachment.geo.json` y sus animaciones: la carcasa de cada antebrazo (obturador, tapa de servicio y carrete), montada sobre el brazo del jugador. Se les quitó el cable con `tools/nanowire_strip_wire.py`: el paquete lo trae horneado como 64 segmentos rígidos a 60 fps (unos 8 MB de animación por brazo) y el mod lo dibuja por su cuenta.
-- `geo/nanowire_item.geo.json`: el modelo del objeto, sin cambios.
+- `geo/nanowire_item.geo.json`: el modelo del objeto, con el cable enrollado (hueso `stored_wire`) cambiado por un tramo recto y tenso entre las bocas de las dos carcasas, a pedido del autor. Regenerar el objeto desde el paquete devuelve el aro.
 - `textures/nanowire/nanowire_red{,_glowmask}.png`: atlas y máscara emisiva, sin cambios.
 
 Para regenerar las exportaciones sin cable desde el paquete:

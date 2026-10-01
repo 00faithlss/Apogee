@@ -59,6 +59,11 @@ public final class SandevistanEffects {
     private static long fovPulseStart = Long.MIN_VALUE;
     private static long killFlashStart = Long.MIN_VALUE;
     private static float hudAlpha;
+
+    /** How visible the Sandevistan's HUD square is, so other squares can stack over it. */
+    public static float hudAlpha() {
+        return hudAlpha;
+    }
     private static long clientTicks;
 
     private SandevistanEffects() {
@@ -330,58 +335,19 @@ public final class SandevistanEffects {
             accent = HUD_YELLOW;
         }
 
-        int size = 26;
+        int size = CyberwareHudSlot.SIZE;
         int x = 6;
         int y = graphics.guiHeight() - size - 6;
         graphics.pose().pushPose();
         graphics.pose().translate(0.0F, (1.0F - hudAlpha) * 6.0F, 0.0F);
-
-        // Slot body with the bottom-left corner cut, like the game's quick-access squares.
-        int background = withAlpha(0x12151A, 0.9F * hudAlpha);
-        int chamfer = 5;
-        for (int row = 0; row < size; row++) {
-            int inset = Math.max(0, row - (size - chamfer));
-            graphics.fill(x + inset, y + row, x + size, y + row + 1, background);
-        }
-        int fillHeight = Math.round(size * fill);
-        int fillColor = withAlpha(active ? 0x02D7F2 : 0xED1E79, 0.32F * hudAlpha);
-        for (int row = size - fillHeight; row < size; row++) {
-            int inset = Math.max(0, row - (size - chamfer));
-            graphics.fill(x + inset, y + row, x + size, y + row + 1, fillColor);
-        }
+        CyberwareHudSlot.draw(graphics, x, y, hudAlpha, fill, active ? HUD_CYAN : HUD_MAGENTA, accent, new ItemStack(ApogeeItems.SANDEVISTAN));
         if (extension > 0.0F) {
-            graphics.fill(x, y, x + Math.max(1, Math.round(size * extension)), y + 2, withAlpha(0xFCEE0A, hudAlpha));
+            graphics.fill(x, y, x + Math.max(1, Math.round(size * extension)), y + 2, withAlpha(HUD_YELLOW, hudAlpha));
         }
-
-        // One-pixel frame following the chamfer.
-        int frame = withAlpha(accent, hudAlpha);
-        graphics.fill(x, y, x + size, y + 1, frame);
-        graphics.fill(x + size - 1, y, x + size, y + size, frame);
-        graphics.fill(x, y, x + 1, y + size - chamfer, frame);
-        graphics.fill(x + chamfer, y + size - 1, x + size, y + size, frame);
-        for (int i = 0; i < chamfer; i++) {
-            graphics.fill(x + i, y + size - chamfer + i, x + i + 1, y + size - chamfer + i + 1, frame);
-        }
-
-        // Full-size implant icon centered in the slot.
-        int iconOffset = (size - 16) / 2;
-        graphics.renderItem(new ItemStack(ApogeeItems.SANDEVISTAN), x + iconOffset, y + iconOffset);
-
-        // Seconds left beside the slot, vertically centered, in the accent color.
+        // Seconds left beside the slot, in the accent color.
         Font font = minecraft.font;
         int labelX = x + size + 4;
-        if (remaining > 0.0F) {
-            float secondsLeft = remaining / 20.0F;
-            String number = active && secondsLeft < 3.0F
-                    ? String.format(Locale.ROOT, "%.1f", secondsLeft)
-                    : Integer.toString(Mth.ceil(secondsLeft));
-            Component text = Component.literal(number).withStyle(style -> style.withFont(HUD_FONT));
-            graphics.pose().pushPose();
-            graphics.pose().translate(labelX, y + size / 2.0F - 6.0F, 0.0F);
-            graphics.pose().scale(1.4F, 1.4F, 1.0F);
-            graphics.drawString(font, text, 0, 0, withAlpha(accent, hudAlpha), true);
-            graphics.pose().popPose();
-        }
+        CyberwareHudSlot.seconds(graphics, x, y, remaining, active ? 3.0F : 0.0F, accent, hudAlpha);
         if (killFlash > 0.0F) {
             Component bonus = Component.translatable("tooltip.apogee.value.bonus_seconds", Integer.toString(rules.killExtensionTicks() / 20))
                     .withStyle(style -> style.withFont(HUD_FONT));

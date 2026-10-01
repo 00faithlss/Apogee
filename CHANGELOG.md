@@ -2,6 +2,20 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.13.0+1.21.1] — 2026-10-01
+
+### Añadido
+
+- Recuadro de recarga del ataque con clic derecho (la estocada de las Cuchillas Mantis y el latigazo doble del Nanocable), con el mismo estilo que el del Sandevistan: aparece abajo a la izquierda mientras el implante está fuera, con el ícono del implante; cian cuando está listo, magenta con los segundos que faltan mientras recarga. Si el del Sandevistan también se ve, se apila encima. Respeta la opción `hud` de `config/apogee-client.json`.
+
+### Cambiado
+
+- El objeto Nanocable lleva el cable recto y tenso entre las bocas de sus dos carcasas, en vez del aro enrollado del paquete.
+
+### Corregido
+
+- El asiento invisible de la mesa de matasanos no tenía nombre: los mods que muestran lo que se mira (como Jade) mostraban `entity.apogee.ripperdoc_seat`. Ahora se llama «Asiento de matasanos» («Ripperdoc seat» en inglés). Se revisaron los demás nombres, subtítulos, teclas y mensajes de muerte del mod y no falta ninguno.
+
 ## [0.12.0+1.21.1] — 2026-10-01
 
 ### Añadido (Mesa de matasanos)
