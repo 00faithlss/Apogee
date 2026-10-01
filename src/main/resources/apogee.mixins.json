@@ -11,6 +11,7 @@
     "MantisAttackMixin",
     "PlayerAdvancementsMixin",
     "PlayerTickMixin",
+    "RipperdocPatientPoseMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerLevelMixin",
     "TrinketsComponentMixin",

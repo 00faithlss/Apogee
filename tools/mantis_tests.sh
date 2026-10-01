@@ -3,6 +3,7 @@
 #
 #   tools/mantis_tests.sh mp      dedicated server + two clients ("Observer", "Wearer")
 #   tools/mantis_tests.sh compat  runMantisSmoke with Punchy, EMF, ETF and Fresh Animations
+#                                 (COMPAT_SMOKE=ripperdoc runs the ripperdoc table script instead)
 #   tools/mantis_tests.sh motion  first-person arm motion, every tick, in vanilla and with Punchy
 #   tools/mantis_tests.sh calibrate  fits the folded implant onto the hand that follows it
 #   tools/mantis_tests.sh iris    the Mantis smoke script with Sodium, Iris and the MakeUp UltraFast
@@ -77,9 +78,9 @@ compat)
     rm -rf "$base/screenshots"
     client_options "$base" 'resourcePacks:["vanilla","fabric","file/FreshAnimations_v1.10.4.zip","file/FA+All_Extensions-v1.8.1.zip","file/FA+Player-v1.1.zip"]'
     xvfb-run -a -s "-screen 0 1600x900x24" java -Xmx3G -Dfabric.dli.config="$CFG" -Dfabric.dli.env=client \
-        -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Dapogee.mantisSmoke=true -cp "$CP" \
+        -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Dapogee.${COMPAT_SMOKE:-mantis}Smoke=true -cp "$CP" \
         net.fabricmc.devlaunchinjector.Main --gameDir "$ROOT/$base" --width 1600 --height 900 > "$base/run.out" 2>&1 || true
-    grep -h -E 'Loading [0-9]+ mods|MantisSmoke.*(FAILED|passed|failed)' "$base/run.out" || true
+    grep -h -E 'Loading [0-9]+ mods|(Mantis|Ripperdoc)Smoke.*(FAILED|passed|failed)' "$base/run.out" || true
     ;;
 motion|calibrate)
     # The same run twice: vanilla hands, then with Punchy alone. Motion frames are then tracked

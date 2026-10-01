@@ -2,6 +2,12 @@ package dev.apogee.gametest;
 
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.mantis.MantisVariant;
+import dev.apogee.client.ripperdoc.RipperdocScreen;
+import dev.apogee.registry.ApogeeItems;
+import dev.apogee.ripperdoc.RipperdocMenu;
+import dev.apogee.ripperdoc.RipperdocSeat;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.inventory.ClickType;
 import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.api.ClientModInitializer;
@@ -20,7 +26,9 @@ import org.slf4j.LoggerFactory;
  * Client half of the multiplayer Mantis Blades check. Run with -Dapogee.mpRole=observer or
  * wearer and the matching --username: on each "[mp] phase" chat line from the server it checks
  * what this client sees of the wearer and takes a screenshot. The observer looks at the wearer;
- * the wearer stays in first person, where both blades must show once deployed.
+ * the wearer stays in first person, where both blades must show once deployed. On the ripperdoc
+ * table the wearer swaps the Mantis Blades for the nanowire with real clicks and turns x-ray on;
+ * the observer checks that they lie on the couch, in the sleeping pose.
  */
 public final class MultiplayerSmokeClient implements ClientModInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger("MultiplayerSmoke");
@@ -29,6 +37,8 @@ public final class MultiplayerSmokeClient implements ClientModInitializer {
     private static String pendingPhase;
     private static int shotDelay = -1;
     private static int stopDelay = -1;
+    /** Ticks since the wearer was laid on the couch, while the wearer works the ripperdoc screen. */
+    private static int surgeryTicks = -1;
 
     @Override
     public void onInitializeClient() {
@@ -70,6 +80,9 @@ public final class MultiplayerSmokeClient implements ClientModInitializer {
             mc.stop();
             return;
         }
+        if (surgeryTicks >= 0) {
+            surgery(mc, surgeryTicks++);
+        }
         if (shotDelay < 0 || shotDelay-- > 0) {
             return;
         }
@@ -85,6 +98,20 @@ public final class MultiplayerSmokeClient implements ClientModInitializer {
                 }
                 case "open", "attack", "thrust" -> check(deployed, "deployed for " + role + " in " + phase);
                 case "retracted" -> check(!deployed, "retracted for " + role);
+                case "couch" -> {
+                    check(wearer.getVehicle() instanceof RipperdocSeat, "the wearer lies on the couch for " + role);
+                    check(wearer.hasPose(Pose.SLEEPING), "the wearer is in the sleeping pose for " + role);
+                    if ("wearer".equals(role)) {
+                        check(mc.screen instanceof RipperdocScreen, "the ripperdoc screen opened for the wearer");
+                        surgeryTicks = 0;
+                    }
+                }
+                case "fitted" -> check(MantisClient.variant(wearer) == MantisVariant.NANOWIRE,
+                        "the nanowire is fitted for " + role + ": " + MantisClient.variant(wearer));
+                case "getup" -> {
+                    check(!(wearer.getVehicle() instanceof RipperdocSeat), "the wearer got up for " + role);
+                    check(!wearer.hasPose(Pose.SLEEPING), "the wearer stands again for " + role);
+                }
                 default -> {
                 }
             }
@@ -95,6 +122,46 @@ public final class MultiplayerSmokeClient implements ClientModInitializer {
         }
         Screenshot.grab(mc.gameDirectory, "mp-" + role + "-" + phase + ".png", mc.getMainRenderTarget(),
                 message -> LOGGER.info("{} screenshot {}", role, phase));
+    }
+
+    /** The wearer's own clicks on the ripperdoc screen, sent to the server like a player's. */
+    private static void surgery(Minecraft mc, int t) {
+        if (!(mc.screen instanceof RipperdocScreen screen)) {
+            if (t == 5) {
+                check(false, "the ripperdoc screen stays open for the wearer");
+            }
+            return;
+        }
+        RipperdocMenu menu = screen.getMenu();
+        int arms = RipperdocMenu.Implant.ARMS.ordinal();
+        switch (t) {
+            // Shift-click the Mantis Blades out of the arms slot, then the nanowire in.
+            case 5 -> mc.gameMode.handleInventoryMouseClick(menu.containerId, arms, 0, ClickType.QUICK_MOVE, mc.player);
+            case 15 -> {
+                check(!menu.getSlot(arms).hasItem(), "the Mantis Blades came out of the arms slot");
+                for (int i = RipperdocMenu.Implant.values().length; i < menu.slots.size(); i++) {
+                    if (menu.getSlot(i).getItem().is(ApogeeItems.NANOWIRE)) {
+                        mc.gameMode.handleInventoryMouseClick(menu.containerId, i, 0, ClickType.QUICK_MOVE, mc.player);
+                        break;
+                    }
+                }
+            }
+            case 25 -> {
+                // The x-ray button, clicked where it is on the screen.
+                double x = (mc.getWindow().getGuiScaledWidth() - RipperdocMenu.WIDTH) / 2.0 + 72;
+                double y = (mc.getWindow().getGuiScaledHeight() - RipperdocMenu.HEIGHT) / 2.0 + 119;
+                screen.mouseClicked(x, y, 0);
+                screen.mouseReleased(x, y, 0);
+            }
+            case 30 -> {
+                check(menu.getSlot(arms).getItem().is(ApogeeItems.NANOWIRE), "the nanowire sits in the arms slot");
+                check(RipperdocScreen.xray(), "the x-ray button works for the wearer");
+                Screenshot.grab(mc.gameDirectory, "mp-wearer-xray.png", mc.getMainRenderTarget(), message -> LOGGER.info("wearer screenshot xray"));
+            }
+            case 31 -> surgeryTicks = -1;
+            default -> {
+            }
+        }
     }
 
     private static Player findWearer(Minecraft mc) {

@@ -2,6 +2,23 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.11.0+1.21.1] — 2026-10-01
+
+### Cambiado (Mesa de matasanos)
+
+- La pantalla se arma como la de un cofre: arriba un panel del matasanos (las ranuras Brazos y Sistema operativo con su nombre y el implante instalado, el visor del paciente y los botones Rayos X y Skin) y abajo el inventario normal de Minecraft. Se dibuja al tamaño normal de la interfaz, sin escalado propio, y sus textos siguen el idioma del juego.
+- El paciente toma la pose de dormir de la cama, recostado sobre el respaldo de la camilla. Es la pose del jugador, así que se sincroniza: en multijugador los demás también lo ven acostado. No cuenta como dormir: no salta la noche ni fija el punto de reaparición.
+
+### Corregido (Mesa de matasanos)
+
+- Las ranuras de la pantalla no coincidían con las de la textura cuando la ventana obligaba a reducirla, y por eso los botones Rayos X y Skin no respondían al clic. Con el nuevo diseño el clic cae donde se ve el botón.
+- Arrastrar el visor hacia la derecha giraba al personaje hacia la izquierda.
+
+### Pruebas
+
+- La prueba multijugador (`tools/mantis_tests.sh mp`) acuesta al portador en una mesa de matasanos: su cliente cambia las Cuchillas Mantis por el Nanocable con clics reales y activa los rayos X, el servidor comprueba la instalación y el daño, y el observador comprueba que lo ve acostado.
+- `COMPAT_SMOKE=ripperdoc tools/mantis_tests.sh compat` corre la prueba de la mesa con Punchy, EMF, ETF y Fresh Animations.
+
 ## [0.10.0+1.21.1] — 2026-10-01
 
 ### Añadido (Mesa de matasanos)

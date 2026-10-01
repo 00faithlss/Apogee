@@ -81,11 +81,11 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 ### Mesa de matasanos
 
 - Se coloca como una cama: ocupa dos bloques, con el respaldo levantado hacia donde miras.
-- Clic derecho: te acuestas en la camilla y se abre la pantalla del matasanos. Al cerrarla (Esc o la tecla de inventario) te levantas.
+- Clic derecho: te acuestas en la camilla (con la pose de dormir de la cama, recostado sobre el respaldo; los demás jugadores te ven así) y se abre la pantalla del matasanos. Al cerrarla (Esc o la tecla de inventario) te levantas.
+- La pantalla funciona como un cofre: arriba el panel del matasanos y abajo tu inventario de siempre.
 - Los implantes **solo** se instalan o quitan aquí: las ranuras de ciberware ya no aparecen en el inventario y usar un implante no lo equipa. Arrastra el implante a su ranura (Sistema operativo o Brazos) o usa Mayús + clic.
 - Cada implante que instalas es una cirugía: cuesta **3 corazones**, atraviesa la armadura y nunca te mata (como mucho te deja en medio corazón). Quitarlo es gratis.
-- En el centro aparece tu personaje con los implantes que llevas; arrástralo con el mouse para rotarlo. **Rayos X** vuelve la piel translúcida y deja ver los implantes a través del cuerpo; **Skin** vuelve a la vista normal. Abajo a la izquierda se listan los implantes instalados.
-- Las demás categorías de la pantalla (corteza, esqueleto, ojos, etc.) son espacios para implantes futuros.
+- En el centro del panel aparece tu personaje con los implantes que llevas; arrástralo con el mouse para rotarlo. **Rayos X** vuelve la piel translúcida y deja ver los implantes a través del cuerpo; **Skin** vuelve a la vista normal. Abajo a la izquierda se listan los implantes instalados.
 
 - Instálalo en la ranura **Sistema operativo** de la mesa de matasanos (la pechera y los élitros siguen libres).
 - **V** (configurable) activa el efecto o lo termina antes de tiempo.
@@ -163,7 +163,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.10.0+1.21.1 (`build/libs/apogee-0.10.0+1.21.1.jar`) | Todos |
+| Apogee | 0.11.0+1.21.1 (`build/libs/apogee-0.11.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -225,8 +225,8 @@ tools/mantis_tests.sh motion
 tools/mantis_tests.sh calibrate
 ```
 
-- `mp`: servidor dedicado y dos clientes (`Observer` y `Wearer`). El servidor equipa al portador y dirige despliegue, corte, estocada y repliegue; cada cliente comprueba lo que ve y captura en `build/mantis-mp/<cliente>/screenshots`.
-- `compat`: `runMantisSmoke` con Punchy 2.8c, Entity Model Features 3.3.9, Entity Texture Features 7.2.4 y Fresh Animations 1.10.4 con sus packs *Extensions* y *Player Extension*, descargados en `build/mantis-compat`.
+- `mp`: servidor dedicado y dos clientes (`Observer` y `Wearer`). El servidor equipa al portador y dirige despliegue, corte, estocada y repliegue; después lo acuesta en una mesa de matasanos, donde el cliente del portador cambia las Cuchillas Mantis por el Nanocable con clics reales y activa los rayos X. Cada cliente comprueba lo que ve (incluida la pose acostada del otro) y captura en `build/mantis-mp/<cliente>/screenshots`.
+- `compat`: `runMantisSmoke` con Punchy 2.8c, Entity Model Features 3.3.9, Entity Texture Features 7.2.4 y Fresh Animations 1.10.4 con sus packs *Extensions* y *Player Extension*, descargados en `build/mantis-compat`. Con `COMPAT_SMOKE=ripperdoc` corre `runRipperdocSmoke` con los mismos mods.
 - `motion`: captura cada tick de la primera persona (quieto, caminando, deteniéndose y guardando las cuchillas), en vanilla y con Punchy, en `build/mantis-motion`; con `MOTION_SPRINT=true`, corriendo, y con `MOTION_ITEM=true`, desplegando y guardando con una espada en la mano. `python3 tools/mantis_motion.py` resume el movimiento de las manos.
 - `calibrate`: ajusta la pose en que termina el repliegue sobre la mano que aparece después (vanilla o Punchy) y la registra en `build/mantis-calibrate/<caso>/run.out`.
 - `iris`: `runMantisSmoke` con Sodium 0.8.13, Iris 1.8.14 y el shader MakeUp UltraFast 9.5e, en una instancia como la de un launcher armada en `build/mantis-iris` (Iris no arranca en el entorno de desarrollo).

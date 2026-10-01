@@ -109,4 +109,4 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 ## Mesa de matasanos — diseño propio del proyecto
 
 - Origen: paquete `mesa-matasanos-edgerunner-assets`, aportado por el autor del proyecto: diseño propio de la pantalla, inspirado en la galería pública de Project: Edgerunner sin copiar sus texturas ni su código. Fuentes en `art/ripperdoc/` (ver `art/ripperdoc/NOTA.md`).
-- Usado: `textures/mesa_matasanos_gui.png` → `assets/apogee/textures/gui/ripperdoc.png`, sin los objetos y textos de muestra.
+- Usado en el juego: ninguna textura. La pantalla actual se dibuja con la textura de cofre de Minecraft y con los colores y esquinas del diseño; `textures/mesa_matasanos_gui.png` queda como referencia en `art/ripperdoc/`.

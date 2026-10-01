@@ -4,10 +4,7 @@ Paquete `mesa-matasanos-edgerunner-assets`, aportado por el autor del proyecto: 
 
 ## Qué usa el mod
 
-- `textures/mesa_matasanos_gui.png` → `assets/apogee/textures/gui/ripperdoc.png`, con estos cambios pedidos por el autor:
-  - sin los objetos de muestra (Mantis térmicas en Brazos y tres objetos en el inventario) ni el marco rosado de selección;
-  - sin los textos «Mantis térmicas / Ambos brazos / Instaladas» ni «Capacidad por definir»: la lista de implantes instalados la dibuja el juego.
-- `layout.json`: las posiciones de las ranuras de Sistema operativo y Brazos, del inventario y del visor del paciente.
+La pantalla se armó primero con `textures/mesa_matasanos_gui.png` (480 × 356). El autor pidió después que funcionara como un cofre, con el inventario normal abajo, así que hoy se dibuja con la textura de cofre de Minecraft y un panel con los colores, las esquinas cian y los botones del diseño. De este paquete quedan como referencia la textura, `layout.json` y las maquetas.
 
 La camilla del bloque no viene de este paquete: es la camilla del conjunto `ripperdoc` de Project: Edgerunner (ver `LICENSE_ASSETS.md`).
 

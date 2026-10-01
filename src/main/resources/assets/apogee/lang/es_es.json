@@ -114,11 +114,14 @@
   "item.apogee.wire_housing": "Carcasa de nanocable",
   "block.apogee.ripperdoc_table": "Mesa de matasanos",
   "block.apogee.ripperdoc_table.occupied": "Ya hay alguien en la camilla",
-  "container.apogee.ripperdoc": "Matasanos",
+  "container.apogee.ripperdoc": "Mesa de matasanos",
   "death.attack.apogee.surgery": "%1$s no sobrevivió a la cirugía",
-  "screen.apogee.ripperdoc.installed": "Instalado",
-  "screen.apogee.ripperdoc.none": "Sin ciberware instalado",
   "screen.apogee.ripperdoc.surgery": "Instalar un implante cuesta 3 corazones",
   "screen.apogee.ripperdoc.rotate": "Arrastra para rotar",
-  "screen.apogee.ripperdoc.xray_empty": "Sin ciberware detectado"
+  "screen.apogee.ripperdoc.xray_empty": "Sin ciberware detectado",
+  "screen.apogee.ripperdoc.slot.arms": "Brazos",
+  "screen.apogee.ripperdoc.slot.os": "Sistema operativo",
+  "screen.apogee.ripperdoc.empty": "Vacío",
+  "screen.apogee.ripperdoc.xray": "Rayos X",
+  "screen.apogee.ripperdoc.skin": "Skin"
 }

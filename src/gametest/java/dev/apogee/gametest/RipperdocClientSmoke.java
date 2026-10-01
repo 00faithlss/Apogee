@@ -127,14 +127,16 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
             });
             case 52 -> {
                 check(mc.player.getVehicle() instanceof RipperdocSeat, "the patient lies on the couch");
+                check(mc.player.hasPose(net.minecraft.world.entity.Pose.SLEEPING), "the patient takes the sleeping pose");
                 check(mc.screen instanceof RipperdocScreen, "the ripperdoc screen is open");
                 shot(mc, "04-screen-empty");
                 healthBefore = mc.player.getHealth();
-                screen(mc).setXray(true);
+                click(mc, XRAY);
             }
             case 54 -> {
+                check(RipperdocScreen.xray(), "the x-ray button turns x-ray on");
                 shot(mc, "04b-xray-empty");
-                screen(mc).setXray(false);
+                click(mc, SKIN);
             }
             case 55 -> server(mc, (level, player) -> {
                 // Fit the Mantis Blades and the Sandevistan as clicks on their slots would.
@@ -146,23 +148,27 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
             case 64 -> {
                 check(MantisManager.equippedVariant(mc.player) != null, "the Mantis Blades are fitted");
                 check(mc.player.getHealth() < healthBefore, "surgery hurts: " + healthBefore + " -> " + mc.player.getHealth());
+                check(!RipperdocScreen.xray(), "the skin button turns x-ray off");
                 shot(mc, "05-screen-fitted");
-                screen(mc).setXray(true);
+                click(mc, XRAY);
             }
             case 66 -> {
                 check(RipperdocScreen.xray(), "the x-ray button is on");
                 shot(mc, "05b-xray-fitted");
-                // Drag the patient view round to the back.
+                // Drag the patient view to the right, round to the back.
                 RipperdocScreen screen = screen(mc);
-                double x = mc.getWindow().getGuiScaledWidth() / 2.0;
-                double y = mc.getWindow().getGuiScaledHeight() / 2.0 - 30;
+                float yawBefore = screen.yaw();
+                double x = left(mc) + 88;
+                double y = top(mc) + 60;
                 screen.mouseClicked(x, y, 0);
-                screen.mouseDragged(x + 60, y, 0, 100, 0);
+                screen.mouseDragged(x + 60, y, 0, 60, 0);
                 screen.mouseReleased(x + 60, y, 0);
+                // Turning the model to the right shows its left side: its yaw goes down.
+                check(screen.yaw() < yawBefore, "dragging right turns the patient right: " + yawBefore + " -> " + screen.yaw());
             }
             case 70 -> {
                 shot(mc, "06-xray-turned");
-                screen(mc).setXray(false);
+                click(mc, SKIN);
             }
             case 72 -> shot(mc, "06b-screen-turned");
             case 73 -> mc.player.closeContainer();
@@ -200,6 +206,26 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
 
     private static RipperdocScreen screen(Minecraft mc) {
         return (RipperdocScreen) mc.screen;
+    }
+
+    /** Centres of the x-ray and skin buttons, from the screen's top left corner. */
+    private static final int[] XRAY = {57 + 15, 113 + 6};
+    private static final int[] SKIN = {89 + 15, 113 + 6};
+
+    private static int left(Minecraft mc) {
+        return (mc.getWindow().getGuiScaledWidth() - RipperdocMenu.WIDTH) / 2;
+    }
+
+    private static int top(Minecraft mc) {
+        return (mc.getWindow().getGuiScaledHeight() - RipperdocMenu.HEIGHT) / 2;
+    }
+
+    /** A real left click on a button of the screen, at its place on the screen. */
+    private static void click(Minecraft mc, int[] button) {
+        double x = left(mc) + button[0];
+        double y = top(mc) + button[1];
+        screen(mc).mouseClicked(x, y, 0);
+        screen(mc).mouseReleased(x, y, 0);
     }
 
     private static void check(boolean ok, String what) {

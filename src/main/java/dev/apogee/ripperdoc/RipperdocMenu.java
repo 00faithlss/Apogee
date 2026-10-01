@@ -20,14 +20,14 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * The ripperdoc screen's menu: one slot per implant slot the mod has (operating system and arms),
- * backed straight by the player's Trinkets inventories, and the player's own inventory. Slot
- * positions follow the screen texture, 480 by 356 pixels.
+ * backed straight by the player's Trinkets inventories, and the player's own inventory below, laid
+ * out like a chest: the ripperdoc panel on top, the usual inventory under it.
  */
 public class RipperdocMenu extends AbstractContainerMenu {
-    /** The implant slots shown on the screen: Trinkets slot, and where its frame is on the texture. */
+    /** The implant slots shown on the screen: Trinkets slot, and where its item sits on the screen. */
     public enum Implant {
-        OS("os", 326, 65),
-        ARMS("arms", 47, 100);
+        OS("os", 136, 41),
+        ARMS("arms", 24, 41);
 
         public final String slot;
         public final int x;
@@ -42,11 +42,13 @@ public class RipperdocMenu extends AbstractContainerMenu {
         }
     }
 
-    public static final int WIDTH = 480;
-    public static final int HEIGHT = 356;
-    private static final int INVENTORY_X = 159;
-    private static final int INVENTORY_Y = 263;
-    private static final int HOTBAR_Y = 322;
+    /** Height of the ripperdoc panel above the inventory; the inventory part is vanilla's. */
+    public static final int PANEL_HEIGHT = 133;
+    public static final int WIDTH = 176;
+    public static final int HEIGHT = PANEL_HEIGHT + 96;
+    private static final int INVENTORY_X = 8;
+    private static final int INVENTORY_Y = PANEL_HEIGHT + 14;
+    private static final int HOTBAR_Y = PANEL_HEIGHT + 72;
 
     private final ContainerLevelAccess access;
     private final Player player;
@@ -67,11 +69,11 @@ public class RipperdocMenu extends AbstractContainerMenu {
         implantSlots = slots.size();
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(inventory, column + row * 9 + 9, INVENTORY_X + 1 + column * 18, INVENTORY_Y + 1 + row * 18));
+                addSlot(new Slot(inventory, column + row * 9 + 9, INVENTORY_X + column * 18, INVENTORY_Y + row * 18));
             }
         }
         for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(inventory, column, INVENTORY_X + 1 + column * 18, HOTBAR_Y + 1));
+            addSlot(new Slot(inventory, column, INVENTORY_X + column * 18, HOTBAR_Y));
         }
     }
 
@@ -133,6 +135,7 @@ public class RipperdocMenu extends AbstractContainerMenu {
 
     /** Marks the implant slots for the screen. */
     public interface ImplantView {
+        Implant implant();
     }
 
     /** An implant slot: only its own kind of implant, one at a time; fitting one is surgery. */
@@ -141,9 +144,14 @@ public class RipperdocMenu extends AbstractContainerMenu {
         private final Player patient;
 
         ImplantSlot(Container container, Implant implant, Player patient) {
-            super(container, 0, implant.x + 1, implant.y + 1);
+            super(container, 0, implant.x, implant.y);
             this.implant = implant;
             this.patient = patient;
+        }
+
+        @Override
+        public Implant implant() {
+            return implant;
         }
 
         @Override
