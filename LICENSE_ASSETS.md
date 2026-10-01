@@ -25,6 +25,7 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
   - `textures/item/axolotl_item.png` → `assets/apogee/textures/item/control_chip.png` (Chip de control), elegido por el autor del proyecto. Tomado de `project_edgerunner-1.1.2.jar` descargado de [Modrinth](https://modrinth.com/mod/project-edgerunner), SHA-1 `3dc5ef442f443bee2c1c0f79c0b50a301767a7cc`.
   - `textures/item/arms_actuator_matrix_t4_item.png` → `assets/apogee/textures/item/blade_actuator.png` (Actuador de cuchilla), elegido por el autor del proyecto, del mismo JAR.
   - `textures/item/arms_power_core_t4_item.png` → `assets/apogee/textures/item/arm_power_core.png` (Núcleo de potencia de brazos), elegido por el autor del proyecto, del mismo JAR.
+  - Camilla del bloque `ripperdoc`: de `geo/ripperdoc.geo.json` solo los huesos `camilla`, `base`, `cojin`, `cables` y `esposas`, recentrados sobre dos bloques → `assets/apogee/geo/ripperdoc_table.geo.json`; `textures/block/ripperdoc.png` sin cambios → `assets/apogee/textures/block/ripperdoc_table.png` (Mesa de matasanos), elegidos por el autor del proyecto, del mismo JAR.
 - Solo referencia (sin copiar código): duración y colores de la transición radial y del tinte, cadencia, cantidad, alcance y desvanecimiento de las estelas.
 
 ## Zoe Isn't Cyberpunk 2.2.5 — vami
@@ -104,3 +105,8 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
   - `sounds/nanowire/deploy.ogg` (despliegue) y `sounds/nanowire/retract.ogg` (guardado);
   - `sounds/nanowire/swing{1,2,3,4}.ogg` (latigazo al aire);
   - `sounds/nanowire/hit{1,2,3,4}.ogg` (golpe al enemigo); el tercero, el de más cuerpo, también es el latigazo doble.
+
+## Mesa de matasanos — diseño propio del proyecto
+
+- Origen: paquete `mesa-matasanos-edgerunner-assets`, aportado por el autor del proyecto: diseño propio de la pantalla, inspirado en la galería pública de Project: Edgerunner sin copiar sus texturas ni su código. Fuentes en `art/ripperdoc/` (ver `art/ripperdoc/NOTA.md`).
+- Usado: `textures/mesa_matasanos_gui.png` → `assets/apogee/textures/gui/ripperdoc.png`, sin los objetos y textos de muestra.

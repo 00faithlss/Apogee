@@ -19,7 +19,15 @@ import dev.apogee.network.ApogeeNetworking.TimeFieldSync;
 import dev.apogee.network.ApogeeNetworking.ToggleMantis;
 import dev.apogee.network.ApogeeNetworking.ToggleSandevistan;
 import dev.apogee.network.ApogeeNetworking.WearerStatus;
+import dev.apogee.registry.ApogeeBlocks;
 import dev.apogee.registry.ApogeeItems;
+import dev.apogee.client.ripperdoc.RipperdocScreen;
+import dev.apogee.client.ripperdoc.RipperdocTableItemRenderer;
+import dev.apogee.client.ripperdoc.RipperdocTableRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.fabricmc.api.ClientModInitializer;
@@ -65,6 +73,10 @@ public final class ApogeeClient implements ClientModInitializer {
         TrinketRendererRegistry.registerRenderer(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.NANOWIRE, dev.apogee.client.nanowire.NanowireItemRenderer.INSTANCE);
+        BlockEntityRenderers.register(ApogeeBlocks.RIPPERDOC_TABLE_ENTITY, context -> new RipperdocTableRenderer());
+        BuiltinItemRendererRegistry.INSTANCE.register(ApogeeBlocks.RIPPERDOC_TABLE_ITEM, RipperdocTableItemRenderer.INSTANCE);
+        EntityRendererRegistry.register(ApogeeBlocks.RIPPERDOC_SEAT, NoopRenderer::new);
+        MenuScreens.register(ApogeeBlocks.RIPPERDOC_MENU, RipperdocScreen::new);
 
         ClientPlayNetworking.registerGlobalReceiver(RulesSync.TYPE, (payload, context) -> ApogeeClientState.acceptRules(payload.rules()));
         ClientPlayNetworking.registerGlobalReceiver(WearerStatus.TYPE, (payload, context) -> {

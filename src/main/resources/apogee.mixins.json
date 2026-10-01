@@ -12,7 +12,8 @@
     "PlayerAdvancementsMixin",
     "PlayerTickMixin",
     "ServerGamePacketListenerImplMixin",
-    "ServerLevelMixin"
+    "ServerLevelMixin",
+    "TrinketsPlayerSlotsMixin"
   ],
   "client": [
     "client.AbstractClientPlayerMixin",
@@ -30,6 +31,8 @@
     "client.MantisMinecraftMixin",
     "client.MantisPlayerModelMixin",
     "client.MantisPlayerRendererMixin",
+    "client.RipperdocPatientMixin",
+    "client.RipperdocPatientModelMixin",
     "client.compat.SimplyTooltipsRendererMixin"
   ],
   "injectors": {

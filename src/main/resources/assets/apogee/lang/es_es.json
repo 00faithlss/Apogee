@@ -111,5 +111,13 @@
   "tooltip.apogee.mantis_blades.stat.heavy_cooldown": "Recarga del latigazo doble",
   "item.apogee.arm_power_core": "Núcleo de potencia de brazos",
   "item.apogee.monofilament": "Monofilamento",
-  "item.apogee.wire_housing": "Carcasa de nanocable"
+  "item.apogee.wire_housing": "Carcasa de nanocable",
+  "block.apogee.ripperdoc_table": "Mesa de matasanos",
+  "block.apogee.ripperdoc_table.occupied": "Ya hay alguien en la camilla",
+  "container.apogee.ripperdoc": "Matasanos",
+  "death.attack.apogee.surgery": "%1$s no sobrevivió a la cirugía",
+  "screen.apogee.ripperdoc.installed": "Instalado",
+  "screen.apogee.ripperdoc.none": "Sin ciberware instalado",
+  "screen.apogee.ripperdoc.surgery": "Instalar un implante cuesta 3 corazones",
+  "screen.apogee.ripperdoc.rotate": "Arrastra para rotar"
 }

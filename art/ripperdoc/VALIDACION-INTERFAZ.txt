@@ -1,0 +1,3 @@
+55 slots: bounds, overlap, ten categories and no install/remove/close buttons checked.
+16 interaction assertions passed in simulated DOM.
+Preview inspected visually. Not an in-game, browser or Blockbench editor test.

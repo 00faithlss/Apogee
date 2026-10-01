@@ -1,0 +1,41 @@
+{
+  "source": "local uploaded ZIP plus local modular revision; remote branch unavailable",
+  "files": [
+    {
+      "path": "combat-source/mantis_electric_right.bbmodel",
+      "sha256": "b97bd6c2bd6a0ae3258cb23afae9e9e1d09ee0d944f02024980a5762b2500c29",
+      "cubes": 524,
+      "animations": 6
+    },
+    {
+      "path": "combat-source/mantis_thermal_left.bbmodel",
+      "sha256": "a27c64b5559644d3c11e1f7258b9b1304216a5b6b13502f19b81b2fe5743ff61",
+      "cubes": 522,
+      "animations": 7
+    },
+    {
+      "path": "combat-source/mantis_thermal_right.bbmodel",
+      "sha256": "5cc425e1093a3937202acc75086da085833a457c5b8ca71d4ec7e6064da662a7",
+      "cubes": 522,
+      "animations": 7
+    },
+    {
+      "path": "combat-source/mantis_electric_left.bbmodel",
+      "sha256": "e90be9a394dd9cb7b8b10fdbc3b160aa0d137cb7183dbcca305a73e6f808c8b0",
+      "cubes": 524,
+      "animations": 6
+    },
+    {
+      "path": "combat-source/mantis_normal_right.bbmodel",
+      "sha256": "87559ca980e990d659d68aac94fae3d02dc64972d96ec62f973031c73538f491",
+      "cubes": 450,
+      "animations": 6
+    },
+    {
+      "path": "combat-source/mantis_normal_left.bbmodel",
+      "sha256": "a2b1b86aacd6dcf262f3483783900ba298924ed52b329ac858b30448ffce5453",
+      "cubes": 450,
+      "animations": 6
+    }
+  ]
+}

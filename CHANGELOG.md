@@ -2,6 +2,21 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.9.0+1.21.1] — 2026-10-01
+
+### Añadido (Mesa de matasanos)
+
+- Bloque `apogee:ripperdoc_table`: una camilla reclinable de dos bloques con la camilla del conjunto ripperdoc de Project: Edgerunner, elegida por el autor del proyecto. Se coloca como una cama y se rompe entera.
+- Clic derecho acuesta al jugador en la camilla, con la espalda en el respaldo, y abre la pantalla del matasanos con el diseño del autor (sin los textos de muestra ni «Capacidad por definir»). Al cerrarla se levanta.
+- La pantalla tiene las ranuras Sistema operativo y Brazos, conectadas a las de Trinkets, y el inventario. En el centro se ve el propio personaje con sus implantes, que se rota arrastrándolo, y abajo a la izquierda la lista de implantes instalados. Se reduce sola si la ventana es más chica que la pantalla.
+- Instalar un implante es una cirugía: cuesta 3 corazones, atraviesa la armadura y nunca mata. Tipo de daño propio `apogee:surgery`.
+- Receta con forma: cables neurales, chip de control, lana blanca y hierro.
+- Prueba de servidor de la receta, la instalación y el daño; prueba de cliente `runRipperdocSmoke` con capturas.
+
+### Cambiado
+
+- Los implantes solo se instalan o quitan en la mesa de matasanos: las ranuras de ciberware ya no aparecen en el inventario normal ni en el creativo, y usar un implante con clic derecho ya no lo equipa. Lo que ya estaba equipado sigue igual.
+
 ## [0.8.0+1.21.1] — 2026-10-01
 
 ### Añadido (Nanocable)

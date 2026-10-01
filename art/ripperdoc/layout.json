@@ -1,0 +1,715 @@
+{
+  "version": 3,
+  "reference_size": [
+    480,
+    356
+  ],
+  "status": "visual_prototype",
+  "style_reference": "Project: Edgerunner 1.1.0 gallery; original UI assets",
+  "capacity_value": null,
+  "entry_point": {
+    "type": "block_interaction",
+    "block": "mesa_matasanos",
+    "status": "future_block_not_implemented"
+  },
+  "viewport": {
+    "rect": [
+      183,
+      50,
+      114,
+      174
+    ],
+    "skin_alpha": 0.23,
+    "use_connected_player_skin": true
+  },
+  "categories": [
+    {
+      "id": "cortex",
+      "label": "Corteza frontal",
+      "slots": 3
+    },
+    {
+      "id": "arms",
+      "label": "Brazos",
+      "slots": 1
+    },
+    {
+      "id": "skeleton",
+      "label": "Esqueleto",
+      "slots": 2
+    },
+    {
+      "id": "nerves",
+      "label": "Sistema nervioso",
+      "slots": 2
+    },
+    {
+      "id": "integumentary",
+      "label": "Tegumentario",
+      "slots": 3
+    },
+    {
+      "id": "os",
+      "label": "Sistema operativo",
+      "slots": 1
+    },
+    {
+      "id": "optics",
+      "label": "Sistema ocular",
+      "slots": 1
+    },
+    {
+      "id": "hands",
+      "label": "Manos",
+      "slots": 2
+    },
+    {
+      "id": "circulatory",
+      "label": "Circulatorio",
+      "slots": 3
+    },
+    {
+      "id": "legs",
+      "label": "Piernas",
+      "slots": 1
+    }
+  ],
+  "slots": [
+    {
+      "id": "cortex_0",
+      "category": "cortex",
+      "rect": [
+        47,
+        65,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "cortex_1",
+      "category": "cortex",
+      "rect": [
+        67,
+        65,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "cortex_2",
+      "category": "cortex",
+      "rect": [
+        87,
+        65,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "arms_0",
+      "category": "arms",
+      "rect": [
+        47,
+        100,
+        18,
+        18
+      ],
+      "item": "mantis_thermal"
+    },
+    {
+      "id": "skeleton_0",
+      "category": "skeleton",
+      "rect": [
+        47,
+        135,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "skeleton_1",
+      "category": "skeleton",
+      "rect": [
+        67,
+        135,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "nerves_0",
+      "category": "nerves",
+      "rect": [
+        47,
+        170,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "nerves_1",
+      "category": "nerves",
+      "rect": [
+        67,
+        170,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "integumentary_0",
+      "category": "integumentary",
+      "rect": [
+        47,
+        205,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "integumentary_1",
+      "category": "integumentary",
+      "rect": [
+        67,
+        205,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "integumentary_2",
+      "category": "integumentary",
+      "rect": [
+        87,
+        205,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "os_0",
+      "category": "os",
+      "rect": [
+        326,
+        65,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "optics_0",
+      "category": "optics",
+      "rect": [
+        326,
+        100,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hands_0",
+      "category": "hands",
+      "rect": [
+        326,
+        135,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hands_1",
+      "category": "hands",
+      "rect": [
+        346,
+        135,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "circulatory_0",
+      "category": "circulatory",
+      "rect": [
+        326,
+        170,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "circulatory_1",
+      "category": "circulatory",
+      "rect": [
+        346,
+        170,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "circulatory_2",
+      "category": "circulatory",
+      "rect": [
+        366,
+        170,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "legs_0",
+      "category": "legs",
+      "rect": [
+        326,
+        205,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_0",
+      "category": "inventory",
+      "rect": [
+        159,
+        263,
+        18,
+        18
+      ],
+      "item": "mantis_normal"
+    },
+    {
+      "id": "inventory_1",
+      "category": "inventory",
+      "rect": [
+        177,
+        263,
+        18,
+        18
+      ],
+      "item": "mantis_thermal"
+    },
+    {
+      "id": "inventory_2",
+      "category": "inventory",
+      "rect": [
+        195,
+        263,
+        18,
+        18
+      ],
+      "item": "mantis_electric"
+    },
+    {
+      "id": "inventory_3",
+      "category": "inventory",
+      "rect": [
+        213,
+        263,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_4",
+      "category": "inventory",
+      "rect": [
+        231,
+        263,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_5",
+      "category": "inventory",
+      "rect": [
+        249,
+        263,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_6",
+      "category": "inventory",
+      "rect": [
+        267,
+        263,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_7",
+      "category": "inventory",
+      "rect": [
+        285,
+        263,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_8",
+      "category": "inventory",
+      "rect": [
+        303,
+        263,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_9",
+      "category": "inventory",
+      "rect": [
+        159,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_10",
+      "category": "inventory",
+      "rect": [
+        177,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_11",
+      "category": "inventory",
+      "rect": [
+        195,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_12",
+      "category": "inventory",
+      "rect": [
+        213,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_13",
+      "category": "inventory",
+      "rect": [
+        231,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_14",
+      "category": "inventory",
+      "rect": [
+        249,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_15",
+      "category": "inventory",
+      "rect": [
+        267,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_16",
+      "category": "inventory",
+      "rect": [
+        285,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_17",
+      "category": "inventory",
+      "rect": [
+        303,
+        281,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_18",
+      "category": "inventory",
+      "rect": [
+        159,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_19",
+      "category": "inventory",
+      "rect": [
+        177,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_20",
+      "category": "inventory",
+      "rect": [
+        195,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_21",
+      "category": "inventory",
+      "rect": [
+        213,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_22",
+      "category": "inventory",
+      "rect": [
+        231,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_23",
+      "category": "inventory",
+      "rect": [
+        249,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_24",
+      "category": "inventory",
+      "rect": [
+        267,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_25",
+      "category": "inventory",
+      "rect": [
+        285,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "inventory_26",
+      "category": "inventory",
+      "rect": [
+        303,
+        299,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_0",
+      "category": "inventory",
+      "rect": [
+        159,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_1",
+      "category": "inventory",
+      "rect": [
+        177,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_2",
+      "category": "inventory",
+      "rect": [
+        195,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_3",
+      "category": "inventory",
+      "rect": [
+        213,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_4",
+      "category": "inventory",
+      "rect": [
+        231,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_5",
+      "category": "inventory",
+      "rect": [
+        249,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_6",
+      "category": "inventory",
+      "rect": [
+        267,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_7",
+      "category": "inventory",
+      "rect": [
+        285,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    },
+    {
+      "id": "hotbar_8",
+      "category": "inventory",
+      "rect": [
+        303,
+        322,
+        18,
+        18
+      ],
+      "item": null
+    }
+  ],
+  "actions": [],
+  "close_keys": [
+    "Escape",
+    "KeyE"
+  ],
+  "interaction": "cursor pickup/place/swap; Shift-click transfer",
+  "skin_controls": [
+    {
+      "id": "xray",
+      "rect": [
+        183,
+        228,
+        55,
+        17
+      ]
+    },
+    {
+      "id": "skin",
+      "rect": [
+        242,
+        228,
+        55,
+        17
+      ]
+    }
+  ],
+  "slot_size": 18,
+  "item_size": 16,
+  "scale": "integer GUI scale when possible; centered; nearest-neighbor for all pixel textures",
+  "demo_items": true,
+  "capacity": "not_yet_defined"
+}

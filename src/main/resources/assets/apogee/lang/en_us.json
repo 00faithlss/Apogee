@@ -111,5 +111,13 @@
   "tooltip.apogee.mantis_blades.stat.heavy_cooldown": "Two-wire lash cooldown",
   "item.apogee.arm_power_core": "Arm Power Core",
   "item.apogee.monofilament": "Monofilament",
-  "item.apogee.wire_housing": "Nanowire Housing"
+  "item.apogee.wire_housing": "Nanowire Housing",
+  "block.apogee.ripperdoc_table": "Ripperdoc Table",
+  "block.apogee.ripperdoc_table.occupied": "Someone is already on the table",
+  "container.apogee.ripperdoc": "Ripperdoc",
+  "death.attack.apogee.surgery": "%1$s did not survive surgery",
+  "screen.apogee.ripperdoc.installed": "Installed",
+  "screen.apogee.ripperdoc.none": "No cyberware installed",
+  "screen.apogee.ripperdoc.surgery": "Fitting an implant costs 3 hearts",
+  "screen.apogee.ripperdoc.rotate": "Drag to rotate"
 }

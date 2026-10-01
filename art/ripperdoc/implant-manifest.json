@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "asset_preview_not_runtime_integration",
+  "slot": "cyberware/arms",
+  "empty": "states/avatar-none.bbmodel",
+  "items": {
+    "apogee:mantis_blades": {
+      "variant": "normal",
+      "model": "modules/mantis_xray_normal_pair.bbmodel",
+      "both_arms": true,
+      "preview": "textures/avatar-normal.png",
+      "state": "states/avatar-normal.bbmodel",
+      "cube_count": 660
+    },
+    "apogee:mantis_blades_thermal": {
+      "variant": "thermal",
+      "model": "modules/mantis_xray_thermal_pair.bbmodel",
+      "both_arms": true,
+      "preview": "textures/avatar-thermal.png",
+      "state": "states/avatar-thermal.bbmodel",
+      "cube_count": 804
+    },
+    "apogee:mantis_blades_electric": {
+      "variant": "electric",
+      "model": "modules/mantis_xray_electric_pair.bbmodel",
+      "both_arms": true,
+      "preview": "textures/avatar-electric.png",
+      "state": "states/avatar-electric.bbmodel",
+      "cube_count": 808
+    }
+  }
+}

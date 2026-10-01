@@ -5,6 +5,7 @@ import dev.apogee.config.ApogeeServerConfig;
 import dev.apogee.mantis.MantisManager;
 import dev.apogee.network.ApogeeNetworking;
 import dev.apogee.registry.ApogeeAttachments;
+import dev.apogee.registry.ApogeeBlocks;
 import dev.apogee.registry.ApogeeItems;
 import dev.apogee.registry.ApogeeSounds;
 import dev.apogee.sandevistan.SandevistanManager;
@@ -24,6 +25,7 @@ public final class Apogee implements ModInitializer {
     @Override
     public void onInitialize() {
         ApogeeServerConfig.load();
+        ApogeeBlocks.register();
         ApogeeItems.register();
         ApogeeSounds.register();
         ApogeeAttachments.register();

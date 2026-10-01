@@ -202,6 +202,44 @@ public final class MantisGameTests implements FabricGameTest {
         helper.succeed();
     }
 
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_ripperdoc")
+    public void ripperdocFitsImplantsWithSurgery(GameTestHelper helper) {
+        Item cable = ApogeeItems.NEURAL_CABLE;
+        Item iron = Items.IRON_INGOT;
+        Item wool = Items.WHITE_WOOL;
+        expect(helper, craft(helper, cable, ApogeeItems.CONTROL_CHIP, cable, wool, wool, wool, iron, Items.IRON_BLOCK, iron),
+                dev.apogee.registry.ApogeeBlocks.RIPPERDOC_TABLE_ITEM, 1, "Ripperdoc table");
+
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        player.setGameMode(GameType.SURVIVAL);
+        // A new player is invulnerable for three seconds; operate once that is over.
+        helper.runAfterDelay(70, () -> ripperdocSurgery(helper, player));
+    }
+
+    private static void ripperdocSurgery(GameTestHelper helper, ServerPlayer player) {
+        // The inventory screens leave the cyberware slots out; the table's menu has them.
+        helper.assertTrue(!dev.emi.trinkets.api.TrinketsApi.getPlayerSlots(player).containsKey("cyberware"),
+                "The inventory does not show the cyberware slots");
+        dev.apogee.ripperdoc.RipperdocMenu menu = new dev.apogee.ripperdoc.RipperdocMenu(1, player.getInventory(), null);
+        helper.assertTrue(!menu.getSlot(1).mayPlace(new ItemStack(ApogeeItems.SANDEVISTAN)), "The arms slot only takes arm cyberware");
+        menu.getSlot(1).setByPlayer(new ItemStack(ApogeeItems.MANTIS_BLADES));
+        helper.assertTrue(MantisManager.equippedVariant(player) != null, "The table fits the Mantis Blades in the Trinkets slot");
+        helper.assertTrue(player.getHealth() == player.getMaxHealth() - 6.0F, "Surgery costs three hearts, health " + player.getHealth());
+        // A second implant right after is its own operation.
+        menu.getSlot(1).setByPlayer(ItemStack.EMPTY);
+        menu.getSlot(1).setByPlayer(new ItemStack(ApogeeItems.NANOWIRE));
+        helper.assertTrue(player.getHealth() == player.getMaxHealth() - 12.0F, "Each implant costs three hearts, health " + player.getHealth());
+        // Surgery never kills: at two hearts it leaves the patient at half a heart.
+        player.setHealth(4.0F);
+        menu.getSlot(0).setByPlayer(new ItemStack(ApogeeItems.SANDEVISTAN));
+        helper.assertTrue(player.isAlive() && player.getHealth() == 1.0F, "Surgery is never lethal, health " + player.getHealth());
+        // The implants do not equip themselves from the hand any more.
+        player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(ApogeeItems.NANOWIRE));
+        ApogeeItems.NANOWIRE.use(helper.getLevel(), player, net.minecraft.world.InteractionHand.MAIN_HAND);
+        helper.assertTrue(player.getMainHandItem().is(ApogeeItems.NANOWIRE), "Using an implant does not equip it");
+        helper.succeed();
+    }
+
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_mantis_enchant")
     public void bladesCannotBeEnchanted(GameTestHelper helper) {
         var enchantments = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);

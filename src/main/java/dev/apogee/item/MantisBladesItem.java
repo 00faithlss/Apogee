@@ -1,7 +1,6 @@
 package dev.apogee.item;
 
 import dev.apogee.mantis.MantisVariant;
-import dev.emi.trinkets.api.TrinketItem;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
@@ -12,7 +11,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
  * Reusable arm implant with no durability; equipped in the Trinkets slot cyberware/arms. Its
  * tooltip is drawn on the client (MantisTooltipPanel, or plain lines without Simply Tooltips).
  */
-public class MantisBladesItem extends TrinketItem implements ArmCyberwareItem {
+public class MantisBladesItem extends CyberwareItem implements ArmCyberwareItem {
     private final MantisVariant variant;
 
     public MantisBladesItem(Item.Properties properties, MantisVariant variant) {

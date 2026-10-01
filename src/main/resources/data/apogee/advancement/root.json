@@ -22,6 +22,7 @@
           {
             "items": [
               "apogee:os_core_t5",
+              "apogee:ripperdoc_table",
               "apogee:apogee_overdrive_kernel_t5",
               "apogee:quantum_sync_lattice_t5",
               "apogee:sandevistan",

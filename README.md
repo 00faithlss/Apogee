@@ -2,7 +2,7 @@
 
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
-Contiene tres implantes, el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**, tres componentes T5 y diez piezas para armar el ciberware de brazos.
+Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
 
 > Estado: primera versión compilable y probada de forma automatizada. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -10,6 +10,7 @@ Contiene tres implantes, el **Sandevistan**, las **Cuchillas Mantis** y el **Nan
 
 | ID | Objeto | Notas |
 |---|---|---|
+| `apogee:ripperdoc_table` | Mesa de matasanos | Camilla de dos bloques; el único lugar donde se instalan y quitan implantes. |
 | `apogee:sandevistan` | Sandevistan | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/os`. |
 | `apogee:mantis_blades` | Cuchillas Mantis | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:mantis_blades_thermal` | Cuchillas Mantis térmicas | Variante que prende fuego al objetivo. |
@@ -36,6 +37,7 @@ Contiene tres implantes, el **Sandevistan**, las **Cuchillas Mantis** y el **Nan
 | Núcleo T5 (con forma) | 4 lingotes de netherita, 4 bloques de redstone, 1 comparador: netherita en esquinas, redstone en los lados, comparador al centro |
 | Overdrive Kernel T5 (con forma) | 2 estrellas del Nether, 4 lingotes de netherita, 2 bloques de diamante, 1 tótem de inmortalidad: netherita en esquinas, estrellas arriba y abajo, diamante a los lados, tótem al centro |
 | Quantum Sync Lattice T5 (con forma) | 2 cristales del End, 2 bloques de amatista, 1 frasco de experiencia, 4 bloques de redstone: redstone en esquinas, cristales arriba y abajo, amatista a los lados, frasco al centro |
+| Mesa de matasanos (con forma) | Fila 1: cable neural, chip de control, cable neural · Fila 2: tres lanas blancas · Fila 3: lingote de hierro, bloque de hierro, lingote de hierro |
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
 
 #### Cuchillas Mantis por partes
@@ -76,14 +78,23 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 
 ## Uso
 
-- Equipa el Sandevistan en la ranura **Sistema operativo** de Trinkets (la pechera y los élitros siguen libres).
+### Mesa de matasanos
+
+- Se coloca como una cama: ocupa dos bloques, con el respaldo levantado hacia donde miras.
+- Clic derecho: te acuestas en la camilla y se abre la pantalla del matasanos. Al cerrarla (Esc o la tecla de inventario) te levantas.
+- Los implantes **solo** se instalan o quitan aquí: las ranuras de ciberware ya no aparecen en el inventario y usar un implante no lo equipa. Arrastra el implante a su ranura (Sistema operativo o Brazos) o usa Mayús + clic.
+- Cada implante que instalas es una cirugía: cuesta **3 corazones**, atraviesa la armadura y nunca te mata (como mucho te deja en medio corazón). Quitarlo es gratis.
+- En el centro aparece tu personaje con los implantes que llevas; arrástralo con el mouse para rotarlo. Abajo a la izquierda se listan los implantes instalados.
+- Las demás categorías de la pantalla (corteza, esqueleto, ojos, etc.) son espacios para implantes futuros.
+
+- Instálalo en la ranura **Sistema operativo** de la mesa de matasanos (la pechera y los élitros siguen libres).
 - **V** (configurable) activa el efecto o lo termina antes de tiempo.
 - Mientras está activo o recargando aparece un recuadro de ciberware abajo a la izquierda con los segundos restantes: cian con el efecto, magenta en la recarga, amarillo con «+2 s» al conseguir una baja y parpadeo rojo en los últimos 2 s. En reposo se oculta.
 - En el tooltip, **G** (tecla de pestañas de Simply Tooltips) alterna Descripción y Estadísticas; al dejar de señalar el objeto vuelve a Descripción. El tooltip usa la fuente Rajdhani, un borde con arcos eléctricos en amarillo, cian y magenta, título ondulado con estelas de colores, partículas neón y scanlines con barrido.
 
 ### Cuchillas Mantis
 
-- Equípalas en la ranura **Brazos** de Trinkets. **R** (configurable) las despliega o las guarda.
+- Instálalas en la ranura **Brazos** de la mesa de matasanos. **R** (configurable) las despliega o las guarda.
 - Cerradas, el brazo se ve como uno normal con tu skin (clásica o Slim). Al desplegarlas se abren las cubiertas del antebrazo, el mecanismo sube por el costado externo y la hoja se extiende.
 - Desplegadas: **clic izquierdo** da cortes alternados (derecho, izquierdo, derecho...) y **clic derecho** hace una estocada con ambas cuchillas hacia adelante (recarga de 2 s).
 - Mientras están fuera la ranura de la hotbar queda fija (sin rueda ni teclas 1-9), el inventario no se abre y el objeto en mano se oculta.
@@ -95,7 +106,7 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 
 ### Nanocable
 
-- Equípalo en la ranura **Brazos** de Trinkets (la misma de las Cuchillas Mantis). **R** (configurable) saca el cable o lo recoge.
+- Instálalo en la ranura **Brazos** de la mesa de matasanos (la misma de las Cuchillas Mantis). **R** (configurable) saca el cable o lo recoge.
 - La carcasa del cable va en la cara interna de cada antebrazo; guardada, queda casi oculta junto al torso. Fuera, el cable rojo brillante va tenso de una mano a la otra.
 - Desplegado: **clic izquierdo** da latigazos alternados (derecho, izquierdo...) de **8 de daño** con **5 bloques** de alcance. **Clic derecho** da un latigazo doble, que se turna entre tres formas (X, vertical y S), y golpea a todo lo que haya delante, en un arco de 140° dentro del alcance (**12 de daño**, recarga de 3 s). Valores provisionales.
 - Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, y tampoco se puede encantar.
@@ -152,7 +163,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.8.0+1.21.1 (`build/libs/apogee-0.8.0+1.21.1.jar`) | Todos |
+| Apogee | 0.9.0+1.21.1 (`build/libs/apogee-0.9.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
@@ -186,7 +197,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```
 
 - `build`: genera el JAR de entrega en `build/libs`. Las pruebas no se incluyen en él.
-- `runGametest`: 23 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
+- `runGametest`: 24 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltips (Sandevistan, Cuchillas Mantis y Nanocable), activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
 ```bash
@@ -199,6 +210,11 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ./gradlew runNanowireSmoke
 ```
 
+```bash
+./gradlew runRipperdocSmoke
+```
+
+- `runRipperdocSmoke`: abre el cliente, coloca la mesa de matasanos, acuesta al jugador, instala implantes (comprueba el daño de la cirugía), rota el visor y comprueba que el inventario ya no muestra las ranuras de ciberware, en `build/ripperdoc-smoke/screenshots`.
 - `runNanowireSmoke`: abre el cliente, equipa el Nanocable y filma cada tick de los latigazos y del latigazo doble, en tercera y primera persona, y el repliegue, en `build/nanowire-smoke/screenshots`.
 
 ```bash

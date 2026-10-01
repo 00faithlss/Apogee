@@ -95,6 +95,14 @@ loom {
             vmArg '-Dapogee.nanowireSmoke=true'
             programArgs '--width', '1280', '--height', '720'
         }
+        ripperdocSmoke {
+            client()
+            name 'Apogee ripperdoc table smoke run'
+            source sourceSets.gametest
+            runDir 'build/ripperdoc-smoke'
+            vmArg '-Dapogee.ripperdocSmoke=true'
+            programArgs '--width', '1280', '--height', '720'
+        }
     }
 }
 

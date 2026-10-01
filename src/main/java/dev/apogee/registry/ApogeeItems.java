@@ -75,6 +75,7 @@ public final class ApogeeItems {
                 .icon(() -> new ItemStack(SANDEVISTAN))
                 .title(Component.translatable("itemGroup.apogee"))
                 .displayItems((parameters, output) -> {
+                    output.accept(ApogeeBlocks.RIPPERDOC_TABLE_ITEM);
                     output.accept(SANDEVISTAN);
                     output.accept(MANTIS_BLADES);
                     output.accept(MANTIS_BLADES_THERMAL);

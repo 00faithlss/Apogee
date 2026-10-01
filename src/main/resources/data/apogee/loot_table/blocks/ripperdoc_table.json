@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "apogee:ripperdoc_table",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "apogee:ripperdoc_table",
+              "properties": {
+                "part": "foot"
+              }
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

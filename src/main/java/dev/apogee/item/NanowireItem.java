@@ -1,7 +1,6 @@
 package dev.apogee.item;
 
 import dev.apogee.mantis.MantisVariant;
-import dev.emi.trinkets.api.TrinketItem;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
@@ -13,7 +12,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
  * housing on the inner side of each forearm feeds a red monofilament wire held between the
  * hands, lashed out one arm at a time or with both at once.
  */
-public class NanowireItem extends TrinketItem implements ArmCyberwareItem {
+public class NanowireItem extends CyberwareItem implements ArmCyberwareItem {
     public NanowireItem(Item.Properties properties) {
         super(properties);
     }
