@@ -9,17 +9,24 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
  * Reusable arm implant with no durability; equipped in the Trinkets slot cyberware/arms. A
- * housing on the inner side of each forearm feeds a red monofilament wire held between the
- * hands, lashed out one arm at a time or with both at once.
+ * housing on each forearm feeds a red or white monofilament through the palm mechanism,
+ * lashed out one arm at a time or with both at once.
  */
 public class NanowireItem extends CyberwareItem implements ArmCyberwareItem {
+    private final MantisVariant variant;
+
     public NanowireItem(Item.Properties properties) {
+        this(properties, MantisVariant.NANOWIRE);
+    }
+
+    public NanowireItem(Item.Properties properties, MantisVariant variant) {
         super(properties);
+        this.variant = variant;
     }
 
     @Override
     public MantisVariant variant() {
-        return MantisVariant.NANOWIRE;
+        return variant;
     }
 
     @Override

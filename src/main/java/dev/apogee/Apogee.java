@@ -7,6 +7,7 @@ import dev.apogee.network.ApogeeNetworking;
 import dev.apogee.registry.ApogeeAttachments;
 import dev.apogee.registry.ApogeeBlocks;
 import dev.apogee.registry.ApogeeItems;
+import dev.apogee.registry.ApogeeEffects;
 import dev.apogee.registry.ApogeeSounds;
 import dev.apogee.sandevistan.SandevistanManager;
 import net.fabricmc.api.ModInitializer;
@@ -27,6 +28,7 @@ public final class Apogee implements ModInitializer {
         ApogeeServerConfig.load();
         ApogeeBlocks.register();
         ApogeeItems.register();
+        ApogeeEffects.register();
         ApogeeSounds.register();
         ApogeeAttachments.register();
         ApogeeNetworking.registerCommon();

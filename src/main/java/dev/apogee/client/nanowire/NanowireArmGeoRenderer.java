@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 import software.bernie.geckolib.util.RenderUtil;
 
-/** Draws one {@link NanowireArm}: the housing and wire, then the red emissive mask on top. */
+/** Draws one {@link NanowireArm}: the housing and wire, then its variant’s emissive mask on top. */
 public final class NanowireArmGeoRenderer extends GeoObjectRenderer<NanowireArm> {
     private NanowireWire.Anchors anchors;
     public NanowireArmGeoRenderer() {
@@ -72,7 +72,7 @@ public final class NanowireArmGeoRenderer extends GeoObjectRenderer<NanowireArm>
 
         @Override
         protected RenderType getRenderType(NanowireArm animatable, @Nullable MultiBufferSource bufferSource) {
-            return RenderType.eyes(NanowireArmGeoModel.GLOWMASK);
+            return RenderType.eyes(NanowireArmGeoModel.glowmask(animatable.variant()));
         }
     }
 }

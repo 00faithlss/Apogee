@@ -106,10 +106,10 @@
   "subtitles.apogee.nanowire_hit": "Nanowire cuts",
   "subtitles.apogee.nanowire_heavy": "Nanowire double lash",
   "advancements.apogee.craft_nanowire.title": "Hanging by a Thread",
-  "advancements.apogee.craft_nanowire.description": "Craft the Nanowire",
+  "advancements.apogee.craft_nanowire.description": "Craft a red or white Nanowire",
   "tooltip.apogee.value.degrees": "%s°",
   "tooltip.apogee.mantis_blades.damage_type.nanowire": "Physical",
-  "tooltip.apogee.mantis_blades.description.nanowire": "A monofilament that cuts through anything.",
+  "tooltip.apogee.mantis_blades.description.nanowire": "A red-hot monofilament that leaves bleeding cuts.",
   "tooltip.apogee.nanowire.toggle": "Draw / retract the wire",
   "tooltip.apogee.nanowire.lash": "Alternating lashes",
   "tooltip.apogee.nanowire.heavy": "Two-wire lash in an arc",
@@ -131,5 +131,14 @@
   "screen.apogee.ripperdoc.empty": "Empty",
   "screen.apogee.ripperdoc.xray": "X-ray",
   "screen.apogee.ripperdoc.skin": "Skin",
-  "screen.apogee.ripperdoc.locked": "No implants for this slot yet"
+  "screen.apogee.ripperdoc.locked": "No implants for this slot yet",
+  "item.apogee.nanowire_white": "White Nanowire",
+  "tooltip.apogee.mantis_blades.description.nanowire_white": "A brilliant white monofilament that leaves bleeding cuts.",
+  "tooltip.apogee.mantis_blades.damage_type.nanowire_white": "Physical",
+  "tooltip.apogee.nanowire.bleeding": "Bleeding",
+  "tooltip.apogee.nanowire.bleeding.text": "Cuts deal %s damage per second for %s s. Hits refresh the duration; bleeding does not stack.",
+  "tooltip.apogee.mantis_blades.stat.bleeding": "Bleeding",
+  "effect.apogee.bleeding": "Bleeding",
+  "death.attack.apogee.bleeding": "%1$s bled out",
+  "death.attack.apogee.bleeding.player": "%1$s bled out while fighting %2$s"
 }

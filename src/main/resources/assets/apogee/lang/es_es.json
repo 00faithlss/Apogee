@@ -106,10 +106,10 @@
   "subtitles.apogee.nanowire_hit": "Corte de nanocable",
   "subtitles.apogee.nanowire_heavy": "Latigazo doble de nanocable",
   "advancements.apogee.craft_nanowire.title": "Pendiendo de un hilo",
-  "advancements.apogee.craft_nanowire.description": "Craftea el Nanocable",
+  "advancements.apogee.craft_nanowire.description": "Craftea un Nanocable rojo o blanco",
   "tooltip.apogee.value.degrees": "%s°",
   "tooltip.apogee.mantis_blades.damage_type.nanowire": "Físico",
-  "tooltip.apogee.mantis_blades.description.nanowire": "Un monofilamento que lo corta todo.",
+  "tooltip.apogee.mantis_blades.description.nanowire": "Monofilamento rojo incandescente que deja cortes sangrantes.",
   "tooltip.apogee.nanowire.toggle": "Sacar / recoger el cable",
   "tooltip.apogee.nanowire.lash": "Latigazos alternados",
   "tooltip.apogee.nanowire.heavy": "Latigazo doble en arco",
@@ -131,5 +131,14 @@
   "screen.apogee.ripperdoc.empty": "Vacío",
   "screen.apogee.ripperdoc.xray": "Rayos X",
   "screen.apogee.ripperdoc.skin": "Skin",
-  "screen.apogee.ripperdoc.locked": "Aún no hay implantes para esta ranura"
+  "screen.apogee.ripperdoc.locked": "Aún no hay implantes para esta ranura",
+  "item.apogee.nanowire_white": "Nanocable blanco",
+  "tooltip.apogee.mantis_blades.description.nanowire_white": "Monofilamento blanco brillante que deja cortes sangrantes.",
+  "tooltip.apogee.mantis_blades.damage_type.nanowire_white": "Físico",
+  "tooltip.apogee.nanowire.bleeding": "Sangrado",
+  "tooltip.apogee.nanowire.bleeding.text": "Los cortes infligen %s de daño por segundo durante %s s. Los golpes renuevan la duración; no se acumula.",
+  "tooltip.apogee.mantis_blades.stat.bleeding": "Sangrado",
+  "effect.apogee.bleeding": "Sangrado",
+  "death.attack.apogee.bleeding": "%1$s murió desangrado",
+  "death.attack.apogee.bleeding.player": "%1$s murió desangrado tras luchar con %2$s"
 }

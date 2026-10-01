@@ -26,6 +26,11 @@ public final class NanowireRules {
     public static final int HEAVY_TICKS = 18;
     public static final int HEAVY_COOLDOWN_TICKS = 60;
 
+    /** Four seconds of bleeding, refreshed by either wire variant without stacking. */
+    public static final int BLEED_TICKS = 80;
+    public static final int BLEED_INTERVAL_TICKS = 20;
+    public static final float BLEED_DAMAGE = 1.0F;
+
     private NanowireRules() {
     }
 }

@@ -62,7 +62,7 @@ public abstract class MantisPlayerRendererMixin {
     @Inject(method = "renderHand", at = @At("TAIL"))
     private void apogee$nanowireHand(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player,
                                      ModelPart arm, ModelPart sleeve, CallbackInfo ci) {
-        if (MantisClient.variant(player) != MantisVariant.NANOWIRE) {
+        if (MantisClient.variant(player) == null || !MantisClient.variant(player).isNanowire()) {
             return;
         }
         PlayerModel<AbstractClientPlayer> model = ((PlayerRenderer) (Object) this).getModel();

@@ -9,15 +9,20 @@ public enum MantisVariant {
     STANDARD,
     THERMAL,
     ELECTRIC,
-    NANOWIRE;
+    NANOWIRE,
+    NANOWIRE_WHITE;
 
     public static MantisVariant byId(int id) {
         MantisVariant[] all = values();
         return id >= 0 && id < all.length ? all[id] : STANDARD;
     }
 
+    public boolean isNanowire() {
+        return this == NANOWIRE || this == NANOWIRE_WHITE;
+    }
+
     /** Mantis Blades, as opposed to the nanowire. */
     public boolean isBlades() {
-        return this != NANOWIRE;
+        return !isNanowire();
     }
 }

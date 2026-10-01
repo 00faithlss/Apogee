@@ -1,6 +1,7 @@
 package dev.apogee.client.nanowire;
 
 import dev.apogee.mantis.MantisRules;
+import dev.apogee.mantis.MantisVariant;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -29,11 +30,20 @@ public final class NanowireArm implements GeoAnimatable {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final boolean right;
     private boolean deployed;
+    private MantisVariant variant = MantisVariant.NANOWIRE;
     private RawAnimation current = STOWED;
     private boolean restart;
 
     public NanowireArm(boolean right) {
         this.right = right;
+    }
+
+    public MantisVariant variant() {
+        return variant;
+    }
+
+    public void setVariant(MantisVariant variant) {
+        this.variant = variant;
     }
 
     public boolean right() {

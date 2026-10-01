@@ -330,6 +330,7 @@ public final class MantisTooltipPanel {
     private static void motif(GuiGraphics graphics, MantisVariant variant, int x, int y, int w, int h, long now) {
         switch (variant) {
             case THERMAL -> TooltipFx.particles(graphics, x, y, w, h, now, new int[]{0xFF8A3D, 0xFCEE0A, 0xF2565A}, 34, true);
+            case NANOWIRE_WHITE -> TooltipFx.particles(graphics, x, y, w, h, now, new int[]{0xF0F8FF, 0xBACBDA}, 16, false);
             case ELECTRIC -> TooltipFx.particles(graphics, x, y, w, h, now, new int[]{0x7CE0EF, 0xFCEE0A}, 24, false);
             default -> TooltipFx.particles(graphics, x, y, w, h, now, new int[]{0xF2565A, 0xFCEE0A}, 16, false);
         }
@@ -340,6 +341,7 @@ public final class MantisTooltipPanel {
             case THERMAL -> 0xFFFF8A3D;
             case ELECTRIC -> 0xFF5BE4FF;
             case NANOWIRE -> 0xFFFF3B3B;
+            case NANOWIRE_WHITE -> 0xFFF0F8FF;
             default -> 0xFFE8E2C8;
         };
     }
@@ -382,7 +384,7 @@ public final class MantisTooltipPanel {
         String[] icon = switch (variant) {
             case THERMAL -> FLAME;
             case ELECTRIC -> BOLT;
-            case NANOWIRE -> WIRE;
+            case NANOWIRE, NANOWIRE_WHITE -> WIRE;
             default -> SLASH;
         };
         for (int row = 0; row < icon.length; row++) {

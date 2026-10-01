@@ -4,7 +4,7 @@ Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado pa
 
 Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
 
-> Versión oficial: **1.0.0+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
+> Versión oficial: **1.1.0+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
 ## Contenido
 
@@ -15,6 +15,7 @@ Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuc
 | `apogee:mantis_blades` | Cuchillas Mantis | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:mantis_blades_thermal` | Cuchillas Mantis térmicas | Variante que prende fuego al objetivo. |
 | `apogee:mantis_blades_electric` | Cuchillas Mantis eléctricas | Variante que aturde al objetivo. |
+| `apogee:nanowire_white` | Nanocable blanco | Variante blanca brillante. Misma ranura, alcance y sangrado que el rojo. |
 | `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
@@ -109,8 +110,10 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 ### Nanocable
 
 - Instálalo en la ranura **Brazos** de la mesa de matasanos (la misma de las Cuchillas Mantis). **R** (configurable) saca el cable o lo recoge.
-- La carcasa del cable va en la cara interna de cada antebrazo; guardada, queda casi oculta junto al torso. Fuera, el cable rojo brillante va tenso de una mano a la otra.
+- La carcasa del cable va en la cara interna de cada antebrazo; guardada, queda casi oculta junto al torso. Fuera, el cable va tenso entre las salidas del mecanismo. Tiene un 30 % más de grosor y un núcleo brillante: rojo incandescente o blanco. Ambas variantes conservan los modelos de Blockbench, las animaciones GeckoLib y la compatibilidad opcional con Punchy.
 - Desplegado: **clic izquierdo** da latigazos alternados (derecho, izquierdo...) de **8 de daño** con **7 bloques** de alcance. **Clic derecho** da un latigazo doble, que se turna entre tres formas (X, vertical y S), y golpea a todo lo que haya delante, en un arco de 140° dentro del alcance (**12 de daño**, recarga de 3 s). Valores provisionales.
+- Ambos Nanocables dejan **Sangrado** al cortar: **1 de daño por segundo durante 4 s**, con partículas rojas. Los golpes renuevan la duración sin acumular intensidad; el sangrado continúa al guardar el cable. Un golpe bloqueado con escudo no lo aplica.
+- El Nanocable blanco se craftea sin patrón con **un Nanocable rojo + un cuarzo** y se instala en la misma ranura de Brazos.
 - Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, muestra el mismo recuadro con la recarga del latigazo doble, y tampoco se puede encantar.
 - Usa la misma tarjeta de tooltip que las Cuchillas Mantis: daño, ataques por segundo y tipo en grande; **G** alterna los controles y las estadísticas del latigazo doble.
 - Sonidos propios: despliegue, guardado, latigazo al aire (4 variantes), golpe al enemigo (4 variantes) y latigazo doble, en `assets/apogee/sounds/nanowire/`.
@@ -171,7 +174,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 1.0.0+1.21.1 (`build/libs/apogee-1.0.0+1.21.1.jar`) | Todos |
+| Apogee | 1.1.0+1.21.1 (`build/libs/apogee-1.1.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |

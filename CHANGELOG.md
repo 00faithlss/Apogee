@@ -2,6 +2,13 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [1.1.0+1.21.1] — 2026-10-01
+
+- Nanocable un 30 % más grueso, con núcleo claro, borde rojo incandescente y halo emisivo.
+- Variante blanca brillante `apogee:nanowire_white`, con el mismo alcance de 7 bloques, animaciones y compatibilidad con Punchy. Se obtiene combinando un Nanocable rojo y cuarzo; se instala en la ranura de Brazos.
+- Ambos Nanocables provocan Sangrado: 1 de daño por segundo durante 4 s, con partículas rojas e icono de estado. Los cortes aceptados renuevan la duración sin acumular intensidad. No se aplica al bloquear el corte con escudo y no altera la inmunidad temporal de los golpes normales.
+- Paleta emisiva blanca y proyectos editables de Blockbench para ambos brazos; tooltip y traducciones actualizados.
+
 ## [1.0.0+1.21.1] — 2026-10-01
 
 Primera versión oficial de Apogee: Sandevistan, Cuchillas Mantis normales, térmicas y eléctricas, Nanocable y mesa de matasanos para instalar y gestionar implantes.

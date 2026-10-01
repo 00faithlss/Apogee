@@ -88,7 +88,7 @@ public final class NanowireRig {
      */
     public static void drawOnArm(PoseStack poseStack, MultiBufferSource buffers, int light, AbstractClientPlayer player,
                                  ModelPart armPart, boolean right, float partialTick) {
-        if (MantisClient.variant(player) != MantisVariant.NANOWIRE) {
+        if (MantisClient.variant(player) == null || !MantisClient.variant(player).isNanowire()) {
             return;
         }
         NanowireRig rig = of(player.getId());
@@ -97,6 +97,7 @@ public final class NanowireRig {
         NanowireArm arm = rig.arms[right ? 0 : 1];
         // A change first seen once its travel is over (a player coming into view with the wire
         // out) skips the transition nobody saw.
+        arm.setVariant(MantisClient.variant(player));
         arm.setDeployed(deployed, deployed ? progress >= 1.0F : progress <= 0.0F);
         poseStack.pushPose();
         armPart.translateAndRotate(poseStack);

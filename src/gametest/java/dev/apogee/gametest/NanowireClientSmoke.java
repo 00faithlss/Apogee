@@ -40,6 +40,9 @@ import org.slf4j.LoggerFactory;
 public final class NanowireClientSmoke implements ClientModInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger("NanowireSmoke");
     private static final List<String> FAILURES = new ArrayList<>();
+    private static final boolean WHITE = Boolean.getBoolean("apogee.nanowireWhite");
+    private static final net.minecraft.world.item.Item IMPLANT = WHITE ? ApogeeItems.NANOWIRE_WHITE : ApogeeItems.NANOWIRE;
+    private static final MantisVariant VARIANT = WHITE ? MantisVariant.NANOWIRE_WHITE : MantisVariant.NANOWIRE;
     private static int worldTicks = -1;
     private static boolean worldRequested;
     /** First tick of each filmed move and how many ticks it is filmed for. */
@@ -83,7 +86,7 @@ public final class NanowireClientSmoke implements ClientModInitializer {
                 player.onUpdateAbilities();
                 player.setYRot(0.0F);
                 player.setXRot(10.0F);
-                player.getInventory().setItem(0, new ItemStack(ApogeeItems.NANOWIRE));
+                player.getInventory().setItem(0, new ItemStack(IMPLANT));
                 player.getInventory().selected = 0;
             });
         }
@@ -106,11 +109,11 @@ public final class NanowireClientSmoke implements ClientModInitializer {
             mc.options.setCameraType(CameraType.FIRST_PERSON);
             server(mc, (level, player) -> {
                 player.getInventory().setItem(0, ItemStack.EMPTY);
-                check(TrinketItem.equipItem(player, new ItemStack(ApogeeItems.NANOWIRE)), "equip the nanowire");
+                check(TrinketItem.equipItem(player, new ItemStack(IMPLANT)), "equip the nanowire");
             });
         }
         if (t == 40) {
-            check(MantisClient.variant(mc.player) == MantisVariant.NANOWIRE, "nanowire worn on the client");
+            check(MantisClient.variant(mc.player) == VARIANT, "nanowire worn on the client");
             shot(mc, "01-stowed-first-person");
             mc.options.hideGui = true;
             mc.options.fov().set(30);

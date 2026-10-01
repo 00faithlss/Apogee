@@ -20,11 +20,18 @@
       "conditions": {
         "recipe_id": "apogee:nanowire"
       }
+    },
+    "crafted_nanowire_white": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipe_id": "apogee:nanowire_white"
+      }
     }
   },
   "requirements": [
     [
-      "crafted_nanowire"
+      "crafted_nanowire",
+      "crafted_nanowire_white"
     ]
   ]
 }

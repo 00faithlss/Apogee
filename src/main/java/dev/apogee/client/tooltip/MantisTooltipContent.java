@@ -32,7 +32,7 @@ public final class MantisTooltipContent {
     }
 
     public static Component damagePerHit(MantisVariant variant) {
-        return Component.literal(number(variant == MantisVariant.NANOWIRE ? NanowireRules.ATTACK_DAMAGE : MantisRules.ATTACK_DAMAGE));
+        return Component.literal(number(variant.isNanowire() ? NanowireRules.ATTACK_DAMAGE : MantisRules.ATTACK_DAMAGE));
     }
 
     public static Component damagePerHitLabel() {
@@ -40,7 +40,7 @@ public final class MantisTooltipContent {
     }
 
     public static Component attacksPerSecond(MantisVariant variant) {
-        return Component.literal(number(variant == MantisVariant.NANOWIRE ? NanowireRules.ATTACK_SPEED : MantisRules.ATTACK_SPEED));
+        return Component.literal(number(variant.isNanowire() ? NanowireRules.ATTACK_SPEED : MantisRules.ATTACK_SPEED));
     }
 
     public static Component attacksPerSecondLabel() {
@@ -62,13 +62,18 @@ public final class MantisTooltipContent {
 
     public static List<Section> sections(MantisVariant variant) {
         List<Section> sections = new ArrayList<>();
-        boolean wire = variant == MantisVariant.NANOWIRE;
+        boolean wire = variant.isNanowire();
         sections.add(new Section(ApogeeClient.TOGGLE_MANTIS.getTranslatedKeyMessage().copy(),
                 List.of(Component.translatable(wire ? "tooltip.apogee.nanowire.toggle" : "tooltip.apogee.mantis_blades.toggle"))));
         sections.add(new Section(Component.translatable("tooltip.apogee.mantis_blades.left_click"),
                 List.of(Component.translatable(wire ? "tooltip.apogee.nanowire.lash" : "tooltip.apogee.mantis_blades.slash"))));
         sections.add(new Section(Component.translatable("tooltip.apogee.mantis_blades.right_click"),
                 List.of(Component.translatable(wire ? "tooltip.apogee.nanowire.heavy" : "tooltip.apogee.mantis_blades.lunge"))));
+        if (wire) {
+            sections.add(new Section(Component.translatable("tooltip.apogee.nanowire.bleeding"),
+                    List.of(Component.translatable("tooltip.apogee.nanowire.bleeding.text",
+                            number(NanowireRules.BLEED_DAMAGE), number(NanowireRules.BLEED_TICKS / 20.0)))));
+        }
         if (variant == MantisVariant.THERMAL || variant == MantisVariant.ELECTRIC) {
             sections.add(new Section(Component.translatable("tooltip.apogee.mantis_blades.ability." + key(variant)),
                     List.of(Component.translatable("tooltip.apogee.mantis_blades.ability." + key(variant) + ".text"))));
@@ -83,12 +88,13 @@ public final class MantisTooltipContent {
     public static List<Stat> stats(MantisVariant variant) {
         List<Stat> stats = new ArrayList<>();
         // Damage per hit and attacks per second are already on the card in large type.
-        if (variant == MantisVariant.NANOWIRE) {
+        if (variant.isNanowire()) {
             stats.add(stat("critical", Component.literal(number(NanowireRules.ATTACK_DAMAGE * 1.5)), false));
             stats.add(stat("reach", Component.translatable("tooltip.apogee.value.blocks", number(3.0 + NanowireRules.REACH_BONUS)), false));
             stats.add(stat("heavy", Component.literal(number(NanowireRules.HEAVY_DAMAGE)), true));
             stats.add(stat("heavy_arc", Component.translatable("tooltip.apogee.value.degrees", number(NanowireRules.HEAVY_HALF_ANGLE * 2.0)), false));
             stats.add(stat("heavy_cooldown", seconds(NanowireRules.HEAVY_COOLDOWN_TICKS), false));
+            stats.add(stat("bleeding", seconds(NanowireRules.BLEED_TICKS), true));
             return stats;
         }
         stats.add(stat("critical", Component.literal(number(MantisRules.ATTACK_DAMAGE * 1.5)), false));

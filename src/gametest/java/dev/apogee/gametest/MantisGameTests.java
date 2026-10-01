@@ -3,6 +3,9 @@ package dev.apogee.gametest;
 import dev.apogee.mantis.MantisManager;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.registry.ApogeeItems;
+import dev.apogee.registry.ApogeeEffects;
+import dev.apogee.mantis.NanowireRules;
+import dev.apogee.mixin.LivingEntityDamageAccessor;
 import dev.emi.trinkets.api.TrinketItem;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -195,6 +198,8 @@ public final class MantisGameTests implements FabricGameTest {
         Item housing = ApogeeItems.WIRE_HOUSING;
         expect(helper, craft(helper, housing, ApogeeItems.MONOFILAMENT, housing, cable, power, cable, cable, core, cable),
                 ApogeeItems.NANOWIRE, 1, "Nanowire");
+        expect(helper, craft(helper, ApogeeItems.NANOWIRE, Items.QUARTZ, null, null, null, null, null, null, null),
+                ApogeeItems.NANOWIRE_WHITE, 1, "White nanowire");
         helper.assertTrue(craft(helper, cable, chip, cable, netherite, kernel, netherite, cable, core, cable).isEmpty(),
                 "The first nanowire recipe no longer works");
         helper.assertTrue(craft(helper, Items.BLAZE_ROD, Items.MAGMA_BLOCK, Items.BLAZE_ROD, Items.MAGMA_BLOCK, ApogeeItems.MANTIS_BLADES,
@@ -255,7 +260,16 @@ public final class MantisGameTests implements FabricGameTest {
 
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_nanowire_reach", timeoutTicks = 40)
     public void nanowireReachesSevenBlocks(GameTestHelper helper) {
-        ServerPlayer player = wearer(helper, ApogeeItems.NANOWIRE);
+        wireReach(helper, ApogeeItems.NANOWIRE);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_nanowire_white_reach", timeoutTicks = 40)
+    public void whiteNanowireReachesSevenBlocks(GameTestHelper helper) {
+        wireReach(helper, ApogeeItems.NANOWIRE_WHITE);
+    }
+
+    private static void wireReach(GameTestHelper helper, Item implant) {
+        ServerPlayer player = wearer(helper, implant);
         MantisManager.toggle(player);
         // 4 blocks over the base 3: 7 in survival. (Mock players count as creative, which vanilla
         // gives 2 blocks more once they tick, so the far pig stands past that too.)
@@ -275,10 +289,14 @@ public final class MantisGameTests implements FabricGameTest {
         }
         helper.getLevel().addFreshEntity(near);
         helper.getLevel().addFreshEntity(far);
+        near.getAttribute(Attributes.MAX_HEALTH).setBaseValue(40.0);
+        near.setHealth(40.0F);
         float nearHealth = near.getHealth();
         float farHealth = far.getHealth();
         MantisManager.thrust(player);
         helper.runAfterDelay(dev.apogee.mantis.NanowireRules.HEAVY_HIT_DELAY_TICKS + 3, () -> {
+            helper.assertTrue(near.hasEffect(ApogeeEffects.BLEEDING), "The heavy lash leaves bleeding on its target");
+            helper.assertTrue(!far.hasEffect(ApogeeEffects.BLEEDING), "An out-of-reach target is not bleeding");
             helper.assertTrue(near.getHealth() < nearHealth, "The two-wire lash hits 6 blocks away");
             helper.assertTrue(far.getHealth() == farHealth, "The two-wire lash does not hit 11 blocks away");
             near.discard();
@@ -294,7 +312,7 @@ public final class MantisGameTests implements FabricGameTest {
         Holder<Enchantment> sharpness = enchantments.getHolderOrThrow(Enchantments.SHARPNESS);
         helper.assertTrue(new ItemStack(Items.IRON_SWORD).canBeEnchantedWith(sharpness, EnchantingContext.ACCEPTABLE),
                 "Control: a sword takes Sharpness");
-        for (Item blades : new Item[]{ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.NANOWIRE}) {
+        for (Item blades : new Item[]{ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.NANOWIRE, ApogeeItems.NANOWIRE_WHITE}) {
             ItemStack stack = new ItemStack(blades);
             helper.assertTrue(!stack.isEnchantable(), blades + " must not go on the enchanting table");
             enchantments.holders().forEach(enchantment -> {
@@ -304,5 +322,100 @@ public final class MantisGameTests implements FabricGameTest {
             });
         }
         helper.succeed();
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_nanowire_red_bleed", timeoutTicks = 130)
+    public void redWireBleedsAfterRetracting(GameTestHelper helper) {
+        wireBleeding(helper, ApogeeItems.NANOWIRE);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_nanowire_white_bleed", timeoutTicks = 130)
+    public void whiteWireBleedsAfterRetracting(GameTestHelper helper) {
+        wireBleeding(helper, ApogeeItems.NANOWIRE_WHITE);
+    }
+
+    private static void wireBleeding(GameTestHelper helper, Item implant) {
+        ServerPlayer player = wearer(helper, implant);
+        MantisManager.toggle(player);
+        helper.assertTrue(near(player.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE), 7.0), "Both wires reach seven blocks");
+        var victim = new net.minecraft.world.entity.animal.Pig(EntityType.PIG, helper.getLevel());
+        victim.moveTo(player.getX(), player.getY(), player.getZ() + 2.0, 0.0F, 0.0F);
+        victim.setNoAi(true);
+        victim.setNoGravity(true);
+        helper.getLevel().addFreshEntity(victim);
+        player.attack(victim);
+        helper.assertTrue(victim.hasEffect(ApogeeEffects.BLEEDING), "A successful cut applies bleeding");
+        helper.assertTrue(victim.getEffect(ApogeeEffects.BLEEDING).getAmplifier() == 0, "Wound strength is fixed");
+        float afterCut = victim.getHealth();
+        MantisManager.retract(player, false);
+        helper.runAfterDelay(85, () -> {
+            helper.assertTrue(!victim.hasEffect(ApogeeEffects.BLEEDING), "Bleeding expires after four seconds");
+            helper.assertTrue(near(victim.getHealth(), afterCut - 4.0), "Four one-damage pulses continue after retracting");
+            cleanup(helper, player);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_nanowire_refresh", timeoutTicks = 160)
+    public void bleedingRefreshDoesNotStackOrInterruptMelee(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, ApogeeItems.NANOWIRE_WHITE);
+        MantisManager.toggle(player);
+        var victim = new net.minecraft.world.entity.animal.Pig(EntityType.PIG, helper.getLevel());
+        victim.moveTo(player.getX(), player.getY(), player.getZ() + 2.0, 0.0F, 0.0F);
+        victim.setNoAi(true);
+        victim.setNoGravity(true);
+        helper.getLevel().addFreshEntity(victim);
+        var source = player.damageSources().playerAttack(player);
+        victim.hurt(source, 2.0F);
+        // Vanilla suppresses this second, equal hit; it must not increase the wound strength.
+        victim.hurt(source, 2.0F);
+        var damage = (LivingEntityDamageAccessor) victim;
+        int immunity = victim.invulnerableTime;
+        float lastHit = damage.apogee$getLastHurt();
+        float health = victim.getHealth();
+        victim.tickCount = 20;
+        ApogeeEffects.BLEEDING.value().applyEffectTick(victim, 0);
+        helper.assertTrue(near(victim.getHealth(), health - 1.0), "Bleeding pulses independently of melee immunity");
+        helper.assertTrue(victim.invulnerableTime == immunity && damage.apogee$getLastHurt() == lastHit,
+                "Bleeding preserves vanilla's immunity and last-hit damage");
+        helper.runAfterDelay(45, () -> {
+            victim.invulnerableTime = 0;
+            victim.hurt(source, 2.0F);
+            helper.assertTrue(victim.getEffect(ApogeeEffects.BLEEDING).getDuration() == NanowireRules.BLEED_TICKS,
+                    "Another accepted cut renews the four seconds");
+            helper.assertTrue(victim.getEffect(ApogeeEffects.BLEEDING).getAmplifier() == 0, "Repeated cuts do not stack bleeding");
+            MantisManager.retract(player, false);
+        });
+        helper.runAfterDelay(100, () -> helper.assertTrue(victim.hasEffect(ApogeeEffects.BLEEDING), "The refreshed wound outlives the original timer"));
+        helper.runAfterDelay(135, () -> {
+            helper.assertTrue(!victim.hasEffect(ApogeeEffects.BLEEDING), "The refreshed wound also expires");
+            cleanup(helper, player);
+            helper.succeed();
+        });
+    }
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_nanowire_shield", timeoutTicks = 40)
+    public void blockedWireCutDoesNotLeaveBleeding(GameTestHelper helper) {
+        ServerPlayer attacker = wearer(helper, ApogeeItems.NANOWIRE);
+        MantisManager.toggle(attacker);
+        // A normally ticking living entity advances the shield's warmup; mock players do
+        // not tick their active item as a connected player would.
+        var defender = new net.minecraft.world.entity.animal.Pig(EntityType.PIG, helper.getLevel());
+        defender.setNoAi(true);
+        defender.setNoGravity(true);
+        defender.moveTo(attacker.getX(), attacker.getY(), attacker.getZ() + 2.0, 180.0F, 0.0F);
+        helper.getLevel().addFreshEntity(defender);
+        defender.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.SHIELD));
+        defender.startUsingItem(net.minecraft.world.InteractionHand.MAIN_HAND);
+        helper.runAfterDelay(10, () -> {
+            helper.assertTrue(defender.isBlocking(), "The defender has raised the shield");
+            defender.setYRot(180.0F);
+            defender.setYHeadRot(180.0F);
+            float health = defender.getHealth();
+            defender.hurt(attacker.damageSources().playerAttack(attacker), 8.0F);
+            helper.assertTrue(defender.getHealth() == health, "The shield blocked the wire cut");
+            helper.assertTrue(!defender.hasEffect(ApogeeEffects.BLEEDING), "A blocked cut does not cause bleeding");
+            cleanup(helper, attacker);
+            helper.succeed();
+        });
     }
 }

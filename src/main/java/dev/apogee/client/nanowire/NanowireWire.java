@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.NanowireRules;
+import dev.apogee.mantis.MantisVariant;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.renderer.LightTexture;
@@ -36,8 +37,8 @@ public final class NanowireWire {
     /** Seconds between trails, so the heavy attack does not leave a longer-lived fan. */
     private static final float TRAIL_SECONDS = 0.012F;
     /** The wire's own red. */
-    private static final int RED = 0xFFFF0000;
-    /** Centre of the atlas' pure red cell, which is also fully emissive in the mask. */
+    private static final int RED = 0xFFFF3018;
+    /** Centre of the white palette's emissive wire cell. */
     private static final float U = 40.0F / 64.0F;
     private static final float V = 24.0F / 64.0F;
 
@@ -100,7 +101,11 @@ public final class NanowireWire {
         float tension = Math.min(1.0F, anchors[0].grip.distance(anchors[1].grip) / 0.5F);
         held.fma(tension * (-0.010F + 0.0015F * Mth.sin(time * 44.0F)), frame.up());
 
-        VertexConsumer core = buffers.getBuffer(RenderType.entityTranslucentEmissive(NanowireArmGeoModel.TEXTURE));
+        boolean white = MantisClient.variant(wearer) == MantisVariant.NANOWIRE_WHITE;
+        int colour = white ? 0xFFEAF5FF : RED;
+        // Both palettes use a neutral white texel for the procedural cable; vertex colour
+        // gives the thermal sheath a red edge and the centre its hotter, paler glow.
+        VertexConsumer core = buffers.getBuffer(RenderType.entityTranslucentEmissive(NanowireArmGeoModel.WHITE_TEXTURE));
         List<List<Vector3f>> glow = new ArrayList<>();
         List<List<Vector3f>> trails = new ArrayList<>();
         List<Float> trailAlpha = new ArrayList<>();
@@ -138,14 +143,15 @@ public final class NanowireWire {
             glow.addAll(wires);
         }
         for (List<Vector3f> wire : glow) {
-            ribbon(core, wire, 1.0F, RED);
+            ribbon(core, wire, 1.0F, colour);
+            ribbon(core, wire, 0.42F, white ? 0xFFFFFFFF : 0xFFFFB590);
         }
         VertexConsumer additive = buffers.getBuffer(RenderType.dragonRays());
         for (List<Vector3f> wire : glow) {
-            halo(additive, wire, 4.5F, 0.35F);
+            halo(additive, wire, 4.5F, 0.42F, colour);
         }
         for (int i = 0; i < trails.size(); i++) {
-            halo(additive, trails.get(i), 2.6F, trailAlpha.get(i));
+            halo(additive, trails.get(i), 2.6F, trailAlpha.get(i), colour);
         }
     }
 
@@ -255,7 +261,7 @@ public final class NanowireWire {
      * thinner than about two pixels on screen further away.
      */
     private static float halfWidth(Vector3f p) {
-        return Math.max(0.0013F, 0.0009F * p.length());
+        return Math.max(0.0017F, 0.00117F * p.length());
     }
 
     /** Camera-facing sideways offset at point {@code i}, scaled by {@code widen}. */
@@ -272,7 +278,7 @@ public final class NanowireWire {
         return side.normalize(halfWidth(p) * widen);
     }
 
-    /** The solid red core, as quads of the emissive entity type (lit by nothing, bloomed by shader packs). */
+    /** The solid cable core, as quads of the emissive entity type (lit by nothing, bloomed by shader packs). */
     private static void ribbon(VertexConsumer out, List<Vector3f> points, float widen, int argb) {
         for (int i = 0; i + 1 < points.size(); i++) {
             Vector3f a = points.get(i);
@@ -292,10 +298,10 @@ public final class NanowireWire {
     }
 
     /** A soft additive glow along the wire: triangles of the dragon-rays type, brightest at the centre line. */
-    private static void halo(VertexConsumer out, List<Vector3f> points, float widen, float alpha) {
-        int red = 255;
-        int green = 24;
-        int blue = 20;
+    private static void halo(VertexConsumer out, List<Vector3f> points, float widen, float alpha, int colour) {
+        int red = (colour >> 16) & 255;
+        int green = (colour >> 8) & 255;
+        int blue = colour & 255;
         int core = Mth.clamp((int) (alpha * 255.0F), 0, 255);
         for (int i = 0; i + 1 < points.size(); i++) {
             Vector3f a = points.get(i);

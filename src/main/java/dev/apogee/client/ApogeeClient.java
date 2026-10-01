@@ -73,6 +73,7 @@ public final class ApogeeClient implements ClientModInitializer {
         TrinketRendererRegistry.registerRenderer(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.NANOWIRE, dev.apogee.client.nanowire.NanowireItemRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.NANOWIRE_WHITE, dev.apogee.client.nanowire.NanowireItemRenderer.INSTANCE);
         BlockEntityRenderers.register(ApogeeBlocks.RIPPERDOC_TABLE_ENTITY, context -> new RipperdocTableRenderer());
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeBlocks.RIPPERDOC_TABLE_ITEM, RipperdocTableItemRenderer.INSTANCE);
         EntityRendererRegistry.register(ApogeeBlocks.RIPPERDOC_SEAT, NoopRenderer::new);

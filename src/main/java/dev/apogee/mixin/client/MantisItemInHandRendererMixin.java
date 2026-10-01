@@ -67,7 +67,7 @@ public abstract class MantisItemInHandRendererMixin implements ImplantHandRender
     @Override
     public void apogee$renderImplants(float partialTick, PoseStack poseStack, MultiBufferSource.BufferSource buffers,
                                       LocalPlayer player, int light) {
-        if (MantisClient.variant(player) == MantisVariant.NANOWIRE) {
+        if (MantisClient.variant(player) != null && MantisClient.variant(player).isNanowire()) {
             NanowireHands.render(poseStack, buffers, player, light, partialTick);
             buffers.endBatch();
             return;

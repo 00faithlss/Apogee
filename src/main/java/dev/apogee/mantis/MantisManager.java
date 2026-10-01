@@ -7,6 +7,7 @@ import dev.apogee.network.ApogeeNetworking.MantisThrust;
 import dev.apogee.network.ApogeeNetworking.ToggleMantis;
 import dev.apogee.item.ArmCyberwareItem;
 import dev.apogee.registry.ApogeeSounds;
+import dev.apogee.registry.ApogeeEffects;
 import dev.emi.trinkets.api.TrinketsApi;
 import java.util.HashMap;
 import java.util.List;
@@ -95,7 +96,11 @@ public final class MantisManager {
                 retract(player, false);
             }
         });
-        ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> onDamage(entity, source));
+        ServerLivingEntityEvents.AFTER_DAMAGE.register((entity, source, baseDamage, damageTaken, blocked) -> {
+            if (!blocked && damageTaken > 0.0F) {
+                onDamage(entity, source);
+            }
+        });
         EntityTrackingEvents.START_TRACKING.register((tracked, viewer) -> {
             if (tracked instanceof ServerPlayer wearer && DEPLOYED.containsKey(wearer.getUUID())
                     && ServerPlayNetworking.canSend(viewer, MantisSync.TYPE)) {
@@ -136,7 +141,7 @@ public final class MantisManager {
         addModifiers(player);
         play(player, switch (variant) {
             case ELECTRIC -> ApogeeSounds.MANTIS_ELECTRIC_DEPLOY;
-            case NANOWIRE -> ApogeeSounds.NANOWIRE_DEPLOY;
+            case NANOWIRE, NANOWIRE_WHITE -> ApogeeSounds.NANOWIRE_DEPLOY;
             default -> ApogeeSounds.MANTIS_DEPLOY;
         });
         broadcast(player, true, variant);
@@ -151,7 +156,7 @@ public final class MantisManager {
         PENDING_LASHES.remove(player.getUUID());
         removeModifiers(player);
         if (audible) {
-            play(player, deployment.variant == MantisVariant.NANOWIRE ? ApogeeSounds.NANOWIRE_RETRACT : ApogeeSounds.MANTIS_RETRACT);
+            play(player, deployment.variant.isNanowire() ? ApogeeSounds.NANOWIRE_RETRACT : ApogeeSounds.MANTIS_RETRACT);
         }
         broadcast(player, false, MantisVariant.STANDARD);
     }
@@ -164,7 +169,7 @@ public final class MantisManager {
      */
     private static void addModifiers(ServerPlayer player) {
         Deployment deployment = DEPLOYED.get(player.getUUID());
-        boolean wire = deployment != null && deployment.variant == MantisVariant.NANOWIRE;
+        boolean wire = deployment != null && deployment.variant.isNanowire();
         double[] held = heldBonuses(player);
         setModifier(player.getAttribute(Attributes.ATTACK_DAMAGE), DAMAGE_MODIFIER,
                 (wire ? NanowireRules.ATTACK_DAMAGE : MantisRules.ATTACK_DAMAGE) - held[0]);
@@ -273,7 +278,7 @@ public final class MantisManager {
         deployment.nextArm = arm == MantisRules.ARM_RIGHT ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT;
         play(player, switch (deployment.variant) {
             case ELECTRIC -> ApogeeSounds.MANTIS_ELECTRIC_SWING;
-            case NANOWIRE -> ApogeeSounds.NANOWIRE_SWING;
+            case NANOWIRE, NANOWIRE_WHITE -> ApogeeSounds.NANOWIRE_SWING;
             default -> ApogeeSounds.MANTIS_SWING;
         });
         sendToTrackers(player, new MantisSwing(player.getId(), arm), false);
@@ -285,7 +290,7 @@ public final class MantisManager {
             if (deployment != null) {
                 victim.level().playSound(null, victim.getX(), victim.getY(), victim.getZ(), switch (deployment.variant) {
                             case ELECTRIC -> ApogeeSounds.MANTIS_ELECTRIC_HIT;
-                            case NANOWIRE -> ApogeeSounds.NANOWIRE_HIT;
+                            case NANOWIRE, NANOWIRE_WHITE -> ApogeeSounds.NANOWIRE_HIT;
                             default -> ApogeeSounds.MANTIS_HIT;
                         }, SoundSource.PLAYERS, 1.0F, 1.0F);
                 applyVariantEffect(victim, deployment.variant);
@@ -295,7 +300,9 @@ public final class MantisManager {
 
     /** Thermal blades set targets alight; electric blades stun them briefly (and hit harder in water, see {@link #variantBonus}). */
     private static void applyVariantEffect(LivingEntity victim, MantisVariant variant) {
-        if (variant == MantisVariant.THERMAL) {
+        if (variant.isNanowire()) {
+            victim.addEffect(new MobEffectInstance(ApogeeEffects.BLEEDING, NanowireRules.BLEED_TICKS, 0, false, false, true));
+        } else if (variant == MantisVariant.THERMAL) {
             victim.igniteForSeconds(MantisRules.THERMAL_BURN_SECONDS);
         } else if (variant == MantisVariant.ELECTRIC) {
             victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, MantisRules.ELECTRIC_STUN_TICKS, MantisRules.ELECTRIC_STUN_AMPLIFIER));
@@ -316,7 +323,7 @@ public final class MantisManager {
             return;
         }
         THRUST_READY.put(player.getUUID(), now + MantisRules.thrustCooldownTicks(deployment.variant));
-        if (deployment.variant == MantisVariant.NANOWIRE) {
+        if (deployment.variant.isNanowire()) {
             // The wires reach the targets partway through the lash.
             PENDING_LASHES.put(player.getUUID(), now + NanowireRules.HEAVY_HIT_DELAY_TICKS);
             play(player, ApogeeSounds.NANOWIRE_HEAVY);

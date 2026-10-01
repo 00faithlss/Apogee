@@ -147,7 +147,7 @@ public final class MantisClient {
 
     /** Starts one arm's attack clip on whichever arm cyberware the entity wears. */
     private static void rigAttack(int entityId, Anim anim, int arm) {
-        if (anim.variant == MantisVariant.NANOWIRE) {
+        if (anim.variant.isNanowire()) {
             NanowireRig.of(entityId).attack(arm);
         } else {
             MantisRig.of(entityId).attack(arm);
@@ -156,7 +156,7 @@ public final class MantisClient {
 
     /** Starts the two-arm attack clip: the blades' lunge or the two-wire lash. */
     private static void rigThrust(int entityId, Anim anim) {
-        if (anim.variant == MantisVariant.NANOWIRE) {
+        if (anim.variant.isNanowire()) {
             anim.heavyStyle = (anim.heavyStyle + 1) % dev.apogee.client.nanowire.NanowireMoves.HEAVY_STYLES;
             NanowireRig.of(entityId).heavy();
         } else {
@@ -166,7 +166,7 @@ public final class MantisClient {
 
     /** Throws sparks or embers from thermal and electric blades as they strike. */
     private static void strike(Minecraft mc, Anim anim, int entityId) {
-        if (anim.variant == MantisVariant.STANDARD || anim.variant == MantisVariant.NANOWIRE) {
+        if (anim.variant == MantisVariant.STANDARD || anim.variant.isNanowire()) {
             return;
         }
         Entity entity = mc.level == null ? null : mc.level.getEntity(entityId);

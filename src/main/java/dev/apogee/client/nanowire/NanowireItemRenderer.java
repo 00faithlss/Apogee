@@ -4,6 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import dev.apogee.Apogee;
+import dev.apogee.item.NanowireItem;
+import dev.apogee.mantis.MantisVariant;
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -31,7 +33,8 @@ import software.bernie.geckolib.util.RenderUtil;
 public final class NanowireItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer {
     public static final NanowireItemRenderer INSTANCE = new NanowireItemRenderer();
 
-    private final Display display = new Display();
+    private final Display redDisplay = new Display(MantisVariant.NANOWIRE);
+    private final Display whiteDisplay = new Display(MantisVariant.NANOWIRE_WHITE);
     private final Renderer renderer = new Renderer();
 
     private NanowireItemRenderer() {
@@ -70,11 +73,17 @@ public final class NanowireItemRenderer implements BuiltinItemRendererRegistry.D
             default -> poseStack.scale(0.55F, 0.55F, 0.55F);
         }
         poseStack.translate(0.0F, -3.0F / 16.0F, -3.5F / 16.0F);
+        Display display = ((NanowireItem) stack.getItem()).variant() == MantisVariant.NANOWIRE_WHITE ? whiteDisplay : redDisplay;
         renderer.renderInto(poseStack, display, buffers, light);
         poseStack.popPose();
     }
 
     private static final class Display implements GeoAnimatable {
+        private final MantisVariant variant;
+
+        Display(MantisVariant variant) {
+            this.variant = variant;
+        }
         private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
         @Override
@@ -103,7 +112,7 @@ public final class NanowireItemRenderer implements BuiltinItemRendererRegistry.D
 
         @Override
         public ResourceLocation getTextureResource(Display animatable) {
-            return NanowireArmGeoModel.TEXTURE;
+            return NanowireArmGeoModel.texture(animatable.variant);
         }
 
         @Override
@@ -123,7 +132,7 @@ public final class NanowireItemRenderer implements BuiltinItemRendererRegistry.D
             addRenderLayer(new AutoGlowingGeoLayer<>(this) {
                 @Override
                 protected RenderType getRenderType(Display animatable, @Nullable MultiBufferSource bufferSource) {
-                    return RenderType.eyes(NanowireArmGeoModel.GLOWMASK);
+                    return RenderType.eyes(NanowireArmGeoModel.glowmask(animatable.variant));
                 }
             });
         }

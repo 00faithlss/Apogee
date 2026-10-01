@@ -106,7 +106,7 @@ public abstract class PunchyArmRendererMixin {
     private static void apogee$nanowireArm(PlayerModel<AbstractClientPlayer> model, AbstractClientPlayer player,
                                            HumanoidArm arm, PoseStack poses, MultiBufferSource buffers, int light,
                                            ResourceLocation texture, boolean slim, float partialTick, CallbackInfo ci) {
-        if (PunchyCompat.rendered() || MantisClient.variant(player) != MantisVariant.NANOWIRE) {
+        if (PunchyCompat.rendered() || (MantisClient.variant(player) == null || !MantisClient.variant(player).isNanowire())) {
             return;
         }
         boolean left = arm == HumanoidArm.LEFT;
