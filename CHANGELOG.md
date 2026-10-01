@@ -2,7 +2,21 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
-## [Sin publicar] — 2026-10-01
+## [1.0.0+1.21.1] — 2026-10-01
+
+Primera versión oficial de Apogee: Sandevistan, Cuchillas Mantis normales, térmicas y eléctricas, Nanocable y mesa de matasanos para instalar y gestionar implantes.
+
+### Cambiado
+
+- La descripción del mod en Minecraft refleja el ciberware disponible, la mesa de matasanos, el alcance de 7 bloques del Nanocable y la compatibilidad opcional con Punchy.
+- El Nanocable lleva modelos de ciberware de palma y antebrazo creados en Blockbench y renderizados con GeckoLib. El cable sale de la boca del mecanismo y sigue su posición animada.
+- Al desplegar las Cuchillas Mantis en tercera persona, las mangas de las pecheras vanilla dejan espacio al mecanismo y conservan la parte superior de la armadura, sus colores, adornos y brillo de encantamiento.
+
+### Corregido
+
+- Los cortes de primera persona de las Cuchillas Mantis entran hacia el centro desde la muñeca; la otra mano acompaña y ambas vuelven a su pose de reposo. Se eliminan los movimientos de ataque superpuestos y se conserva la pose nativa al llevar un objeto, con y sin Punchy.
+- El Nanocable conserva la skin del jugador y el agarre mantiene un recorrido limpio entre las salidas del ciberware.
+- El paciente de la mesa de matasanos apoya las piernas en el cojín y mantiene los brazos en reposo, también con Entity Model Features y con las cuchillas desplegadas.
 
 ### Añadido (Compatibilidad con Punchy)
 
@@ -20,6 +34,8 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ### Pruebas
 
+- Cuchillas Mantis: las tres variantes, cortes de ambos brazos y estocada mediante clics del juego, con objetos equipados; prueba con Punchy 2.8a y 2.8c y sin Punchy. Comprobación de que la muñeca atacante se acerca a la mira durante el corte.
+- Mesa de matasanos: instalación, visor y pose en las cuatro orientaciones con Entity Model Features, ETF y Fresh Animations, incluidas las cuchillas desplegadas.
 - Compatibilidad comprobada con Punchy 2.8a para Fabric 1.21.1: movimiento y guardado de ambos implantes, mano principal derecha e izquierda, balanceo de la vista activado y desactivado, y ataques del Nanocable en primera y tercera persona.
 - `nanowireMotionTest`, incluido en `check` y `build`: continuidad al salir y volver al reposo, barridos opuestos simétricos, coordenadas finitas y límites de despliegue, incluso con manos cruzadas o coincidentes; preparación del ataque doble por encima del agarre, golpe por debajo y retraso de la punta respecto de la raíz.
 - Comprobación del alcance visual: el barrido simple llega a 7 bloques hacia delante y ambos cables del ataque doble llegan a esa distancia al momento de impacto en los tres estilos.

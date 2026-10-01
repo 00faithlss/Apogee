@@ -3,7 +3,7 @@
   "id": "apogee",
   "version": "${version}",
   "name": "Apogee",
-  "description": "A single cyberware implant: the Sandevistan. Speeds your reflexes and slows the fight around you.",
+  "description": "Cyberpunk-inspired cyberware: Sandevistan, Mantis Blades and Nanowire. Install implants at the Ripperdoc table, slow down combat and fight with animated blades or a seven-block monofilament whip. Includes optional Punchy animation compatibility.",
   "authors": ["maaurisiso"],
   "license": "All-Rights-Reserved",
   "icon": "assets/apogee/icon.png",

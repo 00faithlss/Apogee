@@ -4,7 +4,7 @@ Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado pa
 
 Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
 
-> Estado: primera versión compilable y probada de forma automatizada. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
+> Versión oficial: **1.0.0+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
 ## Contenido
 
@@ -171,7 +171,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.14.0+1.21.1 (`build/libs/apogee-0.14.0+1.21.1.jar`) | Todos |
+| Apogee | 1.0.0+1.21.1 (`build/libs/apogee-1.0.0+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
