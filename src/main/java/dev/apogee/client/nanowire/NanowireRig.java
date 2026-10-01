@@ -100,12 +100,10 @@ public final class NanowireRig {
         arm.setDeployed(deployed, deployed ? progress >= 1.0F : progress <= 0.0F);
         poseStack.pushPose();
         armPart.translateAndRotate(poseStack);
-        NanowireGrip.render(poseStack, buffers, light, player, right, progress);
         poseStack.translate((right ? -AXIS_OFFSET : AXIS_OFFSET) / 16.0F, (ARM_END - FINGERTIPS) / 16.0F, 0.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
         poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-        rig.renderers[right ? 0 : 1].renderInto(poseStack, arm, buffers, light, partialTick);
-        rig.anchors[right ? 0 : 1].capture(poseStack.last(), right);
+        rig.renderers[right ? 0 : 1].renderInto(poseStack, arm, buffers, light, partialTick, rig.anchors[right ? 0 : 1]);
         poseStack.popPose();
     }
 }

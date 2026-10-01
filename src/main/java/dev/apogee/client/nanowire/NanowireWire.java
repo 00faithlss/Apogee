@@ -14,14 +14,12 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 /**
  * Both wires of one wearer, computed and drawn every frame as continuous glowing ribbons.
  *
- * <p>Each wire runs from its housing's nozzle along the inside of the hand to the grip on the
- * front of the fist, then on: at rest to the point between both fists, where it meets the other
+ * <p>Each wire starts at its GeckoLib outlet bone: at rest it runs to the point between both fists, where it meets the other
  * wire (built from the real grips every frame, so it holds whatever poses the arms), and while
  * lashing along its tip path (single) or carrying a downward bend from hand to tip (heavy). A lash lets the
  * two ends part: each wire whips from its own fist and they join in the middle again at the end. Fast moves also
@@ -31,10 +29,6 @@ import org.joml.Vector3f;
  * the pose the housing was drawn with, so the same code serves both first and third person.
  */
 public final class NanowireWire {
-    /** Anchor points in the pack's per-arm export space (pixels), right arm then left arm. */
-    private static final float[][] NOZZLE = {{-2.61F, 0.0F, -6.74F}, {2.61F, 0.0F, -6.74F}};
-    private static final float[][] GUIDE = {{-2.12F, 0.65F, -8.65F}, {2.12F, 0.65F, -8.65F}};
-    private static final float[][] GRIP = {{-3.12F, 0.65F, -10.15F}, {3.12F, 0.65F, -10.15F}};
     /** Points along the free part of a wire. */
     private static final int POINTS = 72;
     /** Fading copies of a moving wire, and how far back in move time each one is. */
@@ -47,23 +41,14 @@ public final class NanowireWire {
     private static final float U = 40.0F / 64.0F;
     private static final float V = 24.0F / 64.0F;
 
-    /** Where a wire's lead runs, captured while its housing is drawn, in render space. */
+    /** The outlet's actual animated pose, captured while the cyberware is drawn. */
     static final class Anchors {
-        final Vector3f nozzle = new Vector3f();
-        final Vector3f guide = new Vector3f();
         final Vector3f grip = new Vector3f();
         boolean captured;
 
-        void capture(PoseStack.Pose pose, boolean right) {
-            int side = right ? 0 : 1;
-            transform(pose.pose(), NOZZLE[side], nozzle);
-            transform(pose.pose(), GUIDE[side], guide);
-            transform(pose.pose(), GRIP[side], grip);
+        void capture(PoseStack.Pose pose, float x, float y, float z) {
+            pose.pose().transformPosition(x / 16.0F, y / 16.0F, z / 16.0F, grip);
             captured = true;
-        }
-
-        private static void transform(Matrix4f matrix, float[] pixels, Vector3f out) {
-            matrix.transformPosition(pixels[0] / 16.0F, pixels[1] / 16.0F, pixels[2] / 16.0F, out);
         }
     }
 
@@ -173,14 +158,12 @@ public final class NanowireWire {
     }
 
     /**
-     * One wire as a polyline in render space, {@code back} move-time earlier, cut to {@code feed} of
+     * One wire from its cyberware outlet in render space, {@code back} move-time earlier, cut to {@code feed} of
      * its length; {@code path} is its end's path while it lashes, else null.
      */
     private static List<Vector3f> wire(Anchors anchors, Vector3f opposite, Vector3f held, Frame frame, Move move, NanowireMoves.Path path,
                                        float side, int style, float back, float feed) {
-        List<Vector3f> points = new ArrayList<>(POINTS + 3);
-        points.add(new Vector3f(anchors.nozzle));
-        points.add(new Vector3f(anchors.guide));
+        List<Vector3f> points = new ArrayList<>(POINTS + 1);
         Vector3f grip = anchors.grip;
         points.add(new Vector3f(grip));
         if (move != null && move.heavy) {
