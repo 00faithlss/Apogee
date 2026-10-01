@@ -14,8 +14,8 @@ public final class NanowireRules {
     public static final int LASH_ANIMATION_TICKS = 11;
     /** Attack speed matching one full-strength lash per clip. */
     public static final double ATTACK_SPEED = 20.0 / LASH_TICKS;
-    /** Extra reach of every attack while the wire is out: 3 blocks become 5. */
-    public static final double REACH_BONUS = 2.0;
+    /** Extra reach of every attack while the wire is out: 3 blocks become 7. */
+    public static final double REACH_BONUS = 4.0;
     /** Damage of the two-wire lash to every target in front within reach. */
     public static final float HEAVY_DAMAGE = 12.0F;
     /** Half-angle, in degrees, of the arc the two-wire lash sweeps in front of the wearer. */

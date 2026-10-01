@@ -253,6 +253,41 @@ public final class MantisGameTests implements FabricGameTest {
         helper.succeed();
     }
 
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_nanowire_reach", timeoutTicks = 40)
+    public void nanowireReachesSevenBlocks(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, ApogeeItems.NANOWIRE);
+        MantisManager.toggle(player);
+        // 4 blocks over the base 3: 7 in survival. (Mock players count as creative, which vanilla
+        // gives 2 blocks more once they tick, so the far pig stands past that too.)
+        var range = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ENTITY_INTERACTION_RANGE);
+        var bonus = range.getModifier(MantisManager.REACH_MODIFIER);
+        helper.assertTrue(bonus != null && near(range.getBaseValue() + bonus.amount(), 7.0),
+                "The wire reaches 7 blocks in survival, " + range.getBaseValue() + " + " + (bonus == null ? "none" : bonus.amount()));
+        // Facing south: one pig 6 blocks ahead, inside the reach, and one 11 blocks ahead, out of it.
+        net.minecraft.world.entity.animal.Pig near = net.minecraft.world.entity.EntityType.PIG.create(helper.getLevel());
+        net.minecraft.world.entity.animal.Pig far = net.minecraft.world.entity.EntityType.PIG.create(helper.getLevel());
+        near.moveTo(player.getX(), player.getY(), player.getZ() + 6.0, 0.0F, 0.0F);
+        far.moveTo(player.getX(), player.getY(), player.getZ() + 11.0, 0.0F, 0.0F);
+        // Held in the air, so only the lash can hurt them (the far one is past the test floor).
+        for (net.minecraft.world.entity.animal.Pig pig : new net.minecraft.world.entity.animal.Pig[]{near, far}) {
+            pig.setNoAi(true);
+            pig.setNoGravity(true);
+        }
+        helper.getLevel().addFreshEntity(near);
+        helper.getLevel().addFreshEntity(far);
+        float nearHealth = near.getHealth();
+        float farHealth = far.getHealth();
+        MantisManager.thrust(player);
+        helper.runAfterDelay(dev.apogee.mantis.NanowireRules.HEAVY_HIT_DELAY_TICKS + 3, () -> {
+            helper.assertTrue(near.getHealth() < nearHealth, "The two-wire lash hits 6 blocks away");
+            helper.assertTrue(far.getHealth() == farHealth, "The two-wire lash does not hit 11 blocks away");
+            near.discard();
+            far.discard();
+            cleanup(helper, player);
+            helper.succeed();
+        });
+    }
+
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_mantis_enchant")
     public void bladesCannotBeEnchanted(GameTestHelper helper) {
         var enchantments = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);

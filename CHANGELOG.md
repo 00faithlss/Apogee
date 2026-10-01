@@ -2,6 +2,17 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.14.0+1.21.1] — 2026-10-01
+
+### Cambiado (Nanocable)
+
+- Más alcance: el latigazo y el latigazo doble golpean hasta **7 bloques** (antes 5). En creativo, Minecraft suma sus 2 bloques de siempre.
+- Las trayectorias y el largo del cable dibujado se estiran en proporción (×1,4 hacia los lados y adelante, ×1,2 en altura), para que el cable llegue hasta donde golpea. Se calculan a partir del alcance, así que siguen cualquier ajuste futuro de `NanowireRules.REACH_BONUS`.
+
+### Pruebas
+
+- Gametest nuevo: con el nanocable fuera, el bonus de alcance es de 4 bloques sobre la base de 3, y el latigazo doble golpea a un objetivo a 6 bloques pero no a uno fuera de alcance.
+
 ## [0.13.0+1.21.1] — 2026-10-01
 
 ### Añadido

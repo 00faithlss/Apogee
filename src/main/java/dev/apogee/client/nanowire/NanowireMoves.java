@@ -1,5 +1,6 @@
 package dev.apogee.client.nanowire;
 
+import dev.apogee.mantis.NanowireRules;
 import net.minecraft.util.Mth;
 import org.joml.Vector3f;
 
@@ -86,9 +87,16 @@ public final class NanowireMoves {
      */
     private static final float HEAVY_MIDDLE = -0.12F;
     private static final float HEAVY_LEFT_LAG = 0.05F;
+    /**
+     * How much the moves are stretched to the wire's reach. The keys and lengths here were shaped
+     * for 5 blocks; across and forward they grow with the reach, and up and down by half as much,
+     * so the drawn wire gets as far as it hits.
+     */
+    private static final float SPREAD = (float) ((3.0 + NanowireRules.REACH_BONUS) / 5.0);
+    private static final float LIFT = 1.0F + (SPREAD - 1.0F) * 0.5F;
     /** Longest the free wire gets, in blocks. */
-    private static final float LASH_LENGTH = 4.2F;
-    private static final float HEAVY_LENGTH = 5.0F;
+    private static final float LASH_LENGTH = 4.2F * SPREAD;
+    private static final float HEAVY_LENGTH = 5.0F * SPREAD;
     /** Samples per stretch between two keys when a path is built. */
     private static final int SAMPLES_PER_KEY = 24;
     /** Progress along the path (0..1) against move time, from each move's speed curve. */
@@ -207,7 +215,7 @@ public final class NanowireMoves {
         Vector3f[] points = new Vector3f[keys.length + 2];
         points[0] = new Vector3f(grip);
         for (int i = 0; i < keys.length; i++) {
-            points[i + 1] = new Vector3f(side * keys[i][0], flip * keys[i][1] + lift, keys[i][2]);
+            points[i + 1] = new Vector3f(side * keys[i][0] * SPREAD, (flip * keys[i][1] + lift) * LIFT, keys[i][2] * SPREAD);
         }
         points[points.length - 1] = new Vector3f(held);
         int stretches = points.length - 1;
