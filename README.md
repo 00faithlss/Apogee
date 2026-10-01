@@ -219,6 +219,14 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 - `runRipperdocSmoke`: abre el cliente, coloca la mesa de matasanos, acuesta al jugador, instala implantes (comprueba el daño de la cirugía), rota el visor en modo skin y rayos X, filma la pose acostada (también desde arriba, con un bloque de oro junto al pie y uno de diamante junto a la cabecera) y comprueba que el inventario ya no muestra las ranuras de ciberware, en `build/ripperdoc-smoke/screenshots`.
 - `runNanowireSmoke`: abre el cliente, equipa el Nanocable y filma cada tick de los latigazos y del latigazo doble, en tercera y primera persona, y el repliegue, en `build/nanowire-smoke/screenshots`.
 
+Las comprobaciones numéricas de las animaciones del Nanocable también se ejecutan con `./gradlew nanowireMotionTest` (incluidas en `build`). Para comparar dos ejecuciones con capturas guardadas:
+
+```bash
+python3 tools/nanowire_review.py <capturas-antes> <capturas-despues> build/nanowire-animation-review/preview
+```
+
+Genera un MP4 con los ataques de ambas vistas y un GIF de la primera persona. Requiere Pillow y FFmpeg. Usa el mismo nombre de jugador, tamaño de ventana y FOV en las dos ejecuciones para comparar el movimiento.
+
 ```bash
 tools/mantis_tests.sh mp
 tools/mantis_tests.sh compat

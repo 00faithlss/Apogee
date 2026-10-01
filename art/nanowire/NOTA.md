@@ -26,9 +26,9 @@ python3 tools/nanowire_strip_wire.py <paquete>/src/main/resources/assets/apogee
 El cable se calcula en cada fotograma (`client/nanowire/NanowireWire` y `NanowireMoves`), en primera y en tercera persona:
 
 - En reposo va tenso entre las dos manos, con un leve zumbido.
-- Cada golpe sigue una curva por puntos clave (Catmull-Rom centrípeta) que se recorre por longitud de arco con una sola curva de velocidad, así la punta acelera y frena sin tirones.
-- El cable tiene largo fijo y se desliza por el camino de su punta, por eso los lazos se forman solos.
-- Al golpear, los dos cables se separan: cada uno sale como un látigo desde su propia mano y, al recogerse, se tensa y vuelve a unirse con el otro en el centro. El golpe doble se turna entre tres formas: una X, un tajo vertical con los cables en paralelo y una S con el cable derecho arriba y el izquierdo abajo.
+- El golpe simple sigue una curva por puntos clave (Catmull-Rom centrípeta) que se recorre por longitud de arco con una sola curva de velocidad, así la punta acelera y frena sin tirones.
+- En el golpe simple el cable se desliza por el camino de su punta. El doble transmite un tirón descendente desde la mano hasta la punta con retraso a lo largo de un cable de largo limitado.
+- Al golpear, los dos cables se separan desde sus propias manos y, al recogerse, vuelven a unirse en el centro. Los tres estilos del golpe doble bajan desde arriba: cruzado, paralelo y con un giro lateral y retraso del brazo izquierdo.
 - Las estelas son el mismo cable unos instantes antes.
 - Se dibuja como cintas orientadas a la cámara: un núcleo rojo emisivo con la textura del paquete y un halo aditivo.
 
