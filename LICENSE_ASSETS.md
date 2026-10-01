@@ -98,7 +98,7 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 
 ## Sonidos del Nanocable
 
-- Origen: cuatro MP3 aportados por el autor del proyecto: despliegue, guardado, golpes al aire y golpes (cuatro sonidos cada uno, separados por silencios).
+- Origen: audio del juego Cyberpunk 2077 (CD PROJEKT RED), descargado por el autor del proyecto desde [Cyberpunk 2077 SoundDB](https://sounddb.redmodding.org/), la misma fuente que los de las Cuchillas Mantis. Llegó en cuatro MP3: despliegue, guardado, golpes al aire y golpes (cuatro sonidos cada uno, separados por silencios).
 - Convertidos a Ogg Vorbis mono de 48 kHz, recortados con un fundido de salida y con el pico normalizado a -1 dB.
 - Usado:
   - `sounds/nanowire/deploy.ogg` (despliegue) y `sounds/nanowire/retract.ogg` (guardado);

@@ -2,6 +2,13 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [0.7.1+1.21.1] — 2026-10-01
+
+### Corregido (Nanocable)
+
+- El latigazo doble (clic derecho) dibuja una S, como pidió el autor del proyecto: el cable de la mano derecha va por arriba, sale hacia la derecha y cruza la vista hacia la izquierda; el de la mano izquierda hace el trazo de abajo, al revés. Antes los dos daban las mismas vueltas grandes y se cruzaban en el centro, así que parecían un solo cable.
+- La procedencia de los sonidos del Nanocable en `LICENSE_ASSETS.md`: son de Cyberpunk 2077 SoundDB, como los de las Cuchillas Mantis.
+
 ## [0.7.0+1.21.1] — 2026-09-30
 
 ### Añadido (Nanocable)

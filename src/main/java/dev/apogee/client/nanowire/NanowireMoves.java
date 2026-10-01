@@ -10,9 +10,9 @@ import org.joml.Vector3f;
  * way a lashed cord lies, so loops in the path become loops in the wire.
  *
  * <p>Shaped after a Cyberpunk 2077 monowire clip, frame by frame at 30 fps: the lash's arm crosses
- * the view in about 0.13 s and the wire closes a wide loop around the target right after; the
- * two-wire lash reaches out in about 0.2 s, spins in wide stacked loops for another 0.2 s and fades
- * over about 0.4 s.
+ * the view in about 0.13 s and the wire closes a wide loop around the target right after. The
+ * two-wire lash draws an S across the view, as the project author asked: the right wire sweeps
+ * over the top from right to left, the left wire under it from left to right.
  *
  * <p>The end travels its path by distance, following one smooth speed curve per move, so it never
  * speeds up and slows down again between the path's keys. As the wire is reeled in it is pulled
@@ -32,27 +32,28 @@ final class NanowireMoves {
             {0.00F, -0.20F, 1.00F},
     };
 
-    /** The right wire of the two-wire lash: a rising spiral of two wide loops in front. */
+    /**
+     * The right wire of the two-wire lash, the upper stroke of an S: out and up to the right, a
+     * wide sweep across the top of the view to the left, where it curls down and comes back.
+     */
     private static final float[][] HEAVY = {
-            {0.45F, -0.05F, 0.60F},
-            {1.50F, 0.05F, 1.80F},
-            {0.30F, 0.15F, 3.40F},
-            {-1.45F, 0.25F, 2.50F},
-            {-0.50F, 0.30F, 1.20F},
-            {1.35F, 0.40F, 1.90F},
-            {0.50F, 0.45F, 3.30F},
-            {-1.30F, 0.40F, 2.60F},
-            {-0.40F, 0.30F, 1.40F},
-            {0.00F, 0.10F, 0.90F},
+            {0.45F, 0.05F, 0.60F},
+            {1.40F, 0.30F, 1.60F},
+            {1.00F, 0.52F, 2.90F},
+            {-0.40F, 0.60F, 3.30F},
+            {-1.45F, 0.45F, 2.40F},
+            {-1.20F, 0.22F, 1.40F},
+            {-0.35F, 0.12F, 1.10F},
+            {0.00F, 0.05F, 0.90F},
     };
 
     /**
-     * The left wire of the two-wire lash spins the same way as the right one, but lower, further
-     * left and a moment later, so the two read as separate whips instead of one mirrored bundle.
+     * The left wire is the lower stroke: the right wire's path turned half a turn about the
+     * middle of the view (X mirrored, Y flipped about this height), so the two wires draw one S
+     * and never cross; it also starts a moment later.
      */
-    private static final float HEAVY_LEFT_DROP = 0.45F;
-    private static final float HEAVY_LEFT_SHIFT = 0.55F;
-    private static final float HEAVY_LEFT_LAG = 0.06F;
+    private static final float HEAVY_MIDDLE = -0.12F;
+    private static final float HEAVY_LEFT_LAG = 0.05F;
     /** Longest the free wire gets, in blocks. */
     private static final float LASH_LENGTH = 4.2F;
     private static final float HEAVY_LENGTH = 5.0F;
@@ -147,14 +148,14 @@ final class NanowireMoves {
 
     /** The lash path of the arm on {@code side} (+1 right, -1 left). */
     static Path lash(float side, Vector3f grip, Vector3f held) {
-        return build(LASH, side, 0.0F, 0.0F, grip, held, false);
+        return build(LASH, side, 1.0F, 0.0F, grip, held, false);
     }
 
     /** One wire's path of the two-wire lash. */
     static Path heavy(float side, Vector3f grip, Vector3f held) {
         return side > 0.0F
-                ? build(HEAVY, 1.0F, 0.0F, 0.0F, grip, held, true)
-                : build(HEAVY, 1.0F, -HEAVY_LEFT_SHIFT, -HEAVY_LEFT_DROP, grip, held, true);
+                ? build(HEAVY, 1.0F, 1.0F, 0.0F, grip, held, true)
+                : build(HEAVY, -1.0F, -1.0F, 2.0F * HEAVY_MIDDLE, grip, held, true);
     }
 
     /** Move time of one wire in the two-wire lash: the left one starts a moment after the right. */
@@ -166,11 +167,11 @@ final class NanowireMoves {
      * The end's path: out of the fist through the keys and back to the point between the fists.
      * Each wire whips from its own hand, so the two only meet again in the middle at the end.
      */
-    private static Path build(float[][] keys, float side, float shift, float drop, Vector3f grip, Vector3f held, boolean heavy) {
+    private static Path build(float[][] keys, float side, float flip, float lift, Vector3f grip, Vector3f held, boolean heavy) {
         Vector3f[] points = new Vector3f[keys.length + 2];
         points[0] = new Vector3f(grip);
         for (int i = 0; i < keys.length; i++) {
-            points[i + 1] = new Vector3f(side * keys[i][0] + shift, keys[i][1] + drop, keys[i][2]);
+            points[i + 1] = new Vector3f(side * keys[i][0], flip * keys[i][1] + lift, keys[i][2]);
         }
         points[points.length - 1] = new Vector3f(held);
         int stretches = points.length - 1;

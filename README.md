@@ -152,7 +152,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 0.7.0+1.21.1 (`build/libs/apogee-0.7.0+1.21.1.jar`) | Todos |
+| Apogee | 0.7.1+1.21.1 (`build/libs/apogee-0.7.1+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |
