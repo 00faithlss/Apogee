@@ -33,8 +33,8 @@ import org.joml.Vector3f;
 public final class NanowireWire {
     /** Anchor points in the pack's per-arm export space (pixels), right arm then left arm. */
     private static final float[][] NOZZLE = {{-2.61F, 0.0F, -6.74F}, {2.61F, 0.0F, -6.74F}};
-    private static final float[][] GUIDE = {{-2.61F, 0.0F, -11.85F}, {2.61F, 0.0F, -11.85F}};
-    private static final float[][] GRIP = {{-1.15F, 0.0F, -11.57F}, {1.15F, 0.0F, -11.57F}};
+    private static final float[][] GUIDE = {{-2.12F, 0.65F, -8.65F}, {2.12F, 0.65F, -8.65F}};
+    private static final float[][] GRIP = {{-3.12F, 0.65F, -10.15F}, {3.12F, 0.65F, -10.15F}};
     /** Points along the free part of a wire. */
     private static final int POINTS = 72;
     /** Fading copies of a moving wire, and how far back in move time each one is. */
@@ -157,7 +157,7 @@ public final class NanowireWire {
         }
         VertexConsumer additive = buffers.getBuffer(RenderType.dragonRays());
         for (List<Vector3f> wire : glow) {
-            halo(additive, wire, 6.0F, 0.5F);
+            halo(additive, wire, 4.5F, 0.35F);
         }
         for (int i = 0; i < trails.size(); i++) {
             halo(additive, trails.get(i), 2.6F, trailAlpha.get(i));
@@ -272,7 +272,7 @@ public final class NanowireWire {
      * thinner than about two pixels on screen further away.
      */
     private static float halfWidth(Vector3f p) {
-        return Math.max(0.0028F, 0.0017F * p.length());
+        return Math.max(0.0013F, 0.0009F * p.length());
     }
 
     /** Camera-facing sideways offset at point {@code i}, scaled by {@code widen}. */

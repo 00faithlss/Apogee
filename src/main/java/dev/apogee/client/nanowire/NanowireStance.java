@@ -14,7 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
  */
 public final class NanowireStance {
     private static final float GUARD_X = -1.20F;
-    private static final float GUARD_Y = 0.35F;
+    private static final float GUARD_Y = 0.12F;
 
     private NanowireStance() {
     }
@@ -27,8 +27,8 @@ public final class NanowireStance {
         if (deploy <= 0.0F) {
             return;
         }
-        float rightX = Mth.lerp(deploy, model.rightArm.xRot, GUARD_X);
-        float leftX = Mth.lerp(deploy, model.leftArm.xRot, GUARD_X);
+        float rightX = Mth.lerp(deploy, model.rightArm.xRot, GUARD_X + 0.05F);
+        float leftX = Mth.lerp(deploy, model.leftArm.xRot, GUARD_X - 0.16F);
         float rightY = Mth.lerp(deploy, model.rightArm.yRot, -GUARD_Y);
         float leftY = Mth.lerp(deploy, model.leftArm.yRot, GUARD_Y);
         float rightZ = Mth.lerp(deploy, model.rightArm.zRot, 0.0F);

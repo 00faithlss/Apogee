@@ -53,6 +53,8 @@ public final class NanowireHands {
                 poseStack.translate(0.0F, -RISE * (1.0F - deploy), 0.0F);
             }
             poseStack.translate(-side * GUARD_IN * deploy, GUARD_UP * deploy, 0.0F);
+            poseStack.translate(0.0F, (right ? -0.025F : 0.065F) * deploy, (right ? 0.015F : -0.035F) * deploy);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(-8.0F * deploy));
             float own = MantisClient.slashProgress(player, right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT, partialTick);
             float other = MantisClient.slashProgress(player, right ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT, partialTick);
             if (heavy >= 0.0F) {
