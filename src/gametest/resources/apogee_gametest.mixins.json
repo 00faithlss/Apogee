@@ -9,7 +9,8 @@
   "client": [
     "CloseCameraMixin",
     "ImplantMovementProbeMixin",
-    "MantisArmorProbeMixin"
+    "MantisArmorProbeMixin",
+    "MantisAttackProbeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

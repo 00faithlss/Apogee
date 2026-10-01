@@ -3,6 +3,7 @@ package dev.apogee.client.mantis;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.apogee.mantis.MantisRules;
+import dev.apogee.client.ripperdoc.RipperdocPatientPose;
 import dev.apogee.mantis.MantisVariant;
 import java.util.function.IntPredicate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -130,7 +131,10 @@ public final class MantisRig {
         rig.update(right ? 0 : 1, variant, MantisClient.isDeployed(player), progress);
         poseStack.pushPose();
         armPart.translateAndRotate(poseStack);
-        if (enforceStance && progress > 0.0F) {
+        if (firstPersonPass) {
+            MantisAttackPose.apply(poseStack, player, right, partialTick);
+        }
+        if (enforceStance && progress > 0.0F && !RipperdocPatientPose.resting(player)) {
             // A positive zRot lifts the right arm away from the body, a negative one the left.
             float target = progress * STANCE_ABDUCTION;
             float missing = right ? Math.max(0.0F, target - armPart.zRot) : Math.min(0.0F, -target - armPart.zRot);

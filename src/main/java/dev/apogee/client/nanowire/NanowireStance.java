@@ -1,6 +1,7 @@
 package dev.apogee.client.nanowire;
 
 import dev.apogee.client.mantis.MantisClient;
+import dev.apogee.client.ripperdoc.RipperdocPatientPose;
 import dev.apogee.mantis.MantisRules;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.util.Mth;
@@ -20,7 +21,7 @@ public final class NanowireStance {
     }
 
     public static void apply(PlayerModel<?> model, LivingEntity entity, float partialTick) {
-        if (MantisClient.firstPersonRendering) {
+        if (MantisClient.firstPersonRendering || RipperdocPatientPose.resting(entity)) {
             return;
         }
         float deploy = MantisClient.deployProgress(entity, partialTick);

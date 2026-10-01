@@ -51,7 +51,6 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
     private static int worldTicks = -1;
     private static boolean worldRequested;
     private static BlockPos foot;
-    private static float healthBefore;
 
     @Override
     public void onInitializeClient() {
@@ -81,6 +80,37 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
         }
         worldTicks++;
         int t = worldTicks;
+        if (t >= 160 && t < 250) {
+            Direction facing = new Direction[]{Direction.NORTH, Direction.EAST, Direction.WEST}[(t - 160) / 30];
+            int step = (t - 160) % 30;
+            if (step == 0) {
+                server(mc, (level, player) -> {
+                    player.stopRiding();
+                    for (Direction direction : Direction.Plane.HORIZONTAL) {
+                        level.setBlock(foot.relative(direction), Blocks.AIR.defaultBlockState(), 3);
+                    }
+                    BlockState state = ApogeeBlocks.RIPPERDOC_TABLE.defaultBlockState().setValue(RipperdocTableBlock.FACING, facing);
+                    level.setBlock(foot, state, 3);
+                    level.setBlock(foot.relative(facing), state.setValue(RipperdocTableBlock.PART, BedPart.HEAD), 3);
+                    RipperdocSeat.layDown(level, foot, state, player);
+                });
+            } else if (step == 12) {
+                mc.player.setYRot(facing.getOpposite().toYRot() + 55.0F);
+                mc.player.setXRot(20.0F);
+                mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
+            } else if (step == 24) {
+                check(mc.player.getVehicle() instanceof RipperdocSeat, facing + " patient mounted");
+                var renderer = (net.minecraft.client.renderer.entity.player.PlayerRenderer) mc.getEntityRenderDispatcher().getRenderer(mc.player);
+                var model = renderer.getModel();
+                check(Math.abs(model.body.xRot) < 0.01F && Math.abs(model.rightArm.xRot) < 0.01F
+                        && Math.abs(model.leftArm.xRot) < 0.01F && Math.abs(model.rightLeg.xRot - model.leftLeg.xRot) < 0.01F,
+                        facing + " patient rests symmetrically with deployed blades");
+                shot(mc, "12-patient-" + facing.getName());
+            } else if (step == 28) {
+                server(mc, (level, player) -> player.stopRiding());
+            }
+            return;
+        }
         switch (t) {
             case 10 -> {
                 mc.options.fov().set(70);
@@ -133,7 +163,6 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
                 check(mc.player.hasPose(net.minecraft.world.entity.Pose.SLEEPING), "the patient takes the sleeping pose");
                 check(mc.screen instanceof RipperdocScreen, "the ripperdoc screen is open");
                 shot(mc, "04-screen-empty");
-                healthBefore = mc.player.getHealth();
                 click(mc, XRAY);
             }
             case 54 -> {
@@ -143,14 +172,15 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
             }
             case 55 -> server(mc, (level, player) -> {
                 // Fit the Mantis Blades and the Sandevistan as clicks on their slots would.
+                float healthBefore = player.getHealth();
                 RipperdocMenu menu = (RipperdocMenu) player.containerMenu;
                 menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.ARMS, 0)).setByPlayer(player.getInventory().removeItem(0, 1));
                 menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.OS, 0)).setByPlayer(player.getInventory().removeItem(1, 1));
                 menu.broadcastChanges();
+                check(player.getHealth() < healthBefore, "surgery hurts immediately on the server");
             });
             case 64 -> {
                 check(MantisManager.equippedVariant(mc.player) != null, "the Mantis Blades are fitted");
-                check(mc.player.getHealth() < healthBefore, "surgery hurts: " + healthBefore + " -> " + mc.player.getHealth());
                 check(!RipperdocScreen.xray(), "the skin button turns x-ray off");
                 shot(mc, "05-screen-fitted");
                 click(mc, XRAY);
@@ -178,11 +208,19 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
             case 78 -> {
                 check(!(mc.player.getVehicle() instanceof RipperdocSeat), "closing the screen gets up from the couch");
                 // Lie down again without the screen to film the pose.
-                server(mc, (level, player) -> RipperdocSeat.layDown(level, foot, level.getBlockState(foot), player));
+                server(mc, (level, player) -> {
+                    level.setBlock(foot.north().east(), Blocks.AIR.defaultBlockState(), 3);
+                    level.setBlock(foot.south(2).east(), Blocks.AIR.defaultBlockState(), 3);
+                    RipperdocSeat.layDown(level, foot, level.getBlockState(foot), player);
+                });
             }
             case 82 -> {
                 mc.options.hideGui = true;
                 mc.options.setCameraType(CameraType.THIRD_PERSON_FRONT);
+            }
+            case 83 -> {
+                mc.player.setYRot(mc.player.getVehicle().getYRot() + 55.0F);
+                mc.player.setXRot(20.0F);
             }
             case 88 -> shot(mc, "07-patient-front");
             case 89 -> mc.options.setCameraType(CameraType.THIRD_PERSON_BACK);
@@ -199,7 +237,16 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
             }
             case 105 -> shot(mc, "10-patient-top");
             case 106 -> server(mc, (level, player) -> player.stopRiding());
-            case 112 -> {
+            case 112 -> server(mc, (level, player) -> {
+                MantisManager.toggle(player);
+                RipperdocSeat.layDown(level, foot, level.getBlockState(foot), player);
+            });
+            case 140 -> {
+                check(dev.apogee.client.mantis.MantisClient.isDeployed(mc.player), "blades remain deployed on the couch");
+                shot(mc, "11-patient-deployed");
+            }
+            case 145 -> server(mc, (level, player) -> player.stopRiding());
+            case 260 -> {
                 if (FAILURES.isEmpty()) {
                     LOGGER.info("Ripperdoc smoke run passed");
                 } else {

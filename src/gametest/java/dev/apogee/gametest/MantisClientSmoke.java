@@ -51,6 +51,7 @@ public final class MantisClientSmoke implements ClientModInitializer {
     private static final List<String> FAILURES = new ArrayList<>();
     private static final Item[] VARIANTS = {ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.MANTIS_BLADES};
     private static final String[] NAMES = {"thermal", "electric", "normal"};
+    private static final boolean ATTACK = Boolean.getBoolean("apogee.mantisAttackSmoke");
     private static final boolean ARMOR = Boolean.getBoolean("apogee.mantisArmorSmoke");
     private static final Item[] CHESTPLATES = {Items.IRON_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.NETHERITE_CHESTPLATE,
             Items.LEATHER_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.CHAINMAIL_CHESTPLATE};
@@ -65,7 +66,7 @@ public final class MantisClientSmoke implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        if (!Boolean.getBoolean("apogee.mantisSmoke") && !ARMOR) {
+        if (!Boolean.getBoolean("apogee.mantisSmoke") && !ARMOR && !ATTACK) {
             return;
         }
         ClientTickEvents.END_CLIENT_TICK.register(MantisClientSmoke::tick);
@@ -164,7 +165,7 @@ public final class MantisClientSmoke implements ClientModInitializer {
         if (worldTicks < START) {
             return;
         }
-        if (round >= (ARMOR ? Math.min(CHESTPLATES.length, Integer.getInteger("apogee.armorRounds", CHESTPLATES.length)) : VARIANTS.length)) {
+        if (round >= (ARMOR ? Math.min(CHESTPLATES.length, Integer.getInteger("apogee.armorRounds", CHESTPLATES.length)) : (ATTACK ? Integer.getInteger("apogee.attackRounds", VARIANTS.length) : VARIANTS.length))) {
             finish(mc);
             return;
         }
@@ -228,7 +229,11 @@ public final class MantisClientSmoke implements ClientModInitializer {
                 mc.options.setCameraType(CameraType.FIRST_PERSON);
             }
             case 130 -> shot(mc, name + "-07-open-first-person");
-            case 132 -> mc.player.swing(InteractionHand.MAIN_HAND);
+            case 132 -> {
+                if (ATTACK) attackClick(mc);
+                else mc.player.swing(InteractionHand.MAIN_HAND);
+            }
+            case 133 -> mc.options.keyAttack.setDown(false);
             case 137 -> shot(mc, name + "-08-attack-first-person");
             case 139 -> {
                 mc.options.hideGui = true;
@@ -251,7 +256,7 @@ public final class MantisClientSmoke implements ClientModInitializer {
                 check(!MantisClient.isDeployed(mc.player), name + " retracted on the client");
                 shot(mc, name + "-09-folded-first-person");
                 // Unfold again in first person, holding an item, so the folded view shows no implant arm.
-                server(mc, (level, player) -> player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD)));
+                server(mc, (level, player) -> player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ATTACK ? new Item[]{Items.SLIME_BALL, Items.IRON_SWORD, Items.BOW}[round % 3] : Items.IRON_SWORD)));
             }
             case 195 -> ClientPlayNetworking.send(ToggleMantis.INSTANCE);
             case 203 -> shot(mc, name + "-13-unfolding-first-person");
@@ -261,13 +266,29 @@ public final class MantisClientSmoke implements ClientModInitializer {
             case 225 -> {
                 check(MantisClient.isDeployed(mc.player), name + " deployed again on the client");
                 shot(mc, name + "-14-open-first-person-item");
-                mc.player.swing(InteractionHand.MAIN_HAND);
+                if (ATTACK) attackClick(mc);
+                else mc.player.swing(InteractionHand.MAIN_HAND);
             }
+            case 226 -> mc.options.keyAttack.setDown(false);
             case 227 -> shot(mc, name + "-15-slash-right-first-person");
-            case 234 -> mc.player.swing(InteractionHand.MAIN_HAND);
+            case 229 -> { if (ATTACK) check(MantisClient.slashProgress(mc.player, dev.apogee.mantis.MantisRules.ARM_RIGHT, 0.0F) >= 0.0F, name + " native right cut"); }
+            case 237 -> { if (ATTACK) check(MantisClient.slashProgress(mc.player, dev.apogee.mantis.MantisRules.ARM_LEFT, 0.0F) >= 0.0F, name + " native left cut"); }
+            case 234 -> {
+                if (ATTACK) attackClick(mc);
+                else mc.player.swing(InteractionHand.MAIN_HAND);
+            }
+            case 235 -> mc.options.keyAttack.setDown(false);
+            case 243 -> { if (ATTACK) {
+                net.minecraft.client.KeyMapping.click(com.mojang.blaze3d.platform.InputConstants.Type.MOUSE.getOrCreate(1));
+                mc.options.keyUse.setDown(true);
+            } }
+            case 244 -> mc.options.keyUse.setDown(false);
             case 236 -> shot(mc, name + "-16-slash-left-first-person");
             // Walk forward once the cut's clip is over: the open arms should swing with the steps.
-            case 247 -> mc.options.keyUp.setDown(true);
+            case 247 -> {
+                if (ATTACK) check(MantisClient.thrustProgress(mc.player, 0.0F) >= 0.0F, name + " native two-blade lunge");
+                mc.options.keyUp.setDown(true);
+            }
             case 253 -> shot(mc, name + "-16b-walking-first-person-a");
             case 254 -> shot(mc, name + "-16c-walking-first-person-b");
             case 255 -> {
@@ -290,6 +311,14 @@ public final class MantisClientSmoke implements ClientModInitializer {
             default -> {
             }
         }
+        if (ATTACK && t >= 226 && t <= 255) {
+            shot(mc, name + "-attack-frame-" + t);
+        }
+    }
+
+    private static void attackClick(Minecraft mc) {
+        net.minecraft.client.KeyMapping.click(com.mojang.blaze3d.platform.InputConstants.Type.MOUSE.getOrCreate(0));
+        mc.options.keyAttack.setDown(true);
     }
 
     private static void finish(Minecraft mc) {

@@ -120,6 +120,15 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
     public void renderRecursively(PoseStack poseStack, MantisArm animatable, GeoBone bone, RenderType renderType,
                                   MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick,
                                   int packedLight, int packedOverlay, int colour) {
+        // The view-space cut already moves the whole arm around the wrist. Keep GeckoLib's
+        // shoulder track for the world model; applying it again detaches the first-person hand.
+        boolean viewRoot = firstPerson && bone.getName().equals("arm_root");
+        float rx = bone.getRotX(), ry = bone.getRotY(), rz = bone.getRotZ();
+        if (viewRoot) {
+            bone.setRotX(0.0F);
+            bone.setRotY(0.0F);
+            bone.setRotZ(0.0F);
+        }
         boolean blade = bone.getName().equals("blade_slider");
         if (blade) {
             bladeDepth++;
@@ -130,6 +139,11 @@ public final class MantisArmGeoRenderer extends GeoObjectRenderer<MantisArm> {
         } finally {
             if (blade) {
                 bladeDepth--;
+            }
+            if (viewRoot) {
+                bone.setRotX(rx);
+                bone.setRotY(ry);
+                bone.setRotZ(rz);
             }
         }
     }

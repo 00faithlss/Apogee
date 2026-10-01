@@ -3,6 +3,7 @@ package dev.apogee.mixin.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.apogee.client.ripperdoc.RipperdocScreen;
+import dev.apogee.client.ripperdoc.RipperdocPatientPose;
 import dev.apogee.ripperdoc.RipperdocSeat;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * A patient on the ripperdoc couch is in the sleeping pose (see
  * {@link dev.apogee.mixin.RipperdocPatientPoseMixin}), but lies along the couch rather than across
  * a bed: on their back, the hips on the hinge of the cushion, the body raised along the head end
- * and the legs flat along the foot end (see {@link RipperdocPatientModelMixin}). The model in the
+ * and the legs flat along the foot end (see {@link RipperdocPatientPose}). The model in the
  * ripperdoc screen's view stands upright.
  */
 @Mixin(PlayerRenderer.class)

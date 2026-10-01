@@ -7,12 +7,10 @@ import dev.apogee.client.mantis.ImplantHandRenderer;
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.mantis.MantisHandPose;
 import dev.apogee.client.nanowire.NanowireHands;
-import dev.apogee.mantis.MantisRules;
 import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -76,7 +74,6 @@ public abstract class MantisItemInHandRendererMixin implements ImplantHandRender
         }
         poseStack.pushPose();
         MantisHandPose.applyViewLag(poseStack, player, partialTick);
-        float thrust = MantisClient.thrustProgress(player, partialTick);
         for (HumanoidArm arm : new HumanoidArm[]{HumanoidArm.RIGHT, HumanoidArm.LEFT}) {
             boolean right = arm == HumanoidArm.RIGHT;
             float side = right ? 1.0F : -1.0F;
@@ -99,23 +96,10 @@ public abstract class MantisItemInHandRendererMixin implements ImplantHandRender
                 poseStack.mulPose(Axis.YP.rotationDegrees(-12.0F * guard));
                 poseStack.mulPose(Axis.ZP.rotationDegrees(8.0F * guard));
             }
-            if (thrust >= 0.0F) {
-                float lunge = Mth.sin(thrust * Mth.PI);
-                poseStack.translate(-side * 0.30F * lunge, 0.12F * lunge, -0.60F * lunge);
-                poseStack.mulPose(Axis.YP.rotationDegrees(side * 16.0F * lunge));
-            }
-            float slash = thrust >= 0.0F ? -1.0F
-                    : MantisClient.slashProgress(player, right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT, partialTick);
-            if (slash >= 0.0F) {
-                // A diagonal cut: the forearm sweeps in from its side of the view and down across it.
-                float reach = Mth.sin(Mth.sqrt(slash) * Mth.PI);
-                poseStack.translate(-side * 0.22F * reach, -0.08F * reach, -0.18F * reach);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(side * 28.0F * reach));
-            }
-            float swing = Math.max(slash, 0.0F);
-            // The vanilla swing, on whichever hand cuts; the implant's attack clip adds the blade's arc.
+            // Attack motion is applied at the arm's wrist by the rig after its native pose.
+            // Feeding a vanilla swing here would move the same arm a second time.
             if (!PunchyCompat.renderArm(poseStack, buffers, light, player, right, partialTick)) {
-                renderPlayerArm(poseStack, buffers, light, 0.0F, swing, arm);
+                renderPlayerArm(poseStack, buffers, light, 0.0F, 0.0F, arm);
             }
             poseStack.popPose();
         }

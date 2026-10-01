@@ -3,6 +3,7 @@ package dev.apogee.mixin.client;
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.mantis.MantisRig;
 import dev.apogee.client.nanowire.NanowireStance;
+import dev.apogee.client.ripperdoc.RipperdocPatientPose;
 import dev.apogee.mantis.MantisVariant;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.util.Mth;
@@ -19,6 +20,7 @@ public abstract class MantisPlayerModelMixin<T extends LivingEntity> {
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
     private void apogee$mantisPose(T entity, float limbSwing, float limbSwingAmount, float ageInTicks,
                                    float netHeadYaw, float headPitch, CallbackInfo ci) {
+        RipperdocPatientPose.apply((PlayerModel<?>) (Object) this, entity, headPitch);
         MantisVariant variant = MantisClient.variant(entity);
         if (variant == null) {
             return;
@@ -33,7 +35,7 @@ public abstract class MantisPlayerModelMixin<T extends LivingEntity> {
         model.leftArm.visible = false;
         model.rightSleeve.visible = false;
         model.leftSleeve.visible = false;
-        if (MantisClient.firstPersonRendering) {
+        if (MantisClient.firstPersonRendering || RipperdocPatientPose.resting(entity)) {
             return;
         }
         float partial = ageInTicks - entity.tickCount;
