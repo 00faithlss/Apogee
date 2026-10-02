@@ -6,8 +6,8 @@
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": ["dev.apogee.gametest.SandevistanGameTests", "dev.apogee.gametest.MantisGameTests"],
-    "main": ["dev.apogee.gametest.MultiplayerSmokeServer"],
-    "client": ["dev.apogee.gametest.ImplantMovementSmoke", "dev.apogee.gametest.ApogeeClientSmoke", "dev.apogee.gametest.MantisClientSmoke", "dev.apogee.gametest.MantisMotionStudy", "dev.apogee.gametest.MultiplayerSmokeClient", "dev.apogee.gametest.NanowireClientSmoke", "dev.apogee.gametest.RipperdocClientSmoke"]
+    "main": ["dev.apogee.gametest.MultiplayerSmokeServer", "dev.apogee.gametest.BloodPumpMultiplayerServer"],
+    "client": ["dev.apogee.gametest.ImplantMovementSmoke", "dev.apogee.gametest.ApogeeClientSmoke", "dev.apogee.gametest.MantisClientSmoke", "dev.apogee.gametest.MantisMotionStudy", "dev.apogee.gametest.MultiplayerSmokeClient", "dev.apogee.gametest.NanowireClientSmoke", "dev.apogee.gametest.BloodPumpClientSmoke", "dev.apogee.gametest.BloodPumpMultiplayerClient", "dev.apogee.gametest.RipperdocClientSmoke"]
   },
   "mixins": ["apogee_gametest.mixins.json"],
   "depends": {
