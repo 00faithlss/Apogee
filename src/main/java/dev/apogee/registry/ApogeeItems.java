@@ -1,6 +1,7 @@
 package dev.apogee.registry;
 
 import dev.apogee.Apogee;
+import dev.apogee.item.BloodPumpItem;
 import dev.apogee.item.MantisBladesItem;
 import dev.apogee.item.NanowireItem;
 import dev.apogee.item.SandevistanItem;
@@ -24,6 +25,10 @@ public final class ApogeeItems {
     public static final Item MANTIS_BLADES_ELECTRIC = mantis(MantisVariant.ELECTRIC);
     public static final Item NANOWIRE = new NanowireItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant());
     public static final Item NANOWIRE_WHITE = new NanowireItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant(), MantisVariant.NANOWIRE_WHITE);
+    public static final Item BLOOD_PUMP = new BloodPumpItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant());
+    // Blood Pump parts.
+    public static final Item HEMO_CHAMBER = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item BIO_MONITOR = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final Item OS_CORE_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
     public static final Item OVERDRIVE_KERNEL_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
     public static final Item QUANTUM_SYNC_LATTICE_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
@@ -59,6 +64,9 @@ public final class ApogeeItems {
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("mantis_blades_electric"), MANTIS_BLADES_ELECTRIC);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("nanowire"), NANOWIRE);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("nanowire_white"), NANOWIRE_WHITE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("blood_pump"), BLOOD_PUMP);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("hemo_chamber"), HEMO_CHAMBER);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("bio_monitor"), BIO_MONITOR);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("os_core_t5"), OS_CORE_T5);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("apogee_overdrive_kernel_t5"), OVERDRIVE_KERNEL_T5);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("quantum_sync_lattice_t5"), QUANTUM_SYNC_LATTICE_T5);
@@ -84,6 +92,9 @@ public final class ApogeeItems {
                     output.accept(MANTIS_BLADES_ELECTRIC);
                     output.accept(NANOWIRE);
                     output.accept(NANOWIRE_WHITE);
+                    output.accept(BLOOD_PUMP);
+                    output.accept(HEMO_CHAMBER);
+                    output.accept(BIO_MONITOR);
                     output.accept(OS_CORE_T5);
                     output.accept(OVERDRIVE_KERNEL_T5);
                     output.accept(QUANTUM_SYNC_LATTICE_T5);

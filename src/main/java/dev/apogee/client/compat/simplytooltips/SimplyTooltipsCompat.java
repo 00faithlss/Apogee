@@ -1,5 +1,6 @@
 package dev.apogee.client.compat.simplytooltips;
 
+import dev.apogee.client.tooltip.BloodPumpTooltipContent;
 import dev.apogee.client.tooltip.MantisTooltipContent;
 import dev.apogee.client.tooltip.SandevistanTooltipContent;
 import dev.apogee.item.ArmCyberwareItem;
@@ -20,6 +21,7 @@ import net.sweenus.simplytooltips.client.render.ThemeRegistry;
 public final class SimplyTooltipsCompat {
     public static final String THEME_KEY = "apogee_sandevistan";
     public static final String MANTIS_THEME_KEY = "apogee_mantis";
+    public static final String BLOOD_PUMP_THEME_KEY = "apogee_blood_pump";
 
     private SimplyTooltipsCompat() {
     }
@@ -27,7 +29,39 @@ public final class SimplyTooltipsCompat {
     public static void register() {
         TooltipProviderRegistry.register(new SandevistanProvider(), 100);
         TooltipProviderRegistry.register(new MantisProvider(), 100);
+        TooltipProviderRegistry.register(new BloodPumpProvider(), 100);
         ClientTickEvents.END_CLIENT_TICK.register(client -> TooltipTabs.releaseIfHidden());
+    }
+
+    /** Same routing for the Blood Pump; TooltipRendererMixin draws {@link BloodPumpTooltipPanel}. */
+    private static final class BloodPumpProvider implements TooltipProvider {
+        @Override
+        public boolean supports(ItemStack stack) {
+            return stack.is(ApogeeItems.BLOOD_PUMP);
+        }
+
+        @Override
+        public ModernTooltipModel build(ItemStack stack, List<Component> lines, boolean altDown) {
+            List<String> ability = BloodPumpTooltipContent.descriptionLines().stream().map(Component::getString).toList();
+            List<String> body = new ArrayList<>();
+            body.add(ModernTooltipModel.SECTION_MARKER + BloodPumpTooltipContent.statsHeader().getString());
+            for (BloodPumpTooltipContent.Stat stat : BloodPumpTooltipContent.stats()) {
+                body.add(stat.label().getString() + ": " + stat.value().getString());
+            }
+            body.add(BloodPumpTooltipContent.note().getString());
+            return new ModernTooltipModel(
+                    BloodPumpTooltipContent.title().getString(),
+                    List.of(BloodPumpTooltipContent.badge().getString()),
+                    TooltipBorderStyle.IRON,
+                    ability,
+                    body,
+                    List.of(),
+                    ThemeRegistry.get(BLOOD_PUMP_THEME_KEY).colors(),
+                    null,
+                    "",
+                    BLOOD_PUMP_THEME_KEY,
+                    null);
+        }
     }
 
     /** Same routing for the arm cyberware (Mantis Blades and nanowire); TooltipRendererMixin draws {@link MantisTooltipPanel}. */

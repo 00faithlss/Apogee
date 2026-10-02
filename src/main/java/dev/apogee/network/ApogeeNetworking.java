@@ -19,6 +19,8 @@ public final class ApogeeNetworking {
         PayloadTypeRegistry.playC2S().register(SteamDashRequest.TYPE, SteamDashRequest.CODEC);
         PayloadTypeRegistry.playC2S().register(ToggleMantis.TYPE, ToggleMantis.CODEC);
         PayloadTypeRegistry.playC2S().register(MantisThrust.TYPE, MantisThrust.CODEC);
+        PayloadTypeRegistry.playC2S().register(ToggleBloodPump.TYPE, ToggleBloodPump.CODEC);
+        PayloadTypeRegistry.playS2C().register(BloodPumpUse.TYPE, BloodPumpUse.CODEC);
         PayloadTypeRegistry.playS2C().register(MantisSync.TYPE, MantisSync.CODEC);
         PayloadTypeRegistry.playS2C().register(MantisSwing.TYPE, MantisSwing.CODEC);
         PayloadTypeRegistry.playS2C().register(RulesSync.TYPE, RulesSync.CODEC);
@@ -55,6 +57,36 @@ public final class ApogeeNetworking {
         public static final ToggleMantis INSTANCE = new ToggleMantis();
         public static final Type<ToggleMantis> TYPE = new Type<>(Apogee.id("toggle_mantis"));
         public static final StreamCodec<FriendlyByteBuf, ToggleMantis> CODEC = StreamCodec.unit(INSTANCE);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client asks to fire the Blood Pump. The server validates. */
+    public record ToggleBloodPump() implements CustomPacketPayload {
+        public static final ToggleBloodPump INSTANCE = new ToggleBloodPump();
+        public static final Type<ToggleBloodPump> TYPE = new Type<>(Apogee.id("toggle_blood_pump"));
+        public static final StreamCodec<FriendlyByteBuf, ToggleBloodPump> CODEC = StreamCodec.unit(INSTANCE);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /**
+     * Server game time at which a player's Blood Pump last fired (0 if never or after the recharge
+     * was cleared). Sent to the player and everyone tracking them.
+     */
+    public record BloodPumpUse(int entityId, long startTime) implements CustomPacketPayload {
+        public static final Type<BloodPumpUse> TYPE = new Type<>(Apogee.id("blood_pump_use"));
+        public static final StreamCodec<FriendlyByteBuf, BloodPumpUse> CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, BloodPumpUse::entityId,
+                ByteBufCodecs.VAR_LONG, BloodPumpUse::startTime,
+                BloodPumpUse::new
+        );
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

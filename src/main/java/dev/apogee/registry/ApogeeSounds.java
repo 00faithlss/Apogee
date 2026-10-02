@@ -24,6 +24,8 @@ public final class ApogeeSounds {
     public static final SoundEvent NANOWIRE_HIT = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_hit"));
     public static final SoundEvent NANOWIRE_HEAVY = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_heavy"));
 
+    public static final SoundEvent BLOOD_PUMP = SoundEvent.createVariableRangeEvent(Apogee.id("blood_pump"));
+
     private ApogeeSounds() {
     }
 
@@ -45,5 +47,6 @@ public final class ApogeeSounds {
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_SWING.getLocation(), NANOWIRE_SWING);
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HIT.getLocation(), NANOWIRE_HIT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HEAVY.getLocation(), NANOWIRE_HEAVY);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BLOOD_PUMP.getLocation(), BLOOD_PUMP);
     }
 }

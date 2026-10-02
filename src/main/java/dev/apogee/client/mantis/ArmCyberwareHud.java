@@ -25,6 +25,11 @@ public final class ArmCyberwareHud {
     private ArmCyberwareHud() {
     }
 
+    /** How visible the arm cyberware's square is, 0 to 1. */
+    public static float alpha() {
+        return alpha;
+    }
+
     public static void tick(Minecraft mc) {
         LocalPlayer player = mc.player;
         boolean shown = player != null && (MantisClient.isDeployed(player) || MantisClient.heavyCooldownLeft(0.0F) > 0.0F)

@@ -2,6 +2,9 @@ package dev.apogee.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.apogee.Apogee;
+import dev.apogee.client.bloodpump.BloodPumpArmRenderer;
+import dev.apogee.client.bloodpump.BloodPumpClient;
+import dev.apogee.client.bloodpump.BloodPumpHud;
 import dev.apogee.client.config.ApogeeClientConfig;
 import dev.apogee.client.fx.AfterimageRenderer;
 import dev.apogee.client.fx.SandevistanEffects;
@@ -9,13 +12,16 @@ import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.model.SandevistanModel;
 import dev.apogee.client.render.MantisArmsLayer;
 import dev.apogee.client.render.SandevistanImplantRenderer;
+import dev.apogee.client.tooltip.BloodPumpTooltipContent;
 import dev.apogee.client.tooltip.MantisTooltipContent;
 import dev.apogee.client.tooltip.SandevistanTooltipContent;
 import dev.apogee.item.ArmCyberwareItem;
+import dev.apogee.network.ApogeeNetworking.BloodPumpUse;
 import dev.apogee.network.ApogeeNetworking.MantisSwing;
 import dev.apogee.network.ApogeeNetworking.MantisSync;
 import dev.apogee.network.ApogeeNetworking.RulesSync;
 import dev.apogee.network.ApogeeNetworking.TimeFieldSync;
+import dev.apogee.network.ApogeeNetworking.ToggleBloodPump;
 import dev.apogee.network.ApogeeNetworking.ToggleMantis;
 import dev.apogee.network.ApogeeNetworking.ToggleSandevistan;
 import dev.apogee.network.ApogeeNetworking.WearerStatus;
@@ -55,6 +61,9 @@ public final class ApogeeClient implements ClientModInitializer {
     public static final KeyMapping TOGGLE_MANTIS = new KeyMapping(
             "key.apogee.toggle_mantis", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.apogee");
 
+    public static final KeyMapping ACTIVATE_BLOOD_PUMP = new KeyMapping(
+            "key.apogee.activate_blood_pump", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, "key.categories.apogee");
+
     private static long clientTicks;
 
     @Override
@@ -62,6 +71,7 @@ public final class ApogeeClient implements ClientModInitializer {
         ApogeeClientConfig.load();
         KeyBindingHelper.registerKeyBinding(ACTIVATE_SANDEVISTAN);
         KeyBindingHelper.registerKeyBinding(TOGGLE_MANTIS);
+        KeyBindingHelper.registerKeyBinding(ACTIVATE_BLOOD_PUMP);
         dev.apogee.client.compat.immersivearmors.SteamDashClient.register();
 
         EntityModelLayerRegistry.registerModelLayer(SandevistanModel.LAYER, SandevistanModel::createLayer);
@@ -71,6 +81,7 @@ public final class ApogeeClient implements ClientModInitializer {
             }
         });
         TrinketRendererRegistry.registerRenderer(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
+        TrinketRendererRegistry.registerRenderer(ApogeeItems.BLOOD_PUMP, BloodPumpArmRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.NANOWIRE, dev.apogee.client.nanowire.NanowireItemRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.NANOWIRE_WHITE, dev.apogee.client.nanowire.NanowireItemRenderer.INSTANCE);
@@ -85,6 +96,7 @@ public final class ApogeeClient implements ClientModInitializer {
             ApogeeClientState.acceptStatus(payload);
             SandevistanEffects.onStatus(previous, payload);
         });
+        ClientPlayNetworking.registerGlobalReceiver(BloodPumpUse.TYPE, (payload, context) -> BloodPumpClient.accept(payload));
         ClientPlayNetworking.registerGlobalReceiver(MantisSync.TYPE, (payload, context) -> MantisClient.accept(payload));
         ClientPlayNetworking.registerGlobalReceiver(MantisSwing.TYPE, (payload, context) -> MantisClient.accept(payload));
         ClientPlayNetworking.registerGlobalReceiver(TimeFieldSync.TYPE, (payload, context) -> {
@@ -99,8 +111,10 @@ public final class ApogeeClient implements ClientModInitializer {
             float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
             SandevistanEffects.renderHud(graphics, partialTick);
             dev.apogee.client.mantis.ArmCyberwareHud.render(graphics, partialTick);
+            BloodPumpHud.render(graphics, partialTick);
         });
         ClientTickEvents.END_CLIENT_TICK.register(dev.apogee.client.mantis.ArmCyberwareHud::tick);
+        ClientTickEvents.END_CLIENT_TICK.register(BloodPumpHud::tick);
         WorldRenderEvents.AFTER_ENTITIES.register(context -> AfterimageRenderer.render(context, clientTicks));
 
         if (FabricLoader.getInstance().isModLoaded("simplytooltips")) {
@@ -111,6 +125,12 @@ public final class ApogeeClient implements ClientModInitializer {
                 if (stack.getItem() instanceof ArmCyberwareItem cyberware) {
                     lines.add(MantisTooltipContent.badge().copy().withStyle(ChatFormatting.YELLOW));
                     MantisTooltipContent.plainLines(cyberware.variant()).forEach(line -> lines.add(line.copy().withStyle(ChatFormatting.GRAY)));
+                    return;
+                }
+                if (stack.is(ApogeeItems.BLOOD_PUMP)) {
+                    lines.add(BloodPumpTooltipContent.badge().copy().withStyle(ChatFormatting.RED));
+                    BloodPumpTooltipContent.descriptionLines().forEach(line -> lines.add(line.copy().withStyle(ChatFormatting.GRAY)));
+                    BloodPumpTooltipContent.plainLines().forEach(line -> lines.add(line.copy().withStyle(ChatFormatting.DARK_GRAY)));
                     return;
                 }
                 if (!stack.is(ApogeeItems.SANDEVISTAN)) {
@@ -132,6 +152,8 @@ public final class ApogeeClient implements ClientModInitializer {
         MantisClient.reset();
         SandevistanEffects.reset();
         AfterimageRenderer.reset();
+        BloodPumpClient.reset();
+        BloodPumpArmRenderer.clear();
     }
 
     private static void onEndTick(Minecraft client) {
@@ -139,6 +161,11 @@ public final class ApogeeClient implements ClientModInitializer {
         while (ACTIVATE_SANDEVISTAN.consumeClick()) {
             if (client.player != null && client.screen == null && ClientPlayNetworking.canSend(ToggleSandevistan.TYPE)) {
                 ClientPlayNetworking.send(ToggleSandevistan.INSTANCE);
+            }
+        }
+        while (ACTIVATE_BLOOD_PUMP.consumeClick()) {
+            if (client.player != null && client.screen == null && ClientPlayNetworking.canSend(ToggleBloodPump.TYPE)) {
+                ClientPlayNetworking.send(ToggleBloodPump.INSTANCE);
             }
         }
         while (TOGGLE_MANTIS.consumeClick()) {

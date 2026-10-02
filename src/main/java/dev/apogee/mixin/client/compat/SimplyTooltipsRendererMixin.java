@@ -1,5 +1,6 @@
 package dev.apogee.mixin.client.compat;
 
+import dev.apogee.client.compat.simplytooltips.BloodPumpTooltipPanel;
 import dev.apogee.client.compat.simplytooltips.MantisTooltipPanel;
 import dev.apogee.client.compat.simplytooltips.SandevistanTooltipPanel;
 import dev.apogee.item.ArmCyberwareItem;
@@ -44,6 +45,9 @@ public abstract class SimplyTooltipsRendererMixin {
         }
         if (stack.is(ApogeeItems.SANDEVISTAN)) {
             SandevistanTooltipPanel.render(graphics, font, stack, x, y, screenW, screenH);
+            ci.cancel();
+        } else if (stack.is(ApogeeItems.BLOOD_PUMP)) {
+            BloodPumpTooltipPanel.render(graphics, font, stack, x, y, screenW, screenH);
             ci.cancel();
         } else if (stack.getItem() instanceof ArmCyberwareItem cyberware) {
             MantisTooltipPanel.render(graphics, font, stack, cyberware.variant(), x, y, screenW, screenH);
