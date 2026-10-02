@@ -5,8 +5,10 @@ import dev.apogee.berserk.BerserkManager;
 import dev.apogee.berserk.BerserkVariant;
 import dev.apogee.config.BerserkRules;
 import dev.apogee.registry.ApogeeItems;
+import dev.apogee.ripperdoc.RipperdocMenu;
 import dev.apogee.sandevistan.SandevistanManager;
 import dev.emi.trinkets.api.TrinketItem;
+import dev.emi.trinkets.api.TrinketsApi;
 import java.util.List;
 import java.util.Optional;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
@@ -14,6 +16,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
@@ -171,6 +174,35 @@ public final class BerserkGameTests implements FabricGameTest {
         helper.assertTrue(far.getHealth() == farHealth, "mob out of range is untouched");
         helper.assertTrue(player.getHealth() == player.getMaxHealth(), "the wearer is not hurt");
         cleanup(helper, player);
+        helper.succeed();
+    }
+
+    /** Implants go in only at the ripperdoc table: using one does not equip it, and no inventory screen offers its slot. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_ripperdoc")
+    public void berserkEquipsOnlyAtTheRipperdoc(GameTestHelper helper) {
+        for (Item implant : List.of(ApogeeItems.BERSERK_ZETATECH, ApogeeItems.BERSERK_BIODYNE, ApogeeItems.BERSERK_MILITECH)) {
+            ServerPlayer player = helper.makeMockServerPlayerInLevel();
+            player.setGameMode(GameType.SURVIVAL);
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(implant));
+            implant.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+            helper.assertTrue(!TrinketsApi.getTrinketComponent(player).map(component -> component.isEquipped(implant)).orElse(false),
+                    "using the Berserk must not equip it");
+            helper.assertTrue(TrinketsApi.getPlayerSlots(player).get("cyberware") == null, "the inventory screens must not offer cyberware slots");
+            helper.assertTrue(player.inventoryMenu.slots.stream().noneMatch(slot -> slot.container.getClass().getName().contains("Trinket")),
+                    "the inventory menu must have no trinket slots");
+
+            // The ripperdoc table is the way in: shift-click puts it in the operating system slot and nowhere else.
+            RipperdocMenu menu = new RipperdocMenu(0, player.getInventory(), null);
+            int menuIndex = menu.slots.size() - 9;
+            player.getInventory().setItem(0, new ItemStack(implant));
+            menu.quickMoveStack(player, menuIndex);
+            helper.assertTrue(menu.getSlot(RipperdocMenu.slotIndex(RipperdocMenu.Implant.OS, 0)).getItem().is(implant),
+                    "the ripperdoc must take the Berserk in the operating system slot");
+            helper.assertTrue(TrinketsApi.getTrinketComponent(player).map(component -> component.isEquipped(implant)).orElse(false),
+                    "the Berserk is equipped once fitted at the ripperdoc");
+            player.getServer().getPlayerList().remove(player);
+        }
+        helper.killAllEntities();
         helper.succeed();
     }
 }

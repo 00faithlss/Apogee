@@ -257,7 +257,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```
 
 - `build`: genera el JAR de entrega en `build/libs`. Las pruebas no se incluyen en él.
-- `runGametest`: 37 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
+- `runGametest`: 38 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltips (Sandevistan, Cuchillas Mantis y Nanocable), activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
 ```bash
