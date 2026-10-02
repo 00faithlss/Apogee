@@ -79,6 +79,24 @@ public final class BloodPumpClientSmoke implements ClientModInitializer {
         }
         worldTicks++;
         int t = worldTicks;
+        if (t == 5) {
+            // Implants go in only at the ripperdoc table: not by the inventory, not by use.
+            check(mc.player.inventoryMenu.slots.size() == 46, "no cyberware slots in the inventory: " + mc.player.inventoryMenu.slots.size());
+            server(mc, (level, player) -> {
+                player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(ApogeeItems.BLOOD_PUMP));
+                player.gameMode.useItem(player, level, player.getMainHandItem(), net.minecraft.world.InteractionHand.MAIN_HAND);
+                boolean worn = dev.emi.trinkets.api.TrinketsApi.getTrinketComponent(player)
+                        .map(component -> component.isEquipped(ApogeeItems.BLOOD_PUMP)).orElse(false);
+                check(!worn, "using the blood pump does not equip it");
+                check(player.getMainHandItem().is(ApogeeItems.BLOOD_PUMP), "the blood pump stays in hand after use");
+                player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                var menu = new dev.apogee.ripperdoc.RipperdocMenu(0, player.getInventory());
+                ItemStack pump = new ItemStack(ApogeeItems.BLOOD_PUMP);
+                boolean circulatory = menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.CIRCULATORY, 0)).mayPlace(pump);
+                boolean legs = menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.LEGS, 0)).mayPlace(pump);
+                check(circulatory && !legs, "the ripperdoc takes the blood pump only in the circulatory system");
+            });
+        }
         if (t == 10) {
             mc.options.fov().set(18);
             server(mc, (level, player) -> {
