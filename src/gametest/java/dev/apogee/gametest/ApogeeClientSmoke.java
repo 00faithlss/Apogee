@@ -40,16 +40,17 @@ import org.slf4j.LoggerFactory;
 public final class ApogeeClientSmoke implements ClientModInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger("ApogeeSmoke");
     private static final List<String> FAILURES = new ArrayList<>();
+    private static final boolean TOOLTIP_ONLY = Boolean.getBoolean("apogee.tooltipSmoke");
     private static int worldTicks = -1;
     private static boolean worldRequested;
     private static boolean drawTooltip;
     private static net.minecraft.world.item.Item tooltipItem = ApogeeItems.SANDEVISTAN;
     /** The arm cyberware tooltips (Mantis Blades and nanowire), filmed in both views after the Sandevistan run. */
     private static final net.minecraft.world.item.Item[] MANTIS = {
-            ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.NANOWIRE};
+            ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.NANOWIRE, ApogeeItems.NANOWIRE_WHITE};
     private static final int MANTIS_TOOLTIPS = 272;
-    /** First tick after the arm cyberware tooltips: 20 ticks for each of the four. */
-    private static final int TOOLTIPS_DONE = MANTIS_TOOLTIPS + 20 * 4;
+    /** First tick after the arm cyberware tooltips: 20 ticks for each of the five. */
+    private static final int TOOLTIPS_DONE = MANTIS_TOOLTIPS + 20 * 5;
     private static final net.minecraft.world.item.Item[] PARTS = {
             ApogeeItems.NEURAL_CABLE, ApogeeItems.CONTROL_CHIP, ApogeeItems.BLADE_ACTUATOR, ApogeeItems.DEPLOY_RAIL,
             ApogeeItems.MANTIS_BLADE, ApogeeItems.THERMAL_BLADE, ApogeeItems.ELECTRIC_BLADE, ApogeeItems.ARM_POWER_CORE};
@@ -57,7 +58,7 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        if (!Boolean.getBoolean("apogee.smoke")) {
+        if (!Boolean.getBoolean("apogee.smoke") && !TOOLTIP_ONLY) {
             return;
         }
         ClientTickEvents.END_CLIENT_TICK.register(ApogeeClientSmoke::tick);
@@ -82,6 +83,17 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
             return;
         }
         worldTicks++;
+        if (TOOLTIP_ONLY) {
+            int step = worldTicks - 20;
+            if (step >= 0 && step < MANTIS.length * 20) {
+                mantisTooltip(mc, MANTIS[step / 20], step % 20);
+            }
+            if (step == MANTIS.length * 20 + 5) {
+                LOGGER.info("Tooltip capture run finished");
+                mc.stop();
+            }
+            return;
+        }
         switch (worldTicks) {
             case 20 -> server(mc, (level, player) -> {
                 level.setDayTime(6000);
