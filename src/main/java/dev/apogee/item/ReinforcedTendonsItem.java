@@ -14,7 +14,9 @@ public class ReinforcedTendonsItem extends CyberwareItem {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, net.minecraft.world.item.TooltipFlag flag) {
+        // The short text shown without Simply Tooltips; with it, the Apogee card replaces these lines.
         lines.add(Component.translatable("tooltip.apogee.reinforced_tendons.slot").withStyle(ChatFormatting.GRAY));
-        lines.add(Component.translatable("tooltip.apogee.reinforced_tendons.description").withStyle(ChatFormatting.AQUA));
+        lines.add(Component.translatable("tooltip.apogee.reinforced_tendons.plain.jump").withStyle(ChatFormatting.GOLD));
+        lines.add(Component.translatable("tooltip.apogee.reinforced_tendons.plain.dash").withStyle(ChatFormatting.GOLD));
     }
 }

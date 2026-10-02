@@ -2,6 +2,7 @@ package dev.apogee.client.compat.simplytooltips;
 
 import dev.apogee.client.tooltip.MantisTooltipContent;
 import dev.apogee.client.tooltip.SandevistanTooltipContent;
+import dev.apogee.client.tooltip.TendonsTooltipContent;
 import dev.apogee.item.ArmCyberwareItem;
 import dev.apogee.mantis.MantisVariant;
 import dev.apogee.registry.ApogeeItems;
@@ -20,6 +21,7 @@ import net.sweenus.simplytooltips.client.render.ThemeRegistry;
 public final class SimplyTooltipsCompat {
     public static final String THEME_KEY = "apogee_sandevistan";
     public static final String MANTIS_THEME_KEY = "apogee_mantis";
+    public static final String TENDONS_THEME_KEY = "apogee_tendons";
 
     private SimplyTooltipsCompat() {
     }
@@ -27,6 +29,7 @@ public final class SimplyTooltipsCompat {
     public static void register() {
         TooltipProviderRegistry.register(new SandevistanProvider(), 100);
         TooltipProviderRegistry.register(new MantisProvider(), 100);
+        TooltipProviderRegistry.register(new TendonsProvider(), 100);
         ClientTickEvents.END_CLIENT_TICK.register(client -> TooltipTabs.releaseIfHidden());
     }
 
@@ -96,6 +99,37 @@ public final class SimplyTooltipsCompat {
                     null,
                     "",
                     THEME_KEY,
+                    null);
+        }
+    }
+
+    /** Claims the Reinforced Tendons; TooltipRendererMixin draws {@link TendonsTooltipPanel}. */
+    private static final class TendonsProvider implements TooltipProvider {
+        @Override
+        public boolean supports(ItemStack stack) {
+            return stack.is(ApogeeItems.REINFORCED_TENDONS);
+        }
+
+        @Override
+        public ModernTooltipModel build(ItemStack stack, List<Component> lines, boolean altDown) {
+            List<String> ability = TendonsTooltipContent.descriptionLines().stream().map(Component::getString).toList();
+            List<String> body = new ArrayList<>();
+            body.add(ModernTooltipModel.SECTION_MARKER + TendonsTooltipContent.statsHeader().getString());
+            for (TendonsTooltipContent.Stat stat : TendonsTooltipContent.stats()) {
+                body.add(stat.label().getString() + ": " + stat.value().getString());
+            }
+            body.add(TendonsTooltipContent.note().getString());
+            return new ModernTooltipModel(
+                    TendonsTooltipContent.title().getString(),
+                    List.of(TendonsTooltipContent.badge().getString()),
+                    TooltipBorderStyle.IRON,
+                    ability,
+                    body,
+                    List.of(),
+                    ThemeRegistry.get(TENDONS_THEME_KEY).colors(),
+                    null,
+                    "",
+                    TENDONS_THEME_KEY,
                     null);
         }
     }

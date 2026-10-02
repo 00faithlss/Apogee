@@ -4,7 +4,8 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Sin publicar]
 
-- Implante **Tendones reforzados** `apogee:reinforced_tendons` (ranura Piernas): pulsa saltar en el aire para un doble salto, con 4 bloques de caída amortiguados y una recarga por vuelo. Escapes en los tobillos, receta propia, textos en español e inglés, pruebas de servidor y de cliente (`runTendonsSmoke`).
+- Se elimina la compatibilidad con Immersive Armors (dash de los pantalones Steampunk, dependencia de desarrollo y tecla propia); el dash aéreo pasa a los Tendones reforzados, que ahora lo hacen en todas direcciones.
+- Implante **Tendones reforzados** `apogee:reinforced_tendons` (ranura Piernas): pulsa saltar en el aire para un doble salto, con 4 bloques de caída amortiguados y una recarga por vuelo. Escapes en los tobillos (comprobados con Punchy y Fresh Animations), receta propia, textos en español e inglés, pruebas de servidor, de cliente (`runTendonsSmoke`) y multijugador con y sin Punchy y Fresh Animations (`tools/tendons_tests.sh`).
 
 ## [1.1.0+1.21.1] — 2026-10-01
 

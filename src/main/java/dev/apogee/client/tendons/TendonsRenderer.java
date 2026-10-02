@@ -52,6 +52,29 @@ public final class TendonsRenderer implements TrinketRenderer {
         draw(poseStack, buffer, humanoid.leftLeg, PIVOT_X, 1.0F, light);
     }
 
+    /**
+     * Both exhausts as a free-standing piece, centered on the origin and one block wide, for the
+     * tooltip's spinning model (model space: y points down, like the leg's).
+     */
+    public static void renderPreview(PoseStack poseStack, MultiBufferSource buffers, int light) {
+        VertexConsumer buffer = buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
+        poseStack.pushPose();
+        // Middle of the pair: x between the legs, y and z at the middle of the boxes.
+        poseStack.translate(0.0F, -(PIVOT_Y - 1.5F) / 16.0F, -3.0F / 16.0F);
+        for (float side : new float[]{-1.0F, 1.0F}) {
+            poseStack.pushPose();
+            poseStack.translate(side * PIVOT_X / 16.0F, 0.0F, 0.0F);
+            drawBoxes(poseStack, buffer, side * PIVOT_X, side < 0 ? -3.0F : 1.0F, light);
+            poseStack.popPose();
+        }
+        poseStack.popPose();
+    }
+
+    private static void drawBoxes(PoseStack poseStack, VertexConsumer buffer, float pivotX, float originX, int light) {
+        box(poseStack, buffer, new Box(originX, 2, 2, 2, 1, 1, PIPE_UV), pivotX, light);
+        box(poseStack, buffer, new Box(originX, 0, 2, 2, 2, 2, BLOCK_UV), pivotX, light);
+    }
+
     private static void draw(PoseStack poseStack, VertexConsumer buffer, net.minecraft.client.model.geom.ModelPart leg,
                              float pivotX, float originX, int light) {
         poseStack.pushPose();

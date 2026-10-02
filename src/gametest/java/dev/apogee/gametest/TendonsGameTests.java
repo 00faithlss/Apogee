@@ -38,10 +38,18 @@ public final class TendonsGameTests implements FabricGameTest {
         ServerPlayer player = airborne(helper);
         helper.assertTrue(TrinketItem.equipItem(player, new ItemStack(ApogeeItems.REINFORCED_TENDONS)), "Tendons should equip into cyberware/legs");
         ReinforcedTendons.perform(player);
-        helper.assertTrue(player.fallDistance == -ReinforcedTendons.FALL_MARGIN, "The jump should leave a fall margin");
-        player.fallDistance = 0.0F;
+        helper.assertTrue(ReinforcedTendons.fallMargin(player) == ReinforcedTendons.FALL_MARGIN, "The jump should leave a fall margin");
+        player.fallDistance = 2.5F;
+        ReinforcedTendons.absorbFall(player);
+        helper.assertTrue(player.fallDistance == 0.0F, "The margin should absorb the fall built up");
+        helper.assertTrue(ReinforcedTendons.fallMargin(player) == ReinforcedTendons.FALL_MARGIN - 2.5F, "The margin should be spent");
+        player.fallDistance = 6.0F;
+        ReinforcedTendons.absorbFall(player);
+        helper.assertTrue(player.fallDistance == 6.0F - (ReinforcedTendons.FALL_MARGIN - 2.5F), "Only what the margin covers is absorbed");
+        helper.assertTrue(ReinforcedTendons.fallMargin(player) == 0.0F, "A spent margin stays at zero");
+        player.fallDistance = 1.0F;
         ReinforcedTendons.perform(player);
-        helper.assertTrue(player.fallDistance == 0.0F, "A second request in the same flight must be ignored");
+        helper.assertTrue(ReinforcedTendons.fallMargin(player) == 0.0F, "A second request in the same flight must be ignored");
         player.getServer().getPlayerList().remove(player);
         helper.succeed();
     }
@@ -53,6 +61,32 @@ public final class TendonsGameTests implements FabricGameTest {
         player.setOnGround(true);
         ReinforcedTendons.perform(player);
         helper.assertTrue(player.fallDistance == 2.0F, "No double jump from the ground");
+        player.getServer().getPlayerList().remove(player);
+        helper.succeed();
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void airDashNeedsTheImplantAndWorksOncePerFlight(GameTestHelper helper) {
+        ServerPlayer player = airborne(helper);
+        ReinforcedTendons.performDash(player);
+        helper.assertTrue(player.fallDistance == 2.0F, "Without the implant the dash request must do nothing");
+        helper.assertTrue(TrinketItem.equipItem(player, new ItemStack(ApogeeItems.REINFORCED_TENDONS)), "Tendons should equip");
+        ReinforcedTendons.performDash(player);
+        helper.assertTrue(player.fallDistance == 0.0F, "The dash drops the fall built up");
+        player.fallDistance = 2.0F;
+        ReinforcedTendons.performDash(player);
+        helper.assertTrue(player.fallDistance == 2.0F, "A second dash in the same flight must be ignored");
+        player.getServer().getPlayerList().remove(player);
+        helper.succeed();
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void dashKeepsTheDoubleJumpMargin(GameTestHelper helper) {
+        ServerPlayer player = airborne(helper);
+        helper.assertTrue(TrinketItem.equipItem(player, new ItemStack(ApogeeItems.REINFORCED_TENDONS)), "Tendons should equip");
+        ReinforcedTendons.perform(player);
+        ReinforcedTendons.performDash(player);
+        helper.assertTrue(ReinforcedTendons.fallMargin(player) == ReinforcedTendons.FALL_MARGIN, "The dash must not erase the double jump margin");
         player.getServer().getPlayerList().remove(player);
         helper.succeed();
     }
