@@ -158,6 +158,7 @@
   "tooltip.apogee.berserk.description.zetatech": "Amortigua las caídas.",
   "tooltip.apogee.berserk.description.biodyne": "Tus golpes pueden ser críticos.",
   "tooltip.apogee.berserk.description.militech": "Eres invulnerable y pegas más fuerte cuanto menos vida te queda.",
+  "tooltip.apogee.berserk.description_header": "Descripción",
   "tooltip.apogee.berserk.stats_header": "Mientras está activo",
   "tooltip.apogee.berserk.stat.duration": "Duración",
   "tooltip.apogee.berserk.stat.reduction": "Daño recibido",

@@ -110,6 +110,11 @@ public final class BerserkImplantRenderer implements TrinketRenderer, BuiltinIte
         poseStack.popPose();
     }
 
+    /** The item's GUI pose, for the tooltip header: the caller scales and centres the unit cube. */
+    public void renderForTooltip(ItemStack stack, PoseStack poseStack, MultiBufferSource buffers, int light, int overlay) {
+        render(stack, ItemDisplayContext.GUI, poseStack, buffers, light, overlay);
+    }
+
     static ResourceLocation texture(BerserkVariant variant) {
         return Apogee.id("textures/berserk/berserk_" + variant.id() + ".png");
     }

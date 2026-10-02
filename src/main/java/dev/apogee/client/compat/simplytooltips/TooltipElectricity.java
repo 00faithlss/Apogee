@@ -18,9 +18,14 @@ final class TooltipElectricity {
     }
 
     static void draw(GuiGraphics graphics, int x, int y, int w, int h, long nowMs) {
+        draw(graphics, x, y, w, h, nowMs, COLORS, 0x1400F0FF);
+    }
+
+    /** The same arcs in other colours; {@code glow} is the ARGB of the faint halo along the edges. */
+    static void draw(GuiGraphics graphics, int x, int y, int w, int h, long nowMs, int[] colors, int glow) {
         int perimeter = 2 * (w + h);
         for (int side = 0; side < 4; side++) {
-            glowEdge(graphics, x, y, w, h, side, 0x1400F0FF);
+            glowEdge(graphics, x, y, w, h, side, glow);
         }
         long shapeSeed = nowMs / SHAPE_MS;
         for (int arc = 0; arc < ARCS; arc++) {
@@ -32,7 +37,7 @@ final class TooltipElectricity {
                 continue; // brief gaps keep the effect subtle
             }
             int length = 18 + RANDOM.nextInt(26);
-            int rgb = COLORS[arc % COLORS.length];
+            int rgb = colors[arc % colors.length];
             drawArc(graphics, x, y, w, h, perimeter, start, length, rgb);
         }
     }

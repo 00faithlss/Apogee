@@ -158,6 +158,7 @@
   "tooltip.apogee.berserk.description.zetatech": "Softens falls.",
   "tooltip.apogee.berserk.description.biodyne": "Your hits can be critical.",
   "tooltip.apogee.berserk.description.militech": "You are invulnerable and hit harder the less health you have.",
+  "tooltip.apogee.berserk.description_header": "Description",
   "tooltip.apogee.berserk.stats_header": "While active",
   "tooltip.apogee.berserk.stat.duration": "Duration",
   "tooltip.apogee.berserk.stat.reduction": "Damage taken",
