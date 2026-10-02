@@ -50,7 +50,6 @@ public final class SimplyTooltipsCompat {
             for (BerserkTooltipContent.Stat stat : BerserkTooltipContent.stats(variant)) {
                 body.add(stat.label().getString() + ": " + stat.value().getString());
             }
-            body.add(BerserkTooltipContent.cooldownNote().getString());
             return new ModernTooltipModel(
                     stack.getHoverName().getString(),
                     List.of(BerserkTooltipContent.badge(variant).getString()),

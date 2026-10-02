@@ -65,7 +65,6 @@ public final class BerserkTooltipContent {
         if (stats.fallDamageReductionPercent() > 0) {
             out.add(stat("fall", Component.translatable("tooltip.apogee.value.minus_percent", stats.fallDamageReductionPercent())));
         }
-        out.add(stat("hunger", Component.translatable("tooltip.apogee.berserk.value.hunger")));
         if (rules.slamRadius() > 0.0) {
             out.add(stat("slam", Component.translatable("tooltip.apogee.berserk.value.slam", number(rules.slamDamage()), number(rules.slamRadius()))));
         }
