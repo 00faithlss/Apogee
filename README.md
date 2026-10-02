@@ -17,6 +17,9 @@ Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuc
 | `apogee:mantis_blades_electric` | Cuchillas Mantis eléctricas | Variante que aturde al objetivo. |
 | `apogee:nanowire_white` | Nanocable blanco | Variante blanca brillante. Misma ranura, alcance y sangrado que el rojo. |
 | `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
+| `apogee:blood_pump` | Bomba de sangre | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/circulatory`. |
+| `apogee:hemo_chamber` | Cámara hemo | Pieza de la Bomba de sangre. |
+| `apogee:bio_monitor` | Biomonitor | Pieza de la Bomba de sangre. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
@@ -40,6 +43,9 @@ Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuc
 | Quantum Sync Lattice T5 (con forma) | 2 cristales del End, 2 bloques de amatista, 1 frasco de experiencia, 4 bloques de redstone: redstone en esquinas, cristales arriba y abajo, amatista a los lados, frasco al centro |
 | Mesa de matasanos (con forma) | Fila 1: cable neural, chip de control, cable neural · Fila 2: tres lanas blancas · Fila 3: lingote de hierro, bloque de hierro, lingote de hierro |
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
+| Cámara hemo (con forma) | Fila 1: lingote de hierro, lágrima de ghast, lingote de hierro · Fila 2: vidrio, bloque de redstone, vidrio · Fila 3: lingote de hierro, cable neural, lingote de hierro |
+| Biomonitor (con forma) | Fila 1: lingote de oro, comparador, lingote de oro · Fila 2: redstone, cable neural, redstone · Fila 3: lingote de oro, panel de vidrio, lingote de oro |
+| Bomba de sangre (con forma) | Fila 1: lingote de hierro, Cámara hemo, lingote de hierro · Fila 2: manzana dorada, Biomonitor, manzana dorada · Fila 3: lingote de hierro, cable neural, lingote de hierro |
 
 #### Cuchillas Mantis por partes
 
@@ -117,6 +123,14 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, muestra el mismo recuadro con la recarga del latigazo doble, y tampoco se puede encantar.
 - Usa la misma tarjeta de tooltip que las Cuchillas Mantis: daño, ataques por segundo y tipo en grande; **G** alterna los controles y las estadísticas del latigazo doble.
 - Sonidos propios: despliegue, guardado, latigazo al aire (4 variantes), golpe al enemigo (4 variantes) y latigazo doble, en `assets/apogee/sounds/nanowire/`.
+
+### Bomba de sangre
+
+- Implante del **sistema circulatorio** (se instala en la mesa de matasanos). Se dibuja en el antebrazo derecho: jeringas, tubos y bolsa de sangre; al usarla la bolsa se vacía y se vuelve a llenar durante la recarga.
+- Se activa con **B** (configurable, «Activar Bomba de sangre»): restaura al instante 8 de salud (4 corazones) y luego regenera 8 más durante 6 segundos. Recarga de 30 segundos. No se usa con la salud completa.
+- Con Simply Tooltips, su tooltip es un panel compacto como el del Sandevistan, en rojo y animado (título ondulante con estelas, gotas de sangre, línea de electrocardiograma, arcos eléctricos y latido en el implante), con dos pestañas (Descripción y Al usarla) que se cambian con **G**; sin Simply Tooltips muestra tres líneas.
+- Abajo a la izquierda aparece su recuadro: cian cuando está lista, magenta con los segundos que faltan mientras recarga (encima de los otros recuadros si se ven).
+- La recarga se guarda con el jugador. Los valores están fijos en `dev.apogee.bloodpump.BloodPumpRules`.
 
 ### Mecánica del Sandevistan (valores por defecto)
 
@@ -209,6 +223,8 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 
 - `build`: genera el JAR de entrega en `build/libs`. Las pruebas no se incluyen en él.
 - `runGametest`: 24 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
+- `runBloodPumpSmoke`: equipa la Bomba de sangre con poca vida, la activa y captura el antebrazo (reposo, inyección y rellenado) y el HUD en `build/bloodpump-smoke`.
+- `tools/bloodpump_tests.sh [vanilla|punchy|fresh|both]`: servidor dedicado y dos clientes (Observer y Wearer). El portador usa la Bomba de sangre, después las Cuchillas Mantis y un peto, y el observador comprueba y captura lo que ve. Se repite en vanilla, con Punchy, con Entity Model Features, Entity Texture Features y Fresh Animations, y con todo junto; resultados en `build/bloodpump-mp/<caso>`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltips (Sandevistan, Cuchillas Mantis y Nanocable), activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
 ```bash
