@@ -24,6 +24,12 @@ public final class ApogeeSounds {
     public static final SoundEvent NANOWIRE_HIT = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_hit"));
     public static final SoundEvent NANOWIRE_HEAVY = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_heavy"));
 
+    public static final SoundEvent BERSERK_ACTIVATE = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_activate"));
+    public static final SoundEvent BERSERK_DEACTIVATE = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_deactivate"));
+    public static final SoundEvent BERSERK_HEARTBEAT = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_heartbeat"));
+    public static final SoundEvent BERSERK_DIVE = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_dive"));
+    public static final SoundEvent BERSERK_SLAM = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_slam"));
+
     private ApogeeSounds() {
     }
 
@@ -45,5 +51,10 @@ public final class ApogeeSounds {
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_SWING.getLocation(), NANOWIRE_SWING);
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HIT.getLocation(), NANOWIRE_HIT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HEAVY.getLocation(), NANOWIRE_HEAVY);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_ACTIVATE.getLocation(), BERSERK_ACTIVATE);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_DEACTIVATE.getLocation(), BERSERK_DEACTIVATE);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_HEARTBEAT.getLocation(), BERSERK_HEARTBEAT);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_DIVE.getLocation(), BERSERK_DIVE);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_SLAM.getLocation(), BERSERK_SLAM);
     }
 }

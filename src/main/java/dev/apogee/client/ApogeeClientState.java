@@ -1,6 +1,8 @@
 package dev.apogee.client;
 
+import dev.apogee.config.BerserkRules;
 import dev.apogee.config.SandevistanRules;
+import dev.apogee.network.ApogeeNetworking.BerserkStatus;
 import dev.apogee.network.ApogeeNetworking.TimeFieldSync;
 import dev.apogee.network.ApogeeNetworking.WearerStatus;
 import dev.apogee.time.TimeScaledEntity;
@@ -17,6 +19,8 @@ public final class ApogeeClientState {
     private static IntSet slowed = new IntOpenHashSet();
     private static IntSet wearers = new IntOpenHashSet();
     private static ClientLevel fieldLevel;
+    private static BerserkRules berserkRules = BerserkRules.DEFAULTS;
+    private static BerserkStatus berserkStatus = BerserkStatus.IDLE;
 
     private ApogeeClientState() {
     }
@@ -27,6 +31,22 @@ public final class ApogeeClientState {
 
     public static WearerStatus status() {
         return status;
+    }
+
+    public static BerserkRules berserkRules() {
+        return berserkRules;
+    }
+
+    public static BerserkStatus berserkStatus() {
+        return berserkStatus;
+    }
+
+    static void acceptBerserkRules(BerserkRules synced) {
+        berserkRules = synced.sanitized();
+    }
+
+    static void acceptBerserkStatus(BerserkStatus synced) {
+        berserkStatus = synced;
     }
 
     static void acceptRules(SandevistanRules synced) {
@@ -52,6 +72,8 @@ public final class ApogeeClientState {
         slowed = new IntOpenHashSet();
         wearers = new IntOpenHashSet();
         fieldLevel = null;
+        berserkRules = BerserkRules.DEFAULTS;
+        berserkStatus = BerserkStatus.IDLE;
     }
 
     public static IntSet currentWearers() {

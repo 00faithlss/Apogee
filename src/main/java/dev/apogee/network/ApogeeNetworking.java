@@ -1,6 +1,7 @@
 package dev.apogee.network;
 
 import dev.apogee.Apogee;
+import dev.apogee.config.BerserkRules;
 import dev.apogee.config.SandevistanRules;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -24,9 +25,14 @@ public final class ApogeeNetworking {
         PayloadTypeRegistry.playS2C().register(RulesSync.TYPE, RulesSync.CODEC);
         PayloadTypeRegistry.playS2C().register(WearerStatus.TYPE, WearerStatus.CODEC);
         PayloadTypeRegistry.playS2C().register(TimeFieldSync.TYPE, TimeFieldSync.CODEC);
+        PayloadTypeRegistry.playS2C().register(BerserkRulesSync.TYPE, BerserkRulesSync.CODEC);
+        PayloadTypeRegistry.playS2C().register(BerserkStatus.TYPE, BerserkStatus.CODEC);
     }
 
-    /** Client asks to activate, or to end its active Sandevistan early. The server validates. */
+    /**
+     * Client pressed the operating system key: activate the installed Sandevistan or Berserk, or
+     * end it early. The server validates. The id predates the Berserk and is kept.
+     */
     public record ToggleSandevistan() implements CustomPacketPayload {
         public static final ToggleSandevistan INSTANCE = new ToggleSandevistan();
         public static final Type<ToggleSandevistan> TYPE = new Type<>(Apogee.id("toggle_sandevistan"));
@@ -166,6 +172,42 @@ public final class ApogeeNetworking {
                 INT_LIST, TimeFieldSync::slowedEntities,
                 INT_LIST, TimeFieldSync::activeWearers,
                 TimeFieldSync::new
+        );
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Host Berserk rules, sent on join like {@link RulesSync}. */
+    public record BerserkRulesSync(BerserkRules rules) implements CustomPacketPayload {
+        public static final Type<BerserkRulesSync> TYPE = new Type<>(Apogee.id("berserk_rules_sync"));
+        public static final StreamCodec<FriendlyByteBuf, BerserkRulesSync> CODEC =
+                BerserkRules.STREAM_CODEC.map(BerserkRulesSync::new, BerserkRulesSync::rules).cast();
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /**
+     * The receiving player's own Berserk state, as server game times like {@link WearerStatus}.
+     * {@code variant} is the installed or running variant's ordinal, or -1 with none installed.
+     */
+    public record BerserkStatus(boolean active, int variant, long startTime, long endTime, long cooldownEnd, int kills)
+            implements CustomPacketPayload {
+        public static final BerserkStatus IDLE = new BerserkStatus(false, -1, 0L, 0L, 0L, 0);
+        public static final Type<BerserkStatus> TYPE = new Type<>(Apogee.id("berserk_status"));
+        public static final StreamCodec<FriendlyByteBuf, BerserkStatus> CODEC = StreamCodec.composite(
+                ByteBufCodecs.BOOL, BerserkStatus::active,
+                ByteBufCodecs.VAR_INT, BerserkStatus::variant,
+                ByteBufCodecs.VAR_LONG, BerserkStatus::startTime,
+                ByteBufCodecs.VAR_LONG, BerserkStatus::endTime,
+                ByteBufCodecs.VAR_LONG, BerserkStatus::cooldownEnd,
+                ByteBufCodecs.VAR_INT, BerserkStatus::kills,
+                BerserkStatus::new
         );
 
         @Override

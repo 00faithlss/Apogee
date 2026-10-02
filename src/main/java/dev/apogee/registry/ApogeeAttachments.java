@@ -17,6 +17,13 @@ public final class ApogeeAttachments {
             .copyOnDeath()
             .buildAndRegister(Apogee.id("sandevistan_cooldown_end"));
 
+    /** Server game time at which the player's Berserk cooldown ends; same rules as the Sandevistan's. */
+    @SuppressWarnings("UnstableApiUsage")
+    public static final AttachmentType<Long> BERSERK_COOLDOWN_END = AttachmentRegistry.<Long>builder()
+            .persistent(Codec.LONG)
+            .copyOnDeath()
+            .buildAndRegister(Apogee.id("berserk_cooldown_end"));
+
     /** Set on projectiles launched by an active wearer; they keep the damage bonus until impact. */
     @SuppressWarnings("UnstableApiUsage")
     public static final AttachmentType<Boolean> BOOSTED_PROJECTILE = AttachmentRegistry.<Boolean>builder()

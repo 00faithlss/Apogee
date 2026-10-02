@@ -3,7 +3,13 @@ package dev.apogee.client;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.apogee.Apogee;
 import dev.apogee.client.config.ApogeeClientConfig;
+import dev.apogee.client.berserk.BerserkImplantRenderer;
 import dev.apogee.client.fx.AfterimageRenderer;
+import dev.apogee.client.fx.BerserkEffects;
+import dev.apogee.client.tooltip.BerserkTooltipContent;
+import dev.apogee.item.BerserkItem;
+import dev.apogee.network.ApogeeNetworking.BerserkRulesSync;
+import dev.apogee.network.ApogeeNetworking.BerserkStatus;
 import dev.apogee.client.fx.SandevistanEffects;
 import dev.apogee.client.mantis.MantisClient;
 import dev.apogee.client.model.SandevistanModel;
@@ -71,7 +77,13 @@ public final class ApogeeClient implements ClientModInitializer {
             }
         });
         TrinketRendererRegistry.registerRenderer(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
+        TrinketRendererRegistry.registerRenderer(ApogeeItems.BERSERK_ZETATECH, BerserkImplantRenderer.INSTANCE);
+        TrinketRendererRegistry.registerRenderer(ApogeeItems.BERSERK_BIODYNE, BerserkImplantRenderer.INSTANCE);
+        TrinketRendererRegistry.registerRenderer(ApogeeItems.BERSERK_MILITECH, BerserkImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.SANDEVISTAN, SandevistanImplantRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.BERSERK_ZETATECH, BerserkImplantRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.BERSERK_BIODYNE, BerserkImplantRenderer.INSTANCE);
+        BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.BERSERK_MILITECH, BerserkImplantRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.NANOWIRE, dev.apogee.client.nanowire.NanowireItemRenderer.INSTANCE);
         BuiltinItemRendererRegistry.INSTANCE.register(ApogeeItems.NANOWIRE_WHITE, dev.apogee.client.nanowire.NanowireItemRenderer.INSTANCE);
         BlockEntityRenderers.register(ApogeeBlocks.RIPPERDOC_TABLE_ENTITY, context -> new RipperdocTableRenderer());
@@ -84,6 +96,12 @@ public final class ApogeeClient implements ClientModInitializer {
             WearerStatus previous = ApogeeClientState.status();
             ApogeeClientState.acceptStatus(payload);
             SandevistanEffects.onStatus(previous, payload);
+        });
+        ClientPlayNetworking.registerGlobalReceiver(BerserkRulesSync.TYPE, (payload, context) -> ApogeeClientState.acceptBerserkRules(payload.rules()));
+        ClientPlayNetworking.registerGlobalReceiver(BerserkStatus.TYPE, (payload, context) -> {
+            BerserkStatus previous = ApogeeClientState.berserkStatus();
+            ApogeeClientState.acceptBerserkStatus(payload);
+            BerserkEffects.onStatus(previous, payload);
         });
         ClientPlayNetworking.registerGlobalReceiver(MantisSync.TYPE, (payload, context) -> MantisClient.accept(payload));
         ClientPlayNetworking.registerGlobalReceiver(MantisSwing.TYPE, (payload, context) -> MantisClient.accept(payload));
@@ -98,6 +116,7 @@ public final class ApogeeClient implements ClientModInitializer {
         HudRenderCallback.EVENT.register((graphics, deltaTracker) -> {
             float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
             SandevistanEffects.renderHud(graphics, partialTick);
+            BerserkEffects.renderHud(graphics, partialTick);
             dev.apogee.client.mantis.ArmCyberwareHud.render(graphics, partialTick);
         });
         ClientTickEvents.END_CLIENT_TICK.register(dev.apogee.client.mantis.ArmCyberwareHud::tick);
@@ -111,6 +130,16 @@ public final class ApogeeClient implements ClientModInitializer {
                 if (stack.getItem() instanceof ArmCyberwareItem cyberware) {
                     lines.add(MantisTooltipContent.badge().copy().withStyle(ChatFormatting.YELLOW));
                     MantisTooltipContent.plainLines(cyberware.variant()).forEach(line -> lines.add(line.copy().withStyle(ChatFormatting.GRAY)));
+                    return;
+                }
+                if (stack.getItem() instanceof BerserkItem berserk) {
+                    lines.add(BerserkTooltipContent.badge(berserk.variant()).copy().withStyle(ChatFormatting.RED));
+                    BerserkTooltipContent.descriptionLines(berserk.variant()).forEach(line -> lines.add(line.copy().withStyle(ChatFormatting.GRAY)));
+                    for (BerserkTooltipContent.Stat stat : BerserkTooltipContent.stats(berserk.variant())) {
+                        lines.add(Component.empty().append(stat.label().copy().withStyle(ChatFormatting.DARK_GRAY))
+                                .append(": ").append(stat.value().copy().withStyle(ChatFormatting.RED)));
+                    }
+                    lines.add(BerserkTooltipContent.cooldownNote().copy().withStyle(ChatFormatting.DARK_GRAY));
                     return;
                 }
                 if (!stack.is(ApogeeItems.SANDEVISTAN)) {
@@ -131,6 +160,7 @@ public final class ApogeeClient implements ClientModInitializer {
         ApogeeClientState.reset();
         MantisClient.reset();
         SandevistanEffects.reset();
+        BerserkEffects.reset();
         AfterimageRenderer.reset();
     }
 
@@ -151,6 +181,7 @@ public final class ApogeeClient implements ClientModInitializer {
         }
         if (!client.isPaused()) {
             SandevistanEffects.tick();
+            BerserkEffects.tick();
             AfterimageRenderer.tick(clientTicks);
         }
     }
