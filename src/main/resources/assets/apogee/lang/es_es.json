@@ -105,6 +105,8 @@
   "subtitles.apogee.nanowire_swing": "Latigazo de nanocable",
   "subtitles.apogee.nanowire_hit": "Corte de nanocable",
   "subtitles.apogee.nanowire_heavy": "Latigazo doble de nanocable",
+  "subtitles.apogee.tendons_double_jump": "Doble salto de tendones reforzados",
+  "subtitles.apogee.tendons_air_dash": "Dash aéreo de tendones reforzados",
   "advancements.apogee.craft_nanowire.title": "Pendiendo de un hilo",
   "advancements.apogee.craft_nanowire.description": "Craftea un Nanocable rojo o blanco",
   "tooltip.apogee.value.degrees": "%s°",

@@ -1,6 +1,7 @@
 package dev.apogee.client.tendons;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import dev.apogee.registry.ApogeeSounds;
 import dev.apogee.network.ApogeeNetworking.AirDashRequest;
 import dev.apogee.network.ApogeeNetworking.DoubleJumpRequest;
 import dev.apogee.tendons.ReinforcedTendons;
@@ -10,7 +11,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.glfw.GLFW;
@@ -113,7 +113,7 @@ public final class TendonsClient {
     private static void jump(LocalPlayer player) {
         Vec3 velocity = player.getDeltaMovement();
         player.setDeltaMovement(velocity.x, Math.max(velocity.y, 0.0) + ReinforcedTendons.BOOST_Y, velocity.z);
-        player.playSound(SoundEvents.PISTON_EXTEND, 0.25F, 1.8F);
+        player.playSound(ApogeeSounds.TENDONS_DOUBLE_JUMP, 0.8F, 1.0F);
         if (ClientPlayNetworking.canSend(DoubleJumpRequest.TYPE)) {
             ClientPlayNetworking.send(DoubleJumpRequest.INSTANCE);
         }
@@ -135,7 +135,7 @@ public final class TendonsClient {
         double x = (-sin * forward + cos * left) * ReinforcedTendons.DASH_SPEED;
         double z = (cos * forward + sin * left) * ReinforcedTendons.DASH_SPEED;
         player.setDeltaMovement(x, Math.max(player.getDeltaMovement().y, ReinforcedTendons.DASH_MIN_VERTICAL), z);
-        player.playSound(SoundEvents.REDSTONE_TORCH_BURNOUT, 0.35F, 0.6F);
+        player.playSound(ApogeeSounds.TENDONS_AIR_DASH, 0.8F, 1.0F);
         if (ClientPlayNetworking.canSend(AirDashRequest.TYPE)) {
             ClientPlayNetworking.send(AirDashRequest.INSTANCE);
         }

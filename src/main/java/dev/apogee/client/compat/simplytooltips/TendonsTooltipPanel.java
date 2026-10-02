@@ -5,14 +5,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.apogee.Apogee;
-import dev.apogee.client.tendons.TendonsRenderer;
 import dev.apogee.client.tooltip.TendonsTooltipContent;
 import java.util.List;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -22,7 +23,7 @@ import net.sweenus.simplytooltips.client.TooltipKeybinds;
 /**
  * The Reinforced Tendons card: the same layout and size as the Sandevistan's (translucent black
  * panel, metal frame, a Description view and a Stats view switched with Simply Tooltips' cycle
- * key, G by default), in the exhausts' orange, with the item's own icon in the rhombus.
+ * key, G by default), in orange, with the item's own 3D model turning in the rhombus.
  */
 public final class TendonsTooltipPanel {
     private static final int ACCENT = 0xFFFFA11A;
@@ -125,7 +126,7 @@ public final class TendonsTooltipPanel {
 
         int top = y + 7;
         int left = x + PAD;
-        drawModel(graphics, left, top, now);
+        drawModel(graphics, stack, left, top, now);
         int textX = left + MODEL_W + 7;
         TooltipFx.wavyTitle(graphics, font, title, textX, top + 8, TITLE_SCALE, now);
         graphics.drawString(font, badge, textX, top + 24, ACCENT, false);
@@ -219,8 +220,8 @@ public final class TendonsTooltipPanel {
         pose.popPose();
     }
 
-    /** The two exhausts as a slowly turning 3D piece inside the rhombus, like the Sandevistan's implant. */
-    private static void drawModel(GuiGraphics graphics, int left, int top, long now) {
+    /** The implant's own 3D item model, slowly turning inside the rhombus, like the Sandevistan's implant. */
+    private static void drawModel(GuiGraphics graphics, ItemStack stack, int left, int top, long now) {
         int centerX = left + MODEL_W / 2;
         int centerY = top + HEADER_H / 2;
         drawDiamond(graphics, centerX, centerY, 17, EDGE);
@@ -230,13 +231,15 @@ public final class TendonsTooltipPanel {
         pose.pushPose();
         float bob = (float) Math.sin(now * 0.001) * 0.6F;
         pose.translate(centerX + 0.5F, centerY + bob, 150.0F);
-        pose.scale(60.0F, 60.0F, 60.0F);
-        pose.mulPose(Axis.XP.rotation(0.35F));
-        pose.mulPose(Axis.YP.rotation(0.6F + (float) Math.sin(now * 0.0007) * 0.5F));
-        pose.mulPose(Axis.ZP.rotation(0.0F));
+        pose.scale(40.0F, -40.0F, 40.0F);
+        pose.mulPose(Axis.XP.rotation(0.45F));
+        pose.mulPose(Axis.YP.rotation(-1.15F + (float) Math.sin(now * 0.0007) * 0.5F));
+        pose.mulPose(Axis.ZP.rotation(0.55F));
         Lighting.setupForFlatItems();
         RenderSystem.enableDepthTest();
-        TendonsRenderer.renderPreview(pose, graphics.bufferSource(), LightTexture.FULL_BRIGHT);
+        Minecraft mc = Minecraft.getInstance();
+        mc.getItemRenderer().render(stack, ItemDisplayContext.FIXED, false, pose, graphics.bufferSource(),
+                LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, mc.getItemRenderer().getModel(stack, null, null, 0));
         graphics.flush();
         Lighting.setupFor3DItems();
         pose.popPose();

@@ -6,7 +6,13 @@ import dev.emi.trinkets.api.TrinketItem;
 import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.api.ClientModInitializer;
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.math.Axis;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
@@ -27,8 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Dev-only scripted client run for the Reinforced Tendons: the item in the hotbar, the exhausts
- * on the legs from the back, the side and the front, then a double jump and an air dash in each
+ * Dev-only scripted client run for the Reinforced Tendons: the item in the hand, the legs
+ * from the back, the side and the front (the implant is not drawn on the player), then a double jump and an air dash in each
  * direction from a drop, checking the push and that the double jump softens the landing. Disabled unless
  * -Dapogee.tendonsSmoke=true.
  */
@@ -37,6 +43,7 @@ public final class TendonsClientSmoke implements ClientModInitializer {
     private static final List<String> FAILURES = new ArrayList<>();
     private static int worldTicks = -1;
     private static boolean worldRequested;
+    private static boolean previewModel;
 
     /** One flight: a drop from a height, then the move triggered once the player is falling. */
     private record Flight(String name, boolean jump, float forward, float left) {
@@ -61,6 +68,35 @@ public final class TendonsClientSmoke implements ClientModInitializer {
             return;
         }
         ClientTickEvents.END_CLIENT_TICK.register(TendonsClientSmoke::tick);
+        HudRenderCallback.EVENT.register((graphics, delta) -> {
+            if (!previewModel) {
+                return;
+            }
+            Minecraft mc = Minecraft.getInstance();
+            ItemStack stack = new ItemStack(ApogeeItems.REINFORCED_TENDONS);
+            graphics.fill(0, 0, graphics.guiWidth(), graphics.guiHeight(), 0xFF2A2E38);
+            // The inventory icon, then the item turned to three sides, on a flat background.
+            graphics.pose().pushPose();
+            graphics.pose().translate(20, 20, 0);
+            graphics.pose().scale(8.0F, 8.0F, 1.0F);
+            graphics.renderItem(stack, 0, 0);
+            graphics.pose().popPose();
+            float[] yaws = {0.0F, 90.0F, 180.0F, 270.0F};
+            for (int i = 0; i < yaws.length; i++) {
+                var pose = graphics.pose();
+                pose.pushPose();
+                pose.translate(160 + (i % 2) * 200, 85 + (i / 2) * 150, 150.0F);
+                pose.scale(90.0F, -90.0F, 90.0F);
+                pose.mulPose(Axis.XP.rotationDegrees(20.0F));
+                pose.mulPose(Axis.YP.rotationDegrees(yaws[i] + 35.0F));
+                Lighting.setupForFlatItems();
+                mc.getItemRenderer().render(stack, ItemDisplayContext.FIXED, false, pose, graphics.bufferSource(),
+                        LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, mc.getItemRenderer().getModel(stack, null, null, 0));
+                graphics.flush();
+                Lighting.setupFor3DItems();
+                pose.popPose();
+            }
+        });
     }
 
     private static void tick(Minecraft mc) {
@@ -83,6 +119,15 @@ public final class TendonsClientSmoke implements ClientModInitializer {
             return;
         }
         int t = ++worldTicks;
+        if (t == 4) {
+            previewModel = true;
+        }
+        if (t == 8) {
+            shot(mc, "model-preview");
+        }
+        if (t == 9) {
+            previewModel = false;
+        }
         if (t == 10) {
             server(mc, (level, player) -> {
                 level.setDayTime(6000);

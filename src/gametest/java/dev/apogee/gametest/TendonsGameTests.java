@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
@@ -96,6 +97,37 @@ public final class TendonsGameTests implements FabricGameTest {
         var recipe = helper.getLevel().getRecipeManager().byKey(Apogee.id("reinforced_tendons"));
         helper.assertTrue(recipe.isPresent(), "Missing recipe apogee:reinforced_tendons");
         helper.assertTrue(new ItemStack(ApogeeItems.REINFORCED_TENDONS).getMaxStackSize() == 1, "Implant must not stack");
+        helper.succeed();
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void onlyTheRipperdocFitsTheTendons(GameTestHelper helper) {
+        ServerPlayer player = airborne(helper);
+        player.setGameMode(GameType.SURVIVAL);
+        var legs = dev.emi.trinkets.api.TrinketsApi.getTrinketComponent(player).orElseThrow().getInventory().get("cyberware").get("legs");
+
+        // Not from the hand.
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ApogeeItems.REINFORCED_TENDONS));
+        ApogeeItems.REINFORCED_TENDONS.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+        helper.assertTrue(player.getMainHandItem().is(ApogeeItems.REINFORCED_TENDONS) && legs.getItem(0).isEmpty(), "Using the implant must not equip it");
+
+        // Not from the inventory screen: it has no cyberware slots, and shift-click leaves it where it is.
+        ((dev.emi.trinkets.TrinketPlayerScreenHandler) player.inventoryMenu).trinkets$updateTrinketSlots(true);
+        helper.assertTrue(player.inventoryMenu.slots.size() == 46, "The inventory menu has no cyberware slots, slots " + player.inventoryMenu.slots.size());
+        player.getInventory().setItem(10, new ItemStack(ApogeeItems.REINFORCED_TENDONS));
+        player.inventoryMenu.quickMoveStack(player, 10 + 0);
+        helper.assertTrue(legs.getItem(0).isEmpty(), "Shift-click in the inventory must not equip the implant");
+
+        // At the table, only in the legs system.
+        var menu = new dev.apogee.ripperdoc.RipperdocMenu(1, player.getInventory(), null);
+        int legsSlot = dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.LEGS, 0);
+        int armsSlot = dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.ARMS, 0);
+        helper.assertTrue(!menu.getSlot(armsSlot).mayPlace(new ItemStack(ApogeeItems.REINFORCED_TENDONS)), "The arms system must not take the tendons");
+        helper.assertTrue(!menu.getSlot(legsSlot).mayPlace(new ItemStack(ApogeeItems.SANDEVISTAN)), "The legs system only takes leg cyberware");
+        helper.assertTrue(menu.getSlot(legsSlot).mayPlace(new ItemStack(ApogeeItems.REINFORCED_TENDONS)), "The legs system takes the tendons");
+        menu.getSlot(legsSlot).setByPlayer(new ItemStack(ApogeeItems.REINFORCED_TENDONS));
+        helper.assertTrue(ReinforcedTendons.isEquipped(player), "The table fits the tendons");
+        player.getServer().getPlayerList().remove(player);
         helper.succeed();
     }
 }

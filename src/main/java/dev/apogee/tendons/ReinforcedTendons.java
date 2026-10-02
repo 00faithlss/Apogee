@@ -1,5 +1,6 @@
 package dev.apogee.tendons;
 
+import dev.apogee.registry.ApogeeSounds;
 import dev.apogee.network.ApogeeNetworking.AirDashRequest;
 import dev.apogee.network.ApogeeNetworking.DoubleJumpRequest;
 import dev.emi.trinkets.api.TrinketsApi;
@@ -14,7 +15,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -101,7 +101,7 @@ public final class ReinforcedTendons {
         MARGIN.merge(player.getUUID(), FALL_MARGIN, Float::sum);
         // The jumping client plays its own sound; everyone else hears it from here.
         player.level().playSound(player, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.PISTON_EXTEND, SoundSource.PLAYERS, 0.25F, 1.8F);
+                ApogeeSounds.TENDONS_DOUBLE_JUMP, SoundSource.PLAYERS, 0.8F, 1.0F);
         player.serverLevel().sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY() + 0.1, player.getZ(), 8, 0.25, 0.05, 0.25, 0.03);
         player.serverLevel().sendParticles(ParticleTypes.CRIT, player.getX(), player.getY() + 0.1, player.getZ(), 6, 0.2, 0.1, 0.2, 0.25);
     }
@@ -116,7 +116,7 @@ public final class ReinforcedTendons {
         player.fallDistance = 0.0F;
         // The dashing client plays its own sound; everyone else hears it from here.
         player.level().playSound(player, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.REDSTONE_TORCH_BURNOUT, SoundSource.PLAYERS, 0.35F, 0.6F);
+                ApogeeSounds.TENDONS_AIR_DASH, SoundSource.PLAYERS, 0.8F, 1.0F);
         player.serverLevel().sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                 player.getX(), player.getY() + 0.6, player.getZ(), 8, 0.2, 0.3, 0.2, 0.01);
     }

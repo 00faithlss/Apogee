@@ -105,6 +105,8 @@
   "subtitles.apogee.nanowire_swing": "Nanowire lashes",
   "subtitles.apogee.nanowire_hit": "Nanowire cuts",
   "subtitles.apogee.nanowire_heavy": "Nanowire double lash",
+  "subtitles.apogee.tendons_double_jump": "Reinforced tendons double jump",
+  "subtitles.apogee.tendons_air_dash": "Reinforced tendons air dash",
   "advancements.apogee.craft_nanowire.title": "Hanging by a Thread",
   "advancements.apogee.craft_nanowire.description": "Craft a red or white Nanowire",
   "tooltip.apogee.value.degrees": "%s°",
