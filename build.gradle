@@ -95,6 +95,14 @@ loom {
             vmArg '-Dapogee.nanowireSmoke=true'
             programArgs '--width', '1280', '--height', '720'
         }
+        tendonsSmoke {
+            client()
+            name 'Apogee reinforced tendons smoke run'
+            source sourceSets.gametest
+            runDir 'build/tendons-smoke'
+            vmArg '-Dapogee.tendonsSmoke=true'
+            programArgs '--width', '1280', '--height', '720'
+        }
         ripperdocSmoke {
             client()
             name 'Apogee ripperdoc table smoke run'

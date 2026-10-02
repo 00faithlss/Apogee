@@ -19,6 +19,7 @@ public final class ApogeeNetworking {
         PayloadTypeRegistry.playC2S().register(SteamDashRequest.TYPE, SteamDashRequest.CODEC);
         PayloadTypeRegistry.playC2S().register(ToggleMantis.TYPE, ToggleMantis.CODEC);
         PayloadTypeRegistry.playC2S().register(MantisThrust.TYPE, MantisThrust.CODEC);
+        PayloadTypeRegistry.playC2S().register(DoubleJumpRequest.TYPE, DoubleJumpRequest.CODEC);
         PayloadTypeRegistry.playS2C().register(MantisSync.TYPE, MantisSync.CODEC);
         PayloadTypeRegistry.playS2C().register(MantisSwing.TYPE, MantisSwing.CODEC);
         PayloadTypeRegistry.playS2C().register(RulesSync.TYPE, RulesSync.CODEC);
@@ -43,6 +44,18 @@ public final class ApogeeNetworking {
         public static final SteamDashRequest INSTANCE = new SteamDashRequest();
         public static final Type<SteamDashRequest> TYPE = new Type<>(Apogee.id("steam_dash"));
         public static final StreamCodec<FriendlyByteBuf, SteamDashRequest> CODEC = StreamCodec.unit(INSTANCE);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client performed the Reinforced Tendons double jump; the server validates and plays the effects. */
+    public record DoubleJumpRequest() implements CustomPacketPayload {
+        public static final DoubleJumpRequest INSTANCE = new DoubleJumpRequest();
+        public static final Type<DoubleJumpRequest> TYPE = new Type<>(Apogee.id("double_jump"));
+        public static final StreamCodec<FriendlyByteBuf, DoubleJumpRequest> CODEC = StreamCodec.unit(INSTANCE);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

@@ -63,6 +63,8 @@ public final class ApogeeClient implements ClientModInitializer {
         KeyBindingHelper.registerKeyBinding(ACTIVATE_SANDEVISTAN);
         KeyBindingHelper.registerKeyBinding(TOGGLE_MANTIS);
         dev.apogee.client.compat.immersivearmors.SteamDashClient.register();
+        dev.apogee.client.tendons.TendonsClient.register();
+        TrinketRendererRegistry.registerRenderer(ApogeeItems.REINFORCED_TENDONS, dev.apogee.client.tendons.TendonsRenderer.INSTANCE);
 
         EntityModelLayerRegistry.registerModelLayer(SandevistanModel.LAYER, SandevistanModel::createLayer);
         LivingEntityFeatureRendererRegistrationCallback.EVENT.register((type, renderer, helper, context) -> {

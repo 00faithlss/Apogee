@@ -10,6 +10,7 @@ import dev.apogee.registry.ApogeeItems;
 import dev.apogee.registry.ApogeeEffects;
 import dev.apogee.registry.ApogeeSounds;
 import dev.apogee.sandevistan.SandevistanManager;
+import dev.apogee.tendons.ReinforcedTendons;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public final class Apogee implements ModInitializer {
         ApogeeNetworking.registerCommon();
         SandevistanManager.register();
         MantisManager.register();
+        ReinforcedTendons.register();
         SteamDash.registerServer();
     }
 }

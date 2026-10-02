@@ -140,5 +140,8 @@
   "tooltip.apogee.mantis_blades.stat.bleeding": "Bleeding",
   "effect.apogee.bleeding": "Bleeding",
   "death.attack.apogee.bleeding": "%1$s bled out",
-  "death.attack.apogee.bleeding.player": "%1$s bled out while fighting %2$s"
+  "death.attack.apogee.bleeding.player": "%1$s bled out while fighting %2$s",
+  "item.apogee.reinforced_tendons": "Reinforced Tendons",
+  "tooltip.apogee.reinforced_tendons.slot": "Legs cyberware",
+  "tooltip.apogee.reinforced_tendons.description": "Press the jump button in midair to perform a double jump."
 }

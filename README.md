@@ -2,7 +2,7 @@
 
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
-Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
+Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **Cuchillas Mantis**, el **Nanocable** y los **Tendones reforzados**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
 
 > Versión oficial: **1.1.0+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -17,6 +17,7 @@ Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuc
 | `apogee:mantis_blades_electric` | Cuchillas Mantis eléctricas | Variante que aturde al objetivo. |
 | `apogee:nanowire_white` | Nanocable blanco | Variante blanca brillante. Misma ranura, alcance y sangrado que el rojo. |
 | `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
+| `apogee:reinforced_tendons` | Tendones reforzados | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/legs`. Doble salto. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
@@ -40,6 +41,7 @@ Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuc
 | Quantum Sync Lattice T5 (con forma) | 2 cristales del End, 2 bloques de amatista, 1 frasco de experiencia, 4 bloques de redstone: redstone en esquinas, cristales arriba y abajo, amatista a los lados, frasco al centro |
 | Mesa de matasanos (con forma) | Fila 1: cable neural, chip de control, cable neural · Fila 2: tres lanas blancas · Fila 3: lingote de hierro, bloque de hierro, lingote de hierro |
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
+| Tendones reforzados (con forma) | Fila 1: cable neural, pistón, cable neural · Fila 2: lingote de hierro, chip de control, lingote de hierro · Fila 3: cable neural, pistón, cable neural |
 
 #### Cuchillas Mantis por partes
 
@@ -117,6 +119,12 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, muestra el mismo recuadro con la recarga del latigazo doble, y tampoco se puede encantar.
 - Usa la misma tarjeta de tooltip que las Cuchillas Mantis: daño, ataques por segundo y tipo en grande; **G** alterna los controles y las estadísticas del latigazo doble.
 - Sonidos propios: despliegue, guardado, latigazo al aire (4 variantes), golpe al enemigo (4 variantes) y latigazo doble, en `assets/apogee/sounds/nanowire/`.
+
+### Tendones reforzados
+
+- Instálalos en la ranura **Piernas** de la mesa de matasanos. En el aire (después de saltar o de caer de un borde), pulsa el botón de salto otra vez para un **doble salto**: impulso vertical de 0,68 (un salto normal es 0,42) y **4 bloques de caída amortiguados**. Se recarga al tocar el suelo, el agua o una escalera; mantener el salto pulsado desde el suelo no cuenta.
+- Dos escapes en la parte de atrás de los tobillos, con el modelo de Project: Edgerunner (fuente en `art/tendons/`). Al saltar suena un pistón y salen nubes y chispas; los demás jugadores lo ven y lo oyen. El impulso lo aplica el cliente y el servidor valida el implante y un solo salto por vuelo.
+- Valores provisionales, en `dev.apogee.tendons.ReinforcedTendons`.
 
 ### Mecánica del Sandevistan (valores por defecto)
 
@@ -226,6 +234,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```
 
 - `runRipperdocSmoke`: abre el cliente, coloca la mesa de matasanos, acuesta al jugador, instala implantes (comprueba el daño de la cirugía), rota el visor en modo skin y rayos X, filma la pose acostada (también desde arriba, con un bloque de oro junto al pie y uno de diamante junto a la cabecera) y comprueba que el inventario ya no muestra las ranuras de ciberware, en `build/ripperdoc-smoke/screenshots`.
+- `runTendonsSmoke`: abre el cliente, equipa los Tendones reforzados, captura los escapes (atrás, de lado, de frente), hace un doble salto real durante una caída de 8 bloques y comprueba el impulso y que el aterrizaje no dañe, en `build/tendons-smoke/screenshots`.
 - `runNanowireSmoke`: abre el cliente, equipa el Nanocable y filma cada tick de los latigazos y del latigazo doble, en tercera y primera persona, y el repliegue, en `build/nanowire-smoke/screenshots`.
 
 Las comprobaciones numéricas de las animaciones del Nanocable también se ejecutan con `./gradlew nanowireMotionTest` (incluidas en `build`). Para comparar dos ejecuciones con capturas guardadas:

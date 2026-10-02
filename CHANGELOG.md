@@ -2,6 +2,10 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [Sin publicar]
+
+- Implante **Tendones reforzados** `apogee:reinforced_tendons` (ranura Piernas): pulsa saltar en el aire para un doble salto, con 4 bloques de caída amortiguados y una recarga por vuelo. Escapes en los tobillos, receta propia, textos en español e inglés, pruebas de servidor y de cliente (`runTendonsSmoke`).
+
 ## [1.1.0+1.21.1] — 2026-10-01
 
 - Nanocable un 30 % más grueso, con núcleo claro, borde rojo incandescente y halo emisivo.

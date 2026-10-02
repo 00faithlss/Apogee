@@ -140,5 +140,8 @@
   "tooltip.apogee.mantis_blades.stat.bleeding": "Sangrado",
   "effect.apogee.bleeding": "Sangrado",
   "death.attack.apogee.bleeding": "%1$s murió desangrado",
-  "death.attack.apogee.bleeding.player": "%1$s murió desangrado tras luchar con %2$s"
+  "death.attack.apogee.bleeding.player": "%1$s murió desangrado tras luchar con %2$s",
+  "item.apogee.reinforced_tendons": "Tendones reforzados",
+  "tooltip.apogee.reinforced_tendons.slot": "Ciberware de piernas",
+  "tooltip.apogee.reinforced_tendons.description": "Pulsa el botón de salto en el aire para realizar un doble salto."
 }
