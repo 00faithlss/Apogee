@@ -50,6 +50,8 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
   - `assets/cyber_ware_port/textures/item/katana.png` → `assets/apogee/textures/item/mantis_blade.png` (Hoja mantis).
   - `assets/cyber_ware_port/textures/item/component_fiberoptics.png` → `assets/apogee/textures/item/monofilament.png` (Monofilamento).
   - `assets/cyber_ware_port/textures/item/component_plating.png` → `assets/apogee/textures/item/wire_housing.png` (Carcasa de nanocable).
+  - `assets/cyber_ware_port/textures/item/component_microelectric.png` → `assets/apogee/textures/item/microelectric_module.png` (Módulo microeléctrico, componente del Biodyne Berserk).
+  - `assets/cyber_ware_port/textures/item/component_reactor.png` → `assets/apogee/textures/item/compact_reactor.png` (Reactor compacto, componente del Militech Berserk).
 
 ## Rajdhani SemiBold — Indian Type Foundry
 

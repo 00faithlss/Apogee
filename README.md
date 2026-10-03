@@ -3,7 +3,7 @@
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
 Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **Cuchillas Mantis**, el **Nanocable** y los **Tendones reforzados**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
-Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Berserk**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5, diez piezas para armar el ciberware de brazos y seis componentes de ciberware para el Berserk.
+Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Berserk**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5, diez piezas para armar el ciberware de brazos y ocho componentes de ciberware para el Berserk.
 
 > Versión oficial: **1.1.1+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -44,6 +44,8 @@ Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Be
 | `apogee:fortified_ankles` | Tobillos fortificados | Componente del Berserk (piernas). |
 | `apogee:bionic_joints` | Articulaciones biónicas | Componente del Berserk (esqueleto). |
 | `apogee:synaptic_accelerator` | Acelerador sináptico | Componente del Biodyne Berserk (sistema nervioso). |
+| `apogee:microelectric_module` | Módulo microeléctrico | Componente del Biodyne Berserk (sistema nervioso). |
+| `apogee:compact_reactor` | Reactor compacto | Componente del Militech Berserk (sistema circulatorio). |
 
 ### Recetas (mesa de crafteo)
 
@@ -61,7 +63,7 @@ Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Be
 
 #### Berserk por partes
 
-Todas dan 1 unidad. Los componentes llevan el nombre de implantes reales de Cyberpunk 2077 relacionados con lo que hace el Berserk.
+Todas dan 1 unidad. Cada Berserk tiene su propia receta, que comparte la base (armadura subdérmica, Núcleo T5, potenciador de adrenalina, articulaciones biónicas y Overdrive Kernel T5) y cambia el centro, el lado derecho y la esquina inferior derecha según la marca; ninguna usa otro Berserk como ingrediente. Los componentes llevan el nombre de implantes reales de Cyberpunk 2077 relacionados con lo que hace el Berserk.
 
 | Resultado | Ingredientes |
 |---|---|
@@ -71,9 +73,11 @@ Todas dan 1 unidad. Los componentes llevan el nombre de implantes reales de Cybe
 | Tobillos fortificados (con forma) | hilo, bola de slime, hilo · cable neural, pistón, cable neural · hilo, bola de slime, hilo |
 | Articulaciones biónicas (con forma) | hierro, bloque de hueso, hierro · bloque de hueso, cadena, bloque de hueso · hierro, bloque de hueso, hierro |
 | Acelerador sináptico (con forma) | redstone, cable neural, redstone · fragmento de amatista, diamante, fragmento de amatista · redstone, cable neural, redstone |
+| Módulo microeléctrico (con forma) | redstone, cable neural, redstone · cable neural, comparador, cable neural · redstone, cable neural, redstone |
+| Reactor compacto (con forma) | lingote de oro, cable neural, lingote de oro · cable neural, bloque de redstone, cable neural · lingote de oro, cable neural, lingote de oro |
 | Zetatech Berserk (con forma) | armadura subdérmica, Núcleo T5, armadura subdérmica · potenciador de adrenalina, lingote de netherita, biomonitor · articulaciones biónicas, Overdrive Kernel T5, tobillos fortificados |
-| Biodyne Berserk (sin forma) | Zetatech Berserk, acelerador sináptico, manzana dorada |
-| Militech Berserk (sin forma) | Zetatech Berserk, estrella del Nether, tótem de inmortalidad |
+| Biodyne Berserk (con forma) | armadura subdérmica, Núcleo T5, armadura subdérmica · potenciador de adrenalina, acelerador sináptico, módulo microeléctrico · articulaciones biónicas, Overdrive Kernel T5, manzana dorada |
+| Militech Berserk (con forma) | armadura subdérmica, Núcleo T5, armadura subdérmica · potenciador de adrenalina, estrella del Nether, reactor compacto · articulaciones biónicas, Overdrive Kernel T5, tótem de inmortalidad |
 
 #### Cuchillas Mantis por partes
 

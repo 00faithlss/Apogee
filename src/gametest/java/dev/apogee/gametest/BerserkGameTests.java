@@ -12,6 +12,7 @@ import dev.emi.trinkets.api.TrinketsApi;
 import java.util.List;
 import java.util.Optional;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +23,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 
@@ -56,7 +60,8 @@ public final class BerserkGameTests implements FabricGameTest {
     public void berserkRecipesProduceOneItem(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         List<String> recipes = List.of("berserk_zetatech", "berserk_biodyne", "berserk_militech", "subdermal_armor",
-                "adrenaline_booster", "biomonitor", "fortified_ankles", "bionic_joints", "synaptic_accelerator");
+                "adrenaline_booster", "biomonitor", "fortified_ankles", "bionic_joints", "synaptic_accelerator",
+                "microelectric_module", "compact_reactor");
         for (String name : recipes) {
             Optional<RecipeHolder<?>> recipe = level.getRecipeManager().byKey(Apogee.id(name));
             helper.assertTrue(recipe.isPresent(), "Missing recipe apogee:" + name);
@@ -203,6 +208,36 @@ public final class BerserkGameTests implements FabricGameTest {
             player.getServer().getPlayerList().remove(player);
         }
         helper.killAllEntities();
+        helper.succeed();
+    }
+
+    /** Each Berserk has its own 3x3 recipe: it crafts from the raw parts and never needs another Berserk. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_recipes")
+    public void eachBerserkCraftsFromItsOwnRecipe(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Item subdermal = ApogeeItems.SUBDERMAL_ARMOR;
+        Item core = BuiltInRegistries.ITEM.get(Apogee.id("os_core_t5"));
+        Item kernel = BuiltInRegistries.ITEM.get(Apogee.id("apogee_overdrive_kernel_t5"));
+        Item[][] grids = {
+                {subdermal, core, subdermal, ApogeeItems.ADRENALINE_BOOSTER, Items.NETHERITE_INGOT, ApogeeItems.BIOMONITOR,
+                        ApogeeItems.BIONIC_JOINTS, kernel, ApogeeItems.FORTIFIED_ANKLES},
+                {subdermal, core, subdermal, ApogeeItems.ADRENALINE_BOOSTER, ApogeeItems.SYNAPTIC_ACCELERATOR, ApogeeItems.MICROELECTRIC_MODULE,
+                        ApogeeItems.BIONIC_JOINTS, kernel, Items.GOLDEN_APPLE},
+                {subdermal, core, subdermal, ApogeeItems.ADRENALINE_BOOSTER, Items.NETHER_STAR, ApogeeItems.COMPACT_REACTOR,
+                        ApogeeItems.BIONIC_JOINTS, kernel, Items.TOTEM_OF_UNDYING}};
+        Item[] expected = {ApogeeItems.BERSERK_ZETATECH, ApogeeItems.BERSERK_BIODYNE, ApogeeItems.BERSERK_MILITECH};
+        for (int i = 0; i < grids.length; i++) {
+            List<ItemStack> stacks = java.util.Arrays.stream(grids[i]).map(ItemStack::new).toList();
+            CraftingInput input = CraftingInput.of(3, 3, stacks);
+            Optional<RecipeHolder<net.minecraft.world.item.crafting.CraftingRecipe>> recipe =
+                    level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level);
+            helper.assertTrue(recipe.isPresent(), "grid " + i + " crafts something");
+            ItemStack result = recipe.get().value().assemble(input, level.registryAccess());
+            helper.assertTrue(result.is(expected[i]), "grid " + i + " crafts " + expected[i] + " but gave " + result.getItem());
+            for (Item ingredient : grids[i]) {
+                helper.assertTrue(!(ingredient instanceof dev.apogee.item.BerserkItem), "recipe " + i + " must not use a Berserk");
+            }
+        }
         helper.succeed();
     }
 }

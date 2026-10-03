@@ -227,5 +227,7 @@
   "item.apogee.biomonitor": "Biomonitor",
   "item.apogee.fortified_ankles": "Fortified Ankles",
   "item.apogee.bionic_joints": "Bionic Joints",
-  "item.apogee.synaptic_accelerator": "Synaptic Accelerator"
+  "item.apogee.synaptic_accelerator": "Synaptic Accelerator",
+  "item.apogee.microelectric_module": "Microelectric Module",
+  "item.apogee.compact_reactor": "Compact Reactor"
 }
