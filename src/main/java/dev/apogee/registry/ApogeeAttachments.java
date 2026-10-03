@@ -23,6 +23,13 @@ public final class ApogeeAttachments {
             .persistent(Codec.BOOL)
             .buildAndRegister(Apogee.id("sandevistan_boosted"));
 
+    /** Server game time at which the player's Blood Pump can fire again; saved with the player. */
+    @SuppressWarnings("UnstableApiUsage")
+    public static final AttachmentType<Long> BLOOD_PUMP_COOLDOWN_END = AttachmentRegistry.<Long>builder()
+            .persistent(Codec.LONG)
+            .copyOnDeath()
+            .buildAndRegister(Apogee.id("blood_pump_cooldown_end"));
+
     private ApogeeAttachments() {
     }
 

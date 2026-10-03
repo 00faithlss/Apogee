@@ -1,9 +1,12 @@
 package dev.apogee.client.compat.simplytooltips;
 
+import dev.apogee.client.tooltip.BloodPumpTooltipContent;
+import dev.apogee.client.tooltip.BerserkTooltipContent;
 import dev.apogee.client.tooltip.MantisTooltipContent;
 import dev.apogee.client.tooltip.SandevistanTooltipContent;
 import dev.apogee.client.tooltip.TendonsTooltipContent;
 import dev.apogee.item.ArmCyberwareItem;
+import dev.apogee.item.BerserkItem;
 import dev.apogee.mantis.MantisVariant;
 import dev.apogee.registry.ApogeeItems;
 import java.util.ArrayList;
@@ -22,6 +25,8 @@ public final class SimplyTooltipsCompat {
     public static final String THEME_KEY = "apogee_sandevistan";
     public static final String MANTIS_THEME_KEY = "apogee_mantis";
     public static final String TENDONS_THEME_KEY = "apogee_tendons";
+    public static final String BLOOD_PUMP_THEME_KEY = "apogee_blood_pump";
+    public static final String BERSERK_THEME_KEY = "apogee_berserk";
 
     private SimplyTooltipsCompat() {
     }
@@ -30,7 +35,71 @@ public final class SimplyTooltipsCompat {
         TooltipProviderRegistry.register(new SandevistanProvider(), 100);
         TooltipProviderRegistry.register(new MantisProvider(), 100);
         TooltipProviderRegistry.register(new TendonsProvider(), 100);
+        TooltipProviderRegistry.register(new BloodPumpProvider(), 100);
+        TooltipProviderRegistry.register(new BerserkProvider(), 100);
         ClientTickEvents.END_CLIENT_TICK.register(client -> TooltipTabs.releaseIfHidden());
+    }
+
+    /** Same routing for the Blood Pump; TooltipRendererMixin draws {@link BloodPumpTooltipPanel}. */
+    private static final class BloodPumpProvider implements TooltipProvider {
+        @Override
+        public boolean supports(ItemStack stack) {
+            return stack.is(ApogeeItems.BLOOD_PUMP);
+        }
+
+        @Override
+        public ModernTooltipModel build(ItemStack stack, List<Component> lines, boolean altDown) {
+            List<String> ability = BloodPumpTooltipContent.descriptionLines().stream().map(Component::getString).toList();
+            List<String> body = new ArrayList<>();
+            body.add(ModernTooltipModel.SECTION_MARKER + BloodPumpTooltipContent.statsHeader().getString());
+            for (BloodPumpTooltipContent.Stat stat : BloodPumpTooltipContent.stats()) {
+                body.add(stat.label().getString() + ": " + stat.value().getString());
+            }
+            body.add(BloodPumpTooltipContent.note().getString());
+            return new ModernTooltipModel(
+                    BloodPumpTooltipContent.title().getString(),
+                    List.of(BloodPumpTooltipContent.badge().getString()),
+                    TooltipBorderStyle.IRON,
+                    ability,
+                    body,
+                    List.of(),
+                    ThemeRegistry.get(BLOOD_PUMP_THEME_KEY).colors(),
+                    null,
+                    "",
+                    BLOOD_PUMP_THEME_KEY,
+                    null);
+        }
+    }
+
+    /** The Berserk uses Simply Tooltips' own layout with Apogee's red theme. */
+    private static final class BerserkProvider implements TooltipProvider {
+        @Override
+        public boolean supports(ItemStack stack) {
+            return stack.getItem() instanceof BerserkItem;
+        }
+
+        @Override
+        public ModernTooltipModel build(ItemStack stack, List<Component> lines, boolean altDown) {
+            var variant = ((BerserkItem) stack.getItem()).variant();
+            List<String> ability = BerserkTooltipContent.descriptionLines(variant).stream().map(Component::getString).toList();
+            List<String> body = new ArrayList<>();
+            body.add(ModernTooltipModel.SECTION_MARKER + BerserkTooltipContent.statsHeader().getString());
+            for (BerserkTooltipContent.Stat stat : BerserkTooltipContent.stats(variant)) {
+                body.add(stat.label().getString() + ": " + stat.value().getString());
+            }
+            return new ModernTooltipModel(
+                    stack.getHoverName().getString(),
+                    List.of(BerserkTooltipContent.badge(variant).getString()),
+                    TooltipBorderStyle.IRON,
+                    ability,
+                    body,
+                    List.of(),
+                    ThemeRegistry.get(BERSERK_THEME_KEY).colors(),
+                    null,
+                    "",
+                    BERSERK_THEME_KEY,
+                    null);
+        }
     }
 
     /** Same routing for the arm cyberware (Mantis Blades and nanowire); TooltipRendererMixin draws {@link MantisTooltipPanel}. */
