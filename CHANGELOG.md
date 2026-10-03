@@ -2,6 +2,13 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [1.1.1+1.21.1] — 2026-10-01
+
+- Tooltips del Nanocable con el mismo ancho de tarjeta que las Cuchillas Mantis: descripciones y habilidad de sangrado divididas en líneas, altura calculada según el texto y ajuste a la pantalla cuando no cabe. Traducciones más breves en español e inglés.
+- Clic izquierdo del Nanocable rojo y blanco: barrido en área de 180° hasta 7 bloques en supervivencia, con daño según la carga del ataque, críticos y sangrado. Funciona al golpear al aire y no duplica el golpe sobre el enemigo apuntado.
+- Clic derecho: el barrido fuerte usa el mismo semicírculo frontal; ambos ataques respetan las paredes y excluyen aliados. Guardar el implante cancela los cortes que todavía no impactaron; iniciar el ataque fuerte cancela el corte pendiente.
+- Comprobación visual de Descripción y Estadísticas en español e inglés y pruebas de varios enemigos por ataque, límites del área, golpes al aire, daño único, sangrado y cancelación al guardar.
+
 ## [1.1.0+1.21.1] — 2026-10-01
 
 - Nanocable un 30 % más grueso, con núcleo claro, borde rojo incandescente y halo emisivo.
