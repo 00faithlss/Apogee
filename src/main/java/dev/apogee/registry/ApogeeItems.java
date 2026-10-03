@@ -3,6 +3,7 @@ package dev.apogee.registry;
 import dev.apogee.Apogee;
 import dev.apogee.item.MantisBladesItem;
 import dev.apogee.item.NanowireItem;
+import dev.apogee.item.ReinforcedTendonsItem;
 import dev.apogee.item.SandevistanItem;
 import dev.apogee.mantis.MantisVariant;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -24,6 +25,7 @@ public final class ApogeeItems {
     public static final Item MANTIS_BLADES_ELECTRIC = mantis(MantisVariant.ELECTRIC);
     public static final Item NANOWIRE = new NanowireItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant());
     public static final Item NANOWIRE_WHITE = new NanowireItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant(), MantisVariant.NANOWIRE_WHITE);
+    public static final Item REINFORCED_TENDONS = new ReinforcedTendonsItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
     public static final Item OS_CORE_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
     public static final Item OVERDRIVE_KERNEL_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
     public static final Item QUANTUM_SYNC_LATTICE_T5 = new Item(new Item.Properties().rarity(Rarity.RARE));
@@ -59,6 +61,7 @@ public final class ApogeeItems {
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("mantis_blades_electric"), MANTIS_BLADES_ELECTRIC);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("nanowire"), NANOWIRE);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("nanowire_white"), NANOWIRE_WHITE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("reinforced_tendons"), REINFORCED_TENDONS);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("os_core_t5"), OS_CORE_T5);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("apogee_overdrive_kernel_t5"), OVERDRIVE_KERNEL_T5);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("quantum_sync_lattice_t5"), QUANTUM_SYNC_LATTICE_T5);
@@ -84,6 +87,7 @@ public final class ApogeeItems {
                     output.accept(MANTIS_BLADES_ELECTRIC);
                     output.accept(NANOWIRE);
                     output.accept(NANOWIRE_WHITE);
+                    output.accept(REINFORCED_TENDONS);
                     output.accept(OS_CORE_T5);
                     output.accept(OVERDRIVE_KERNEL_T5);
                     output.accept(QUANTUM_SYNC_LATTICE_T5);
