@@ -77,6 +77,17 @@ public abstract class PunchyArmRendererMixin {
     private static void apogee$mantisArm(PlayerModel<AbstractClientPlayer> model, AbstractClientPlayer player,
                                          HumanoidArm arm, PoseStack poses, MultiBufferSource buffers, int light,
                                          ResourceLocation texture, boolean slim, float partialTick, CallbackInfo ci) {
+        if (PunchyCompat.probe != null) {
+            boolean probeLeft = arm == HumanoidArm.LEFT;
+            PoseStack sampled = new PoseStack();
+            if (slim) {
+                sampled.translate((probeLeft ? 1.0F : -1.0F) * 0.5F / 16.0F, 0.0F, 0.0F);
+            }
+            applyArmMeshOffsets(sampled, probeLeft);
+            applyFreezeShake(sampled, player, partialTick);
+            (probeLeft ? model.leftArm : model.rightArm).translateAndRotate(sampled);
+            PunchyCompat.probe.accept(probeLeft, new Matrix4f(sampled.last().pose()));
+        }
         if (PunchyCompat.rendered()) {
             ci.cancel();
             return;

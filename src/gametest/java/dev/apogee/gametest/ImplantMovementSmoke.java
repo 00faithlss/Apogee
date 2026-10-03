@@ -50,11 +50,43 @@ public final class ImplantMovementSmoke implements ClientModInitializer {
     private static float walkSpan;
     private static float runSpan;
     private static Vector3f previous;
+    private static Vector3f finalPrevious;
+    private static float finalWalk;
+    private static float finalRun;
+    private static float finalIdle;
+    private static Matrix4f lastPunchy;
+    private static float offsetSum;
+    private static float tiltSum;
+    private static int offsetCount;
 
     @Override
     public void onInitializeClient() {
         if (ENABLED) {
             ClientTickEvents.END_CLIENT_TICK.register(ImplantMovementSmoke::tick);
+            PunchyCompat.finalProbe = (left, pose) -> {
+                if (left == (Minecraft.getInstance().options.mainHand().get() == HumanoidArm.RIGHT) || ticks < 40) {
+                    return;
+                }
+                Vector3f at = pose.getTranslation(new Vector3f());
+                int t = (ticks - 40) % ROUND;
+                if (lastPunchy != null && t >= 60 && t < 155) {
+                    offsetSum += lastPunchy.getTranslation(new Vector3f()).distance(at);
+                    tiltSum += (float) Math.toDegrees(lastPunchy.getNormalizedRotation(new org.joml.Quaternionf())
+                            .difference(pose.getNormalizedRotation(new org.joml.Quaternionf()), new org.joml.Quaternionf()).angle());
+                    offsetCount++;
+                }
+                if (finalPrevious != null) {
+                    float distance = finalPrevious.distance(at);
+                    if (t >= 60 && t < 75) {
+                        finalIdle += distance;
+                    } else if (t >= 90 && t < 115) {
+                        finalWalk += distance;
+                    } else if (t >= 130 && t < 155) {
+                        finalRun += distance;
+                    }
+                }
+                finalPrevious = at;
+            };
         }
     }
 
@@ -63,6 +95,7 @@ public final class ImplantMovementSmoke implements ClientModInitializer {
             return;
         }
         check(pose.isFinite(), "finite Punchy arm transform");
+        lastPunchy = new Matrix4f(pose);
         Vector3f position = pose.getTranslation(new Vector3f());
         int t = (ticks - 40) % ROUND;
         if (previous != null) {
@@ -118,6 +151,10 @@ public final class ImplantMovementSmoke implements ClientModInitializer {
         if (t == 0) {
             samples = 0;
             idleSpan = walkSpan = runSpan = 0.0F;
+            finalIdle = finalWalk = finalRun = 0.0F;
+            finalPrevious = null;
+            offsetSum = tiltSum = 0.0F;
+            offsetCount = 0;
             previous = null;
             mc.options.hideGui = false;
             mc.options.fov().set(70);
@@ -178,7 +215,7 @@ public final class ImplantMovementSmoke implements ClientModInitializer {
                     check(walkSpan > 0.02F, "walking moves native poses " + name);
                     check(runSpan > 0.02F, "running moves native poses " + name);
                 }
-                LOGGER.info("{} samples={} idle={} walking={} running={}", name, samples, idleSpan, walkSpan, runSpan);
+                LOGGER.info("{} samples={} idle={} walking={} running={} | final idle={} walking={} running={} | from Punchy: offset={} tilt={}", name, samples, idleSpan, walkSpan, runSpan, finalIdle, finalWalk, finalRun, offsetSum / Math.max(1, offsetCount), tiltSum / Math.max(1, offsetCount));
             }
             default -> {
             }

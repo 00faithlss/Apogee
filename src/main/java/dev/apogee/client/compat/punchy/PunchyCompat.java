@@ -33,6 +33,10 @@ public final class PunchyCompat {
     private static boolean resolved;
     private static Frame frame;
     private static boolean rendering;
+    /** Test hook: told Punchy's pose of each first-person arm (true for the left), implants or not. */
+    public static java.util.function.BiConsumer<Boolean, Matrix4f> probe;
+    /** Test hook: told where each implant arm ends up in view space, after the implant's own offsets. */
+    public static java.util.function.BiConsumer<Boolean, Matrix4f> finalProbe;
 
     private static final class Frame {
         final LocalPlayer player;
@@ -153,6 +157,9 @@ public final class PunchyCompat {
         boolean armVisible = arm.visible, sleeveVisible = sleeve.visible;
         poses.pushPose();
         poses.mulPose(frame.arms[right ? 0 : 1]);
+        if (finalProbe != null) {
+            finalProbe.accept(!right, new Matrix4f(poses.last().pose()));
+        }
         try {
             arm.loadPose(PartPose.ZERO);
             sleeve.loadPose(PartPose.ZERO);
