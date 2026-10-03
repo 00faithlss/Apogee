@@ -344,15 +344,17 @@ public final class MantisGameTests implements FabricGameTest {
         victim.setNoGravity(true);
         helper.getLevel().addFreshEntity(victim);
         player.attack(victim);
-        helper.assertTrue(victim.hasEffect(ApogeeEffects.BLEEDING), "A successful cut applies bleeding");
-        helper.assertTrue(victim.getEffect(ApogeeEffects.BLEEDING).getAmplifier() == 0, "Wound strength is fixed");
-        float afterCut = victim.getHealth();
-        MantisManager.retract(player, false);
-        helper.runAfterDelay(85, () -> {
-            helper.assertTrue(!victim.hasEffect(ApogeeEffects.BLEEDING), "Bleeding expires after four seconds");
-            helper.assertTrue(near(victim.getHealth(), afterCut - 4.0), "Four one-damage pulses continue after retracting");
-            cleanup(helper, player);
-            helper.succeed();
+        helper.runAfterDelay(NanowireRules.LASH_HIT_DELAY_TICKS + 1, () -> {
+            helper.assertTrue(victim.hasEffect(ApogeeEffects.BLEEDING), "A successful cut applies bleeding");
+            helper.assertTrue(victim.getEffect(ApogeeEffects.BLEEDING).getAmplifier() == 0, "Wound strength is fixed");
+            float afterCut = victim.getHealth();
+            MantisManager.retract(player, false);
+            helper.runAfterDelay(85, () -> {
+                helper.assertTrue(!victim.hasEffect(ApogeeEffects.BLEEDING), "Bleeding expires after four seconds");
+                helper.assertTrue(near(victim.getHealth(), afterCut - 4.0), "Four one-damage pulses continue after retracting");
+                cleanup(helper, player);
+                helper.succeed();
+            });
         });
     }
 
@@ -415,6 +417,123 @@ public final class MantisGameTests implements FabricGameTest {
             helper.assertTrue(defender.getHealth() == health, "The shield blocked the wire cut");
             helper.assertTrue(!defender.hasEffect(ApogeeEffects.BLEEDING), "A blocked cut does not cause bleeding");
             cleanup(helper, attacker);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_wire_red_area", timeoutTicks = 50)
+    public void redWireSweepsMultipleTargetsWithEitherClick(GameTestHelper helper) {
+        wireArea(helper, ApogeeItems.NANOWIRE, false);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_wire_white_area", timeoutTicks = 50)
+    public void whiteWireSweepsMultipleTargetsWithEitherClick(GameTestHelper helper) {
+        wireArea(helper, ApogeeItems.NANOWIRE_WHITE, false);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_wire_air_area", timeoutTicks = 50)
+    public void wireAirSwingCutsNearbyTargets(GameTestHelper helper) {
+        wireArea(helper, ApogeeItems.NANOWIRE_WHITE, true);
+    }
+
+    private static net.minecraft.world.entity.animal.Pig wireTarget(GameTestHelper helper, ServerPlayer player, double x, double z) {
+        var target = new net.minecraft.world.entity.animal.Pig(EntityType.PIG, helper.getLevel());
+        target.moveTo(player.getX() + x, player.getY(), player.getZ() + z, 0.0F, 0.0F);
+        target.setNoAi(true);
+        target.setNoGravity(true);
+        target.getAttribute(Attributes.MAX_HEALTH).setBaseValue(100.0);
+        target.setHealth(100.0F);
+        helper.getLevel().addFreshEntity(target);
+        return target;
+    }
+
+    private static void wireArea(GameTestHelper helper, Item implant, boolean air) {
+        ServerPlayer player = wearer(helper, implant);
+        MantisManager.toggle(player);
+        // Keep this arena above the test structures and their result markers.
+        player.teleportTo(helper.getLevel(), player.getX(), player.getY() + 8.0, player.getZ(), 0.0F, 0.0F);
+        player.setNoGravity(true);
+        player.setYRot(0.0F);
+        var centre = wireTarget(helper, player, 0.0, 4.0);
+        var left = wireTarget(helper, player, -4.0, 2.0);
+        var right = wireTarget(helper, player, 4.0, 2.0);
+        var side = wireTarget(helper, player, -5.0, 0.0);
+        var behind = wireTarget(helper, player, 0.0, -3.0);
+        var far = wireTarget(helper, player, 0.0, 11.0);
+        var walled = wireTarget(helper, player, 4.0, 0.0);
+        // Block the sideways target's line of sight with a full-height stone screen.
+        for (int y = 0; y <= 4; y++) {
+            helper.getLevel().setBlockAndUpdate(BlockPos.containing(player.getX() + 2, player.getY() - 2 + y, player.getZ()),
+                    Blocks.STONE.defaultBlockState());
+        }
+        float charge = player.getAttackStrengthScale(0.5F);
+        float expected = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * (0.2F + charge * charge * 0.8F);
+        if (air) {
+            player.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        } else {
+            player.attack(centre);
+            // The actual client sends both attack and swing. Spam must not queue extra cuts.
+            player.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+            player.attack(centre);
+        }
+        helper.assertTrue(centre.getHealth() == 100.0F, "The pointed target waits for the same cable impact as the others");
+        helper.runAfterDelay(NanowireRules.LASH_HIT_DELAY_TICKS + 1, () -> {
+            for (var target : new net.minecraft.world.entity.animal.Pig[]{centre, left, right, side}) {
+                helper.assertTrue(Math.abs(target.getHealth() - (100.0F - expected)) < 1.0E-4,
+                        "One left-click cut hits every target in the semicircle once: health=" + target.getHealth()
+                                + " expected=" + (100.0F - expected) + " pos=" + target.position().subtract(player.position())
+                                + " sight=" + player.hasLineOfSight(target));
+                helper.assertTrue(target.hasEffect(ApogeeEffects.BLEEDING), "Every accepted area cut applies bleeding");
+                target.removeEffect(ApogeeEffects.BLEEDING);
+                target.invulnerableTime = 0;
+            }
+            helper.assertTrue(behind.getHealth() == 100.0F && far.getHealth() == 100.0F && walled.getHealth() == 100.0F,
+                    "A sweep skips targets behind the wearer, outside reach or behind a wall");
+            MantisManager.thrust(player);
+        });
+        helper.runAfterDelay(NanowireRules.LASH_HIT_DELAY_TICKS + NanowireRules.HEAVY_HIT_DELAY_TICKS + 3, () -> {
+            for (var target : new net.minecraft.world.entity.animal.Pig[]{centre, left, right, side}) {
+                helper.assertTrue(Math.abs(target.getHealth() - (100.0F - expected - NanowireRules.HEAVY_DAMAGE)) < 1.0E-4,
+                        "The right-click heavy hits every eligible target once");
+                helper.assertTrue(target.hasEffect(ApogeeEffects.BLEEDING), "The heavy refreshes bleeding on every target");
+            }
+            helper.assertTrue(behind.getHealth() == 100.0F && far.getHealth() == 100.0F && walled.getHealth() == 100.0F,
+                    "The heavy respects the same area boundaries");
+            cleanup(helper, player);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_wire_cancel", timeoutTicks = 35)
+    public void retractingCancelsAnUnlandedWireCut(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, ApogeeItems.NANOWIRE);
+        MantisManager.toggle(player);
+        var victim = wireTarget(helper, player, 0.0, 3.0);
+        player.attack(victim);
+        MantisManager.retract(player, false);
+        helper.runAfterDelay(10, () -> {
+            helper.assertTrue(victim.getHealth() == 100.0F && !victim.hasEffect(ApogeeEffects.BLEEDING),
+                    "Retracting before the cable crosses the target cancels the cut");
+            cleanup(helper, player);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_wire_heavy_priority", timeoutTicks = 35)
+    public void heavyWireSweepReplacesAPendingSingleCut(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, ApogeeItems.NANOWIRE_WHITE);
+        MantisManager.toggle(player);
+        var victim = wireTarget(helper, player, 0.0, 3.0);
+        player.attack(victim);
+        MantisManager.thrust(player);
+        player.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        helper.runAfterDelay(NanowireRules.LASH_HIT_DELAY_TICKS + 1, () ->
+                helper.assertTrue(victim.getHealth() == 100.0F, "The interrupted single cut does not land during the heavy"));
+        helper.runAfterDelay(NanowireRules.HEAVY_HIT_DELAY_TICKS + 1, () -> {
+            helper.assertTrue(victim.getHealth() == 100.0F - NanowireRules.HEAVY_DAMAGE,
+                    "The heavy owns the impact and hits exactly once");
+            helper.assertTrue(victim.hasEffect(ApogeeEffects.BLEEDING), "The heavy still leaves a bleeding wound");
+            cleanup(helper, player);
             helper.succeed();
         });
     }
