@@ -1,6 +1,7 @@
 package dev.apogee.mixin;
 
 import dev.apogee.Apogee;
+import dev.apogee.berserk.BerserkManager;
 import dev.apogee.sandevistan.SandevistanManager;
 import dev.apogee.time.TimeScaledEntity;
 import java.util.Iterator;
@@ -25,7 +26,7 @@ public abstract class LivingEntityMixin {
         if (self.level().isClientSide()) {
             return amount;
         }
-        return SandevistanManager.modifyDamage(self, source, amount);
+        return BerserkManager.modifyDamage(self, source, SandevistanManager.modifyDamage(self, source, amount));
     }
 
     /**

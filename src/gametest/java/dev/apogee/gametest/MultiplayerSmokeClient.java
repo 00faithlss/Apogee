@@ -43,7 +43,7 @@ public final class MultiplayerSmokeClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         role = System.getProperty("apogee.mpRole");
-        if (role == null) {
+        if (role == null || Boolean.getBoolean("apogee.mpBerserk")) {
             return;
         }
         ClientReceiveMessageEvents.GAME.register((message, overlay) -> {

@@ -5,6 +5,9 @@
 #   tools/mantis_tests.sh compat  runMantisSmoke with Punchy, EMF, ETF and Fresh Animations
 #                                 (COMPAT_SMOKE=ripperdoc runs the ripperdoc table script instead)
 #   tools/mantis_tests.sh motion  first-person arm motion, every tick, in vanilla and with Punchy
+#   tools/mantis_tests.sh berserk-mp [vanilla|punchy|fresh|both]
+#                                 the Berserk with a dedicated server and two clients, with and without
+#                                 Punchy and Fresh Animations (default: all four, one after the other)
 #   tools/mantis_tests.sh calibrate  fits the folded implant onto the hand that follows it
 #   tools/mantis_tests.sh iris    the Mantis smoke script with Sodium, Iris and the MakeUp UltraFast
 #                                 shader pack, in a production-like instance (Iris fails in dev runs)
@@ -24,7 +27,7 @@ CFG="$ROOT/.gradle/loom-cache/launch.cfg"
 # server <dir>: dedicated server running the multiplayer script, in the background.
 server() {
     (cd "$1" && exec java -Xmx2G -Dfabric.dli.config="$CFG" -Dfabric.dli.env=server \
-        -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotServer -Dapogee.mpSmoke=true \
+        -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotServer -Dapogee.mpSmoke=${SERVER_FLAG:-true} -Dapogee.mpBerserk=${BERSERK_FLAG:-false} \
         -cp "$CP" net.fabricmc.devlaunchinjector.Main nogui > run.out 2>&1) &
 }
 
@@ -81,6 +84,58 @@ compat)
         -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Dapogee.${COMPAT_SMOKE:-mantis}Smoke=true -cp "$CP" \
         net.fabricmc.devlaunchinjector.Main --gameDir "$ROOT/$base" --width 1600 --height 900 > "$base/run.out" 2>&1 || true
     grep -h -E 'Loading [0-9]+ mods|(Mantis|Ripperdoc)Smoke.*(FAILED|passed|failed)' "$base/run.out" || true
+    ;;
+berserk-mp)
+    # Server plus Observer and Wearer, once per mod combination; each client gets its own mods and resource packs.
+    fetch() { [ -f "$2" ] || curl -sSfL -o "$2" "$1"; }
+    cache=build/mantis-compat
+    mkdir -p "$cache/mods" "$cache/resourcepacks"
+    fetch https://cdn.modrinth.com/data/8aoMKplv/versions/80B8c9Qd/punchy-2.8c-fabric-1.21.1.jar "$cache/mods/punchy-2.8c-fabric-1.21.1.jar"
+    fetch https://cdn.modrinth.com/data/4I1XuqiY/versions/FMPLuEEv/entity_model_features-3.3.9-1.21-fabric.jar "$cache/mods/entity_model_features-3.3.9-1.21-fabric.jar"
+    fetch https://cdn.modrinth.com/data/BVzZfTc1/versions/lmZfRqnz/entity_texture_features-7.2.4-1.21-fabric.jar "$cache/mods/entity_texture_features-7.2.4-1.21-fabric.jar"
+    fetch https://cdn.modrinth.com/data/50dA9Sha/versions/xN57JJts/FreshAnimations_v1.10.4.zip "$cache/resourcepacks/FreshAnimations_v1.10.4.zip"
+    fetch 'https://cdn.modrinth.com/data/YAVTU8mK/versions/RfJ3uz2J/FA%2BAll_Extensions-v1.8.1.zip' "$cache/resourcepacks/FA+All_Extensions-v1.8.1.zip"
+    fetch 'https://cdn.modrinth.com/data/TAIMVZCL/versions/Wj7NeGjP/FA%2BPlayer-v1.1.zip' "$cache/resourcepacks/FA+Player-v1.1.zip"
+    combos=${2:-"vanilla punchy fresh both"}
+    for combo in $combos; do
+        base=build/berserk-mp/$combo
+        rm -rf "$base" && mkdir -p "$base/server"
+        printf 'eula=true\n' > "$base/server/eula.txt"
+        printf 'online-mode=false\nenforce-secure-profile=false\nspawn-protection=0\nlevel-type=minecraft\\:flat\ngenerate-structures=false\nmotd=berserk\nserver-port=25566\nspawn-monsters=false\n' > "$base/server/server.properties"
+        for role in observer wearer; do
+            packs='resourcePacks:["vanilla","fabric"]'
+            mkdir -p "$base/$role/mods"
+            case "$combo" in punchy|both) cp "$cache/mods/punchy-"*.jar "$base/$role/mods/" ;; esac
+            case "$combo" in fresh|both)
+                cp "$cache/mods/entity_"*.jar "$base/$role/mods/"
+                packs='resourcePacks:["vanilla","fabric","file/FreshAnimations_v1.10.4.zip","file/FA+All_Extensions-v1.8.1.zip","file/FA+Player-v1.1.zip"]'
+                mkdir -p "$base/$role/resourcepacks"
+                cp "$cache/resourcepacks/"*.zip "$base/$role/resourcepacks/" ;;
+            esac
+            client_options "$base/$role" "$packs"
+        done
+        SERVER_FLAG=false BERSERK_FLAG=true server "$base/server"
+        server=$!
+        until grep -q 'Done (' "$base/server/run.out" 2>/dev/null; do
+            kill -0 "$server" 2>/dev/null || { echo "server exited"; tail -40 "$base/server/run.out"; exit 1; }
+            sleep 2
+        done
+        for role in observer wearer; do
+            name=$(echo "$role" | sed 's/^./\U&/')
+            xvfb-run -a -s "-screen 0 1280x720x24" java -Xmx3G -Dfabric.dli.config="$CFG" -Dfabric.dli.env=client \
+                -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Dapogee.mpBerserk=true -Dapogee.mpRole=$role -cp "$CP" \
+                net.fabricmc.devlaunchinjector.Main --username "$name" --gameDir "$ROOT/$base/$role" \
+                --quickPlayMultiplayer localhost:25566 --width 1280 --height 720 > "$base/$role/run.out" 2>&1 &
+            eval "pid_$role=\$!"
+            sleep 15
+        done
+        wait "$pid_observer" "$pid_wearer" || true
+        (sleep 60; kill "$server" 2>/dev/null) &
+        wait "$server" || true
+        echo "== $combo"
+        grep -h -E 'Loading [0-9]+ mods' "$base"/*/run.out | head -2 || true
+        grep -h 'BerserkMultiplayer' "$base"/*/run.out "$base/server/run.out" | grep -E 'FAILED|passed|failed' || true
+    done
     ;;
 motion|calibrate)
     # The same run twice: vanilla hands, then with Punchy alone. Motion frames are then tracked

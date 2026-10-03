@@ -1,5 +1,6 @@
 package dev.apogee.mixin.client;
 
+import dev.apogee.client.fx.BerserkEffects;
 import dev.apogee.client.fx.SandevistanEffects;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
@@ -13,6 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GuiMixin {
     @Inject(method = "render", at = @At("HEAD"))
     private void apogee$screenOverlay(GuiGraphics graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        SandevistanEffects.renderScreenOverlay(graphics, deltaTracker.getGameTimeDeltaPartialTick(false));
+        float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
+        SandevistanEffects.renderScreenOverlay(graphics, partialTick);
+        BerserkEffects.renderScreenOverlay(graphics, partialTick);
     }
 }

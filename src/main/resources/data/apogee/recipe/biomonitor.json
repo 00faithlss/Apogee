@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "QMQ",
+    "CDC",
+    "QMQ"
+  ],
+  "key": {
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "M": {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    "C": {
+      "item": "apogee:neural_cable"
+    },
+    "D": {
+      "item": "apogee:control_chip"
+    }
+  },
+  "result": {
+    "id": "apogee:biomonitor",
+    "count": 1
+  }
+}

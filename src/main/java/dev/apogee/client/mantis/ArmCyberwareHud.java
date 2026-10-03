@@ -1,6 +1,7 @@
 package dev.apogee.client.mantis;
 
 import dev.apogee.client.config.ApogeeClientConfig;
+import dev.apogee.client.fx.BerserkEffects;
 import dev.apogee.client.fx.CyberwareHudSlot;
 import dev.apogee.client.fx.SandevistanEffects;
 import dev.apogee.item.ArmCyberwareItem;
@@ -55,8 +56,8 @@ public final class ArmCyberwareHud {
         float fill = left / Math.max(1, MantisRules.thrustCooldownTicks(variant));
         int accent = left > 0.0F ? CyberwareHudSlot.MAGENTA : CyberwareHudSlot.CYAN;
         int x = 6;
-        // Over the Sandevistan's square while that one shows.
-        float lift = SandevistanEffects.hudAlpha() * (CyberwareHudSlot.SIZE + 6);
+        // Over the operating system's square (Sandevistan or Berserk) while that one shows.
+        float lift = Math.max(SandevistanEffects.hudAlpha(), BerserkEffects.hudAlpha()) * (CyberwareHudSlot.SIZE + 6);
         int y = Math.round(graphics.guiHeight() - CyberwareHudSlot.SIZE - 6 - lift);
         graphics.pose().pushPose();
         graphics.pose().translate(0.0F, (1.0F - alpha) * 6.0F, 0.0F);
