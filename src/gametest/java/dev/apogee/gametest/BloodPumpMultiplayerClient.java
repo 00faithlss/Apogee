@@ -81,9 +81,12 @@ public final class BloodPumpMultiplayerClient implements ClientModInitializer {
             float elapsed = BloodPumpClient.elapsed(wearer, 0.0F);
             switch (phase) {
                 case "idle" -> check(elapsed < 0.0F, "the pump is ready for " + role + ": " + elapsed);
-                case "fired", "refilling", "mantis", "mantis-armor" -> check(elapsed >= 0.0F, "the pump shows as fired for " + role + " in " + phase + ": " + elapsed);
+                case "fired", "refilling", "mantis", "mantis-armor", "nanowire" -> check(elapsed >= 0.0F, "the pump shows as fired for " + role + " in " + phase + ": " + elapsed);
                 default -> {
                 }
+            }
+            if ("nanowire".equals(phase)) {
+                check(MantisClient.variant(wearer) == MantisVariant.NANOWIRE, "nanowire synced to " + role);
             }
             if ("mantis".equals(phase) || "mantis-armor".equals(phase)) {
                 check(MantisClient.variant(wearer) == MantisVariant.STANDARD, "mantis blades synced to " + role);

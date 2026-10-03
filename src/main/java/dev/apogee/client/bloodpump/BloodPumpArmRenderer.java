@@ -8,7 +8,6 @@ import dev.emi.trinkets.api.client.TrinketRenderer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,6 +17,8 @@ import net.minecraft.world.item.ItemStack;
 public final class BloodPumpArmRenderer implements TrinketRenderer {
     public static final BloodPumpArmRenderer INSTANCE = new BloodPumpArmRenderer();
     private static final Int2ObjectOpenHashMap<BloodPumpArm> ARMS = new Int2ObjectOpenHashMap<>();
+
+    private static final float OUT_PIXELS = 2.5F;
 
     private final BloodPumpGeoRenderer renderer = new BloodPumpGeoRenderer();
 
@@ -40,15 +41,12 @@ public final class BloodPumpArmRenderer implements TrinketRenderer {
         arm.follow(BloodPumpClient.elapsed(entity, tickDelta));
         poseStack.pushPose();
         float armor = entity.getItemBySlot(EquipmentSlot.CHEST).isEmpty() ? 0.0F : 1.0F;
-        if (entity instanceof AbstractClientPlayer player && MantisClient.variant(player) != null) {
-            // The arm cyberware takes over both forearms: the pump goes on the right of the lower back.
-            humanoid.body.translateAndRotate(poseStack);
-            poseStack.translate(-2.5F / 16.0F, 0.0F, (0.2F + armor) / 16.0F);
-            poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
-        } else {
-            humanoid.rightArm.translateAndRotate(poseStack);
-            // Outside the armor sleeve, which is a pixel thicker than the arm.
-            poseStack.translate(-armor / 16.0F, 0.0F, 0.0F);
+        humanoid.rightArm.translateAndRotate(poseStack);
+        // Outside the armor sleeve, which is a pixel thicker than the arm.
+        poseStack.translate(-armor / 16.0F, 0.0F, 0.0F);
+        if (MantisClient.variant(entity) != null) {
+            // The arm cyberware's rig sits on this forearm too: ride just outside it, clear of the rig.
+            poseStack.translate(-OUT_PIXELS / 16.0F, 0.0F, 0.0F);
         }
         // The export is in a player-model's space: x to the wearer's right, y up from the feet,
         // the right arm's pivot at (-5, 22, 0) pixels. Seat it on the arm part's own space (y down).
