@@ -26,8 +26,8 @@ public final class BloodPumpArmRenderer implements TrinketRenderer {
     public static final BloodPumpArmRenderer INSTANCE = new BloodPumpArmRenderer();
     private static final Int2ObjectOpenHashMap<BloodPumpArm> ARMS = new Int2ObjectOpenHashMap<>();
 
-    /** Clear of the nanowire housing, which sticks out of the player's own arm. */
-    private static final float OUT_PIXELS = 2.5F;
+    /** Nanowire: the housing rides on the player's own arm, so the pump needs only a hair of clearance. */
+    private static final float OUT_PIXELS = 0.5F;
     /** The Mantis housing is as wide as the arm, so the pump only needs a hair of clearance. */
     private static final float MANTIS_OUT_PIXELS = 0.5F;
 
