@@ -77,7 +77,6 @@ public final class ApogeeClient implements ClientModInitializer {
         ApogeeClientConfig.load();
         KeyBindingHelper.registerKeyBinding(ACTIVATE_SANDEVISTAN);
         KeyBindingHelper.registerKeyBinding(TOGGLE_MANTIS);
-        dev.apogee.client.compat.immersivearmors.SteamDashClient.register();
         dev.apogee.client.tendons.TendonsClient.register();
         KeyBindingHelper.registerKeyBinding(ACTIVATE_BLOOD_PUMP);
 
