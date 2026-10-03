@@ -21,11 +21,11 @@ final class TooltipElectricity {
         draw(graphics, x, y, w, h, nowMs, COLORS, 0x1400F0FF);
     }
 
-    /** Same arcs in another palette, with its own faint glow along the frame. */
-    static void draw(GuiGraphics graphics, int x, int y, int w, int h, long nowMs, int[] colors, int glow) {
+    /** Arcs in {@code colors}, over a faint {@code glowArgb} edge. */
+    static void draw(GuiGraphics graphics, int x, int y, int w, int h, long nowMs, int[] colors, int glowArgb) {
         int perimeter = 2 * (w + h);
         for (int side = 0; side < 4; side++) {
-            glowEdge(graphics, x, y, w, h, side, glow);
+            glowEdge(graphics, x, y, w, h, side, glowArgb);
         }
         long shapeSeed = nowMs / SHAPE_MS;
         for (int arc = 0; arc < ARCS; arc++) {

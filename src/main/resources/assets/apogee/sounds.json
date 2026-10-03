@@ -261,5 +261,65 @@
         "stream": false
       }
     ]
+  },
+  "blood_pump": {
+    "subtitle": "subtitles.apogee.blood_pump",
+    "sounds": [
+      {
+        "name": "apogee:blood_pump",
+        "stream": false
+      }
+    ]
+  },
+  "berserk_activate": {
+    "subtitle": "subtitles.apogee.berserk_activate",
+    "sounds": [
+      {
+        "name": "minecraft:entity.ravager.roar",
+        "type": "event",
+        "pitch": 1.35,
+        "volume": 0.8
+      }
+    ]
+  },
+  "berserk_deactivate": {
+    "subtitle": "subtitles.apogee.berserk_deactivate",
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.deactivate",
+        "type": "event",
+        "pitch": 0.7
+      }
+    ]
+  },
+  "berserk_heartbeat": {
+    "subtitle": "subtitles.apogee.berserk_heartbeat",
+    "sounds": [
+      {
+        "name": "minecraft:entity.warden.heartbeat",
+        "type": "event",
+        "volume": 1.0
+      }
+    ]
+  },
+  "berserk_dive": {
+    "subtitle": "subtitles.apogee.berserk_dive",
+    "sounds": [
+      {
+        "name": "minecraft:entity.breeze.wind_burst",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ]
+  },
+  "berserk_slam": {
+    "subtitle": "subtitles.apogee.berserk_slam",
+    "sounds": [
+      {
+        "name": "minecraft:item.mace.smash_ground_heavy",
+        "type": "event",
+        "pitch": 0.85
+      }
+    ]
   }
 }

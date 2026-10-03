@@ -3,6 +3,7 @@
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
 Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **Cuchillas Mantis**, el **Nanocable** y los **Tendones reforzados**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
+Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Berserk**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5, diez piezas para armar el ciberware de brazos y seis componentes de ciberware para el Berserk.
 
 > Versión oficial: **1.1.1+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -12,12 +13,18 @@ Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **C
 |---|---|---|
 | `apogee:ripperdoc_table` | Mesa de matasanos | Camilla de dos bloques; el único lugar donde se instalan y quitan implantes. |
 | `apogee:sandevistan` | Sandevistan | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/os`. |
+| `apogee:berserk_zetatech` | Zetatech Berserk | Sistema operativo reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/os` (la misma del Sandevistan). |
+| `apogee:berserk_biodyne` | Biodyne Berserk | Variante con golpes críticos. |
+| `apogee:berserk_militech` | Militech Berserk | Variante icónica: invulnerable mientras está activa. |
 | `apogee:mantis_blades` | Cuchillas Mantis | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:mantis_blades_thermal` | Cuchillas Mantis térmicas | Variante que prende fuego al objetivo. |
 | `apogee:mantis_blades_electric` | Cuchillas Mantis eléctricas | Variante que aturde al objetivo. |
 | `apogee:nanowire_white` | Nanocable blanco | Variante blanca brillante. Misma ranura, alcance y sangrado que el rojo. |
 | `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:reinforced_tendons` | Tendones reforzados | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/legs`. Doble salto. |
+| `apogee:blood_pump` | Bomba de sangre | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/circulatory`. |
+| `apogee:hemo_chamber` | Cámara hemo | Pieza de la Bomba de sangre. |
+| `apogee:bio_monitor` | Biomonitor | Pieza de la Bomba de sangre. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
@@ -31,6 +38,12 @@ Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **C
 | `apogee:arm_power_core` | Núcleo de potencia de brazos | Alimenta las Cuchillas Mantis y el Nanocable. |
 | `apogee:monofilament` | Monofilamento | El cable del Nanocable. |
 | `apogee:wire_housing` | Carcasa de nanocable | Carcasa del antebrazo que guarda y lanza el cable. |
+| `apogee:subdermal_armor` | Armadura subdérmica | Componente del Berserk (sistema tegumentario). |
+| `apogee:adrenaline_booster` | Potenciador de adrenalina | Componente del Berserk (sistema circulatorio). |
+| `apogee:biomonitor` | Biomonitor | Componente del Berserk (sistema circulatorio). |
+| `apogee:fortified_ankles` | Tobillos fortificados | Componente del Berserk (piernas). |
+| `apogee:bionic_joints` | Articulaciones biónicas | Componente del Berserk (esqueleto). |
+| `apogee:synaptic_accelerator` | Acelerador sináptico | Componente del Biodyne Berserk (sistema nervioso). |
 
 ### Recetas (mesa de crafteo)
 
@@ -42,6 +55,25 @@ Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **C
 | Mesa de matasanos (con forma) | Fila 1: cable neural, chip de control, cable neural · Fila 2: tres lanas blancas · Fila 3: lingote de hierro, bloque de hierro, lingote de hierro |
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
 | Tendones reforzados (con forma) | Fila 1: cable neural, pistón, cable neural · Fila 2: lingote de hierro, chip de control, lingote de hierro · Fila 3: cable neural, pistón, cable neural |
+| Cámara hemo (con forma) | Fila 1: lingote de hierro, lágrima de ghast, lingote de hierro · Fila 2: vidrio, bloque de redstone, vidrio · Fila 3: lingote de hierro, cable neural, lingote de hierro |
+| Biomonitor (con forma) | Fila 1: lingote de oro, comparador, lingote de oro · Fila 2: redstone, cable neural, redstone · Fila 3: lingote de oro, panel de vidrio, lingote de oro |
+| Bomba de sangre (con forma) | Fila 1: lingote de hierro, Cámara hemo, lingote de hierro · Fila 2: manzana dorada, Biomonitor, manzana dorada · Fila 3: lingote de hierro, cable neural, lingote de hierro |
+
+#### Berserk por partes
+
+Todas dan 1 unidad. Los componentes llevan el nombre de implantes reales de Cyberpunk 2077 relacionados con lo que hace el Berserk.
+
+| Resultado | Ingredientes |
+|---|---|
+| Armadura subdérmica (con forma) | hierro, escama de armadillo, hierro · escama, cable neural, escama · hierro, escama, hierro |
+| Potenciador de adrenalina (con forma) | azúcar, polvo de blaze, azúcar · cable neural, lágrima de ghast, cable neural · azúcar, polvo de blaze, azúcar |
+| Biomonitor (con forma) | cuarzo, rodaja de sandía reluciente, cuarzo · cable neural, chip de control, cable neural · cuarzo, rodaja de sandía reluciente, cuarzo |
+| Tobillos fortificados (con forma) | hilo, bola de slime, hilo · cable neural, pistón, cable neural · hilo, bola de slime, hilo |
+| Articulaciones biónicas (con forma) | hierro, bloque de hueso, hierro · bloque de hueso, cadena, bloque de hueso · hierro, bloque de hueso, hierro |
+| Acelerador sináptico (con forma) | redstone, cable neural, redstone · fragmento de amatista, diamante, fragmento de amatista · redstone, cable neural, redstone |
+| Zetatech Berserk (con forma) | armadura subdérmica, Núcleo T5, armadura subdérmica · potenciador de adrenalina, lingote de netherita, biomonitor · articulaciones biónicas, Overdrive Kernel T5, tobillos fortificados |
+| Biodyne Berserk (sin forma) | Zetatech Berserk, acelerador sináptico, manzana dorada |
+| Militech Berserk (sin forma) | Zetatech Berserk, estrella del Nether, tótem de inmortalidad |
 
 #### Cuchillas Mantis por partes
 
@@ -77,6 +109,7 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - **Un implante rudimentario** (desafío, marco morado): conseguir el Sandevistan de cualquier forma (crafteándolo, de un cofre o de otro jugador). Muestra el aviso de desafío completado y se anuncia en el chat.
 - **Mantis religiosa** (desafío): craftear cualquiera de las tres Cuchillas Mantis.
 - **Pendiendo de un hilo** (desafío): craftear el Nanocable.
+- **Cuerpo de acero** (desafío): craftear cualquiera de los tres Berserk.
 - Cuando un jugador consigue el Sandevistan por primera vez (al completar ese logro, sea crafteándolo, de un cofre o de otro jugador), todos los jugadores del servidor oyen a Adam Smasher decir «A rudimentary implant», estén donde estén.
 
 ## Uso
@@ -87,7 +120,7 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Clic derecho: te acuestas en la camilla (con la pose de dormir de la cama, recostado sobre el respaldo; los demás jugadores te ven así) y se abre la pantalla del matasanos. Al cerrarla (Esc o la tecla de inventario) te levantas.
 - La pantalla funciona como un cofre: arriba el panel del matasanos y abajo tu inventario de siempre.
 - Los implantes **solo** se instalan o quitan aquí: las ranuras de ciberware ya no aparecen en el inventario y usar un implante no lo equipa. Arrastra el implante a su ranura o usa Mayús + clic.
-- El panel muestra los diez sistemas del diseño, cada uno con sus ranuras: Corteza frontal (3), Brazos, Esqueleto (2), Sistema nervioso (2), Tegumentario (3), Sistema operativo, Sistema ocular, Manos (2), Circulatorio (3) y Piernas. Hoy solo hay implantes para Sistema operativo y Brazos; los demás se ven apagados hasta que exista un implante para ellos. Cada sistema es una ranura de Trinkets (`cyberware/<sistema>`): un implante nuevo solo tiene que entrar en la etiqueta `trinkets:cyberware/<sistema>`.
+- El panel muestra los diez sistemas del diseño, cada uno con sus ranuras: Corteza frontal (3), Brazos, Esqueleto (2), Sistema nervioso (2), Tegumentario (3), Sistema operativo, Sistema ocular, Manos (2), Circulatorio (3) y Piernas. Hoy solo hay implantes para Sistema operativo (Sandevistan o Berserk, uno a la vez) y Brazos; los demás se ven apagados hasta que exista un implante para ellos. Cada sistema es una ranura de Trinkets (`cyberware/<sistema>`): un implante nuevo solo tiene que entrar en la etiqueta `trinkets:cyberware/<sistema>`.
 - Cada implante que instalas es una cirugía: cuesta **3 corazones**, atraviesa la armadura y nunca te mata (como mucho te deja en medio corazón). Quitarlo es gratis.
 - En el centro del panel aparece tu personaje con los implantes que llevas; arrástralo con el mouse para rotarlo. **Rayos X** vuelve la piel translúcida y deja ver los implantes a través del cuerpo; **Skin** vuelve a la vista normal. Abajo a la izquierda se listan los implantes instalados.
 
@@ -95,6 +128,28 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - **V** (configurable) activa el efecto o lo termina antes de tiempo.
 - Mientras está activo o recargando aparece un recuadro de ciberware abajo a la izquierda con los segundos restantes: cian con el efecto, magenta en la recarga, amarillo con «+2 s» al conseguir una baja y parpadeo rojo en los últimos 2 s. En reposo se oculta.
 - En el tooltip, **G** (tecla de pestañas de Simply Tooltips) alterna Descripción y Estadísticas; al dejar de señalar el objeto vuelve a Descripción. El tooltip usa la fuente Rajdhani, un borde con arcos eléctricos en amarillo, cian y magenta, título ondulado con estelas de colores, partículas neón y scanlines con barrido.
+
+### Berserk
+
+- Instálalo en la ranura **Sistema operativo** de la mesa de matasanos. Es la misma del Sandevistan: llevas uno u otro.
+- **V** (la misma tecla, ahora «Activar / terminar sistema operativo») lo activa o lo termina antes de tiempo.
+- Mientras está activo: recibes menos daño, tu vida no baja del 25 % (salvo /kill y el vacío), atacas más rápido y correr, saltar o pelear no gasta hambre. Al terminar recuperas el **25 % de tu vida máxima por cada baja** conseguida mientras estaba activo (animales no cuentan).
+- **Aterrizaje de superhéroe:** con el Berserk activo y al menos 3 bloques de aire debajo, mantén **Mayús** y caes en picada. Al tocar el suelo sueltas una onda de choque de 4 bloques de radio: 8 de daño (la mitad en el borde), empuje hacia afuera y hacia arriba, polvo y bloques. No recibes daño por esa caída. No daña a tus mascotas ni a tu equipo; a otros jugadores solo con PvP activado.
+- Pantalla: destello rojo al activarlo, viñeta roja que late con tu corazón (más rápido en los últimos 2 s) y latido audible. El recuadro de ciberware abajo a la izquierda va en rojo con los segundos restantes y, en amarillo, cuánto te curarás al terminar; en la recarga va en magenta.
+- Los demás ven partículas rojas alrededor del portador y el implante en la espalda: placas vertebrales con luces rojas (naranjas en el Militech) que se expanden con cada latido mientras está activo (eso último solo en tu propia vista).
+- Tooltip (con Simply Tooltips) al estilo del Sandevistan, en rojo: panel con marco metálico, el implante en 3D dentro de un rombo, título ondulado con estelas, partículas, arcos eléctricos y barrido de scanlines, con la fuente Rajdhani. **G** alterna Descripción y Estadísticas y cada vista cabe en pantalla. Sin Simply Tooltips se muestra un tooltip simple.
+- Sonidos provisionales tomados de Minecraft (rugido de devastador, latido del warden, golpe de la maza); para cambiarlos hay que reemplazar los eventos `berserk_*` en `assets/apogee/sounds.json`.
+
+| Valor | Zetatech | Biodyne | Militech (icónico) |
+|---|---|---|---|
+| Duración | 10 s | 9 s | 12 s |
+| Recarga | 40 s | 45 s | 60 s |
+| Daño recibido | -40 % | -35 % | Ninguno (invulnerable) |
+| Vida mínima | 25 % | 25 % | — |
+| Velocidad de ataque | +15 % | +25 % | +25 % |
+| Extra | Daño por caída -50 % | 20 % de crítico con +50 % de daño | +20 % de movimiento y hasta +50 % de daño cuerpo a cuerpo cuanto menos vida (máximo al 20 %) |
+
+Morir, desequipar, cambiar de dimensión o desconectarse lo termina sin curar e inicia la recarga, que se guarda con el jugador como la del Sandevistan.
 
 ### Cuchillas Mantis
 
@@ -127,6 +182,13 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - **Dash aéreo en todas direcciones:** pulsa la tecla de correr (Ctrl izquierdo por defecto) en el aire. Impulsa hacia donde empujas (adelante, atrás o a los lados, según W A S D) o hacia donde miras si no pulsas nada, con un leve empuje hacia arriba (velocidad horizontal 1,05). Si venías manteniendo la tecla desde el suelo, hay que soltarla y volver a pulsarla. Un dash por vuelo, independiente del doble salto, y no anula el margen de caída del doble salto. En Controles hay una tecla opcional «Dash aéreo (Tendones reforzados)», sin asignar.
 - El implante es solo funcional: no se dibuja en el jugador. Su modelo 3D (inventario, mano, suelo y tooltip) se hizo en Blockbench a partir de una imagen de referencia: fuente `art/tendons/blockbench/reinforced_tendons.bbmodel`, generada con `art/tendons/blockbench/build_model.py`. Al saltar y al hacer dash suenan sus propios sonidos (`sounds/tendons/`) y salen nubes y chispas; los demás jugadores lo ven y lo oyen. El impulso lo aplica el cliente y el servidor valida el implante y un solo salto por vuelo.
 - Valores provisionales, en `dev.apogee.tendons.ReinforcedTendons`.
+### Bomba de sangre
+
+- Implante del **sistema circulatorio** (se instala en la mesa de matasanos). Se dibuja en el antebrazo derecho: jeringas, tubos y bolsa de sangre; al usarla la bolsa se vacía y se vuelve a llenar durante la recarga.
+- Se activa con **B** (configurable, «Activar Bomba de sangre»): restaura al instante 8 de salud (4 corazones) y luego regenera 8 más durante 6 segundos. Recarga de 30 segundos. No se usa con la salud completa.
+- Con Simply Tooltips, su tooltip es un panel compacto como el del Sandevistan, en rojo y animado (título ondulante con estelas, gotas de sangre, línea de electrocardiograma, arcos eléctricos y latido en el implante), con dos pestañas (Descripción y Al usarla) que se cambian con **G**; sin Simply Tooltips muestra tres líneas.
+- Abajo a la izquierda aparece su recuadro: cian cuando está lista, magenta con los segundos que faltan mientras recarga (encima de los otros recuadros si se ven).
+- La recarga se guarda con el jugador. Los valores están fijos en `dev.apogee.bloodpump.BloodPumpRules`.
 
 ### Mecánica del Sandevistan (valores por defecto)
 
@@ -166,6 +228,7 @@ Punchy es opcional y se instala solo en el cliente. La integración respeta la m
 - **Varios portadores en juego:** la regla ya está comprobada con pruebas automáticas (ver *Varios portadores*); falta confirmarla en una partida real con Essential.
 - **Tooltip en juego:** revisar dentro de Minecraft la fuente Rajdhani y el borde eléctrico en distintas escalas de interfaz y en español.
 - **Nanocable:** los valores de combate son provisionales.
+- **Berserk:** valores provisionales, sonidos tomados de Minecraft hasta tener grabaciones propias, y sin prueba de cliente con capturas todavía.
 
 ## Instalación para anfitrión e invitados
 
@@ -189,7 +252,7 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 
 ## Configuración
 
-- `config/apogee-server.json` (quien aloja el mundo): porcentaje de ralentización, radio, duraciones en segundos, bonificaciones, rampa de velocidad (`movementRampSeconds`), extensión por baja, máximo, recarga, memoria de combate y empuje sobre ralentizados (`slowedKnockbackPercent`). Se lee al abrir el mundo; los clientes reciben estos valores y el tooltip los muestra.
+- `config/apogee-server.json` (quien aloja el mundo): porcentaje de ralentización, radio, duraciones en segundos, bonificaciones, rampa de velocidad (`movementRampSeconds`), extensión por baja, máximo, recarga, memoria de combate y empuje sobre ralentizados (`slowedKnockbackPercent`); en la sección `berserk`, la curación por baja, el aterrizaje (radio, daño, altura mínima) y un bloque por variante con duración, recarga y bonificaciones. Se lee al abrir el mundo; los clientes reciben estos valores y el tooltip los muestra.
 - `config/apogee-client.json` (cada jugador): estelas (cantidad 28, alcance 48 bloques, desvanecimiento 5,2 s, separación, opacidad), volumen, tinte, transición radial, pulso de FOV y HUD.
 
 ## Desarrollo
@@ -208,6 +271,9 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 
 - `build`: genera el JAR de entrega en `build/libs`. Las pruebas no se incluyen en él.
 - `runGametest`: 24 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
+- `runBloodPumpSmoke`: equipa la Bomba de sangre con poca vida, la activa y captura el antebrazo (reposo, inyección y rellenado) y el HUD en `build/bloodpump-smoke`.
+- `tools/bloodpump_tests.sh [vanilla|punchy|fresh|both]`: servidor dedicado y dos clientes (Observer y Wearer). El portador usa la Bomba de sangre, después las Cuchillas Mantis y un peto, y el observador comprueba y captura lo que ve. Se repite en vanilla, con Punchy, con Entity Model Features, Entity Texture Features y Fresh Animations, y con todo junto; resultados en `build/bloodpump-mp/<caso>`.
+- `runGametest`: 38 pruebas de servidor con jugadores simulados (`src/gametest`), informe en `build/gametest/report.xml`.
 - `runSmokeClient`: abre el cliente, crea un mundo plano, equipa el implante, captura tooltips (Sandevistan, Cuchillas Mantis y Nanocable), activación, HUD y estelas en `build/smoke-client/screenshots` y se cierra.
 
 ```bash
@@ -238,6 +304,7 @@ python3 tools/nanowire_review.py <capturas-antes> <capturas-despues> build/nanow
 Genera un MP4 con los ataques de ambas vistas y un GIF de la primera persona. Requiere Pillow y FFmpeg. Usa el mismo nombre de jugador, tamaño de ventana y FOV en las dos ejecuciones para comparar el movimiento.
 
 ```bash
+tools/mantis_tests.sh berserk-mp   # Berserk con servidor y dos clientes: vanilla, Punchy, Fresh Animations y ambos
 tools/mantis_tests.sh mp
 tools/mantis_tests.sh compat
 tools/mantis_tests.sh iris
@@ -253,6 +320,8 @@ tools/mantis_tests.sh calibrate
 - Todos requieren Linux con Xvfb.
 
 El modelo de las Cuchillas Mantis viene del kit Mantis v0.4: los proyectos de Blockbench y su documentación están en [`art/mantis-kit/`](art/mantis-kit/LEEME.md). Tras exportar desde Blockbench con el flujo de GeckoLib, `python3 tools/mantis_kit_import.py <carpeta del kit>` copia geometrías, animaciones y texturas a `assets/apogee` y añade la mano y el tope del hombro que el kit deja fuera de su exportación. Los recursos actuales ya incluyen revisiones posteriores al kit v0.4 (cyberware inferior, hoja y riel separados, alcance de la hoja, colores); volver a importar el kit v0.4 las desharía.
+
+El implante del Berserk se genera con `python3 tools/berserk_assets.py` (requiere Pillow): escribe el proyecto de Blockbench [`art/berserk/berserk.bbmodel`](art/berserk/berserk.bbmodel), su exportación para GeckoLib (`geo/berserk.geo.json`, `animations/berserk.animation.json`, una textura y una máscara de brillo por variante) y los íconos de los Berserk y de sus seis componentes. Si retocas el modelo en Blockbench, expórtalo con el complemento de GeckoLib encima de esos archivos y no vuelvas a correr el script para esa parte.
 
 El Nanocable usa el paquete `nanocable-rojo-geckolib-assets` v0.3: fuentes y notas en [`art/nanowire/`](art/nanowire/NOTA.md). El mod dibuja el cable por código (`dev.apogee.client.nanowire`), así que `python3 tools/nanowire_strip_wire.py <paquete>/src/main/resources/assets/apogee` copia las exportaciones de cada brazo sin los huesos del cable.
 

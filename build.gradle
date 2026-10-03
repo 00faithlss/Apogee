@@ -103,6 +103,22 @@ loom {
             vmArg '-Dapogee.tendonsSmoke=true'
             programArgs '--width', '1280', '--height', '720'
         }
+        bloodPumpSmoke {
+            client()
+            name 'Apogee Blood Pump smoke run'
+            source sourceSets.gametest
+            runDir 'build/bloodpump-smoke'
+            vmArg '-Dapogee.bloodPumpSmoke=true'
+            programArgs '--width', '1280', '--height', '720'
+        }
+        berserkSmoke {
+            client()
+            name 'Apogee Berserk smoke run'
+            source sourceSets.gametest
+            runDir 'build/berserk-smoke'
+            vmArg '-Dapogee.berserkSmoke=true'
+            programArgs '--width', '1280', '--height', '720'
+        }
         ripperdocSmoke {
             client()
             name 'Apogee ripperdoc table smoke run'

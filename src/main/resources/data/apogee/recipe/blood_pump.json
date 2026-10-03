@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "IHI",
+    "GBG",
+    "ICI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "H": {
+      "item": "apogee:hemo_chamber"
+    },
+    "G": {
+      "item": "minecraft:golden_apple"
+    },
+    "B": {
+      "item": "apogee:bio_monitor"
+    },
+    "C": {
+      "item": "apogee:neural_cable"
+    }
+  },
+  "result": {
+    "id": "apogee:blood_pump",
+    "count": 1
+  }
+}

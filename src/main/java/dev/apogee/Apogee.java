@@ -1,5 +1,7 @@
 package dev.apogee;
 
+import dev.apogee.bloodpump.BloodPumpManager;
+import dev.apogee.berserk.BerserkManager;
 import dev.apogee.config.ApogeeServerConfig;
 import dev.apogee.mantis.MantisManager;
 import dev.apogee.network.ApogeeNetworking;
@@ -33,7 +35,9 @@ public final class Apogee implements ModInitializer {
         ApogeeAttachments.register();
         ApogeeNetworking.registerCommon();
         SandevistanManager.register();
+        BerserkManager.register();
         MantisManager.register();
         ReinforcedTendons.register();
+        BloodPumpManager.register();
     }
 }

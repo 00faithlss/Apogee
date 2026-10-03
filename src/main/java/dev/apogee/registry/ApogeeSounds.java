@@ -26,6 +26,14 @@ public final class ApogeeSounds {
     public static final SoundEvent TENDONS_DOUBLE_JUMP = SoundEvent.createVariableRangeEvent(Apogee.id("tendons_double_jump"));
     public static final SoundEvent TENDONS_AIR_DASH = SoundEvent.createVariableRangeEvent(Apogee.id("tendons_air_dash"));
 
+    public static final SoundEvent BLOOD_PUMP = SoundEvent.createVariableRangeEvent(Apogee.id("blood_pump"));
+
+    public static final SoundEvent BERSERK_ACTIVATE = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_activate"));
+    public static final SoundEvent BERSERK_DEACTIVATE = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_deactivate"));
+    public static final SoundEvent BERSERK_HEARTBEAT = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_heartbeat"));
+    public static final SoundEvent BERSERK_DIVE = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_dive"));
+    public static final SoundEvent BERSERK_SLAM = SoundEvent.createVariableRangeEvent(Apogee.id("berserk_slam"));
+
     private ApogeeSounds() {
     }
 
@@ -49,5 +57,11 @@ public final class ApogeeSounds {
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HEAVY.getLocation(), NANOWIRE_HEAVY);
         Registry.register(BuiltInRegistries.SOUND_EVENT, TENDONS_DOUBLE_JUMP.getLocation(), TENDONS_DOUBLE_JUMP);
         Registry.register(BuiltInRegistries.SOUND_EVENT, TENDONS_AIR_DASH.getLocation(), TENDONS_AIR_DASH);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BLOOD_PUMP.getLocation(), BLOOD_PUMP);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_ACTIVATE.getLocation(), BERSERK_ACTIVATE);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_DEACTIVATE.getLocation(), BERSERK_DEACTIVATE);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_HEARTBEAT.getLocation(), BERSERK_HEARTBEAT);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_DIVE.getLocation(), BERSERK_DIVE);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BERSERK_SLAM.getLocation(), BERSERK_SLAM);
     }
 }
