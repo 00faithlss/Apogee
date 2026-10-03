@@ -203,7 +203,7 @@ public final class TendonsClientSmoke implements ClientModInitializer {
         if (dt == 1) {
             var v = mc.player.getDeltaMovement();
             if (f.jump) {
-                check(v.y > 0.35 && v.y < 0.5, f.name + ": an ordinary jump, not a giant one (vy " + v.y + ")");
+                check(v.y > 0.30 && v.y < 0.42, f.name + ": an ordinary jump, not a giant one (vy " + v.y + ")");
             } else {
                 // Facing yaw 0 (south): forward is +z and left is +x.
                 double along = v.x * f.left + v.z * f.forward;

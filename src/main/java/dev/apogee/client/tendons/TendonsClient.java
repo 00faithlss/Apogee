@@ -30,11 +30,8 @@ public final class TendonsClient {
     private static final KeyMapping DASH = new KeyMapping(
             "key.apogee.air_dash", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), "key.categories.apogee");
 
-    private static boolean jumpCharged;
+    private static final TendonsAirInput INPUT = new TendonsAirInput();
     private static boolean jumpWasDown;
-    private static boolean jumpHeldSinceTakeoff;
-    private static boolean dashCharged;
-    private static boolean dashHeldSinceTakeoff;
     private static boolean sprintKeyWasDown;
     private static boolean forcedJump;
     private static boolean forcedDash;
@@ -80,29 +77,17 @@ public final class TendonsClient {
             forcedDash = false;
             return;
         }
-        if (player.onGround() || player.isInWater() || player.isInLava() || player.onClimbable()) {
-            jumpCharged = true;
-            dashCharged = true;
-            jumpHeldSinceTakeoff = jumpDown;
-            dashHeldSinceTakeoff = dashDown;
-            forcedJump = false;
-            forcedDash = false;
-            return;
-        }
-        if (!jumpDown) {
-            jumpHeldSinceTakeoff = false;
-        }
-        if (!dashDown) {
-            dashHeldSinceTakeoff = false;
-        }
+        boolean grounded = player.onGround() || player.isInWater() || player.isInLava() || player.onClimbable();
         boolean usable = ReinforcedTendons.isEquipped(player) && !player.getAbilities().flying && !player.isFallFlying()
                 && !player.isPassenger() && !player.isSpectator();
-        if (usable && pressedJump && jumpCharged && !jumpHeldSinceTakeoff) {
-            jumpCharged = false;
+        if (forcedJump || forcedDash) {
+            INPUT.settle();
+        }
+        TendonsAirInput.Fire fire = INPUT.step(grounded, jumpDown, pressedJump, dashDown, pressedDash, usable);
+        if (fire.jump()) {
             jump(player);
         }
-        if (usable && pressedDash && dashCharged && !dashHeldSinceTakeoff) {
-            dashCharged = false;
+        if (fire.dash()) {
             dash(player);
         }
         forcedJump = false;

@@ -146,4 +146,39 @@ public final class TendonsGameTests implements FabricGameTest {
         }
         helper.succeed();
     }
+
+    /** The press that leaves the ground, or a key held from the ground, must not fire the double jump. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void groundJumpPressIsNotTheDoubleJump(GameTestHelper helper) {
+        dev.apogee.client.tendons.TendonsAirInput input = new dev.apogee.client.tendons.TendonsAirInput();
+        // On the ground, key up.
+        helper.assertTrue(!input.step(true, false, false, false, false, true).jump(), "nothing on the ground");
+        // The tick the feet leave the ground: jump is down and was just pressed.
+        helper.assertTrue(!input.step(false, true, true, false, false, true).jump(), "the take-off press must not fire");
+        // Still held in the air.
+        helper.assertTrue(!input.step(false, true, false, false, false, true).jump(), "a held key must not fire");
+        // Released, then pressed again: the double jump.
+        helper.assertTrue(!input.step(false, false, false, false, false, true).jump(), "release does not fire");
+        helper.assertTrue(input.step(false, true, true, false, false, true).jump(), "a new press in the air fires");
+        helper.assertTrue(!input.step(false, false, false, false, false, true).jump(), "release");
+        helper.assertTrue(!input.step(false, true, true, false, false, true).jump(), "only once per flight");
+        // Landing recharges it.
+        input.step(true, false, false, false, false, true);
+        input.step(false, true, true, false, false, true);
+        input.step(false, false, false, false, false, true);
+        helper.assertTrue(input.step(false, true, true, false, false, true).jump(), "recharged after landing");
+        helper.succeed();
+    }
+
+    /** A dash needs a new press too, and works independently of the jump. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void dashIsIndependentFromTheJump(GameTestHelper helper) {
+        dev.apogee.client.tendons.TendonsAirInput input = new dev.apogee.client.tendons.TendonsAirInput();
+        input.step(true, false, false, false, false, true);
+        input.step(false, true, true, false, false, true);
+        input.step(false, false, false, false, false, true);
+        helper.assertTrue(input.step(false, false, false, true, true, true).dash(), "a dash press in the air fires");
+        helper.assertTrue(input.step(false, true, true, true, false, true).jump(), "the jump still works after the dash");
+        helper.succeed();
+    }
 }
