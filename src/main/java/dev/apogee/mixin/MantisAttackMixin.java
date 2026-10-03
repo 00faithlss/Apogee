@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * With the Mantis Blades out the blades are the weapon: the item left in the locked hotbar slot
@@ -18,6 +19,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(Player.class)
 public abstract class MantisAttackMixin {
+    /** The wire's sweep owns the hit; the pointed entity must not also receive a vanilla punch. */
+    @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
+    private void apogee$nanowireSweep(Entity target, CallbackInfo ci) {
+        if ((Object) this instanceof ServerPlayer player && MantisManager.isNanowireDeployed(player)) {
+            MantisManager.onSwing(player);
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "getWeaponItem", at = @At("HEAD"), cancellable = true)
     private void apogee$bladesAreTheWeapon(CallbackInfoReturnable<ItemStack> cir) {
         if ((Object) this instanceof ServerPlayer player && MantisManager.isDeployed(player)) {
