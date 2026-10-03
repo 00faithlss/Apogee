@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IAI",
+    "ACA",
+    "IAI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "A": {
+      "item": "minecraft:armadillo_scute"
+    },
+    "C": {
+      "item": "apogee:neural_cable"
+    }
+  },
+  "result": {
+    "id": "apogee:subdermal_armor",
+    "count": 1
+  }
+}

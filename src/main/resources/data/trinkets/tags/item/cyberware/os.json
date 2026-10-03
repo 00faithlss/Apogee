@@ -1,4 +1,9 @@
 {
   "replace": false,
-  "values": ["apogee:sandevistan"]
+  "values": [
+    "apogee:sandevistan",
+    "apogee:berserk_zetatech",
+    "apogee:berserk_biodyne",
+    "apogee:berserk_militech"
+  ]
 }

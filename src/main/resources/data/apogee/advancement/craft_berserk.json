@@ -1,0 +1,44 @@
+{
+  "parent": "apogee:root",
+  "display": {
+    "icon": {
+      "id": "apogee:berserk_zetatech"
+    },
+    "title": {
+      "translate": "advancements.apogee.craft_berserk.title"
+    },
+    "description": {
+      "translate": "advancements.apogee.craft_berserk.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "crafted_zetatech": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipe_id": "apogee:berserk_zetatech"
+      }
+    },
+    "crafted_biodyne": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipe_id": "apogee:berserk_biodyne"
+      }
+    },
+    "crafted_militech": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipe_id": "apogee:berserk_militech"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "crafted_zetatech",
+      "crafted_biodyne",
+      "crafted_militech"
+    ]
+  ]
+}

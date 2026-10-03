@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "plugin": "dev.apogee.mixin.ApogeeMixinPlugin",
   "mixins": [
+    "BerserkPlayerMixin",
     "EntityTimeMixin",
     "LivingEntityMixin",
     "LivingEntityDamageAccessor",
