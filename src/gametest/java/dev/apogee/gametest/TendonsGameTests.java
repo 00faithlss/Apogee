@@ -130,4 +130,20 @@ public final class TendonsGameTests implements FabricGameTest {
         player.getServer().getPlayerList().remove(player);
         helper.succeed();
     }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void soundsAreRegisteredAndShort(GameTestHelper helper) {
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.containsKey(Apogee.id("tendons_double_jump")), "double jump sound registered");
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.containsKey(Apogee.id("tendons_air_dash")), "air dash sound registered");
+        helper.assertTrue(ReinforcedTendons.JUMP_POWER == 0.42, "The double jump is an ordinary jump");
+        for (String name : new String[]{"double_jump", "air_dash"}) {
+            try (var in = ReinforcedTendons.class.getResourceAsStream("/assets/apogee/sounds/tendons/" + name + ".ogg")) {
+                helper.assertTrue(in != null, name + ".ogg is packaged");
+                helper.assertTrue(in.readAllBytes().length < 40_000, name + ".ogg is a short clip");
+            } catch (java.io.IOException e) {
+                throw new AssertionError(e);
+            }
+        }
+        helper.succeed();
+    }
 }

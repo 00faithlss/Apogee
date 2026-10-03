@@ -152,7 +152,7 @@
   "tooltip.apogee.reinforced_tendons.description.2": "Press sprint in midair to",
   "tooltip.apogee.reinforced_tendons.description.3": "dash in any direction.",
   "tooltip.apogee.reinforced_tendons.stats_header": "In the air",
-  "tooltip.apogee.reinforced_tendons.stat.jump": "Double jump impulse",
+  "tooltip.apogee.reinforced_tendons.stat.jump": "Double jump height",
   "tooltip.apogee.reinforced_tendons.stat.fall": "Fall absorbed",
   "tooltip.apogee.reinforced_tendons.stat.dash": "Dash speed",
   "tooltip.apogee.reinforced_tendons.stat.directions": "Dash directions",

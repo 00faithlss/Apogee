@@ -36,6 +36,12 @@ public final class TendonsMultiplayerClient implements ClientModInitializer {
     private static Vec3 movedFrom;
     /** Lowest height the observer saw the wearer at since the move was announced: the double jump is the rise from there. */
     private static double lowestY = Double.MAX_VALUE;
+    /** The wearer's last heights: the move's announcement can arrive after the jump has started, so its low point is looked up here. */
+    private static final double[] recentY = new double[12];
+    static {
+        java.util.Arrays.fill(recentY, Double.MAX_VALUE);
+    }
+    private static int recentIndex;
     /** The wearer's own view of the move it just made: its speed on the next ticks. */
     private static String moveWatch;
     private static int moveWatchTicks;
@@ -78,6 +84,7 @@ public final class TendonsMultiplayerClient implements ClientModInitializer {
         if (observer && wearer != null) {
             mc.player.lookAt(EntityAnchorArgument.Anchor.EYES, wearer.getEyePosition());
             lowestY = Math.min(lowestY, wearer.getY());
+            recentY[recentIndex++ % recentY.length] = wearer.getY();
             if (movedFrom != null && trackedMove != null) {
                 bestPush = Math.max(bestPush, push(wearer, trackedMove));
             }
@@ -95,7 +102,7 @@ public final class TendonsMultiplayerClient implements ClientModInitializer {
             Vec3 v = mc.player.getDeltaMovement();
             boolean jump = moveWatch.equals("jump");
             LOGGER.info("wearer {} speed two ticks in: vy={} horizontal={}", moveWatch, v.y, v.horizontalDistance());
-            check(jump ? v.y > 0.3 : v.horizontalDistance() > 0.6, "the wearer's own client makes the " + moveWatch + " (vy " + v.y + ", horizontal " + v.horizontalDistance() + ")");
+            check(jump ? v.y > 0.15 : v.horizontalDistance() > 0.6, "the wearer's own client makes the " + moveWatch + " (vy " + v.y + ", horizontal " + v.horizontalDistance() + ")");
             moveWatch = null;
         }
         if (!observer && pendingMove != null) {
@@ -139,7 +146,7 @@ public final class TendonsMultiplayerClient implements ClientModInitializer {
                 return;
             }
             case "moved" -> {
-                lowestY = Double.MAX_VALUE;
+                lowestY = java.util.Arrays.stream(recentY).min().orElse(wearer.getY());
                 movedFrom = wearer.position();
                 trackedMove = name;
                 bestPush = 0.0;

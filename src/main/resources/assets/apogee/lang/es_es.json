@@ -152,7 +152,7 @@
   "tooltip.apogee.reinforced_tendons.description.2": "Pulsa correr en el aire para",
   "tooltip.apogee.reinforced_tendons.description.3": "un dash hacia cualquier lado.",
   "tooltip.apogee.reinforced_tendons.stats_header": "En el aire",
-  "tooltip.apogee.reinforced_tendons.stat.jump": "Impulso del doble salto",
+  "tooltip.apogee.reinforced_tendons.stat.jump": "Altura del doble salto",
   "tooltip.apogee.reinforced_tendons.stat.fall": "Caída amortiguada",
   "tooltip.apogee.reinforced_tendons.stat.dash": "Velocidad del dash",
   "tooltip.apogee.reinforced_tendons.stat.directions": "Direcciones del dash",

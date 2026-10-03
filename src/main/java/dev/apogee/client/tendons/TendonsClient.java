@@ -112,8 +112,9 @@ public final class TendonsClient {
 
     private static void jump(LocalPlayer player) {
         Vec3 velocity = player.getDeltaMovement();
-        player.setDeltaMovement(velocity.x, Math.max(velocity.y, 0.0) + ReinforcedTendons.BOOST_Y, velocity.z);
-        player.playSound(ApogeeSounds.TENDONS_DOUBLE_JUMP, 0.8F, 1.0F);
+        // A second ordinary jump: the vertical speed is set, not added, so it never stacks on a rise or a fall.
+        player.setDeltaMovement(velocity.x, ReinforcedTendons.jumpPower(player), velocity.z);
+        player.playSound(ApogeeSounds.TENDONS_DOUBLE_JUMP, 0.7F, 1.0F);
         if (ClientPlayNetworking.canSend(DoubleJumpRequest.TYPE)) {
             ClientPlayNetworking.send(DoubleJumpRequest.INSTANCE);
         }
@@ -135,7 +136,7 @@ public final class TendonsClient {
         double x = (-sin * forward + cos * left) * ReinforcedTendons.DASH_SPEED;
         double z = (cos * forward + sin * left) * ReinforcedTendons.DASH_SPEED;
         player.setDeltaMovement(x, Math.max(player.getDeltaMovement().y, ReinforcedTendons.DASH_MIN_VERTICAL), z);
-        player.playSound(ApogeeSounds.TENDONS_AIR_DASH, 0.8F, 1.0F);
+        player.playSound(ApogeeSounds.TENDONS_AIR_DASH, 0.7F, 1.0F);
         if (ClientPlayNetworking.canSend(AirDashRequest.TYPE)) {
             ClientPlayNetworking.send(AirDashRequest.INSTANCE);
         }
