@@ -90,30 +90,29 @@ public final class MantisTooltipPanel {
         for (MantisTooltipContent.Section section : sections) {
             sectionText = Math.max(sectionText, 9 + font.width(section.header()) + 6);
         }
-        if (view.showDescription()) {
-            for (Component line : description) {
-                contentW = Math.max(contentW, font.width(line));
-            }
-            for (MantisTooltipContent.Section section : sections) {
-                for (Component line : section.lines()) {
-                    contentW = Math.max(contentW, sectionText + font.width(line));
-                }
-            }
-        }
-        if (view.showStats()) {
-            contentW = Math.max(contentW, font.width(statsHeader) + 9);
-            for (MantisTooltipContent.Stat stat : stats) {
-                contentW = Math.max(contentW, font.width(stat.label()) + 12 + font.width(stat.value()));
-            }
-            contentW = Math.max(contentW, Math.round(font.width(note) * SMALL));
-        }
+        // The title, badge and combat numbers set the card width. Prose flows inside
+        // it instead of stretching the entire card to the longest translated sentence.
+        sectionText = Math.min(sectionText, contentW / 2);
         int panelW = contentW + PAD * 2;
+        final int cardTextWidth = contentW;
+        List<FormattedCharSequence> descriptionRows = description.stream()
+                .flatMap(line -> font.split(line, cardTextWidth).stream()).toList();
+        final int textWidth = Math.max(1, contentW - sectionText);
+        final int labelWidth = Math.max(1, sectionText - 15);
+        List<List<FormattedCharSequence>> sectionHeaders = sections.stream()
+                .map(section -> font.split(section.header(), labelWidth)).toList();
+        List<List<FormattedCharSequence>> sectionRows = sections.stream()
+                .map(section -> section.lines().stream().flatMap(line -> font.split(line, textWidth).stream()).toList())
+                .toList();
+        List<List<FormattedCharSequence>> statLabels = stats.stream()
+                .map(stat -> font.split(stat.label(), Math.max(1, cardTextWidth - 12 - font.width(stat.value())))).toList();
+        List<FormattedCharSequence> noteRows = font.split(note, Math.max(1, (int) (contentW / SMALL)));
 
         int bodyH = 0;
         if (view.showDescription()) {
-            bodyH += description.size() * LINE_H + 5;
-            for (MantisTooltipContent.Section section : sections) {
-                bodyH += section.lines().size() * STAT_H;
+            bodyH += descriptionRows.size() * LINE_H + 5;
+            for (int i = 0; i < sections.size(); i++) {
+                bodyH += Math.max(sectionHeaders.get(i).size(), sectionRows.get(i).size()) * STAT_H;
             }
         }
         if (view.showStats()) {
@@ -121,24 +120,30 @@ public final class MantisTooltipPanel {
                 bodyH += 8;
             }
             bodyH += LINE_H + 3;
-            for (MantisTooltipContent.Stat stat : stats) {
-                bodyH += (stat.separatedBefore() ? 6 : 0) + STAT_H;
+            for (int i = 0; i < stats.size(); i++) {
+                bodyH += (stats.get(i).separatedBefore() ? 6 : 0) + statLabels.get(i).size() * STAT_H;
             }
-            bodyH += 10;
+            bodyH += noteRows.size() * 8 + 2;
         }
         int panelH = 6 + HEADER_H + 8 + NUMBERS_H + 7 + bodyH + 9 + 13 + 5;
 
+        // Large GUI scales or disabled tabs can leave less space than a complete card.
+        float scale = Math.min(1.0F, Math.min((screenW - 12.0F) / panelW, (screenH - 12.0F) / panelH));
+        int visibleW = (int) Math.ceil(panelW * scale);
+        int visibleH = (int) Math.ceil(panelH * scale);
         int x = mouseX + 12;
         int y = mouseY - 12;
-        if (x + panelW > screenW - 6) {
-            x = mouseX - panelW - 12;
+        if (x + visibleW > screenW - 6) {
+            x = mouseX - visibleW - 12;
         }
-        x = Math.max(6, x);
-        y = Math.max(6, Math.min(y, screenH - panelH - 6));
+        x = Math.max(6, Math.min(x, screenW - visibleW - 6));
+        y = Math.max(6, Math.min(y, screenH - visibleH - 6));
 
         PoseStack pose = graphics.pose();
         pose.pushPose();
-        pose.translate(0.0F, 0.0F, 400.0F);
+        pose.translate(x, y, 400.0F);
+        pose.scale(scale, scale, 1.0F);
+        pose.translate(-x, -y, 0.0F);
 
         drawFrame(graphics, x, y, panelW, panelH);
         motif(graphics, variant, x, y, panelW, panelH, now);
@@ -174,16 +179,22 @@ public final class MantisTooltipPanel {
 
         // ---- description view: flavor, controls and ability
         if (view.showDescription()) {
-            for (Component line : description) {
+            for (FormattedCharSequence line : descriptionRows) {
                 graphics.drawString(font, line, left, cursor, YELLOW_SOFT, false);
                 cursor += LINE_H;
             }
             cursor += 5;
-            for (MantisTooltipContent.Section section : sections) {
+            for (int i = 0; i < sections.size(); i++) {
                 drawDiamond(graphics, left + 2, cursor + 4, 2, RED);
-                graphics.drawString(font, section.header(), left + 9, cursor + 1, RED, false);
-                for (Component line : section.lines()) {
-                    graphics.drawString(font, line, left + sectionText, cursor + 1, YELLOW_SOFT, false);
+                List<FormattedCharSequence> headers = sectionHeaders.get(i);
+                List<FormattedCharSequence> lines = sectionRows.get(i);
+                for (int row = 0; row < Math.max(headers.size(), lines.size()); row++) {
+                    if (row < headers.size()) {
+                        graphics.drawString(font, headers.get(row), left + 9, cursor + 1, RED, false);
+                    }
+                    if (row < lines.size()) {
+                        graphics.drawString(font, lines.get(row), left + sectionText, cursor + 1, YELLOW_SOFT, false);
+                    }
                     cursor += STAT_H;
                 }
             }
@@ -197,16 +208,22 @@ public final class MantisTooltipPanel {
             drawDiamond(graphics, left + 2, cursor + 3, 2, RED);
             graphics.drawString(font, statsHeader, left + 9, cursor, RED, false);
             cursor += LINE_H + 3;
-            for (MantisTooltipContent.Stat stat : stats) {
+            for (int i = 0; i < stats.size(); i++) {
+                MantisTooltipContent.Stat stat = stats.get(i);
                 if (stat.separatedBefore()) {
                     graphics.fill(left, cursor + 1, right, cursor + 2, RED_DIM);
                     cursor += 6;
                 }
-                graphics.drawString(font, stat.label(), left, cursor + 1, RED_SOFT, false);
                 graphics.drawString(font, stat.value(), right - font.width(stat.value()), cursor + 1, YELLOW, false);
-                cursor += STAT_H;
+                for (FormattedCharSequence label : statLabels.get(i)) {
+                    graphics.drawString(font, label, left, cursor + 1, RED_SOFT, false);
+                    cursor += STAT_H;
+                }
             }
-            drawScaled(graphics, font, note.getVisualOrderText(), left, cursor + 2, RED_SOFT);
+            for (FormattedCharSequence line : noteRows) {
+                drawScaled(graphics, font, line, left, cursor + 2, RED_SOFT);
+                cursor += 8;
+            }
         }
 
         // ---- footer

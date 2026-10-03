@@ -134,6 +134,9 @@ public final class MantisClient {
         if (anim == null || !anim.deployed) {
             return;
         }
+        if (anim.variant.isNanowire() && thrustProgress(mc.player, 0.0F) >= 0.0F) {
+            return;
+        }
         // Holding the button on a block swings every tick; one cut at a time, as on the server.
         if (ticks - anim.slashStart[anim.swingArm] < MantisRules.slashIntervalTicks(anim.variant)) {
             return;

@@ -4,7 +4,7 @@ Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado pa
 
 Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Berserk**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5, diez piezas para armar el ciberware de brazos y seis componentes de ciberware para el Berserk.
 
-> Versión oficial: **1.1.0+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
+> Versión oficial: **1.1.1+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
 ## Contenido
 
@@ -159,7 +159,8 @@ Morir, desequipar, cambiar de dimensión o desconectarse lo termina sin curar e 
 
 - Instálalo en la ranura **Brazos** de la mesa de matasanos (la misma de las Cuchillas Mantis). **R** (configurable) saca el cable o lo recoge.
 - La carcasa del cable va en la cara interna de cada antebrazo; guardada, queda casi oculta junto al torso. Fuera, el cable va tenso entre las salidas del mecanismo. Tiene un 30 % más de grosor y un núcleo brillante: rojo incandescente o blanco. Ambas variantes conservan los modelos de Blockbench, las animaciones GeckoLib y la compatibilidad opcional con Punchy.
-- Desplegado: **clic izquierdo** da latigazos alternados (derecho, izquierdo...) de **8 de daño** con **7 bloques** de alcance. **Clic derecho** da un latigazo doble, que se turna entre tres formas (X, vertical y S), y golpea a todo lo que haya delante, en un arco de 140° dentro del alcance (**12 de daño**, recarga de 3 s). Valores provisionales.
+- Desplegado: **clic izquierdo** da barridos alternados en área (derecho, izquierdo...) de **8 de daño** con **7 bloques** de alcance. Cada enemigo en el semicírculo frontal recibe un solo corte; también funciona al golpear al aire. **Clic derecho** da un latigazo doble, que se turna entre tres formas (X, vertical y S), y golpea a todo lo que haya delante, en un arco de 180° dentro del alcance (**12 de daño**, recarga de 3 s). Valores provisionales.
+- Los dos ataques respetan las paredes y excluyen objetivos aliados. El barrido izquierdo respeta la carga del ataque y los críticos; el derecho conserva su daño y recarga propios.
 - Ambos Nanocables dejan **Sangrado** al cortar: **1 de daño por segundo durante 4 s**, con partículas rojas. Los golpes renuevan la duración sin acumular intensidad; el sangrado continúa al guardar el cable. Un golpe bloqueado con escudo no lo aplica.
 - El Nanocable blanco se craftea sin patrón con **un Nanocable rojo + un cuarzo** y se instala en la misma ranura de Brazos.
 - Bloquea la hotbar y el inventario igual que las Cuchillas Mantis, muestra el mismo recuadro con la recarga del latigazo doble, y tampoco se puede encantar.
@@ -223,7 +224,7 @@ Todos deben usar **exactamente** estas versiones:
 
 | Mod | Versión | Necesario en |
 |---|---|---|
-| Apogee | 1.1.0+1.21.1 (`build/libs/apogee-1.1.0+1.21.1.jar`) | Todos |
+| Apogee | 1.1.1+1.21.1 (`build/libs/apogee-1.1.1+1.21.1.jar`) | Todos |
 | Fabric Loader | 0.16.0 o superior (probado con 0.19.3) | Todos |
 | Fabric API | 0.116.17+1.21.1 | Todos |
 | Trinkets | 3.10.0 (incluye Cardinal Components) | Todos |

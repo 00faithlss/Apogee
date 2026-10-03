@@ -56,6 +56,10 @@ public final class MantisManager {
     private static final Map<UUID, Long> THRUST_READY = new HashMap<>();
     /** Game time each wearer's two-wire lash reaches its targets. */
     private static final Map<UUID, Long> PENDING_LASHES = new HashMap<>();
+    private static final Map<UUID, PendingCut> PENDING_CUTS = new HashMap<>();
+
+    private record PendingCut(long tick, float damage, boolean critical) {
+    }
 
     private MantisManager() {
     }
@@ -65,6 +69,7 @@ public final class MantisManager {
         final MantisVariant variant;
         int nextArm = MantisRules.ARM_RIGHT;
         long lastSwingTick = Long.MIN_VALUE / 2;
+        long heavyUntil = Long.MIN_VALUE / 2;
 
         Deployment(int lockedSlot, MantisVariant variant) {
             this.lockedSlot = lockedSlot;
@@ -87,6 +92,7 @@ public final class MantisManager {
             DEPLOYED.clear();
             THRUST_READY.clear();
             PENDING_LASHES.clear();
+            PENDING_CUTS.clear();
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> retract(handler.getPlayer(), false));
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> retract(player, false));
@@ -154,6 +160,7 @@ public final class MantisManager {
             return;
         }
         PENDING_LASHES.remove(player.getUUID());
+        PENDING_CUTS.remove(player.getUUID());
         removeModifiers(player);
         if (audible) {
             play(player, deployment.variant.isNanowire() ? ApogeeSounds.NANOWIRE_RETRACT : ApogeeSounds.MANTIS_RETRACT);
@@ -237,6 +244,7 @@ public final class MantisManager {
         if (DEPLOYED.isEmpty()) {
             return;
         }
+        cuts(server);
         lashes(server);
         for (Map.Entry<UUID, Deployment> entry : List.copyOf(DEPLOYED.entrySet())) {
             ServerPlayer player = server.getPlayerList().getPlayer(entry.getKey());
@@ -265,15 +273,28 @@ public final class MantisManager {
     /** Called on the server whenever a deployed wearer starts a swing; picks the alternating arm. */
     public static void onSwing(ServerPlayer player) {
         Deployment deployment = DEPLOYED.get(player.getUUID());
-        if (deployment == null) {
+        if (deployment == null || !player.isAlive() || player.isSpectator()) {
             return;
         }
         long now = player.level().getGameTime();
+        if (deployment.variant.isNanowire() && now < deployment.heavyUntil) {
+            return;
+        }
         // Mining swings every tick while the button is held: one cut (and sound) at a time.
         if (now - deployment.lastSwingTick < MantisRules.slashIntervalTicks(deployment.variant)) {
             return;
         }
         deployment.lastSwingTick = now;
+        if (deployment.variant.isNanowire()) {
+            float charge = player.getAttackStrengthScale(0.5F);
+            float damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * (0.2F + charge * charge * 0.8F);
+            boolean critical = charge > 0.9F && player.fallDistance > 0.0F && !player.onGround()
+                    && !player.onClimbable() && !player.isInWater() && !player.hasEffect(MobEffects.BLINDNESS)
+                    && !player.isPassenger() && !player.isSprinting();
+            PENDING_CUTS.put(player.getUUID(), new PendingCut(now + NanowireRules.LASH_HIT_DELAY_TICKS,
+                    damage * (critical ? 1.5F : 1.0F), critical));
+            player.resetAttackStrengthTicker();
+        }
         int arm = deployment.nextArm;
         deployment.nextArm = arm == MantisRules.ARM_RIGHT ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT;
         play(player, switch (deployment.variant) {
@@ -324,6 +345,8 @@ public final class MantisManager {
         }
         THRUST_READY.put(player.getUUID(), now + MantisRules.thrustCooldownTicks(deployment.variant));
         if (deployment.variant.isNanowire()) {
+            PENDING_CUTS.remove(player.getUUID());
+            deployment.heavyUntil = now + NanowireRules.HEAVY_TICKS;
             // The wires reach the targets partway through the lash.
             PENDING_LASHES.put(player.getUUID(), now + NanowireRules.HEAVY_HIT_DELAY_TICKS);
             play(player, ApogeeSounds.NANOWIRE_HEAVY);
@@ -360,6 +383,60 @@ public final class MantisManager {
         sendToTrackers(player, new MantisSwing(player.getId(), MantisRules.ARM_BOTH), false);
     }
 
+    /** Vanilla entity attacks and air swings both enter the same single-wire sweep. */
+    public static boolean isNanowireDeployed(ServerPlayer player) {
+        Deployment deployment = DEPLOYED.get(player.getUUID());
+        return deployment != null && deployment.variant.isNanowire();
+    }
+
+    private static void cuts(MinecraftServer server) {
+        for (Map.Entry<UUID, PendingCut> entry : List.copyOf(PENDING_CUTS.entrySet())) {
+            ServerPlayer player = server.getPlayerList().getPlayer(entry.getKey());
+            if (player == null || !isNanowireDeployed(player)) {
+                PENDING_CUTS.remove(entry.getKey());
+            } else if (player.level().getGameTime() >= entry.getValue().tick()) {
+                PENDING_CUTS.remove(entry.getKey());
+                sweep(player, entry.getValue().damage(), entry.getValue().critical());
+            }
+        }
+    }
+
+    /** One hit per eligible target in the cable's forward sweep, including air swings. */
+    private static void sweep(ServerPlayer player, float damage, boolean critical) {
+        if (!player.isAlive() || player.isSpectator()) {
+            return;
+        }
+        double reach = player.entityInteractionRange();
+        Vec3 eye = player.getEyePosition();
+        Vec3 flat = new Vec3(player.getLookAngle().x, 0.0, player.getLookAngle().z);
+        if (flat.lengthSqr() < 1.0E-4) {
+            flat = Vec3.directionFromRotation(0.0F, player.getYRot());
+        }
+        flat = flat.normalize();
+        double minCos = Math.cos(Math.toRadians(NanowireRules.SWEEP_HALF_ANGLE)) - 1.0E-7;
+        DamageSource source = player.damageSources().playerAttack(player);
+        boolean hit = false;
+        for (LivingEntity target : player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(reach),
+                e -> e != player && e.isAlive() && !e.isSpectator() && e.isPickable() && !player.isAlliedTo(e))) {
+            Vec3 to = target.getBoundingBox().getCenter().subtract(eye);
+            Vec3 toFlat = new Vec3(to.x, 0.0, to.z);
+            double distance = target.getBoundingBox().distanceToSqr(eye);
+            if (distance > reach * reach || (toFlat.lengthSqr() >= 1.0E-4 && toFlat.normalize().dot(flat) < minCos)
+                    || !player.hasLineOfSight(target)) {
+                continue;
+            }
+            if (target.hurt(source, damage)) {
+                hit = true;
+                if (critical) {
+                    player.crit(target);
+                }
+            }
+        }
+        if (hit) {
+            player.causeFoodExhaustion(0.1F);
+        }
+    }
+
     /** Lands the two-wire lashes that are due: every living target in the arc in front, within reach. */
     private static void lashes(MinecraftServer server) {
         if (PENDING_LASHES.isEmpty()) {
@@ -375,25 +452,7 @@ public final class MantisManager {
                 continue;
             }
             PENDING_LASHES.remove(entry.getKey());
-            double reach = player.entityInteractionRange();
-            Vec3 eye = player.getEyePosition();
-            Vec3 flat = new Vec3(player.getLookAngle().x, 0.0, player.getLookAngle().z);
-            if (flat.lengthSqr() < 1.0E-4) {
-                flat = Vec3.directionFromRotation(0.0F, player.getYRot());
-            }
-            flat = flat.normalize();
-            double minCos = Math.cos(Math.toRadians(NanowireRules.HEAVY_HALF_ANGLE));
-            DamageSource source = player.damageSources().playerAttack(player);
-            for (LivingEntity target : player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(reach),
-                    e -> e != player && e.isAlive() && !e.isSpectator() && e.isPickable() && !player.isAlliedTo(e))) {
-                Vec3 to = target.getBoundingBox().getCenter().subtract(eye);
-                Vec3 toFlat = new Vec3(to.x, 0.0, to.z);
-                double distance = target.getBoundingBox().distanceToSqr(eye);
-                if (distance > reach * reach || toFlat.lengthSqr() < 1.0E-4 || toFlat.normalize().dot(flat) < minCos) {
-                    continue;
-                }
-                target.hurt(source, NanowireRules.HEAVY_DAMAGE);
-            }
+            sweep(player, NanowireRules.HEAVY_DAMAGE, false);
         }
     }
 
