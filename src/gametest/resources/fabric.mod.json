@@ -5,9 +5,9 @@
   "name": "Apogee GameTests",
   "environment": "*",
   "entrypoints": {
-    "fabric-gametest": ["dev.apogee.gametest.SandevistanGameTests", "dev.apogee.gametest.MantisGameTests"],
-    "main": ["dev.apogee.gametest.MultiplayerSmokeServer"],
-    "client": ["dev.apogee.gametest.ImplantMovementSmoke", "dev.apogee.gametest.ApogeeClientSmoke", "dev.apogee.gametest.MantisClientSmoke", "dev.apogee.gametest.MantisMotionStudy", "dev.apogee.gametest.MultiplayerSmokeClient", "dev.apogee.gametest.NanowireClientSmoke", "dev.apogee.gametest.RipperdocClientSmoke"]
+    "fabric-gametest": ["dev.apogee.gametest.SandevistanGameTests", "dev.apogee.gametest.MantisGameTests", "dev.apogee.gametest.TendonsGameTests"],
+    "main": ["dev.apogee.gametest.MultiplayerSmokeServer", "dev.apogee.gametest.TendonsMultiplayerServer"],
+    "client": ["dev.apogee.gametest.ImplantMovementSmoke", "dev.apogee.gametest.ApogeeClientSmoke", "dev.apogee.gametest.MantisClientSmoke", "dev.apogee.gametest.MantisMotionStudy", "dev.apogee.gametest.MultiplayerSmokeClient", "dev.apogee.gametest.NanowireClientSmoke", "dev.apogee.gametest.RipperdocClientSmoke", "dev.apogee.gametest.TendonsClientSmoke", "dev.apogee.gametest.TendonsMultiplayerClient"]
   },
   "mixins": ["apogee_gametest.mixins.json"],
   "depends": {

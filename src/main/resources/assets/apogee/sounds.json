@@ -243,5 +243,23 @@
         "stream": false
       }
     ]
+  },
+  "tendons_double_jump": {
+    "subtitle": "subtitles.apogee.tendons_double_jump",
+    "sounds": [
+      {
+        "name": "apogee:tendons/double_jump",
+        "stream": false
+      }
+    ]
+  },
+  "tendons_air_dash": {
+    "subtitle": "subtitles.apogee.tendons_air_dash",
+    "sounds": [
+      {
+        "name": "apogee:tendons/air_dash",
+        "stream": false
+      }
+    ]
   }
 }

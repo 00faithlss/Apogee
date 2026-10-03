@@ -1,6 +1,5 @@
 package dev.apogee;
 
-import dev.apogee.compat.immersivearmors.SteamDash;
 import dev.apogee.config.ApogeeServerConfig;
 import dev.apogee.mantis.MantisManager;
 import dev.apogee.network.ApogeeNetworking;
@@ -10,6 +9,7 @@ import dev.apogee.registry.ApogeeItems;
 import dev.apogee.registry.ApogeeEffects;
 import dev.apogee.registry.ApogeeSounds;
 import dev.apogee.sandevistan.SandevistanManager;
+import dev.apogee.tendons.ReinforcedTendons;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
@@ -34,6 +34,6 @@ public final class Apogee implements ModInitializer {
         ApogeeNetworking.registerCommon();
         SandevistanManager.register();
         MantisManager.register();
-        SteamDash.registerServer();
+        ReinforcedTendons.register();
     }
 }

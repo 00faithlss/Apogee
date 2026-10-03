@@ -23,6 +23,8 @@ public final class ApogeeSounds {
     public static final SoundEvent NANOWIRE_SWING = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_swing"));
     public static final SoundEvent NANOWIRE_HIT = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_hit"));
     public static final SoundEvent NANOWIRE_HEAVY = SoundEvent.createVariableRangeEvent(Apogee.id("nanowire_heavy"));
+    public static final SoundEvent TENDONS_DOUBLE_JUMP = SoundEvent.createVariableRangeEvent(Apogee.id("tendons_double_jump"));
+    public static final SoundEvent TENDONS_AIR_DASH = SoundEvent.createVariableRangeEvent(Apogee.id("tendons_air_dash"));
 
     private ApogeeSounds() {
     }
@@ -45,5 +47,7 @@ public final class ApogeeSounds {
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_SWING.getLocation(), NANOWIRE_SWING);
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HIT.getLocation(), NANOWIRE_HIT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, NANOWIRE_HEAVY.getLocation(), NANOWIRE_HEAVY);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, TENDONS_DOUBLE_JUMP.getLocation(), TENDONS_DOUBLE_JUMP);
+        Registry.register(BuiltInRegistries.SOUND_EVENT, TENDONS_AIR_DASH.getLocation(), TENDONS_AIR_DASH);
     }
 }

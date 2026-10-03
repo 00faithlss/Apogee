@@ -2,7 +2,7 @@
 
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
-Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
+Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **Cuchillas Mantis**, el **Nanocable** y los **Tendones reforzados**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
 
 > Versión oficial: **1.1.1+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -17,6 +17,7 @@ Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuc
 | `apogee:mantis_blades_electric` | Cuchillas Mantis eléctricas | Variante que aturde al objetivo. |
 | `apogee:nanowire_white` | Nanocable blanco | Variante blanca brillante. Misma ranura, alcance y sangrado que el rojo. |
 | `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
+| `apogee:reinforced_tendons` | Tendones reforzados | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/legs`. Doble salto. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |
 | `apogee:apogee_overdrive_kernel_t5` | Overdrive Kernel T5 | Componente apilable. |
 | `apogee:quantum_sync_lattice_t5` | Quantum Sync Lattice T5 | Componente apilable. |
@@ -40,6 +41,7 @@ Contiene la **mesa de matasanos**, tres implantes (el **Sandevistan**, las **Cuc
 | Quantum Sync Lattice T5 (con forma) | 2 cristales del End, 2 bloques de amatista, 1 frasco de experiencia, 4 bloques de redstone: redstone en esquinas, cristales arriba y abajo, amatista a los lados, frasco al centro |
 | Mesa de matasanos (con forma) | Fila 1: cable neural, chip de control, cable neural · Fila 2: tres lanas blancas · Fila 3: lingote de hierro, bloque de hierro, lingote de hierro |
 | Sandevistan (con forma) | Fila 1: bloque de diamante, Núcleo T5, bloque de diamante · Fila 2: lingote de netherita, Overdrive Kernel T5, lingote de netherita · Fila 3: bloque de diamante, Quantum Sync Lattice T5, bloque de diamante |
+| Tendones reforzados (con forma) | Fila 1: cable neural, pistón, cable neural · Fila 2: lingote de hierro, chip de control, lingote de hierro · Fila 3: cable neural, pistón, cable neural |
 
 #### Cuchillas Mantis por partes
 
@@ -119,6 +121,13 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 - Usa la misma tarjeta de tooltip que las Cuchillas Mantis: daño, ataques por segundo y tipo en grande; **G** alterna los controles y las estadísticas del latigazo doble.
 - Sonidos propios: despliegue, guardado, latigazo al aire (4 variantes), golpe al enemigo (4 variantes) y latigazo doble, en `assets/apogee/sounds/nanowire/`.
 
+### Tendones reforzados
+
+- Instálalos en la ranura **Piernas** de la mesa de matasanos. En el aire (después de saltar o de caer de un borde), pulsa el botón de salto otra vez para un **doble salto**: impulso vertical de 0,68 (un salto normal es 0,42) y **4 bloques de caída amortiguados**. Se recarga al tocar el suelo, el agua o una escalera; mantener el salto pulsado desde el suelo no cuenta.
+- **Dash aéreo en todas direcciones:** pulsa la tecla de correr (Ctrl izquierdo por defecto) en el aire. Impulsa hacia donde empujas (adelante, atrás o a los lados, según W A S D) o hacia donde miras si no pulsas nada, con un leve empuje hacia arriba (velocidad horizontal 1,05). Si venías manteniendo la tecla desde el suelo, hay que soltarla y volver a pulsarla. Un dash por vuelo, independiente del doble salto, y no anula el margen de caída del doble salto. En Controles hay una tecla opcional «Dash aéreo (Tendones reforzados)», sin asignar.
+- El implante es solo funcional: no se dibuja en el jugador. Su modelo 3D (inventario, mano, suelo y tooltip) se hizo en Blockbench a partir de una imagen de referencia: fuente `art/tendons/blockbench/reinforced_tendons.bbmodel`, generada con `art/tendons/blockbench/build_model.py`. Al saltar y al hacer dash suenan sus propios sonidos (`sounds/tendons/`) y salen nubes y chispas; los demás jugadores lo ven y lo oyen. El impulso lo aplica el cliente y el servidor valida el implante y un solo salto por vuelo.
+- Valores provisionales, en `dev.apogee.tendons.ReinforcedTendons`.
+
 ### Mecánica del Sandevistan (valores por defecto)
 
 | Regla | Valor |
@@ -151,17 +160,6 @@ El servidor (integrado del anfitrión o dedicado) valida la tecla, decide objeti
 Las **Cuchillas Mantis** y el **Nanocable** son compatibles con las animaciones de primera persona de Punchy: acompañan el movimiento al caminar y correr, el balanceo y los giros de cámara, y mantienen transiciones suaves al desplegarse, guardarse y volver al objeto en mano.
 
 Punchy es opcional y se instala solo en el cliente. La integración respeta la mano principal elegida y la configuración de animaciones de Punchy. Comprobada con **Punchy 2.8a para Fabric 1.21.1**, incluyendo pruebas con mano principal derecha e izquierda y balanceo de la vista activado y desactivado.
-
-## Compatibilidad con Immersive Armors
-
-Si Immersive Armors está instalado, los **pantalones Steampunk** (que ya dan doble salto) ganan un **dash aéreo hacia delante**:
-
-- Pulsa la tecla de correr (Ctrl izquierdo por defecto) estando en el aire. Si venías manteniéndola desde el suelo, hay que soltarla y volver a pulsarla.
-- Un dash por salto: se recarga al tocar el suelo y es independiente del doble salto.
-- Impulsa hacia donde miras, con un leve empuje hacia arriba, y anula el daño por caída acumulado.
-- Vapor y sonido del propulsor, visibles para los demás jugadores.
-- En Controles hay una tecla opcional «Dash aéreo (pantalones Steampunk)», sin asignar, por si prefieres otra.
-- Sin Immersive Armors esta función no se carga.
 
 ## Pendientes
 
@@ -227,6 +225,8 @@ No se requiere Simply Swords. Un servidor dedicado solo necesita Apogee, Fabric 
 ```
 
 - `runRipperdocSmoke`: abre el cliente, coloca la mesa de matasanos, acuesta al jugador, instala implantes (comprueba el daño de la cirugía), rota el visor en modo skin y rayos X, filma la pose acostada (también desde arriba, con un bloque de oro junto al pie y uno de diamante junto a la cabecera) y comprueba que el inventario ya no muestra las ranuras de ciberware, en `build/ripperdoc-smoke/screenshots`.
+- `runTendonsSmoke`: abre el cliente, equipa los Tendones reforzados, captura el ítem en la mano, el modelo 3D por varios lados y al jugador (atrás, de lado, de frente, sin nada dibujado), hace un doble salto y un dash en cada dirección (adelante, izquierda, atrás, derecha) desde una caída de 8 bloques, y comprueba el impulso, la dirección y que el doble salto amortigüe el aterrizaje, en `build/tendons-smoke/screenshots`.
+- `tools/tendons_tests.sh vanilla|punchy|fresh|punchy-fresh|all`: servidor dedicado y dos clientes (el observador mira al portador, de espaldas y de frente), con el portador haciendo un doble salto y un dash en cada dirección desde 8 bloques. Comprueba que el observador ve el implante sincronizado y el empuje de cada movimiento, que el cliente del portador lo ejecuta y el aterrizaje en el servidor; lo repite sin mods extra, con Punchy, con Entity Model Features + Entity Texture Features + los paquetes de Fresh Animations y con todos. Capturas y registros en `build/tendons-mp/<combinación>/`.
 - `runNanowireSmoke`: abre el cliente, equipa el Nanocable y filma cada tick de los latigazos y del latigazo doble, en tercera y primera persona, y el repliegue, en `build/nanowire-smoke/screenshots`.
 
 Las comprobaciones numéricas de las animaciones del Nanocable también se ejecutan con `./gradlew nanowireMotionTest` (incluidas en `build`). Para comparar dos ejecuciones con capturas guardadas:

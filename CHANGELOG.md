@@ -2,6 +2,11 @@
 
 Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
+## [Sin publicar]
+
+- Se elimina la compatibilidad con Immersive Armors (dash de los pantalones Steampunk, dependencia de desarrollo y tecla propia); el dash aéreo pasa a los Tendones reforzados, que ahora lo hacen en todas direcciones.
+- Implante **Tendones reforzados** `apogee:reinforced_tendons` (ranura Piernas): pulsa saltar en el aire para un doble salto, con 4 bloques de caída amortiguados y una recarga por vuelo. Implante solo funcional (no se dibuja en el jugador), con modelo 3D propio hecho en Blockbench (`art/tendons/blockbench/`) y sonidos propios de salto y dash, receta propia, textos en español e inglés, pruebas de servidor, de cliente (`runTendonsSmoke`) y multijugador con y sin Punchy y Fresh Animations (`tools/tendons_tests.sh`).
+
 ## [1.1.1+1.21.1] — 2026-10-01
 
 - Tooltips del Nanocable con el mismo ancho de tarjeta que las Cuchillas Mantis: descripciones y habilidad de sangrado divididas en líneas, altura calculada según el texto y ajuste a la pantalla cuando no cabe. Traducciones más breves en español e inglés.
