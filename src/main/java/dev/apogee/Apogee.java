@@ -1,6 +1,7 @@
 package dev.apogee;
 
 import dev.apogee.bloodpump.BloodPumpManager;
+import dev.apogee.compat.immersivearmors.SteamDash;
 import dev.apogee.berserk.BerserkManager;
 import dev.apogee.config.ApogeeServerConfig;
 import dev.apogee.mantis.MantisManager;
@@ -37,6 +38,7 @@ public final class Apogee implements ModInitializer {
         SandevistanManager.register();
         BerserkManager.register();
         MantisManager.register();
+        SteamDash.registerServer();
         ReinforcedTendons.register();
         BloodPumpManager.register();
     }

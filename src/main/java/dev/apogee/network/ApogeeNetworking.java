@@ -17,6 +17,7 @@ public final class ApogeeNetworking {
 
     public static void registerCommon() {
         PayloadTypeRegistry.playC2S().register(ToggleSandevistan.TYPE, ToggleSandevistan.CODEC);
+        PayloadTypeRegistry.playC2S().register(SteamDashRequest.TYPE, SteamDashRequest.CODEC);
         PayloadTypeRegistry.playC2S().register(AirDashRequest.TYPE, AirDashRequest.CODEC);
         PayloadTypeRegistry.playC2S().register(ToggleMantis.TYPE, ToggleMantis.CODEC);
         PayloadTypeRegistry.playC2S().register(MantisThrust.TYPE, MantisThrust.CODEC);
@@ -40,6 +41,18 @@ public final class ApogeeNetworking {
         public static final ToggleSandevistan INSTANCE = new ToggleSandevistan();
         public static final Type<ToggleSandevistan> TYPE = new Type<>(Apogee.id("toggle_sandevistan"));
         public static final StreamCodec<FriendlyByteBuf, ToggleSandevistan> CODEC = StreamCodec.unit(INSTANCE);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Steampunk Leggings air dash performed by the client; the server replays the effects. */
+    public record SteamDashRequest() implements CustomPacketPayload {
+        public static final SteamDashRequest INSTANCE = new SteamDashRequest();
+        public static final Type<SteamDashRequest> TYPE = new Type<>(Apogee.id("steam_dash"));
+        public static final StreamCodec<FriendlyByteBuf, SteamDashRequest> CODEC = StreamCodec.unit(INSTANCE);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {
