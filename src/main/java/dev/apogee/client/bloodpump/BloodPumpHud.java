@@ -40,7 +40,7 @@ public final class BloodPumpHud {
         float fill = left / BloodPumpRules.COOLDOWN_TICKS;
         int accent = left > 0.0F ? CyberwareHudSlot.MAGENTA : CyberwareHudSlot.CYAN;
         float step = CyberwareHudSlot.SIZE + 6;
-        float lift = (SandevistanEffects.hudAlpha() + ArmCyberwareHud.alpha()) * step;
+        float lift = (CyberwareHudSlot.osAlpha() + ArmCyberwareHud.alpha()) * step;
         int x = 6;
         int y = Math.round(graphics.guiHeight() - CyberwareHudSlot.SIZE - 6 - lift);
         graphics.pose().pushPose();

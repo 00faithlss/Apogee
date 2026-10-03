@@ -57,7 +57,7 @@ public final class ArmCyberwareHud {
         int accent = left > 0.0F ? CyberwareHudSlot.MAGENTA : CyberwareHudSlot.CYAN;
         int x = 6;
         // Over the operating system's square (Sandevistan or Berserk) while that one shows.
-        float lift = Math.max(SandevistanEffects.hudAlpha(), BerserkEffects.hudAlpha()) * (CyberwareHudSlot.SIZE + 6);
+        float lift = CyberwareHudSlot.osAlpha() * CyberwareHudSlot.STEP;
         int y = Math.round(graphics.guiHeight() - CyberwareHudSlot.SIZE - 6 - lift);
         graphics.pose().pushPose();
         graphics.pose().translate(0.0F, (1.0F - alpha) * 6.0F, 0.0F);

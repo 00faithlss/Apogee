@@ -214,7 +214,7 @@ public final class BerserkEffects {
                     : 1.0F - Mth.clamp((clientTicks - killFlashStart + partialTick) / 12.0F, 0.0F, 1.0F);
             Component text = Component.translatable("hud.apogee.berserk.heal", heal)
                     .withStyle(style -> style.withFont(CyberwareHudSlot.FONT));
-            graphics.drawString(minecraft.font, text, x + size + 4, y - 8 - Math.round(bump * 3.0F),
+            graphics.drawString(minecraft.font, text, x + CyberwareHudSlot.BONUS_X_OFFSET, y + size / 2 - 4 - Math.round(bump * 3.0F),
                     CyberwareHudSlot.withAlpha(CyberwareHudSlot.YELLOW, hudAlpha), true);
         }
         graphics.pose().popPose();
