@@ -97,7 +97,7 @@ public final class TendonsClient {
 
     private static void jump(LocalPlayer player) {
         Vec3 velocity = player.getDeltaMovement();
-        // A second ordinary jump: the vertical speed is set, not added, so it never stacks on a rise or a fall.
+        // Set the extra jump's vertical speed rather than adding it to a rise or a fall.
         player.setDeltaMovement(velocity.x, ReinforcedTendons.jumpPower(player), velocity.z);
         player.playSound(ApogeeSounds.TENDONS_DOUBLE_JUMP, 0.7F, 1.0F);
         if (ClientPlayNetworking.canSend(DoubleJumpRequest.TYPE)) {

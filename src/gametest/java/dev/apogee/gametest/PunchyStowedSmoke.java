@@ -2,11 +2,13 @@ package dev.apogee.gametest;
 
 import dev.apogee.client.compat.punchy.PunchyCompat;
 import dev.apogee.client.mantis.MantisClient;
+import dev.apogee.network.ApogeeNetworking.ToggleMantis;
 import dev.apogee.registry.ApogeeItems;
 import dev.emi.trinkets.api.TrinketItem;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.AccessibilityOnboardingScreen;
@@ -139,6 +141,10 @@ public final class PunchyStowedSmoke implements ClientModInitializer {
         }
         if (t == 20 && round > 0) {
             LOGGER.info("{} variant={} out={}", NAMES[round], MantisClient.variant(mc.player), MantisClient.isOut(mc.player));
+        }
+        // Exercise deployment and retraction before measuring Punchy's restored locomotion.
+        if (round > 0 && (t == 25 || t == 40)) {
+            ClientPlayNetworking.send(ToggleMantis.INSTANCE);
         }
         // idle 60..120, walk 130..190, run 200..255
         phase = t < 125 ? 0 : t < 195 ? 1 : 2;

@@ -149,7 +149,7 @@ public final class BerserkGameTests implements FabricGameTest {
 
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_heal")
     public void killsHealWhenItEnds(GameTestHelper helper) {
-        ServerPlayer player = wearer(helper, ApogeeItems.BERSERK_ZETATECH);
+        ServerPlayer player = wearer(helper, ApogeeItems.BERSERK_MILITECH);
         BerserkManager.toggle(player);
         player.setHealth(4.0F);
         Zombie zombie = helper.spawn(EntityType.ZOMBIE, new Vec3(2.5, 2.0, 1.5));
@@ -182,6 +182,99 @@ public final class BerserkGameTests implements FabricGameTest {
         helper.succeed();
     }
 
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_identity")
+    public void militechLocksStartingHealthAndCapsKillExtension(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, ApogeeItems.BERSERK_MILITECH);
+        player.setHealth(4.0F);
+        BerserkManager.toggle(player);
+        long originalEnd = BerserkManager.activeEndTime(player);
+        Zombie victim = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+        float before = BerserkManager.modifyDamage(victim, player.damageSources().playerAttack(player), 10.0F);
+        player.setHealth(player.getMaxHealth());
+        float after = BerserkManager.modifyDamage(victim, player.damageSources().playerAttack(player), 10.0F);
+        helper.assertTrue(before > 10.0F && before == after, "healing must not change the starting-health damage bonus");
+        for (int i = 0; i < 15; i++) {
+            Zombie target = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+            target.hurt(player.damageSources().playerAttack(player), 1000.0F);
+            if (i == 0) {
+                helper.assertTrue(BerserkManager.activeEndTime(player) == originalEnd + BerserkRules.KILL_EXTENSION_TICKS,
+                        "a kill extends Militech");
+            }
+        }
+        helper.assertTrue(BerserkManager.activeEndTime(player) == originalEnd + stats(BerserkVariant.MILITECH).durationTicks(),
+                "extensions are capped at double the initial duration");
+        cleanup(helper, player);
+        helper.succeed();
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_identity", timeoutTicks = 100)
+    public void biodyneBuildsComboHealsAndLosesRhythm(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, ApogeeItems.BERSERK_BIODYNE);
+        player.setHealth(10.0F);
+        player.getFoodData().setFoodLevel(17);
+        double base = player.getAttributeValue(Attributes.ATTACK_SPEED);
+        BerserkManager.toggle(player);
+        helper.assertTrue(player.getAttributeValue(Attributes.ATTACK_SPEED) == base, "Biodyne starts without combo speed");
+        Zombie victim = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+        victim.setNoAi(true);
+        Zombie other = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+        other.setNoAi(true);
+        for (int i = 1; i <= BerserkRules.COMBO_HITS; i++) {
+            final int hit = i;
+            helper.runAfterDelay(i * 3, () -> {
+                victim.invulnerableTime = 0;
+                victim.hurt(player.damageSources().playerAttack(player), 0.2F);
+                helper.assertTrue(BerserkManager.comboHits(player) == hit, "successful hit advances one combo step");
+                double expected = base * (1.0 + stats(BerserkVariant.BIODYNE).attackSpeedPercent() / 100.0 * hit / BerserkRules.COMBO_HITS);
+                helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_SPEED) - expected) < 1.0E-6,
+                        "speed scales with the combo");
+                other.invulnerableTime = 0;
+                other.hurt(player.damageSources().playerAttack(player), 0.2F);
+                helper.assertTrue(BerserkManager.comboHits(player) == hit, "AoE damage in the same tick must not add another step");
+                if (hit == BerserkRules.COMBO_HITS) {
+                    helper.assertTrue(Math.abs(player.getHealth() - 12.0F) < 0.01F, "five hits heal ten percent");
+                    helper.assertTrue(dev.apogee.mantis.MantisRules.berserkTicks(15, player) < 15, "combo speed also accelerates nanowire");
+                }
+            });
+        }
+        helper.runAfterDelay(15 + BerserkRules.COMBO_WINDOW_TICKS + 2, () -> {
+            helper.assertTrue(BerserkManager.comboHits(player) == 0, "combo expires after losing rhythm");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_SPEED) - base) < 1.0E-6, "expired combo removes speed");
+            cleanup(helper, player);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_identity")
+    public void landingIsExclusiveAndOnlyHealsOnSuccessfulImpact(GameTestHelper helper) {
+        ServerPlayer biodyne = wearer(helper, ApogeeItems.BERSERK_BIODYNE);
+        BerserkManager.toggle(biodyne);
+        Zombie target = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+        target.setNoAi(true);
+        float initial = target.getHealth();
+        BerserkManager.slam(biodyne, BerserkManager.rules(), 12.0);
+        helper.assertTrue(target.getHealth() == initial, "Biodyne cannot slam");
+        biodyne.teleportTo(biodyne.getX() + 20.0, biodyne.getY(), biodyne.getZ());
+        ServerPlayer zetatech = wearer(helper, ApogeeItems.BERSERK_ZETATECH);
+        BerserkManager.toggle(zetatech);
+        zetatech.setHealth(10.0F);
+        BerserkManager.slam(zetatech, BerserkManager.rules(), 3.0);
+        helper.assertTrue(Math.abs(zetatech.getHealth() - 11.0F) < 0.01F, "one enemy hit heals five percent");
+        float lowerImpact = initial - target.getHealth();
+        target.invulnerableTime = 0;
+        target.setHealth(initial);
+        BerserkManager.slam(zetatech, BerserkManager.rules(), 7.0);
+        helper.assertTrue(initial - target.getHealth() > lowerImpact, "higher landing deals more damage");
+        float healed = zetatech.getHealth();
+        // The weaker immediate hit is rejected by the target's damage immunity window.
+        BerserkManager.slam(zetatech, BerserkManager.rules(), 3.0);
+        helper.assertTrue(zetatech.getHealth() == healed, "rejected damage does not grant landing healing");
+        helper.assertTrue(BerserkRules.landingPower(1000.0, 3.0) == 3.0F, "height power is capped");
+        BerserkManager.end(zetatech, true);
+        helper.assertTrue(zetatech.getHealth() == healed, "Zetatech does not bank kill healing");
+        cleanup(helper, biodyne, zetatech);
+        helper.succeed();
+    }
     /** Implants go in only at the ripperdoc table: using one does not equip it, and no inventory screen offers its slot. */
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_ripperdoc")
     public void berserkEquipsOnlyAtTheRipperdoc(GameTestHelper helper) {

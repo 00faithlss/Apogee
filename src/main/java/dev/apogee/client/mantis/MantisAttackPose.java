@@ -30,20 +30,20 @@ public final class MantisAttackPose {
         float side = right ? 1.0F : -1.0F;
         if (thrust >= 0.0F) {
             float reach = pulse(thrust, 0.42F);
-            return new Motion(-side * 0.42F * reach, 0.12F * reach, -0.60F * reach,
-                    -8.0F * reach, side * 12.0F * reach, side * 8.0F * reach);
+            return new Motion(-side * 0.48F * reach, 0.18F * reach, -0.85F * reach,
+                    -14.0F * reach, side * 18.0F * reach, side * 14.0F * reach);
         }
         if (own >= 0.0F) {
             float wind = pulse(own / 0.42F, 0.48F);
             float cut = pulse((own - 0.18F) / 0.82F, 0.38F);
-            return new Motion(side * (0.06F * wind - 0.68F * cut), 0.12F * wind + 0.08F * cut,
-                    0.04F * wind - 0.42F * cut, 8.0F * wind - 12.0F * cut,
-                    side * (-6.0F * wind + 25.0F * cut), side * (-8.0F * wind + 34.0F * cut));
+            return new Motion(side * (0.14F * wind - 0.95F * cut), 0.18F * wind + 0.12F * cut,
+                    0.08F * wind - 0.60F * cut, 14.0F * wind - 20.0F * cut,
+                    side * (-12.0F * wind + 38.0F * cut), side * (-16.0F * wind + 48.0F * cut));
         }
         if (other >= 0.0F) {
             float follow = pulse(other, 0.50F);
-            return new Motion(-side * 0.18F * follow, 0.04F * follow, 0.02F * follow,
-                    3.0F * follow, -side * 4.0F * follow, -side * 8.0F * follow);
+            return new Motion(-side * 0.26F * follow, 0.06F * follow, 0.04F * follow,
+                    5.0F * follow, -side * 7.0F * follow, -side * 12.0F * follow);
         }
         return Motion.REST;
     }

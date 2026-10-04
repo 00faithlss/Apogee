@@ -138,7 +138,7 @@ public final class MantisClient {
             return;
         }
         // Holding the button on a block swings every tick; one cut at a time, as on the server.
-        if (ticks - anim.slashStart[anim.swingArm] < MantisRules.slashIntervalTicks(anim.variant)) {
+        if (ticks - anim.slashStart[anim.swingArm] < MantisRules.berserkTicks(MantisRules.slashIntervalTicks(anim.variant), mc.player)) {
             return;
         }
         anim.swingArm = anim.nextArm;
@@ -279,7 +279,7 @@ public final class MantisClient {
         if (anim == null || anim.slashStart[arm] == Long.MIN_VALUE / 2) {
             return -1.0F;
         }
-        float t = (ticks - anim.slashStart[arm] + partialTick) / MantisRules.slashAnimationTicks(anim.variant);
+        float t = (ticks - anim.slashStart[arm] + partialTick) / MantisRules.berserkTicks(MantisRules.slashAnimationTicks(anim.variant), entity);
         return t >= 0.0F && t <= 1.0F ? t : -1.0F;
     }
 

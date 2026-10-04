@@ -135,7 +135,14 @@ public final class TendonsGameTests implements FabricGameTest {
     public void soundsAreRegisteredAndShort(GameTestHelper helper) {
         helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.containsKey(Apogee.id("tendons_double_jump")), "double jump sound registered");
         helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.containsKey(Apogee.id("tendons_air_dash")), "air dash sound registered");
-        helper.assertTrue(ReinforcedTendons.JUMP_POWER == 0.42, "The double jump is an ordinary jump");
+        double velocity = ReinforcedTendons.JUMP_POWER;
+        double height = 0.0;
+        while (velocity > 0.0) {
+            height += velocity;
+            velocity = (velocity - 0.08) * 0.98;
+        }
+        helper.assertTrue(Math.abs(height - 2.0) < 0.02,
+                "The extra jump gains two blocks under vanilla gravity and drag");
         for (String name : new String[]{"double_jump", "air_dash"}) {
             try (var in = ReinforcedTendons.class.getResourceAsStream("/assets/apogee/sounds/tendons/" + name + ".ogg")) {
                 helper.assertTrue(in != null, name + ".ogg is packaged");

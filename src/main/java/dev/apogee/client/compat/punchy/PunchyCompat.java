@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 public final class PunchyCompat {
     private static Method enabled;
     private static Method blacklisted;
+    private static Method explicitTransform;
+    private static Method setExplicitTransform;
     private static boolean resolved;
     private static Frame frame;
     private static boolean rendering;
@@ -41,14 +43,15 @@ public final class PunchyCompat {
     private static final class Frame {
         final LocalPlayer player;
         final PoseStack poses;
-        final MultiBufferSource.BufferSource buffers;
+        final MultiBufferSource buffers;
         final float partialTick;
         final int light;
         final Matrix4f[] arms = new Matrix4f[2];
         final boolean[] visible = new boolean[2];
+        boolean nanowireRendered;
         boolean rendered;
 
-        Frame(LocalPlayer player, PoseStack poses, MultiBufferSource.BufferSource buffers, float partialTick, int light) {
+        Frame(LocalPlayer player, PoseStack poses, MultiBufferSource buffers, float partialTick, int light) {
             this.player = player;
             this.poses = poses;
             this.buffers = buffers;
@@ -68,7 +71,11 @@ public final class PunchyCompat {
                     Class<?> config = Class.forName("punchy.config.PunchyConfig");
                     enabled = config.getMethod("isModEnabled");
                     blacklisted = config.getMethod("isHandBlacklisted", Player.class, InteractionHand.class);
+                    Class<?> part = Class.forName("punchy.client.access.TransformablePart");
+                    explicitTransform = part.getMethod("punchy$getExplicitTransform");
+                    setExplicitTransform = part.getMethod("punchy$setExplicitTransform", Matrix4f.class);
                 } catch (ReflectiveOperationException exception) {
+                    enabled = null;
                     LoggerFactory.getLogger("Apogee").warn("Punchy hand integration unavailable", exception);
                 }
             }
@@ -89,14 +96,31 @@ public final class PunchyCompat {
 
     public static void begin(LocalPlayer player, PoseStack poses, MultiBufferSource buffers, float partialTick, int light) {
         reset();
-        if (buffers instanceof MultiBufferSource.BufferSource source && active(player) && !player.isScoping()
+        MantisVariant variant = MantisClient.variant(player);
+        if ((buffers instanceof MultiBufferSource.BufferSource || variant != null && variant.isNanowire())
+                && active(player) && !player.isScoping()
                 && (MantisClient.implantViewReady(player) || MantisHandPose.holdFolded)) {
-            frame = new Frame(player, poses, source, partialTick, light);
+            frame = new Frame(player, poses, buffers, partialTick, light);
         }
     }
 
     public static boolean needsPose(LocalPlayer player) {
-        return frame != null && frame.player == player && !frame.rendered;
+        return frame != null && frame.player == player && !frame.rendered && !nativeNanowireView(player);
+    }
+
+    /** Nanowire keeps Punchy's own skin renderer for the whole deploy/retract cycle. */
+    public static boolean nativeNanowireView(LocalPlayer player) {
+        MantisVariant variant = MantisClient.variant(player);
+        return frame != null && frame.player == player && variant != null && variant.isNanowire();
+    }
+
+    /** The first native arm call draws both arms; the other call must not draw them again. */
+    public static boolean claimNanowireArms(LocalPlayer player) {
+        if (!nativeNanowireView(player) || frame.nanowireRendered) {
+            return false;
+        }
+        frame.nanowireRendered = true;
+        return true;
     }
 
     public static void capture(LocalPlayer player, HumanoidArm arm, Matrix4f matrix, boolean visible) {
@@ -114,7 +138,8 @@ public final class PunchyCompat {
         rendering = true;
         try {
             ((ImplantHandRenderer) Minecraft.getInstance().gameRenderer.itemInHandRenderer)
-                    .apogee$renderImplants(current.partialTick, current.poses, current.buffers, player, current.light);
+                    .apogee$renderImplants(current.partialTick, current.poses,
+                            (MultiBufferSource.BufferSource) current.buffers, player, current.light);
             current.rendered = true;
         } finally {
             rendering = false;
@@ -139,6 +164,22 @@ public final class PunchyCompat {
         rendering = false;
     }
 
+    private static Matrix4f explicitPose(ModelPart part) {
+        try {
+            return (Matrix4f) explicitTransform.invoke(part);
+        } catch (ReflectiveOperationException exception) {
+            throw new IllegalStateException("Cannot read Punchy's arm transform", exception);
+        }
+    }
+
+    private static void explicitPose(ModelPart part, Matrix4f pose) {
+        try {
+            setExplicitTransform.invoke(part, new Object[]{pose});
+        } catch (ReflectiveOperationException exception) {
+            throw new IllegalStateException("Cannot restore Punchy's arm transform", exception);
+        }
+    }
+
     public static boolean renderArm(PoseStack poses, MultiBufferSource buffers, int light, LocalPlayer player,
                                      boolean right, float partialTick) {
         if (!rendering || frame == null || frame.player != player) {
@@ -155,17 +196,31 @@ public final class PunchyCompat {
         float ax = arm.xScale, ay = arm.yScale, az = arm.zScale;
         float sx = sleeve.xScale, sy = sleeve.yScale, sz = sleeve.zScale;
         boolean armVisible = arm.visible, sleeveVisible = sleeve.visible;
+        Matrix4f armExplicit = explicitPose(arm);
+        Matrix4f sleeveExplicit = explicitPose(sleeve);
         poses.pushPose();
         poses.mulPose(frame.arms[right ? 0 : 1]);
-        if (finalProbe != null) {
-            finalProbe.accept(!right, new Matrix4f(poses.last().pose()));
-        }
         try {
+            // The captured matrix already includes Punchy's explicit transform. PartPose.ZERO
+            // alone does not clear it: ModelPart would apply it again to skin and housing.
+            explicitPose(arm, null);
+            explicitPose(sleeve, null);
             arm.loadPose(PartPose.ZERO);
             sleeve.loadPose(PartPose.ZERO);
             arm.xScale = arm.yScale = arm.zScale = 1.0F;
             sleeve.xScale = sleeve.yScale = sleeve.zScale = 1.0F;
             arm.visible = sleeve.visible = true;
+            if (finalProbe != null) {
+                // Measure the mesh's actual pose too, so a second ModelPart transform is
+                // visible to movement regressions rather than only measuring its parent.
+                poses.pushPose();
+                try {
+                    arm.translateAndRotate(poses);
+                    finalProbe.accept(!right, new Matrix4f(poses.last().pose()));
+                } finally {
+                    poses.popPose();
+                }
+            }
             MantisVariant variant = MantisClient.variant(player);
             if (variant != null && variant.isBlades()) {
                 MantisRig.firstPersonPass = true;
@@ -184,6 +239,8 @@ public final class PunchyCompat {
                 NanowireRig.drawOnArm(poses, buffers, light, player, arm, right, partialTick);
             }
         } finally {
+            explicitPose(arm, armExplicit);
+            explicitPose(sleeve, sleeveExplicit);
             arm.loadPose(armPose);
             sleeve.loadPose(sleevePose);
             arm.xScale = ax;

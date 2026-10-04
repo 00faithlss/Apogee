@@ -24,14 +24,14 @@ import net.minecraft.world.entity.LivingEntity;
  * used since the last landing, then softens the fall and plays the effects for everyone else.
  */
 public final class ReinforcedTendons {
-    /** Upward speed of the extra jump: the same as a normal jump from the ground. */
-    public static final double JUMP_POWER = 0.42;
-    /** Height of a normal jump in blocks, which the double jump reaches again from the air. */
-    public static final double JUMP_HEIGHT = 1.25;
+    /** Upward speed that gains about two blocks under vanilla gravity and drag. */
+    public static final double JUMP_POWER = 0.545;
+    /** Approximate extra height in blocks under vanilla gravity, without Jump Boost. */
+    public static final double JUMP_HEIGHT = 2.0;
     /** Blocks of fall the extra jump absorbs (the 3 free blocks of vanilla come on top). */
     public static final float FALL_MARGIN = 4.0F;
 
-    /** Upward speed of the double jump for this entity: a normal jump, raised by Jump Boost like one. */
+    /** Upward speed of the double jump, raised by Jump Boost like a ground jump. */
     public static double jumpPower(LivingEntity entity) {
         var boost = entity.getEffect(net.minecraft.world.effect.MobEffects.JUMP);
         return JUMP_POWER + (boost == null ? 0.0 : 0.1 * (boost.getAmplifier() + 1));
