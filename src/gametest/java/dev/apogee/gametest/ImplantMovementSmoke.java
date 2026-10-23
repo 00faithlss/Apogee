@@ -50,11 +50,59 @@ public final class ImplantMovementSmoke implements ClientModInitializer {
     private static float walkSpan;
     private static float runSpan;
     private static Vector3f previous;
+    private static Vector3f finalPrevious;
+    private static float finalWalk;
+    private static float finalRun;
+    private static float finalIdle;
+    private static Matrix4f lastPunchy;
+    private static float offsetSum;
+    private static float tiltSum;
+    private static int offsetCount;
+    private static final Vector3f[] armPrevious = new Vector3f[2];
+    private static final float[] armWalk = new float[2];
+    private static final float[] armRun = new float[2];
 
     @Override
     public void onInitializeClient() {
         if (ENABLED) {
             ClientTickEvents.END_CLIENT_TICK.register(ImplantMovementSmoke::tick);
+            PunchyCompat.finalProbe = (left, pose) -> {
+                if (ticks < 40) {
+                    return;
+                }
+                Vector3f at = pose.getTranslation(new Vector3f());
+                int t = (ticks - 40) % ROUND;
+                int arm = left ? 1 : 0;
+                if (armPrevious[arm] != null) {
+                    float distance = armPrevious[arm].distance(at);
+                    if (t >= 90 && t < 115) armWalk[arm] += distance;
+                    if (t >= 130 && t < 155) armRun[arm] += distance;
+                }
+                armPrevious[arm] = new Vector3f(at);
+                if (PunchyCompat.nativeNanowireView(Minecraft.getInstance().player)) {
+                    samples++;
+                }
+                if (left == (Minecraft.getInstance().options.mainHand().get() == HumanoidArm.RIGHT)) {
+                    return;
+                }
+                if (lastPunchy != null && t >= 60 && t < 155) {
+                    offsetSum += lastPunchy.getTranslation(new Vector3f()).distance(at);
+                    tiltSum += (float) Math.toDegrees(lastPunchy.getNormalizedRotation(new org.joml.Quaternionf())
+                            .difference(pose.getNormalizedRotation(new org.joml.Quaternionf()), new org.joml.Quaternionf()).angle());
+                    offsetCount++;
+                }
+                if (finalPrevious != null) {
+                    float distance = finalPrevious.distance(at);
+                    if (t >= 60 && t < 75) {
+                        finalIdle += distance;
+                    } else if (t >= 90 && t < 115) {
+                        finalWalk += distance;
+                    } else if (t >= 130 && t < 155) {
+                        finalRun += distance;
+                    }
+                }
+                finalPrevious = at;
+            };
         }
     }
 
@@ -63,6 +111,7 @@ public final class ImplantMovementSmoke implements ClientModInitializer {
             return;
         }
         check(pose.isFinite(), "finite Punchy arm transform");
+        lastPunchy = new Matrix4f(pose);
         Vector3f position = pose.getTranslation(new Vector3f());
         int t = (ticks - 40) % ROUND;
         if (previous != null) {
@@ -118,7 +167,14 @@ public final class ImplantMovementSmoke implements ClientModInitializer {
         if (t == 0) {
             samples = 0;
             idleSpan = walkSpan = runSpan = 0.0F;
+            finalIdle = finalWalk = finalRun = 0.0F;
+            finalPrevious = null;
+            offsetSum = tiltSum = 0.0F;
+            offsetCount = 0;
             previous = null;
+            java.util.Arrays.fill(armPrevious, null);
+            java.util.Arrays.fill(armWalk, 0.0F);
+            java.util.Arrays.fill(armRun, 0.0F);
             mc.options.hideGui = false;
             mc.options.fov().set(70);
             mc.options.bobView().set(round < 2);
@@ -175,10 +231,12 @@ public final class ImplantMovementSmoke implements ClientModInitializer {
                 check(!MantisClient.isOut(mc.player), "returned to held items " + name);
                 if (PUNCHY) {
                     check(samples > 30, "Punchy frames were rendered " + name);
-                    check(walkSpan > 0.02F, "walking moves native poses " + name);
-                    check(runSpan > 0.02F, "running moves native poses " + name);
+                    for (int a = 0; a < 2; a++) {
+                        check(armWalk[a] > 0.02F, "walking moves " + (a == 0 ? "right" : "left") + " arm " + name);
+                        check(armRun[a] > 0.02F, "running moves " + (a == 0 ? "right" : "left") + " arm " + name);
+                    }
                 }
-                LOGGER.info("{} samples={} idle={} walking={} running={}", name, samples, idleSpan, walkSpan, runSpan);
+                LOGGER.info("{} samples={} idle={} walking={} running={} | final idle={} walking={} running={} | from Punchy: offset={} tilt={}", name, samples, idleSpan, walkSpan, runSpan, finalIdle, finalWalk, finalRun, offsetSum / Math.max(1, offsetCount), tiltSum / Math.max(1, offsetCount));
             }
             default -> {
             }

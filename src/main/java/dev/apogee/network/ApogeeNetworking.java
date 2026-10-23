@@ -241,20 +241,26 @@ public final class ApogeeNetworking {
      * The receiving player's own Berserk state, as server game times like {@link WearerStatus}.
      * {@code variant} is the installed or running variant's ordinal, or -1 with none installed.
      */
-    public record BerserkStatus(boolean active, int variant, long startTime, long endTime, long cooldownEnd, int kills)
+    public record BerserkStatus(boolean active, int variant, long startTime, long endTime, long cooldownEnd, int kills, int comboHits)
             implements CustomPacketPayload {
+        public BerserkStatus(boolean active, int variant, long startTime, long endTime, long cooldownEnd, int kills) {
+            this(active, variant, startTime, endTime, cooldownEnd, kills, 0);
+        }
         public static final BerserkStatus IDLE = new BerserkStatus(false, -1, 0L, 0L, 0L, 0);
         public static final Type<BerserkStatus> TYPE = new Type<>(Apogee.id("berserk_status"));
-        public static final StreamCodec<FriendlyByteBuf, BerserkStatus> CODEC = StreamCodec.composite(
-                ByteBufCodecs.BOOL, BerserkStatus::active,
-                ByteBufCodecs.VAR_INT, BerserkStatus::variant,
-                ByteBufCodecs.VAR_LONG, BerserkStatus::startTime,
-                ByteBufCodecs.VAR_LONG, BerserkStatus::endTime,
-                ByteBufCodecs.VAR_LONG, BerserkStatus::cooldownEnd,
-                ByteBufCodecs.VAR_INT, BerserkStatus::kills,
-                BerserkStatus::new
+        public static final StreamCodec<FriendlyByteBuf, BerserkStatus> CODEC = StreamCodec.of(
+                (buf, status) -> {
+                    buf.writeBoolean(status.active());
+                    buf.writeVarInt(status.variant());
+                    buf.writeVarLong(status.startTime());
+                    buf.writeVarLong(status.endTime());
+                    buf.writeVarLong(status.cooldownEnd());
+                    buf.writeVarInt(status.kills());
+                    buf.writeVarInt(status.comboHits());
+                },
+                buf -> new BerserkStatus(buf.readBoolean(), buf.readVarInt(), buf.readVarLong(),
+                        buf.readVarLong(), buf.readVarLong(), buf.readVarInt(), buf.readVarInt())
         );
-
         @Override
         public Type<? extends CustomPacketPayload> type() {
             return TYPE;

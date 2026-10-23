@@ -130,4 +130,62 @@ public final class TendonsGameTests implements FabricGameTest {
         player.getServer().getPlayerList().remove(player);
         helper.succeed();
     }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void soundsAreRegisteredAndShort(GameTestHelper helper) {
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.containsKey(Apogee.id("tendons_double_jump")), "double jump sound registered");
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.containsKey(Apogee.id("tendons_air_dash")), "air dash sound registered");
+        double velocity = ReinforcedTendons.JUMP_POWER;
+        double height = 0.0;
+        while (velocity > 0.0) {
+            height += velocity;
+            velocity = (velocity - 0.08) * 0.98;
+        }
+        helper.assertTrue(Math.abs(height - 2.0) < 0.02,
+                "The extra jump gains two blocks under vanilla gravity and drag");
+        for (String name : new String[]{"double_jump", "air_dash"}) {
+            try (var in = ReinforcedTendons.class.getResourceAsStream("/assets/apogee/sounds/tendons/" + name + ".ogg")) {
+                helper.assertTrue(in != null, name + ".ogg is packaged");
+                helper.assertTrue(in.readAllBytes().length < 40_000, name + ".ogg is a short clip");
+            } catch (java.io.IOException e) {
+                throw new AssertionError(e);
+            }
+        }
+        helper.succeed();
+    }
+
+    /** The press that leaves the ground, or a key held from the ground, must not fire the double jump. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void groundJumpPressIsNotTheDoubleJump(GameTestHelper helper) {
+        dev.apogee.client.tendons.TendonsAirInput input = new dev.apogee.client.tendons.TendonsAirInput();
+        // On the ground, key up.
+        helper.assertTrue(!input.step(true, false, false, false, false, true).jump(), "nothing on the ground");
+        // The tick the feet leave the ground: jump is down and was just pressed.
+        helper.assertTrue(!input.step(false, true, true, false, false, true).jump(), "the take-off press must not fire");
+        // Still held in the air.
+        helper.assertTrue(!input.step(false, true, false, false, false, true).jump(), "a held key must not fire");
+        // Released, then pressed again: the double jump.
+        helper.assertTrue(!input.step(false, false, false, false, false, true).jump(), "release does not fire");
+        helper.assertTrue(input.step(false, true, true, false, false, true).jump(), "a new press in the air fires");
+        helper.assertTrue(!input.step(false, false, false, false, false, true).jump(), "release");
+        helper.assertTrue(!input.step(false, true, true, false, false, true).jump(), "only once per flight");
+        // Landing recharges it.
+        input.step(true, false, false, false, false, true);
+        input.step(false, true, true, false, false, true);
+        input.step(false, false, false, false, false, true);
+        helper.assertTrue(input.step(false, true, true, false, false, true).jump(), "recharged after landing");
+        helper.succeed();
+    }
+
+    /** A dash needs a new press too, and works independently of the jump. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_tendons")
+    public void dashIsIndependentFromTheJump(GameTestHelper helper) {
+        dev.apogee.client.tendons.TendonsAirInput input = new dev.apogee.client.tendons.TendonsAirInput();
+        input.step(true, false, false, false, false, true);
+        input.step(false, true, true, false, false, true);
+        input.step(false, false, false, false, false, true);
+        helper.assertTrue(input.step(false, false, false, true, true, true).dash(), "a dash press in the air fires");
+        helper.assertTrue(input.step(false, true, true, true, false, true).jump(), "the jump still works after the dash");
+        helper.succeed();
+    }
 }

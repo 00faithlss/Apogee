@@ -31,7 +31,8 @@ public final class BloodPumpClient {
         if (mc.level == null || !STARTS.containsKey(entity.getId())) {
             return -1.0F;
         }
-        float elapsed = mc.level.getGameTime() + partialTick - STARTS.get(entity.getId());
+        // The client's clock can trail the server's by a few ticks: right after a shot that is still "just fired".
+        float elapsed = Math.max(0.0F, mc.level.getGameTime() + partialTick - STARTS.get(entity.getId()));
         return elapsed >= BloodPumpRules.COOLDOWN_TICKS ? -1.0F : elapsed;
     }
 

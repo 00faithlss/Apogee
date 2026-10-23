@@ -59,6 +59,8 @@ public final class ApogeeItems {
     public static final Item FORTIFIED_ANKLES = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final Item BIONIC_JOINTS = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final Item SYNAPTIC_ACCELERATOR = new Item(new Item.Properties().rarity(Rarity.RARE));
+    public static final Item MICROELECTRIC_MODULE = new Item(new Item.Properties().rarity(Rarity.RARE));
+    public static final Item COMPACT_REACTOR = new Item(new Item.Properties().rarity(Rarity.RARE));
 
     private ApogeeItems() {
     }
@@ -109,6 +111,8 @@ public final class ApogeeItems {
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("fortified_ankles"), FORTIFIED_ANKLES);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("bionic_joints"), BIONIC_JOINTS);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("synaptic_accelerator"), SYNAPTIC_ACCELERATOR);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("microelectric_module"), MICROELECTRIC_MODULE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("compact_reactor"), COMPACT_REACTOR);
 
         CreativeModeTab tab = FabricItemGroup.builder()
                 .icon(() -> new ItemStack(SANDEVISTAN))
@@ -147,6 +151,8 @@ public final class ApogeeItems {
                     output.accept(FORTIFIED_ANKLES);
                     output.accept(BIONIC_JOINTS);
                     output.accept(SYNAPTIC_ACCELERATOR);
+                    output.accept(MICROELECTRIC_MODULE);
+                    output.accept(COMPACT_REACTOR);
                 })
                 .build();
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Apogee.id("apogee"), tab);

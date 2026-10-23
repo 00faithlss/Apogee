@@ -23,8 +23,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Draws the Apogee panels for the Sandevistan, the Reinforced Tendons and the arm cyberware in place of Simply Tooltips' default layout. Only
- * Draws the Apogee panels for the Sandevistan, the Berserk and the arm cyberware in place of Simply Tooltips' default layout. Only
+ * Draws the Apogee panels for the Sandevistan, the Reinforced Tendons, the Blood Pump, the Berserk and the arm
+ * cyberware in place of Simply Tooltips' default layout, which is cancelled so it is not drawn underneath. Only
  * applied when Simply Tooltips is loaded (see ApogeeMixinPlugin). Theme Studio previews and
  * exports (non-null render state) keep Simply Tooltips' renderer and the registered provider.
  * Simply Tooltips ships intermediary names, while development runs remap it to Mojang names,
@@ -52,8 +52,10 @@ public abstract class SimplyTooltipsRendererMixin {
             ci.cancel();
         } else if (stack.is(ApogeeItems.REINFORCED_TENDONS)) {
             TendonsTooltipPanel.render(graphics, font, stack, x, y, screenW, screenH);
+            ci.cancel();
         } else if (stack.is(ApogeeItems.BLOOD_PUMP)) {
             BloodPumpTooltipPanel.render(graphics, font, stack, x, y, screenW, screenH);
+            ci.cancel();
         } else if (stack.getItem() instanceof BerserkItem berserk) {
             BerserkTooltipPanel.render(graphics, font, stack, berserk.variant(), x, y, screenW, screenH);
             ci.cancel();

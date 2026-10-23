@@ -48,6 +48,16 @@ public final class MantisRules {
         return (variant != null && variant.isNanowire()) ? NanowireRules.LASH_TICKS : SLASH_INTERVAL_TICKS;
     }
 
+    /** Berserk's synced attribute modifier speeds up both implant strikes and their animation. */
+    public static int berserkTicks(int ticks, net.minecraft.world.entity.Entity entity) {
+        if (!(entity instanceof net.minecraft.world.entity.LivingEntity living)) {
+            return ticks;
+        }
+        var attribute = living.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_SPEED);
+        var modifier = attribute == null ? null : attribute.getModifier(dev.apogee.berserk.BerserkManager.ATTACK_SPEED_MODIFIER);
+        return modifier == null ? ticks : Math.max(1, (int) Math.round(ticks / (1.0 + modifier.amount())));
+    }
+
     /** Client-side length of one arm's attack animation, in ticks. */
     public static int slashAnimationTicks(MantisVariant variant) {
         return (variant != null && variant.isNanowire()) ? NanowireRules.LASH_ANIMATION_TICKS : SLASH_ANIMATION_TICKS;

@@ -59,6 +59,9 @@ public final class TendonsClientSmoke implements ClientModInitializer {
     private static int flight = -1;
     private static int flightStart;
     private static int moveTick = -1;
+    /** Height at the move and its apex, to check the extra jump's slightly increased height. */
+    private static double moveY;
+    private static double apexY;
     private static int landedTick = -1;
     private static double groundY;
 
@@ -185,6 +188,8 @@ public final class TendonsClientSmoke implements ClientModInitializer {
         if (moveTick < 0) {
             if (t > flightStart && !mc.player.onGround() && mc.player.getDeltaMovement().y < -0.3 && mc.player.getY() > groundY + 2.0) {
                 moveTick = t;
+                moveY = mc.player.getY();
+                apexY = moveY;
                 if (f.jump) {
                     TendonsClient.simulateJumpPressForTests();
                 } else {
@@ -194,15 +199,20 @@ public final class TendonsClientSmoke implements ClientModInitializer {
             return;
         }
         int dt = t - moveTick;
+        apexY = Math.max(apexY, mc.player.getY());
         if (dt == 1) {
             var v = mc.player.getDeltaMovement();
             if (f.jump) {
-                check(v.y > 0.5, f.name + ": launched upward (vy " + v.y + ")");
+                check(v.y > 0.44 && v.y < 0.50, f.name + ": a two-block extra jump (vy " + v.y + ")");
             } else {
                 // Facing yaw 0 (south): forward is +z and left is +x.
                 double along = v.x * f.left + v.z * f.forward;
                 check(along > 0.9, f.name + ": pushed the right way (" + along + " of " + v.horizontalDistance() + ")");
             }
+        }
+        if (f.jump && dt == 24) {
+            double rise = apexY - moveY;
+            check(rise > 1.8 && rise < 2.2, f.name + ": rises about 2 blocks, " + rise + " blocks");
         }
         if (dt == 2 || dt == 5 || dt == 9) {
             shot(mc, String.format("%02d-%s-%d", 4 + flight, f.name, dt));

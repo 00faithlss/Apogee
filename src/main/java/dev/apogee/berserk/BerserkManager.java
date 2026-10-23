@@ -79,7 +79,11 @@ public final class BerserkManager {
     private static final class Session {
         final BerserkVariant variant;
         final long startTime;
-        final long endTime;
+        long endTime;
+        float activationBonus;
+        int comboHits;
+        int comboCycle;
+        long lastHitTime = Long.MIN_VALUE / 2;
         int kills;
         boolean diving;
         double diveStartY;
@@ -121,6 +125,7 @@ public final class BerserkManager {
 
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(BerserkManager::allowDamage);
         ServerLivingEntityEvents.AFTER_DEATH.register(BerserkManager::onDeath);
+        ServerLivingEntityEvents.AFTER_DAMAGE.register(BerserkManager::afterDamage);
     }
 
     public static BerserkRules rules() {
@@ -186,7 +191,9 @@ public final class BerserkManager {
                 && now >= cooldownEndTime(player);
         if (ready) {
             BerserkRules.Stats stats = rules().stats(variant.get());
-            SESSIONS.put(player.getUUID(), new Session(variant.get(), now, now + stats.durationTicks()));
+            Session session = new Session(variant.get(), now, now + stats.durationTicks());
+            session.activationBonus = lowHealthBonus(player.getHealth() / player.getMaxHealth(), stats.lowHealthDamagePercent());
+            SESSIONS.put(player.getUUID(), session);
             applyModifiers(player, stats);
             playAt(player, ApogeeSounds.BERSERK_ACTIVATE, 1.0F);
         }
@@ -195,7 +202,7 @@ public final class BerserkManager {
 
     /**
      * Ends an activation (manual, expiry, death, unequip, dimension change or disconnect). A
-     * living wearer then heals a share of their maximum health for each kill.
+     * living Militech wearer then heals a share of their maximum health for each kill.
      */
     public static void end(ServerPlayer player, boolean heal) {
         Session session = SESSIONS.remove(player.getUUID());
@@ -206,7 +213,7 @@ public final class BerserkManager {
         long now = gameTime(player.server);
         BerserkRules rules = rules();
         player.setAttached(ApogeeAttachments.BERSERK_COOLDOWN_END, now + rules.stats(session.variant).cooldownTicks());
-        if (heal && player.isAlive() && session.kills > 0) {
+        if (heal && session.variant == BerserkVariant.MILITECH && player.isAlive() && session.kills > 0) {
             float share = Math.min(1.0F, session.kills * rules.healPerKillPercent() / 100.0F);
             player.heal(player.getMaxHealth() * share);
         }
@@ -217,7 +224,7 @@ public final class BerserkManager {
     }
 
     private static void applyModifiers(ServerPlayer player, BerserkRules.Stats stats) {
-        setModifier(player, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, stats.attackSpeedPercent() / 100.0);
+        setModifier(player, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, activeVariant(player) == BerserkVariant.BIODYNE ? 0.0 : stats.attackSpeedPercent() / 100.0);
         setModifier(player, Attributes.MOVEMENT_SPEED, MOVEMENT_MODIFIER, stats.movementPercent() / 100.0);
         setModifier(player, Attributes.FALL_DAMAGE_MULTIPLIER, FALL_DAMAGE_MODIFIER, -stats.fallDamageReductionPercent() / 100.0);
     }
@@ -259,7 +266,15 @@ public final class BerserkManager {
                 end(player, true);
                 continue;
             }
-            tickLanding(player, session, now);
+            if (session.variant == BerserkVariant.ZETATECH) {
+                tickLanding(player, session, now);
+            } else if (session.variant == BerserkVariant.BIODYNE
+                    && session.comboHits > 0 && now - session.lastHitTime > BerserkRules.COMBO_WINDOW_TICKS) {
+                session.comboHits = 0;
+                session.comboCycle = 0;
+                setModifier(player, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 0.0);
+                sendStatus(player);
+            }
             if ((now - session.startTime) % 3L == 0L) {
                 Vec3 center = player.getBoundingBox().getCenter();
                 // Solo para los demás: en primera persona la cámara queda dentro de la nube.
@@ -320,6 +335,11 @@ public final class BerserkManager {
 
     /** The shockwave of a superhero landing; public for the game tests. */
     public static void slam(ServerPlayer player, BerserkRules rules, double dropped) {
+        if (activeVariant(player) != BerserkVariant.ZETATECH || rules.slamRadius() <= 0.0) {
+            return;
+        }
+        float power = BerserkRules.landingPower(dropped, rules.slamMinHeight());
+        int enemiesHit = 0;
         ServerLevel level = player.serverLevel();
         double radius = rules.slamRadius();
         Vec3 center = player.position();
@@ -330,15 +350,22 @@ public final class BerserkManager {
                 continue;
             }
             float falloff = (float) (1.0 - 0.5 * distance / radius);
-            target.hurt(player.damageSources().playerAttack(player), rules.slamDamage() * falloff);
+            if (!target.hurt(player.damageSources().playerAttack(player), rules.slamDamage() * falloff * power)) {
+                continue;
+            }
+            if (!(target instanceof Animal)) {
+                enemiesHit++;
+            }
             double dx = target.getX() - center.x;
             double dz = target.getZ() - center.z;
             double length = Math.max(0.01, Math.sqrt(dx * dx + dz * dz));
-            double push = 0.6 + 0.8 * falloff;
-            target.push(dx / length * push, 0.35 + 0.25 * falloff, dz / length * push);
+            double push = (0.6 + 0.8 * falloff) * power;
+            target.push(dx / length * push, (0.35 + 0.25 * falloff) * power, dz / length * push);
             target.hurtMarked = true;
         }
 
+        player.heal(player.getMaxHealth() * Math.min(BerserkRules.LANDING_HEAL_CAP_PERCENT,
+                enemiesHit * BerserkRules.LANDING_HEAL_PERCENT) / 100.0F);
         BlockPos ground = player.blockPosition().below();
         BlockState state = level.getBlockState(ground);
         if (!state.isAir()) {
@@ -401,14 +428,18 @@ public final class BerserkManager {
         }
         ServerPlayer player = (ServerPlayer) attacker;
         BerserkRules.Stats stats = rules.stats(attacking);
-        if (stats.critChancePercent() > 0 && player.getRandom().nextInt(100) < stats.critChancePercent()) {
+        Session session = SESSIONS.get(player.getUUID());
+        int critChance = attacking == BerserkVariant.BIODYNE
+                ? stats.critChancePercent() * session.comboHits / BerserkRules.COMBO_HITS
+                : stats.critChancePercent();
+        if (critChance > 0 && player.getRandom().nextInt(100) < critChance) {
             amount *= 1.0F + stats.critDamagePercent() / 100.0F;
             player.crit(victim);
             player.level().playSound(null, victim.getX(), victim.getY(), victim.getZ(),
                     net.minecraft.sounds.SoundEvents.PLAYER_ATTACK_CRIT, SoundSource.PLAYERS, 1.0F, 0.8F);
         }
         if (stats.lowHealthDamagePercent() > 0) {
-            amount *= 1.0F + lowHealthBonus(player.getHealth() / player.getMaxHealth(), stats.lowHealthDamagePercent());
+            amount *= 1.0F + session.activationBonus;
         }
         return amount;
     }
@@ -445,14 +476,56 @@ public final class BerserkManager {
         if (entity instanceof ServerPlayer player) {
             end(player, false);
         }
-        if (!(source.getEntity() instanceof ServerPlayer killer) || entity instanceof Animal || entity == killer) {
+        if (!(source.getEntity() instanceof ServerPlayer killer) || entity instanceof Animal || entity == killer || entity instanceof ArmorStand || entity.isAlliedTo(killer)
+                || entity instanceof OwnableEntity pet && killer.getUUID().equals(pet.getOwnerUUID())) {
             return;
         }
         Session session = SESSIONS.get(killer.getUUID());
         if (session != null) {
             session.kills++;
+            if (session.variant == BerserkVariant.MILITECH) {
+                long cap = session.startTime + rules().militech().durationTicks() * 2L;
+                session.endTime = Math.min(cap, session.endTime + BerserkRules.KILL_EXTENSION_TICKS);
+            }
             sendStatus(killer);
         }
+    }
+
+    /** Only successful melee damage advances a combo; one step per tick also covers implant AoE. */
+    private static void afterDamage(LivingEntity victim, DamageSource source, float baseDamage, float damageTaken, boolean blocked) {
+        if (blocked || damageTaken <= 0.0F || !(source.getEntity() instanceof ServerPlayer player)
+                || source.getDirectEntity() != player || !source.is(DamageTypes.PLAYER_ATTACK)
+                || victim == player || victim instanceof Animal || victim instanceof ArmorStand
+                || victim.isAlliedTo(player)
+                || victim instanceof OwnableEntity pet && player.getUUID().equals(pet.getOwnerUUID())) {
+            return;
+        }
+        Session session = SESSIONS.get(player.getUUID());
+        if (session == null || session.variant != BerserkVariant.BIODYNE) {
+            return;
+        }
+        long now = gameTime(player.server);
+        if (now == session.lastHitTime) {
+            return;
+        }
+        if (now - session.lastHitTime > BerserkRules.COMBO_WINDOW_TICKS) {
+            session.comboHits = 0;
+            session.comboCycle = 0;
+        }
+        session.lastHitTime = now;
+        session.comboHits = Math.min(BerserkRules.COMBO_HITS, session.comboHits + 1);
+        if (++session.comboCycle >= BerserkRules.COMBO_HITS) {
+            session.comboCycle = 0;
+            player.heal(player.getMaxHealth() * BerserkRules.COMBO_HEAL_PERCENT / 100.0F);
+        }
+        setModifier(player, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER,
+                rules().biodyne().attackSpeedPercent() / 100.0 * session.comboHits / BerserkRules.COMBO_HITS);
+        sendStatus(player);
+    }
+
+    public static int comboHits(ServerPlayer player) {
+        Session session = SESSIONS.get(player.getUUID());
+        return session == null ? 0 : session.comboHits;
     }
 
     // ------------------------------------------------------------------ sync and helpers
@@ -464,7 +537,7 @@ public final class BerserkManager {
         Session session = SESSIONS.get(player.getUUID());
         BerserkStatus status = session == null
                 ? new BerserkStatus(false, installed(player).map(Enum::ordinal).orElse(-1), 0L, 0L, cooldownEndTime(player), 0)
-                : new BerserkStatus(true, session.variant.ordinal(), session.startTime, session.endTime, cooldownEndTime(player), session.kills);
+                : new BerserkStatus(true, session.variant.ordinal(), session.startTime, session.endTime, cooldownEndTime(player), session.kills, session.comboHits);
         ServerPlayNetworking.send(player, status);
     }
 

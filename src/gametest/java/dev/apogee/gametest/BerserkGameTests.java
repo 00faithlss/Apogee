@@ -12,6 +12,7 @@ import dev.emi.trinkets.api.TrinketsApi;
 import java.util.List;
 import java.util.Optional;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +23,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 
@@ -56,7 +60,8 @@ public final class BerserkGameTests implements FabricGameTest {
     public void berserkRecipesProduceOneItem(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         List<String> recipes = List.of("berserk_zetatech", "berserk_biodyne", "berserk_militech", "subdermal_armor",
-                "adrenaline_booster", "biomonitor", "fortified_ankles", "bionic_joints", "synaptic_accelerator");
+                "adrenaline_booster", "biomonitor", "fortified_ankles", "bionic_joints", "synaptic_accelerator",
+                "microelectric_module", "compact_reactor");
         for (String name : recipes) {
             Optional<RecipeHolder<?>> recipe = level.getRecipeManager().byKey(Apogee.id(name));
             helper.assertTrue(recipe.isPresent(), "Missing recipe apogee:" + name);
@@ -144,7 +149,7 @@ public final class BerserkGameTests implements FabricGameTest {
 
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_heal")
     public void killsHealWhenItEnds(GameTestHelper helper) {
-        ServerPlayer player = wearer(helper, ApogeeItems.BERSERK_ZETATECH);
+        ServerPlayer player = wearer(helper, ApogeeItems.BERSERK_MILITECH);
         BerserkManager.toggle(player);
         player.setHealth(4.0F);
         Zombie zombie = helper.spawn(EntityType.ZOMBIE, new Vec3(2.5, 2.0, 1.5));
@@ -177,6 +182,99 @@ public final class BerserkGameTests implements FabricGameTest {
         helper.succeed();
     }
 
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_identity")
+    public void militechLocksStartingHealthAndCapsKillExtension(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, ApogeeItems.BERSERK_MILITECH);
+        player.setHealth(4.0F);
+        BerserkManager.toggle(player);
+        long originalEnd = BerserkManager.activeEndTime(player);
+        Zombie victim = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+        float before = BerserkManager.modifyDamage(victim, player.damageSources().playerAttack(player), 10.0F);
+        player.setHealth(player.getMaxHealth());
+        float after = BerserkManager.modifyDamage(victim, player.damageSources().playerAttack(player), 10.0F);
+        helper.assertTrue(before > 10.0F && before == after, "healing must not change the starting-health damage bonus");
+        for (int i = 0; i < 15; i++) {
+            Zombie target = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+            target.hurt(player.damageSources().playerAttack(player), 1000.0F);
+            if (i == 0) {
+                helper.assertTrue(BerserkManager.activeEndTime(player) == originalEnd + BerserkRules.KILL_EXTENSION_TICKS,
+                        "a kill extends Militech");
+            }
+        }
+        helper.assertTrue(BerserkManager.activeEndTime(player) == originalEnd + stats(BerserkVariant.MILITECH).durationTicks(),
+                "extensions are capped at double the initial duration");
+        cleanup(helper, player);
+        helper.succeed();
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_identity", timeoutTicks = 100)
+    public void biodyneBuildsComboHealsAndLosesRhythm(GameTestHelper helper) {
+        ServerPlayer player = wearer(helper, ApogeeItems.BERSERK_BIODYNE);
+        player.setHealth(10.0F);
+        player.getFoodData().setFoodLevel(17);
+        double base = player.getAttributeValue(Attributes.ATTACK_SPEED);
+        BerserkManager.toggle(player);
+        helper.assertTrue(player.getAttributeValue(Attributes.ATTACK_SPEED) == base, "Biodyne starts without combo speed");
+        Zombie victim = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+        victim.setNoAi(true);
+        Zombie other = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+        other.setNoAi(true);
+        for (int i = 1; i <= BerserkRules.COMBO_HITS; i++) {
+            final int hit = i;
+            helper.runAfterDelay(i * 3, () -> {
+                victim.invulnerableTime = 0;
+                victim.hurt(player.damageSources().playerAttack(player), 0.2F);
+                helper.assertTrue(BerserkManager.comboHits(player) == hit, "successful hit advances one combo step");
+                double expected = base * (1.0 + stats(BerserkVariant.BIODYNE).attackSpeedPercent() / 100.0 * hit / BerserkRules.COMBO_HITS);
+                helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_SPEED) - expected) < 1.0E-6,
+                        "speed scales with the combo");
+                other.invulnerableTime = 0;
+                other.hurt(player.damageSources().playerAttack(player), 0.2F);
+                helper.assertTrue(BerserkManager.comboHits(player) == hit, "AoE damage in the same tick must not add another step");
+                if (hit == BerserkRules.COMBO_HITS) {
+                    helper.assertTrue(Math.abs(player.getHealth() - 12.0F) < 0.01F, "five hits heal ten percent");
+                    helper.assertTrue(dev.apogee.mantis.MantisRules.berserkTicks(15, player) < 15, "combo speed also accelerates nanowire");
+                }
+            });
+        }
+        helper.runAfterDelay(15 + BerserkRules.COMBO_WINDOW_TICKS + 2, () -> {
+            helper.assertTrue(BerserkManager.comboHits(player) == 0, "combo expires after losing rhythm");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_SPEED) - base) < 1.0E-6, "expired combo removes speed");
+            cleanup(helper, player);
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_identity")
+    public void landingIsExclusiveAndOnlyHealsOnSuccessfulImpact(GameTestHelper helper) {
+        ServerPlayer biodyne = wearer(helper, ApogeeItems.BERSERK_BIODYNE);
+        BerserkManager.toggle(biodyne);
+        Zombie target = helper.spawn(EntityType.ZOMBIE, new Vec3(3.5, 2.0, 1.5));
+        target.setNoAi(true);
+        float initial = target.getHealth();
+        BerserkManager.slam(biodyne, BerserkManager.rules(), 12.0);
+        helper.assertTrue(target.getHealth() == initial, "Biodyne cannot slam");
+        biodyne.teleportTo(biodyne.getX() + 20.0, biodyne.getY(), biodyne.getZ());
+        ServerPlayer zetatech = wearer(helper, ApogeeItems.BERSERK_ZETATECH);
+        BerserkManager.toggle(zetatech);
+        zetatech.setHealth(10.0F);
+        BerserkManager.slam(zetatech, BerserkManager.rules(), 3.0);
+        helper.assertTrue(Math.abs(zetatech.getHealth() - 11.0F) < 0.01F, "one enemy hit heals five percent");
+        float lowerImpact = initial - target.getHealth();
+        target.invulnerableTime = 0;
+        target.setHealth(initial);
+        BerserkManager.slam(zetatech, BerserkManager.rules(), 7.0);
+        helper.assertTrue(initial - target.getHealth() > lowerImpact, "higher landing deals more damage");
+        float healed = zetatech.getHealth();
+        // The weaker immediate hit is rejected by the target's damage immunity window.
+        BerserkManager.slam(zetatech, BerserkManager.rules(), 3.0);
+        helper.assertTrue(zetatech.getHealth() == healed, "rejected damage does not grant landing healing");
+        helper.assertTrue(BerserkRules.landingPower(1000.0, 3.0) == 3.0F, "height power is capped");
+        BerserkManager.end(zetatech, true);
+        helper.assertTrue(zetatech.getHealth() == healed, "Zetatech does not bank kill healing");
+        cleanup(helper, biodyne, zetatech);
+        helper.succeed();
+    }
     /** Implants go in only at the ripperdoc table: using one does not equip it, and no inventory screen offers its slot. */
     @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_ripperdoc")
     public void berserkEquipsOnlyAtTheRipperdoc(GameTestHelper helper) {
@@ -203,6 +301,36 @@ public final class BerserkGameTests implements FabricGameTest {
             player.getServer().getPlayerList().remove(player);
         }
         helper.killAllEntities();
+        helper.succeed();
+    }
+
+    /** Each Berserk has its own 3x3 recipe: it crafts from the raw parts and never needs another Berserk. */
+    @GameTest(template = EMPTY_STRUCTURE, batch = "apogee_berserk_recipes")
+    public void eachBerserkCraftsFromItsOwnRecipe(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Item subdermal = ApogeeItems.SUBDERMAL_ARMOR;
+        Item core = BuiltInRegistries.ITEM.get(Apogee.id("os_core_t5"));
+        Item kernel = BuiltInRegistries.ITEM.get(Apogee.id("apogee_overdrive_kernel_t5"));
+        Item[][] grids = {
+                {subdermal, core, subdermal, ApogeeItems.ADRENALINE_BOOSTER, Items.NETHERITE_INGOT, ApogeeItems.BIOMONITOR,
+                        ApogeeItems.BIONIC_JOINTS, kernel, ApogeeItems.FORTIFIED_ANKLES},
+                {subdermal, core, subdermal, ApogeeItems.ADRENALINE_BOOSTER, ApogeeItems.SYNAPTIC_ACCELERATOR, ApogeeItems.MICROELECTRIC_MODULE,
+                        ApogeeItems.BIONIC_JOINTS, kernel, Items.GOLDEN_APPLE},
+                {subdermal, core, subdermal, ApogeeItems.ADRENALINE_BOOSTER, Items.NETHER_STAR, ApogeeItems.COMPACT_REACTOR,
+                        ApogeeItems.BIONIC_JOINTS, kernel, Items.TOTEM_OF_UNDYING}};
+        Item[] expected = {ApogeeItems.BERSERK_ZETATECH, ApogeeItems.BERSERK_BIODYNE, ApogeeItems.BERSERK_MILITECH};
+        for (int i = 0; i < grids.length; i++) {
+            List<ItemStack> stacks = java.util.Arrays.stream(grids[i]).map(ItemStack::new).toList();
+            CraftingInput input = CraftingInput.of(3, 3, stacks);
+            Optional<RecipeHolder<net.minecraft.world.item.crafting.CraftingRecipe>> recipe =
+                    level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level);
+            helper.assertTrue(recipe.isPresent(), "grid " + i + " crafts something");
+            ItemStack result = recipe.get().value().assemble(input, level.registryAccess());
+            helper.assertTrue(result.is(expected[i]), "grid " + i + " crafts " + expected[i] + " but gave " + result.getItem());
+            for (Item ingredient : grids[i]) {
+                helper.assertTrue(!(ingredient instanceof dev.apogee.item.BerserkItem), "recipe " + i + " must not use a Berserk");
+            }
+        }
         helper.succeed();
     }
 }
