@@ -346,12 +346,11 @@ public final class SandevistanEffects {
         }
         // Seconds left beside the slot, in the accent color.
         Font font = minecraft.font;
-        int labelX = x + size + 4;
         CyberwareHudSlot.seconds(graphics, x, y, remaining, active ? 3.0F : 0.0F, accent, hudAlpha);
         if (killFlash > 0.0F) {
             Component bonus = Component.translatable("tooltip.apogee.value.bonus_seconds", Integer.toString(rules.killExtensionTicks() / 20))
                     .withStyle(style -> style.withFont(HUD_FONT));
-            graphics.drawString(font, bonus, labelX, y - 8 - Math.round((1.0F - killFlash) * 6.0F),
+            graphics.drawString(font, bonus, x + CyberwareHudSlot.BONUS_X_OFFSET, y + size / 2 - 4 - Math.round((1.0F - killFlash) * 6.0F),
                     withAlpha(0xFCEE0A, killFlash * hudAlpha), true);
         }
         graphics.pose().popPose();

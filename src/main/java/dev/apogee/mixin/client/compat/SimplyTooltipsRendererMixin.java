@@ -1,8 +1,12 @@
 package dev.apogee.mixin.client.compat;
 
+import dev.apogee.client.compat.simplytooltips.BloodPumpTooltipPanel;
+import dev.apogee.client.compat.simplytooltips.BerserkTooltipPanel;
 import dev.apogee.client.compat.simplytooltips.MantisTooltipPanel;
 import dev.apogee.client.compat.simplytooltips.SandevistanTooltipPanel;
+import dev.apogee.client.compat.simplytooltips.TendonsTooltipPanel;
 import dev.apogee.item.ArmCyberwareItem;
+import dev.apogee.item.BerserkItem;
 import dev.apogee.registry.ApogeeItems;
 import java.util.List;
 import net.minecraft.client.gui.Font;
@@ -19,7 +23,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Draws the Apogee panels for the Sandevistan and the arm cyberware in place of Simply Tooltips' default layout. Only
+ * Draws the Apogee panels for the Sandevistan, the Reinforced Tendons and the arm cyberware in place of Simply Tooltips' default layout. Only
+ * Draws the Apogee panels for the Sandevistan, the Berserk and the arm cyberware in place of Simply Tooltips' default layout. Only
  * applied when Simply Tooltips is loaded (see ApogeeMixinPlugin). Theme Studio previews and
  * exports (non-null render state) keep Simply Tooltips' renderer and the registered provider.
  * Simply Tooltips ships intermediary names, while development runs remap it to Mojang names,
@@ -44,6 +49,13 @@ public abstract class SimplyTooltipsRendererMixin {
         }
         if (stack.is(ApogeeItems.SANDEVISTAN)) {
             SandevistanTooltipPanel.render(graphics, font, stack, x, y, screenW, screenH);
+            ci.cancel();
+        } else if (stack.is(ApogeeItems.REINFORCED_TENDONS)) {
+            TendonsTooltipPanel.render(graphics, font, stack, x, y, screenW, screenH);
+        } else if (stack.is(ApogeeItems.BLOOD_PUMP)) {
+            BloodPumpTooltipPanel.render(graphics, font, stack, x, y, screenW, screenH);
+        } else if (stack.getItem() instanceof BerserkItem berserk) {
+            BerserkTooltipPanel.render(graphics, font, stack, berserk.variant(), x, y, screenW, screenH);
             ci.cancel();
         } else if (stack.getItem() instanceof ArmCyberwareItem cyberware) {
             MantisTooltipPanel.render(graphics, font, stack, cyberware.variant(), x, y, screenW, screenH);

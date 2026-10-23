@@ -132,6 +132,7 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
                     player.getInventory().setItem(1, new ItemStack(ApogeeItems.SANDEVISTAN));
                     player.getInventory().setItem(2, new ItemStack(ApogeeBlocks.RIPPERDOC_TABLE_ITEM));
                     player.getInventory().setItem(3, new ItemStack(ApogeeItems.NANOWIRE));
+                    player.getInventory().setItem(4, new ItemStack(ApogeeItems.REINFORCED_TENDONS));
                     player.getInventory().selected = 2;
                 });
             }
@@ -176,7 +177,9 @@ public final class RipperdocClientSmoke implements ClientModInitializer {
                 RipperdocMenu menu = (RipperdocMenu) player.containerMenu;
                 menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.ARMS, 0)).setByPlayer(player.getInventory().removeItem(0, 1));
                 menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.OS, 0)).setByPlayer(player.getInventory().removeItem(1, 1));
+                menu.getSlot(dev.apogee.ripperdoc.RipperdocMenu.slotIndex(dev.apogee.ripperdoc.RipperdocMenu.Implant.LEGS, 0)).setByPlayer(player.getInventory().removeItem(4, 1));
                 menu.broadcastChanges();
+                check(dev.apogee.tendons.ReinforcedTendons.isEquipped(player), "the Reinforced Tendons are fitted at the table");
                 check(player.getHealth() < healthBefore, "surgery hurts immediately on the server");
             });
             case 64 -> {

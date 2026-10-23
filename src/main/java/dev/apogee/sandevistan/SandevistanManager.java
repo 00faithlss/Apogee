@@ -1,6 +1,7 @@
 package dev.apogee.sandevistan;
 
 import dev.apogee.Apogee;
+import dev.apogee.berserk.BerserkManager;
 import dev.apogee.config.ApogeeServerConfig;
 import dev.apogee.config.SandevistanRules;
 import dev.apogee.network.ApogeeNetworking.RulesSync;
@@ -65,7 +66,15 @@ public final class SandevistanManager {
     }
 
     public static void register() {
-        ServerPlayNetworking.registerGlobalReceiver(ToggleSandevistan.TYPE, (payload, context) -> toggle(context.player()));
+        ServerPlayNetworking.registerGlobalReceiver(ToggleSandevistan.TYPE, (payload, context) -> {
+            // One key for the operating system slot, whichever implant it holds.
+            ServerPlayer player = context.player();
+            if (BerserkManager.isActive(player) || BerserkManager.isEquipped(player)) {
+                BerserkManager.toggle(player);
+            } else {
+                toggle(player);
+            }
+        });
 
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             ApogeeServerConfig.load();

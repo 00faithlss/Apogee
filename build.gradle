@@ -95,6 +95,30 @@ loom {
             vmArg '-Dapogee.nanowireSmoke=true'
             programArgs '--width', '1280', '--height', '720'
         }
+        tendonsSmoke {
+            client()
+            name 'Apogee reinforced tendons smoke run'
+            source sourceSets.gametest
+            runDir 'build/tendons-smoke'
+            vmArg '-Dapogee.tendonsSmoke=true'
+            programArgs '--width', '1280', '--height', '720'
+        }
+        bloodPumpSmoke {
+            client()
+            name 'Apogee Blood Pump smoke run'
+            source sourceSets.gametest
+            runDir 'build/bloodpump-smoke'
+            vmArg '-Dapogee.bloodPumpSmoke=true'
+            programArgs '--width', '1280', '--height', '720'
+        }
+        berserkSmoke {
+            client()
+            name 'Apogee Berserk smoke run'
+            source sourceSets.gametest
+            runDir 'build/berserk-smoke'
+            vmArg '-Dapogee.berserkSmoke=true'
+            programArgs '--width', '1280', '--height', '720'
+        }
         ripperdocSmoke {
             client()
             name 'Apogee ripperdoc table smoke run'
@@ -129,8 +153,6 @@ dependencies {
     runtimeOnly 'blue.endless:jankson:1.2.3'
     runtimeOnly 'net.peanuuutz.tomlkt:tomlkt-jvm:0.3.7'
     modRuntimeOnly 'me.lucko:fabric-permissions-api:0.3.1'
-    // Dev-only: exercises the optional Steampunk Leggings dash compatibility.
-    modLocalRuntime "maven.modrinth:immersive-armors:${immersive_armors_version}"
     // Dev-only, with -PirisTest: shader pack checks (tools/mantis_tests.sh iris), where Sodium
     // and Iris are taken from here and run in a production-like instance.
     if (project.hasProperty('irisTest')) {

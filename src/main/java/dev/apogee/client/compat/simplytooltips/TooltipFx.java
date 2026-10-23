@@ -85,6 +85,15 @@ final class TooltipFx {
      * magenta, yellow and cyan afterimages like the Sandevistan's own effect.
      */
     static void wavyTitle(GuiGraphics graphics, Font font, Component title, float x, float y, float scale, long nowMs) {
+        wavyTitle(graphics, font, title, x, y, scale, nowMs, new int[]{MAGENTA, YELLOW, CYAN}, CYAN, 0xFF7AA8);
+    }
+
+    /**
+     * As above with the three afterimage colors (farthest first) and the gradient's middle and end
+     * colors, which start from white.
+     */
+    static void wavyTitle(GuiGraphics graphics, Font font, Component title, float x, float y, float scale, long nowMs,
+                          int[] afterimages, int gradientMid, int gradientEnd) {
         String text = title.getString();
         Style style = title.getStyle();
         PoseStack pose = graphics.pose();
@@ -92,15 +101,15 @@ final class TooltipFx {
         pose.translate(x, y, 0.0F);
         pose.scale(scale, scale, 1.0F);
         float sway = 0.6F + 0.4F * Mth.sin(nowMs * 0.0023F);
-        drawRun(graphics, font, text, style, -5.0F * sway, nowMs, MAGENTA, 0.22F);
-        drawRun(graphics, font, text, style, -3.2F * sway, nowMs, YELLOW, 0.28F);
-        drawRun(graphics, font, text, style, -1.6F * sway, nowMs, CYAN, 0.40F);
-        drawRun(graphics, font, text, style, 0.0F, nowMs, -1, 1.0F);
+        drawRun(graphics, font, text, style, -5.0F * sway, nowMs, afterimages[0], 0.22F, gradientMid, gradientEnd);
+        drawRun(graphics, font, text, style, -3.2F * sway, nowMs, afterimages[1], 0.28F, gradientMid, gradientEnd);
+        drawRun(graphics, font, text, style, -1.6F * sway, nowMs, afterimages[2], 0.40F, gradientMid, gradientEnd);
+        drawRun(graphics, font, text, style, 0.0F, nowMs, -1, 1.0F, gradientMid, gradientEnd);
         pose.popPose();
     }
 
     private static void drawRun(GuiGraphics graphics, Font font, String text, Style style, float dx,
-                                long nowMs, int solidRgb, float alpha) {
+                                long nowMs, int solidRgb, float alpha, int gradientMid, int gradientEnd) {
         PoseStack pose = graphics.pose();
         for (int i = 0; i < text.length(); ) {
             int codePoint = text.codePointAt(i);
@@ -108,7 +117,7 @@ final class TooltipFx {
             // TTF advances are fractional: place each letter by the exact width of the prefix.
             float cursor = font.getSplitter().stringWidth(Component.literal(text.substring(0, i)).withStyle(style));
             float wave = Mth.sin(nowMs * 0.005F - i * 0.55F) * 1.0F;
-            int rgb = solidRgb >= 0 ? solidRgb : gradient(nowMs, i);
+            int rgb = solidRgb >= 0 ? solidRgb : gradient(nowMs, i, gradientMid, gradientEnd);
             pose.pushPose();
             pose.translate(cursor + dx, wave, 0.0F);
             graphics.drawString(font, letter, 0, 0, argb(rgb, alpha), solidRgb < 0);
@@ -117,9 +126,9 @@ final class TooltipFx {
         }
     }
 
-    private static int gradient(long nowMs, int index) {
+    private static int gradient(long nowMs, int index, int mid, int end) {
         float k = (Mth.sin(nowMs * 0.002F - index * 0.35F) + 1.0F) / 2.0F;
-        return k < 0.5F ? lerp(0xFFFFFF, CYAN, k * 2.0F) : lerp(CYAN, 0xFF7AA8, (k - 0.5F) * 2.0F);
+        return k < 0.5F ? lerp(0xFFFFFF, mid, k * 2.0F) : lerp(mid, end, (k - 0.5F) * 2.0F);
     }
 
     private static int lerp(int from, int to, float t) {

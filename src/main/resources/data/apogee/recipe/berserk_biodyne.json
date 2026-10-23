@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "apogee:berserk_zetatech"
+    },
+    {
+      "item": "apogee:synaptic_accelerator"
+    },
+    {
+      "item": "minecraft:golden_apple"
+    }
+  ],
+  "result": {
+    "id": "apogee:berserk_biodyne",
+    "count": 1
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "NPN",
+    "IHI",
+    "NPN"
+  ],
+  "key": {
+    "N": {
+      "item": "apogee:neural_cable"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "H": {
+      "item": "apogee:control_chip"
+    }
+  },
+  "result": {
+    "id": "apogee:reinforced_tendons",
+    "count": 1
+  }
+}

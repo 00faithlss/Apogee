@@ -47,7 +47,8 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
     private static net.minecraft.world.item.Item tooltipItem = ApogeeItems.SANDEVISTAN;
     /** The arm cyberware tooltips (Mantis Blades and nanowire), filmed in both views after the Sandevistan run. */
     private static final net.minecraft.world.item.Item[] MANTIS = {
-            ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.NANOWIRE, ApogeeItems.NANOWIRE_WHITE};
+            ApogeeItems.MANTIS_BLADES, ApogeeItems.MANTIS_BLADES_THERMAL, ApogeeItems.MANTIS_BLADES_ELECTRIC, ApogeeItems.NANOWIRE, ApogeeItems.NANOWIRE_WHITE,
+            ApogeeItems.REINFORCED_TENDONS};
     private static final int MANTIS_TOOLTIPS = 272;
     /** First tick after the arm cyberware tooltips: 20 ticks for each of the five. */
     private static final int TOOLTIPS_DONE = MANTIS_TOOLTIPS + 20 * 5;
@@ -149,23 +150,21 @@ public final class ApogeeClientSmoke implements ClientModInitializer {
             }
             case 230 -> shot(mc, "06-cooldown-hud");
             case 234 -> server(mc, (level, player) -> {
-                var leggings = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
-                        net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("immersive_armors", "steampunk_leggings"));
-                player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(leggings));
+                dev.emi.trinkets.api.TrinketItem.equipItem(player, new ItemStack(ApogeeItems.REINFORCED_TENDONS));
                 player.getAbilities().flying = false;
                 player.onUpdateAbilities();
                 player.teleportTo(player.getX(), player.getY() + 12.0, player.getZ());
             });
             case 240 -> {
                 check(!mc.player.onGround() && !mc.player.getAbilities().flying, "player airborne for the dash");
-                check(dev.apogee.compat.immersivearmors.SteamDash.wearsSteampunkLeggings(mc.player), "steampunk leggings equipped on the client");
-                // No real keyboard in the scripted run: inject a fresh sprint-key press.
-                dev.apogee.client.compat.immersivearmors.SteamDashClient.simulateSprintPressForTests();
+                check(dev.apogee.tendons.ReinforcedTendons.isEquipped(mc.player), "reinforced tendons equipped on the client");
+                // No real keyboard in the scripted run: inject a fresh dash press, pushing forward.
+                dev.apogee.client.tendons.TendonsClient.simulateDashPressForTests(1.0F, 0.0F);
             }
             case 242 -> {
                 double horizontal = mc.player.getDeltaMovement().horizontalDistance();
-                LOGGER.info("steam dash horizontal speed {}", horizontal);
-                check(horizontal > 0.6, "steam dash launches the player forward");
+                LOGGER.info("air dash horizontal speed {}", horizontal);
+                check(horizontal > 0.6, "air dash launches the player");
             }
             case 244 -> server(mc, (level, player) -> {
                 // Getting the implant completes the advancement, which plays Adam Smasher's voice line to everyone.

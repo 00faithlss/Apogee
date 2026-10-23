@@ -66,6 +66,20 @@ public final class CyberwareHudSlot {
         graphics.pose().popPose();
     }
 
+    /** Horizontal start of the floating bonus text, clear of the seconds drawn beside the square. */
+    public static final int BONUS_X_OFFSET = SIZE + 36;
+
+    /** Vertical step between stacked squares. */
+    public static final int STEP = SIZE + 6;
+
+    /**
+     * Visibility of the operating system square (Sandevistan or Berserk, they share the slot),
+     * so the squares stacked over it keep a single, consistent position.
+     */
+    public static float osAlpha() {
+        return Math.max(SandevistanEffects.hudAlpha(), BerserkEffects.hudAlpha());
+    }
+
     public static int withAlpha(int rgb, float alpha) {
         return Mth.clamp(Math.round(alpha * 255.0F), 0, 255) << 24 | rgb & 0xFFFFFF;
     }
