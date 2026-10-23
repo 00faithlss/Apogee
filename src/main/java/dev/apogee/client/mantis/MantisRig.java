@@ -2,9 +2,11 @@ package dev.apogee.client.mantis;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import dev.apogee.client.bloodpump.BloodPumpArmRenderer;
 import dev.apogee.mantis.MantisRules;
 import dev.apogee.client.ripperdoc.RipperdocPatientPose;
 import dev.apogee.mantis.MantisVariant;
+import java.util.List;
 import java.util.function.IntPredicate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.model.geom.ModelPart;
@@ -13,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
 /**
@@ -166,6 +169,22 @@ public final class MantisRig {
         renderer.armorDeployment(!firstPersonPass && MantisArmorSleeves.hasVanillaChestplate(player)
                 ? MantisClient.deployProgress(player, partialTick) : 0.0F);
         renderer.renderInto(poseStack, arm, buffers, light, partialTick);
+        if (right && !firstPersonPass && BloodPumpArmRenderer.worn(player)) {
+            // The Blood Pump rides on the housing, so it opens and folds with the arm.
+            var model = renderer.getGeoModel();
+            var baked = model.getBakedModel(model.getModelResource(arm, renderer));
+            var root = baked.getBone("arm_root");
+            var housing = baked.getBone("housing");
+            if (root.isPresent() && housing.isPresent()) {
+                Matrix4f rigFrame = new Matrix4f().translate(centerX / 16.0F, 4.0F / 16.0F, 0.0F);
+                if (slim) {
+                    rigFrame.scale(0.75F, 1.0F, 1.0F);
+                }
+                rigFrame.rotate(RIGHT_SEAT);
+                BloodPumpArmRenderer.INSTANCE.renderOnMantis(poseStack, player, buffers, light, partialTick,
+                        List.of(root.get(), housing.get()), rigFrame);
+            }
+        }
         poseStack.popPose();
     }
 }

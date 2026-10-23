@@ -68,7 +68,7 @@ public final class BerserkMultiplayerServer implements ModInitializer {
                 observer.teleportTo(level, 0.5, groundY, -1.5, 0.0F, 10.0F);
                 wearer.setGameMode(GameType.SURVIVAL);
                 wearer.teleportTo(level, 0.5, groundY, 3.5, 180.0F, 10.0F);
-                LOGGER.info("equip wearer: {}", TrinketItem.equipItem(wearer, new ItemStack(ApogeeItems.BERSERK_BIODYNE)));
+                LOGGER.info("equip wearer: {}", TrinketItem.equipItem(wearer, new ItemStack(ApogeeItems.BERSERK_ZETATECH)));
             }
             case 100 -> phase(server, "front");
             case 110 -> wearer.teleportTo(level, 0.5, groundY, 3.5, 0.0F, 10.0F);
