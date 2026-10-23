@@ -281,7 +281,7 @@ public final class MantisManager {
             return;
         }
         // Mining swings every tick while the button is held: one cut (and sound) at a time.
-        if (now - deployment.lastSwingTick < MantisRules.slashIntervalTicks(deployment.variant)) {
+        if (now - deployment.lastSwingTick < MantisRules.berserkTicks(MantisRules.slashIntervalTicks(deployment.variant), player)) {
             return;
         }
         deployment.lastSwingTick = now;
@@ -291,7 +291,7 @@ public final class MantisManager {
             boolean critical = charge > 0.9F && player.fallDistance > 0.0F && !player.onGround()
                     && !player.onClimbable() && !player.isInWater() && !player.hasEffect(MobEffects.BLINDNESS)
                     && !player.isPassenger() && !player.isSprinting();
-            PENDING_CUTS.put(player.getUUID(), new PendingCut(now + NanowireRules.LASH_HIT_DELAY_TICKS,
+            PENDING_CUTS.put(player.getUUID(), new PendingCut(now + MantisRules.berserkTicks(NanowireRules.LASH_HIT_DELAY_TICKS, player),
                     damage * (critical ? 1.5F : 1.0F), critical));
             player.resetAttackStrengthTicker();
         }

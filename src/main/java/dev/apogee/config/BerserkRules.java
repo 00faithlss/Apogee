@@ -6,7 +6,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 /**
- * Berserk values owned by the host, one set per variant plus what all of them share. The server
+ * Berserk values owned by the host, one set per variant plus Militech's kill healing and
+ * Zetatech's landing values. The server
  * uses them directly and sends them to every client for the tooltip and the HUD.
  */
 public record BerserkRules(
@@ -88,6 +89,17 @@ public record BerserkRules(
 
     /** Health fraction at which the Militech's low-health bonus reaches its maximum. */
     public static final float LOW_HEALTH_FULL_BONUS = 0.2F;
+    public static final int COMBO_HITS = 5;
+    public static final int COMBO_WINDOW_TICKS = 40;
+    public static final int COMBO_HEAL_PERCENT = 10;
+    public static final int LANDING_HEAL_PERCENT = 5;
+    public static final int LANDING_HEAL_CAP_PERCENT = 25;
+    public static final int KILL_EXTENSION_TICKS = 40;
+
+    /** Height adds 25% per block above the dive threshold, capped at triple impact. */
+    public static float landingPower(double dropped, double minimum) {
+        return (float) Math.max(1.0, Math.min(3.0, 1.0 + (dropped - minimum) * 0.25));
+    }
 
     public static final StreamCodec<ByteBuf, BerserkRules> STREAM_CODEC = StreamCodec.of(
             (buf, rules) -> {

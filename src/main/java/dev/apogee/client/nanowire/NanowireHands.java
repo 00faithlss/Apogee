@@ -40,8 +40,6 @@ public final class NanowireHands {
         MantisHandPose.applyViewLag(poseStack, player, partialTick);
         NanowireWire.Frame frame = NanowireWire.Frame.of(poseStack.last(), false);
         float deploy = MantisClient.deployProgress(player, partialTick);
-        float heavy = MantisClient.thrustProgress(player, partialTick);
-        int style = MantisClient.heavyStyle(player);
         for (boolean right : new boolean[]{true, false}) {
             float side = right ? 1.0F : -1.0F;
             poseStack.pushPose();
@@ -52,26 +50,37 @@ public final class NanowireHands {
                 // with the wire away only the main hand is left, as in vanilla.
                 poseStack.translate(0.0F, -RISE * (1.0F - deploy), 0.0F);
             }
-            poseStack.translate(-side * GUARD_IN * deploy, GUARD_UP * deploy, 0.0F);
-            poseStack.translate(0.0F, (right ? -0.025F : 0.065F) * deploy, (right ? 0.015F : -0.035F) * deploy);
-            poseStack.mulPose(Axis.ZP.rotationDegrees(-8.0F * deploy));
-            float own = MantisClient.slashProgress(player, right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT, partialTick);
-            float other = MantisClient.slashProgress(player, right ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT, partialTick);
-            if (heavy >= 0.0F) {
-                heavy(poseStack, NanowireMoves.heavyTime(side, style, heavy), side, style);
-            } else if (own >= 0.0F) {
-                lash(poseStack, own, side);
-            } else if (other >= 0.0F) {
-                // The other fist lets go of the wire and gives a little.
-                float k = NanowireMoves.release(other, false);
-                poseStack.translate(side * 0.08F * k, -0.08F * k, 0.04F * k);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(side * 7.0F * k));
+            if (!PunchyCompat.rendering()) {
+                // Under Punchy the fists stay exactly on its animated pose, as the Mantis arms do.
+                poseStack.translate(-side * GUARD_IN * deploy, GUARD_UP * deploy, 0.0F);
+                poseStack.translate(0.0F, (right ? -0.025F : 0.065F) * deploy, (right ? 0.015F : -0.035F) * deploy);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(-8.0F * deploy));
             }
+            applyAttack(poseStack, player, right, partialTick);
             arm(poseStack, buffers, light, player, renderer, right, partialTick);
             poseStack.popPose();
         }
         NanowireRig.drawWires(buffers, player, frame, partialTick);
         poseStack.popPose();
+    }
+
+    /** Implant attacks layered on the hand renderer's native pose; no idle or locomotion pose. */
+    public static void applyAttack(PoseStack poseStack, LocalPlayer player, boolean right, float partialTick) {
+        float side = right ? 1.0F : -1.0F;
+        float heavy = MantisClient.thrustProgress(player, partialTick);
+        int style = MantisClient.heavyStyle(player);
+        float own = MantisClient.slashProgress(player, right ? MantisRules.ARM_RIGHT : MantisRules.ARM_LEFT, partialTick);
+        float other = MantisClient.slashProgress(player, right ? MantisRules.ARM_LEFT : MantisRules.ARM_RIGHT, partialTick);
+        if (heavy >= 0.0F) {
+            heavy(poseStack, NanowireMoves.heavyTime(side, style, heavy), side, style);
+        } else if (own >= 0.0F) {
+            lash(poseStack, own, side);
+        } else if (other >= 0.0F) {
+            // The other fist lets go of the wire and gives a little.
+            float k = NanowireMoves.release(other, false);
+            poseStack.translate(side * 0.08F * k, -0.08F * k, 0.04F * k);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(side * 7.0F * k));
+        }
     }
 
     /**

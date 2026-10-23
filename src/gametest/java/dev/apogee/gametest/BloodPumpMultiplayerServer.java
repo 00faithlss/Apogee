@@ -77,7 +77,16 @@ public final class BloodPumpMultiplayerServer implements ModInitializer {
             case 215 -> phase(server, "mantis");
             case 220 -> wearer.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
             case 230 -> phase(server, "mantis-armor");
-            case 250 -> {
+            case 235 -> {
+                // Swap the Mantis Blades for the Nanowire: the pump stays on the forearm either way.
+                dev.emi.trinkets.api.TrinketsApi.getTrinketComponent(wearer).ifPresent(component ->
+                        component.getEquipped(stack -> stack.getItem() instanceof dev.apogee.item.ArmCyberwareItem)
+                                .forEach(pair -> pair.getA().inventory().setItem(pair.getA().index(), ItemStack.EMPTY)));
+                check(TrinketItem.equipItem(wearer, new ItemStack(ApogeeItems.NANOWIRE)), "equip the nanowire");
+                MantisManager.toggle(wearer);
+            }
+            case 270 -> phase(server, "nanowire");
+            case 280 -> {
                 if (FAILURES.isEmpty()) {
                     LOGGER.info("server: blood pump multiplayer run passed");
                 } else {
@@ -85,7 +94,7 @@ public final class BloodPumpMultiplayerServer implements ModInitializer {
                 }
                 phase(server, "done");
             }
-            case 400 -> server.halt(false);
+            case 430 -> server.halt(false);
             default -> {
             }
         }

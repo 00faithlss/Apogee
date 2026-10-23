@@ -208,13 +208,19 @@ public final class BerserkEffects {
         graphics.pose().translate(0.0F, (1.0F - hudAlpha) * 6.0F, 0.0F);
         CyberwareHudSlot.draw(graphics, x, y, hudAlpha, fill, active ? HUD_RED : CyberwareHudSlot.MAGENTA, accent, new ItemStack(icon(variant)));
         CyberwareHudSlot.seconds(graphics, x, y, remaining, active ? 3.0F : 0.0F, accent, hudAlpha);
-        if (active && status.kills() > 0) {
+        if (active && variant == BerserkVariant.MILITECH && status.kills() > 0) {
             int heal = Math.min(100, status.kills() * rules.healPerKillPercent());
             float bump = killFlashStart == Long.MIN_VALUE ? 0.0F
                     : 1.0F - Mth.clamp((clientTicks - killFlashStart + partialTick) / 12.0F, 0.0F, 1.0F);
             Component text = Component.translatable("hud.apogee.berserk.heal", heal)
                     .withStyle(style -> style.withFont(CyberwareHudSlot.FONT));
             graphics.drawString(minecraft.font, text, x + CyberwareHudSlot.BONUS_X_OFFSET, y + size / 2 - 4 - Math.round(bump * 3.0F),
+                    CyberwareHudSlot.withAlpha(CyberwareHudSlot.YELLOW, hudAlpha), true);
+        }
+        if (active && variant == BerserkVariant.BIODYNE) {
+            Component combo = Component.translatable("hud.apogee.berserk.combo", status.comboHits(), BerserkRules.COMBO_HITS)
+                    .withStyle(style -> style.withFont(CyberwareHudSlot.FONT));
+            graphics.drawString(minecraft.font, combo, x + CyberwareHudSlot.BONUS_X_OFFSET, y + size / 2 - 4,
                     CyberwareHudSlot.withAlpha(CyberwareHudSlot.YELLOW, hudAlpha), true);
         }
         graphics.pose().popPose();

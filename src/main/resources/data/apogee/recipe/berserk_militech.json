@@ -1,17 +1,37 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "ingredients": [
-    {
-      "item": "apogee:berserk_zetatech"
+  "pattern": [
+    "SOS",
+    "AWM",
+    "JKX"
+  ],
+  "key": {
+    "S": {
+      "item": "apogee:subdermal_armor"
     },
-    {
+    "O": {
+      "item": "apogee:os_core_t5"
+    },
+    "A": {
+      "item": "apogee:adrenaline_booster"
+    },
+    "M": {
+      "item": "apogee:compact_reactor"
+    },
+    "J": {
+      "item": "apogee:bionic_joints"
+    },
+    "K": {
+      "item": "apogee:apogee_overdrive_kernel_t5"
+    },
+    "W": {
       "item": "minecraft:nether_star"
     },
-    {
+    "X": {
       "item": "minecraft:totem_of_undying"
     }
-  ],
+  },
   "result": {
     "id": "apogee:berserk_militech",
     "count": 1

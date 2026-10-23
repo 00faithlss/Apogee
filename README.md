@@ -3,7 +3,7 @@
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
 Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **Cuchillas Mantis**, el **Nanocable** y los **Tendones reforzados**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
-Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Berserk**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5, diez piezas para armar el ciberware de brazos y seis componentes de ciberware para el Berserk.
+Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Berserk**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5, diez piezas para armar el ciberware de brazos y ocho componentes de ciberware para el Berserk.
 
 > Versión oficial: **1.1.1+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -44,6 +44,8 @@ Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Be
 | `apogee:fortified_ankles` | Tobillos fortificados | Componente del Berserk (piernas). |
 | `apogee:bionic_joints` | Articulaciones biónicas | Componente del Berserk (esqueleto). |
 | `apogee:synaptic_accelerator` | Acelerador sináptico | Componente del Biodyne Berserk (sistema nervioso). |
+| `apogee:microelectric_module` | Módulo microeléctrico | Componente del Biodyne Berserk (sistema nervioso). |
+| `apogee:compact_reactor` | Reactor compacto | Componente del Militech Berserk (sistema circulatorio). |
 
 ### Recetas (mesa de crafteo)
 
@@ -61,7 +63,7 @@ Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Be
 
 #### Berserk por partes
 
-Todas dan 1 unidad. Los componentes llevan el nombre de implantes reales de Cyberpunk 2077 relacionados con lo que hace el Berserk.
+Todas dan 1 unidad. Cada Berserk tiene su propia receta, que comparte la base (armadura subdérmica, Núcleo T5, potenciador de adrenalina, articulaciones biónicas y Overdrive Kernel T5) y cambia el centro, el lado derecho y la esquina inferior derecha según la marca; ninguna usa otro Berserk como ingrediente. Los componentes llevan el nombre de implantes reales de Cyberpunk 2077 relacionados con lo que hace el Berserk.
 
 | Resultado | Ingredientes |
 |---|---|
@@ -71,9 +73,11 @@ Todas dan 1 unidad. Los componentes llevan el nombre de implantes reales de Cybe
 | Tobillos fortificados (con forma) | hilo, bola de slime, hilo · cable neural, pistón, cable neural · hilo, bola de slime, hilo |
 | Articulaciones biónicas (con forma) | hierro, bloque de hueso, hierro · bloque de hueso, cadena, bloque de hueso · hierro, bloque de hueso, hierro |
 | Acelerador sináptico (con forma) | redstone, cable neural, redstone · fragmento de amatista, diamante, fragmento de amatista · redstone, cable neural, redstone |
+| Módulo microeléctrico (con forma) | redstone, cable neural, redstone · cable neural, comparador, cable neural · redstone, cable neural, redstone |
+| Reactor compacto (con forma) | lingote de oro, cable neural, lingote de oro · cable neural, bloque de redstone, cable neural · lingote de oro, cable neural, lingote de oro |
 | Zetatech Berserk (con forma) | armadura subdérmica, Núcleo T5, armadura subdérmica · potenciador de adrenalina, lingote de netherita, biomonitor · articulaciones biónicas, Overdrive Kernel T5, tobillos fortificados |
-| Biodyne Berserk (sin forma) | Zetatech Berserk, acelerador sináptico, manzana dorada |
-| Militech Berserk (sin forma) | Zetatech Berserk, estrella del Nether, tótem de inmortalidad |
+| Biodyne Berserk (con forma) | armadura subdérmica, Núcleo T5, armadura subdérmica · potenciador de adrenalina, acelerador sináptico, módulo microeléctrico · articulaciones biónicas, Overdrive Kernel T5, manzana dorada |
+| Militech Berserk (con forma) | armadura subdérmica, Núcleo T5, armadura subdérmica · potenciador de adrenalina, estrella del Nether, reactor compacto · articulaciones biónicas, Overdrive Kernel T5, tótem de inmortalidad |
 
 #### Cuchillas Mantis por partes
 
@@ -133,9 +137,12 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 
 - Instálalo en la ranura **Sistema operativo** de la mesa de matasanos. Es la misma del Sandevistan: llevas uno u otro.
 - **V** (la misma tecla, ahora «Activar / terminar sistema operativo») lo activa o lo termina antes de tiempo.
-- Mientras está activo: recibes menos daño, tu vida no baja del 25 % (salvo /kill y el vacío), atacas más rápido y correr, saltar o pelear no gasta hambre. Al terminar recuperas el **25 % de tu vida máxima por cada baja** conseguida mientras estaba activo (animales no cuentan).
-- **Aterrizaje de superhéroe:** con el Berserk activo y al menos 3 bloques de aire debajo, mantén **Mayús** y caes en picada. Al tocar el suelo sueltas una onda de choque de 4 bloques de radio: 8 de daño (la mitad en el borde), empuje hacia afuera y hacia arriba, polvo y bloques. No recibes daño por esa caída. No daña a tus mascotas ni a tu equipo; a otros jugadores solo con PvP activado.
-- Pantalla: destello rojo al activarlo, viñeta roja que late con tu corazón (más rápido en los últimos 2 s) y latido audible. El recuadro de ciberware abajo a la izquierda va en rojo con los segundos restantes y, en amarillo, cuánto te curarás al terminar; en la recarga va en magenta.
+- Todos evitan el gasto de hambre. Zetatech y Biodyne conservan reducción de daño y suelo del 25 % de vida; Militech conserva invulnerabilidad (salvo /kill y el vacío).
+- **Zetatech — impacto aéreo:** aterrizaje exclusivo. Cada bloque de caída por encima del mínimo añade 25 % de daño y empuje, hasta ×3. Cada enemigo que recibe daño cura 5 % de vida máxima, hasta 25 % por aterrizaje. Sin curación al terminar.
+- **Biodyne — combos:** cada impacto cuerpo a cuerpo acertado añade una carga, hasta 5; velocidad y probabilidad de crítico crecen proporcionalmente hasta los valores de la tabla. Cada 5 impactos cura 10 % de vida máxima; más de 2 s sin acertar pierde cargas y progreso de curación. Un ataque de área cuenta una sola vez por tick. Funciona con armas, Mantis y Nanocable; el bono de velocidad acorta también sus ataques normales. Sin curación al terminar.
+- **Militech — furia:** el daño extra se fija con la vida que tenías al activarlo, aunque después te cures. Cada baja prolonga 2 s la activación, hasta el doble de su duración inicial (24 s por defecto). Al terminar recuperas 25 % de vida máxima por baja, hasta 100 %. Animales, aliados y mascotas propias no dan recompensas.
+- **Aterrizaje de superhéroe:** con Zetatech activo y al menos 3 bloques de aire debajo, mantén **Mayús** y caes en picada. Al tocar el suelo sueltas una onda de choque de 4 bloques de radio: 8 de daño (la mitad en el borde), empuje hacia afuera y hacia arriba, polvo y bloques. No recibes daño por esa caída. No daña a tus mascotas ni a tu equipo; a otros jugadores solo con PvP activado.
+- Pantalla: destello rojo al activarlo, viñeta roja que late con tu corazón (más rápido en los últimos 2 s) y latido audible. El recuadro de ciberware abajo a la izquierda va en rojo con los segundos restantes y, en amarillo, las cargas de Biodyne o la curación final de Militech; en la recarga va en magenta.
 - Los demás ven partículas rojas alrededor del portador y el implante en la espalda: placas vertebrales con luces rojas (naranjas en el Militech) que se expanden con cada latido mientras está activo (eso último solo en tu propia vista).
 - Tooltip (con Simply Tooltips) al estilo del Sandevistan, en rojo: panel con marco metálico, el implante en 3D dentro de un rombo, título ondulado con estelas, partículas, arcos eléctricos y barrido de scanlines, con la fuente Rajdhani. **G** alterna Descripción y Estadísticas y cada vista cabe en pantalla. Sin Simply Tooltips se muestra un tooltip simple.
 - Sonidos provisionales tomados de Minecraft (rugido de devastador, latido del warden, golpe de la maza); para cambiarlos hay que reemplazar los eventos `berserk_*` en `assets/apogee/sounds.json`.
@@ -146,8 +153,8 @@ Todas con forma. El cable neural, el chip de control, el actuador de cuchilla y 
 | Recarga | 40 s | 45 s | 60 s |
 | Daño recibido | -40 % | -35 % | Ninguno (invulnerable) |
 | Vida mínima | 25 % | 25 % | — |
-| Velocidad de ataque | +15 % | +25 % | +25 % |
-| Extra | Daño por caída -50 % | 20 % de crítico con +50 % de daño | +20 % de movimiento y hasta +50 % de daño cuerpo a cuerpo cuanto menos vida (máximo al 20 %) |
+| Velocidad de ataque | +15 % | Hasta +25 % con 5 impactos | +25 % |
+| Extra | Caídas -50 %, impacto escalable y curación al aterrizar | Hasta 20 % de crítico con +50 % de daño; curación por combo | +20 % de movimiento y hasta +50 % de daño según vida al activar (máximo al 20 %); extensión por baja |
 
 Morir, desequipar, cambiar de dimensión o desconectarse lo termina sin curar e inicia la recarga, que se guarda con el jugador como la del Sandevistan.
 
@@ -178,9 +185,9 @@ Morir, desequipar, cambiar de dimensión o desconectarse lo termina sin curar e 
 
 ### Tendones reforzados
 
-- Instálalos en la ranura **Piernas** de la mesa de matasanos. En el aire (después de saltar o de caer de un borde), pulsa el botón de salto otra vez para un **doble salto**: impulso vertical de 0,68 (un salto normal es 0,42) y **4 bloques de caída amortiguados**. Se recarga al tocar el suelo, el agua o una escalera; mantener el salto pulsado desde el suelo no cuenta.
+- Instálalos en la ranura **Piernas** de la mesa de matasanos. En el aire (después de saltar o de caer de un borde), pulsa el botón de salto otra vez para un **doble salto**: un salto ligeramente más alto desde el aire (unos 2 bloques adicionales; el primer salto es el de siempre y el sonido suena solo en el segundo) y **4 bloques de caída amortiguados**. Se recarga al tocar el suelo, el agua o una escalera; mantener el salto pulsado desde el suelo no cuenta.
 - **Dash aéreo en todas direcciones:** pulsa la tecla de correr (Ctrl izquierdo por defecto) en el aire. Impulsa hacia donde empujas (adelante, atrás o a los lados, según W A S D) o hacia donde miras si no pulsas nada, con un leve empuje hacia arriba (velocidad horizontal 1,05). Si venías manteniendo la tecla desde el suelo, hay que soltarla y volver a pulsarla. Un dash por vuelo, independiente del doble salto, y no anula el margen de caída del doble salto. En Controles hay una tecla opcional «Dash aéreo (Tendones reforzados)», sin asignar.
-- El implante es solo funcional: no se dibuja en el jugador. Su modelo 3D (inventario, mano, suelo y tooltip) se hizo en Blockbench a partir de una imagen de referencia: fuente `art/tendons/blockbench/reinforced_tendons.bbmodel`, generada con `art/tendons/blockbench/build_model.py`. Al saltar y al hacer dash suenan sus propios sonidos (`sounds/tendons/`) y salen nubes y chispas; los demás jugadores lo ven y lo oyen. El impulso lo aplica el cliente y el servidor valida el implante y un solo salto por vuelo.
+- El implante es solo funcional: no se dibuja en el jugador. Su modelo 3D (inventario, mano, suelo y tooltip) se hizo en Blockbench a partir de una imagen de referencia: fuente `art/tendons/blockbench/reinforced_tendons.bbmodel`, generada con `art/tendons/blockbench/build_model.py`. Al hacer el segundo salto y el dash suenan sus propios sonidos (`sounds/tendons/`, recortados y sin ruido de fondo) y salen nubes y chispas; los demás jugadores lo ven y lo oyen. El impulso lo aplica el cliente y el servidor valida el implante y un solo salto por vuelo.
 - Valores provisionales, en `dev.apogee.tendons.ReinforcedTendons`.
 ### Bomba de sangre
 

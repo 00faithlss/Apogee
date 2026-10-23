@@ -4,11 +4,11 @@ import java.util.Locale;
 
 /** The three Berserk operating systems, after the ones in Cyberpunk 2077 2.0. */
 public enum BerserkVariant {
-    /** The base model: damage reduction, a health floor, faster attacks and softer falls. */
+    /** Aerial impact: height-scaled superhero landing and healing on impact. */
     ZETATECH,
-    /** Trades some reduction and duration for faster attacks and critical hits. */
+    /** Sustained combos build attack speed, critical chance and periodic healing. */
     BIODYNE,
-    /** The iconic one: invulnerable, faster, and hits harder the less health is left. */
+    /** Invulnerable rage: starting health fixes damage, kills extend it and bank healing. */
     MILITECH;
 
     private static final BerserkVariant[] VALUES = values();

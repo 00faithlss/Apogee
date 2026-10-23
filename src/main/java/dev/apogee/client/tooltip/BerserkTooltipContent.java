@@ -30,7 +30,9 @@ public final class BerserkTooltipContent {
         return List.of(
                 Component.translatable("tooltip.apogee.berserk.description.0"),
                 Component.translatable("tooltip.apogee.berserk.description." + variant.id()),
-                Component.translatable("tooltip.apogee.berserk.description.1", activate, sneak));
+                variant == BerserkVariant.ZETATECH
+                        ? Component.translatable("tooltip.apogee.berserk.description.1", activate, sneak)
+                        : Component.translatable("tooltip.apogee.berserk.activation", activate));
     }
 
     public static Component statsHeader() {
@@ -51,13 +53,13 @@ public final class BerserkTooltipContent {
             out.add(stat("floor", Component.translatable("tooltip.apogee.value.percent", stats.healthFloorPercent())));
         }
         if (stats.attackSpeedPercent() > 0) {
-            out.add(stat("attack_speed", Component.translatable("tooltip.apogee.value.bonus_percent", stats.attackSpeedPercent())));
+            out.add(stat(variant == BerserkVariant.BIODYNE ? "combo_speed" : "attack_speed", Component.translatable("tooltip.apogee.value.bonus_percent", stats.attackSpeedPercent())));
         }
         if (stats.movementPercent() > 0) {
             out.add(stat("movement", Component.translatable("tooltip.apogee.value.bonus_percent", stats.movementPercent())));
         }
         if (stats.critChancePercent() > 0) {
-            out.add(stat("crit", Component.translatable("tooltip.apogee.berserk.value.crit", stats.critChancePercent(), stats.critDamagePercent())));
+            out.add(stat(variant == BerserkVariant.BIODYNE ? "combo_crit" : "crit", Component.translatable("tooltip.apogee.berserk.value.crit", stats.critChancePercent(), stats.critDamagePercent())));
         }
         if (stats.lowHealthDamagePercent() > 0) {
             out.add(stat("low_health", Component.translatable("tooltip.apogee.berserk.value.low_health", stats.lowHealthDamagePercent())));
@@ -65,10 +67,20 @@ public final class BerserkTooltipContent {
         if (stats.fallDamageReductionPercent() > 0) {
             out.add(stat("fall", Component.translatable("tooltip.apogee.value.minus_percent", stats.fallDamageReductionPercent())));
         }
-        if (rules.slamRadius() > 0.0) {
+        if (variant == BerserkVariant.ZETATECH && rules.slamRadius() > 0.0) {
             out.add(stat("slam", Component.translatable("tooltip.apogee.berserk.value.slam", number(rules.slamDamage()), number(rules.slamRadius()))));
         }
-        out.add(stat("heal", Component.translatable("tooltip.apogee.berserk.value.heal", rules.healPerKillPercent())));
+        switch (variant) {
+            case ZETATECH -> out.add(stat("landing_heal", Component.translatable("tooltip.apogee.berserk.value.landing_heal",
+                    BerserkRules.LANDING_HEAL_PERCENT, BerserkRules.LANDING_HEAL_CAP_PERCENT)));
+            case BIODYNE -> out.add(stat("combo", Component.translatable("tooltip.apogee.berserk.value.combo",
+                    BerserkRules.COMBO_HITS, BerserkRules.COMBO_WINDOW_TICKS / 20, BerserkRules.COMBO_HEAL_PERCENT)));
+            case MILITECH -> {
+                out.add(stat("extension", Component.translatable("tooltip.apogee.berserk.value.extension",
+                        BerserkRules.KILL_EXTENSION_TICKS / 20, number(stats.durationTicks() * 2 / 20.0))));
+                out.add(stat("heal", Component.translatable("tooltip.apogee.berserk.value.heal", rules.healPerKillPercent())));
+            }
+        }
         out.add(stat("cooldown", seconds(stats.cooldownTicks())));
         return out;
     }

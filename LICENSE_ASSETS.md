@@ -29,7 +29,7 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
   - `textures/item/hemo_chamber_t2_item.png` → `assets/apogee/textures/item/hemo_chamber.png` (Cámara hemo) y `textures/item/bio_monitor_t2_item.png` → `assets/apogee/textures/item/bio_monitor.png` (Biomonitor), sin cambios; son las piezas con las que Project: Edgerunner arma su Bomba de sangre. Elegidas por el autor del proyecto, del mismo JAR.
   - Camilla del bloque `ripperdoc`: de `geo/ripperdoc.geo.json` solo los huesos `camilla`, `base`, `cojin`, `cables` y `esposas`, recentrados sobre dos bloques → `assets/apogee/geo/ripperdoc_table.geo.json`; `textures/block/ripperdoc.png` sin cambios → `assets/apogee/textures/block/ripperdoc_table.png` (Mesa de matasanos), elegidos por el autor del proyecto, del mismo JAR.
   - Tendones reforzados (`apogee:reinforced_tendons`): el modelo 3D (`models/item/reinforced_tendons.json`, fuente `art/tendons/blockbench/reinforced_tendons.bbmodel`) y su textura (`textures/item/reinforced_tendons_3d.png`) son originales, generados por `art/tendons/blockbench/build_model.py` a partir de una imagen de referencia aportada por el autor del proyecto (solo como guía de forma, sin copiar píxeles). Ya no se usan texturas ni modelos de Project: Edgerunner en este implante. La lógica del doble salto se escribió en Java tomando como referencia el impulso vertical (0,68) y el margen de caída (4 bloques) del script de ese mod.
-  - Sonidos de los Tendones reforzados: `sounds/tendons/double_jump.ogg` y `sounds/tendons/air_dash.ogg`, convertidos de `salto.mp3` y `dash.mp3`, archivos aportados por el autor del proyecto en la biblioteca. Su origen y licencia no están registrados: pendiente de confirmar con el autor antes de publicar.
+  - Sonidos de los Tendones reforzados: `sounds/tendons/double_jump.ogg` y `sounds/tendons/air_dash.ogg`, convertidos de `salto.mp3` y `dash.mp3` (recortados a la parte útil, con reducción de ruido, compuerta y normalización a -1 dBFS; sin otros cambios), archivos aportados por el autor del proyecto en la biblioteca. Su origen y licencia no están registrados: pendiente de confirmar con el autor antes de publicar.
 - Solo referencia (sin copiar código): duración y colores de la transición radial y del tinte, cadencia, cantidad, alcance y desvanecimiento de las estelas.
 
 ## Zoe Isn't Cyberpunk 2.2.5 — vami
@@ -50,6 +50,8 @@ Apogee es una entrega **privada y local**. Los recursos de terceros listados aqu
   - `assets/cyber_ware_port/textures/item/katana.png` → `assets/apogee/textures/item/mantis_blade.png` (Hoja mantis).
   - `assets/cyber_ware_port/textures/item/component_fiberoptics.png` → `assets/apogee/textures/item/monofilament.png` (Monofilamento).
   - `assets/cyber_ware_port/textures/item/component_plating.png` → `assets/apogee/textures/item/wire_housing.png` (Carcasa de nanocable).
+  - `assets/cyber_ware_port/textures/item/component_microelectric.png` → `assets/apogee/textures/item/microelectric_module.png` (Módulo microeléctrico, componente del Biodyne Berserk).
+  - `assets/cyber_ware_port/textures/item/component_reactor.png` → `assets/apogee/textures/item/compact_reactor.png` (Reactor compacto, componente del Militech Berserk).
 
 ## Rajdhani SemiBold — Indian Type Foundry
 

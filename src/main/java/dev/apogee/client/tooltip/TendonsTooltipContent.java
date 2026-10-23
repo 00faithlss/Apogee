@@ -39,7 +39,7 @@ public final class TendonsTooltipContent {
 
     public static List<Stat> stats() {
         return List.of(
-                stat("jump", number(ReinforcedTendons.BOOST_Y), false),
+                stat("jump", Component.translatable("tooltip.apogee.value.blocks", number(ReinforcedTendons.JUMP_HEIGHT)), false),
                 stat("fall", Component.translatable("tooltip.apogee.value.blocks", number(ReinforcedTendons.FALL_MARGIN)), false),
                 stat("dash", Component.translatable("tooltip.apogee.value.blocks_per_second", number(ReinforcedTendons.DASH_SPEED * 20.0)), false),
                 stat("directions", Component.translatable("tooltip.apogee.reinforced_tendons.all"), false),

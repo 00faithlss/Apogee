@@ -24,10 +24,18 @@ import net.minecraft.world.entity.LivingEntity;
  * used since the last landing, then softens the fall and plays the effects for everyone else.
  */
 public final class ReinforcedTendons {
-    /** Upward speed of the extra jump (a normal jump is 0.42). */
-    public static final double BOOST_Y = 0.68;
+    /** Upward speed that gains about two blocks under vanilla gravity and drag. */
+    public static final double JUMP_POWER = 0.545;
+    /** Approximate extra height in blocks under vanilla gravity, without Jump Boost. */
+    public static final double JUMP_HEIGHT = 2.0;
     /** Blocks of fall the extra jump absorbs (the 3 free blocks of vanilla come on top). */
     public static final float FALL_MARGIN = 4.0F;
+
+    /** Upward speed of the double jump, raised by Jump Boost like a ground jump. */
+    public static double jumpPower(LivingEntity entity) {
+        var boost = entity.getEffect(net.minecraft.world.effect.MobEffects.JUMP);
+        return JUMP_POWER + (boost == null ? 0.0 : 0.1 * (boost.getAmplifier() + 1));
+    }
 
     /** Horizontal speed of the air dash, in any direction. */
     public static final double DASH_SPEED = 1.05;
@@ -101,7 +109,7 @@ public final class ReinforcedTendons {
         MARGIN.merge(player.getUUID(), FALL_MARGIN, Float::sum);
         // The jumping client plays its own sound; everyone else hears it from here.
         player.level().playSound(player, player.getX(), player.getY(), player.getZ(),
-                ApogeeSounds.TENDONS_DOUBLE_JUMP, SoundSource.PLAYERS, 0.8F, 1.0F);
+                ApogeeSounds.TENDONS_DOUBLE_JUMP, SoundSource.PLAYERS, 0.7F, 1.0F);
         player.serverLevel().sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY() + 0.1, player.getZ(), 8, 0.25, 0.05, 0.25, 0.03);
         player.serverLevel().sendParticles(ParticleTypes.CRIT, player.getX(), player.getY() + 0.1, player.getZ(), 6, 0.2, 0.1, 0.2, 0.25);
     }
@@ -116,7 +124,7 @@ public final class ReinforcedTendons {
         player.fallDistance = 0.0F;
         // The dashing client plays its own sound; everyone else hears it from here.
         player.level().playSound(player, player.getX(), player.getY(), player.getZ(),
-                ApogeeSounds.TENDONS_AIR_DASH, SoundSource.PLAYERS, 0.8F, 1.0F);
+                ApogeeSounds.TENDONS_AIR_DASH, SoundSource.PLAYERS, 0.7F, 1.0F);
         player.serverLevel().sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                 player.getX(), player.getY() + 0.6, player.getZ(), 8, 0.2, 0.3, 0.2, 0.01);
     }
