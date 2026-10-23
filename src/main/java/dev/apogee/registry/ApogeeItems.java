@@ -5,6 +5,8 @@ import dev.apogee.item.BloodPumpItem;
 import dev.apogee.berserk.BerserkVariant;
 import dev.apogee.item.BerserkItem;
 import dev.apogee.item.MantisBladesItem;
+import dev.apogee.item.MaxtacArmorItem;
+import dev.apogee.item.TraumaArmorItem;
 import dev.apogee.item.NanowireItem;
 import dev.apogee.item.ReinforcedTendonsItem;
 import dev.apogee.item.SandevistanItem;
@@ -14,11 +16,21 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 
 public final class ApogeeItems {
+    public static final Item MAXTAC_HELMET = new MaxtacArmorItem(ArmorItem.Type.HELMET);
+    public static final Item MAXTAC_HELMET_CLOSED = new MaxtacArmorItem(ArmorItem.Type.HELMET, true);
+    public static final Item MAXTAC_CHESTPLATE = new MaxtacArmorItem(ArmorItem.Type.CHESTPLATE);
+    public static final Item MAXTAC_LEGGINGS = new MaxtacArmorItem(ArmorItem.Type.LEGGINGS);
+    public static final Item MAXTAC_BOOTS = new MaxtacArmorItem(ArmorItem.Type.BOOTS);
+    public static final Item TRAUMA_TEAM_HELMET = new TraumaArmorItem(ArmorItem.Type.HELMET);
+    public static final Item TRAUMA_TEAM_CHESTPLATE = new TraumaArmorItem(ArmorItem.Type.CHESTPLATE);
+    public static final Item TRAUMA_TEAM_LEGGINGS = new TraumaArmorItem(ArmorItem.Type.LEGGINGS);
+    public static final Item TRAUMA_TEAM_BOOTS = new TraumaArmorItem(ArmorItem.Type.BOOTS);
     public static final Item SANDEVISTAN = new SandevistanItem(new Item.Properties()
             .stacksTo(1)
             .rarity(Rarity.EPIC)
@@ -62,6 +74,15 @@ public final class ApogeeItems {
     public static final Item MICROELECTRIC_MODULE = new Item(new Item.Properties().rarity(Rarity.RARE));
     public static final Item COMPACT_REACTOR = new Item(new Item.Properties().rarity(Rarity.RARE));
 
+    // Armor parts: shared by the MaxTac and Trauma Team sets, then each set's own parts.
+    public static final Item BALLISTIC_WEAVE = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item COMPOSITE_PLATE = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item TACTICAL_OPTICS = new Item(new Item.Properties().rarity(Rarity.RARE));
+    public static final Item OPTICS_ARRAY = new Item(new Item.Properties().rarity(Rarity.RARE));
+    public static final Item NEON_BAND = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item RESPIRATOR_FILTER = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final Item MEDICAL_MODULE = new Item(new Item.Properties().rarity(Rarity.UNCOMMON));
+
     private ApogeeItems() {
     }
 
@@ -79,6 +100,15 @@ public final class ApogeeItems {
     }
 
     public static void register() {
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("maxtac_helmet"), MAXTAC_HELMET);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("maxtac_helmet_closed"), MAXTAC_HELMET_CLOSED);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("maxtac_chestplate"), MAXTAC_CHESTPLATE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("maxtac_leggings"), MAXTAC_LEGGINGS);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("maxtac_boots"), MAXTAC_BOOTS);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("trauma_team_helmet"), TRAUMA_TEAM_HELMET);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("trauma_team_chestplate"), TRAUMA_TEAM_CHESTPLATE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("trauma_team_leggings"), TRAUMA_TEAM_LEGGINGS);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("trauma_team_boots"), TRAUMA_TEAM_BOOTS);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("sandevistan"), SANDEVISTAN);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("berserk_zetatech"), BERSERK_ZETATECH);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("berserk_biodyne"), BERSERK_BIODYNE);
@@ -113,11 +143,27 @@ public final class ApogeeItems {
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("synaptic_accelerator"), SYNAPTIC_ACCELERATOR);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("microelectric_module"), MICROELECTRIC_MODULE);
         Registry.register(BuiltInRegistries.ITEM, Apogee.id("compact_reactor"), COMPACT_REACTOR);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("ballistic_weave"), BALLISTIC_WEAVE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("composite_plate"), COMPOSITE_PLATE);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("tactical_optics"), TACTICAL_OPTICS);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("optics_array"), OPTICS_ARRAY);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("neon_band"), NEON_BAND);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("respirator_filter"), RESPIRATOR_FILTER);
+        Registry.register(BuiltInRegistries.ITEM, Apogee.id("medical_module"), MEDICAL_MODULE);
 
         CreativeModeTab tab = FabricItemGroup.builder()
                 .icon(() -> new ItemStack(SANDEVISTAN))
                 .title(Component.translatable("itemGroup.apogee"))
                 .displayItems((parameters, output) -> {
+                    output.accept(MAXTAC_HELMET);
+                    output.accept(MAXTAC_HELMET_CLOSED);
+                    output.accept(MAXTAC_CHESTPLATE);
+                    output.accept(MAXTAC_LEGGINGS);
+                    output.accept(MAXTAC_BOOTS);
+                    output.accept(TRAUMA_TEAM_HELMET);
+                    output.accept(TRAUMA_TEAM_CHESTPLATE);
+                    output.accept(TRAUMA_TEAM_LEGGINGS);
+                    output.accept(TRAUMA_TEAM_BOOTS);
                     output.accept(ApogeeBlocks.RIPPERDOC_TABLE_ITEM);
                     output.accept(SANDEVISTAN);
                     output.accept(BERSERK_ZETATECH);
@@ -153,6 +199,13 @@ public final class ApogeeItems {
                     output.accept(SYNAPTIC_ACCELERATOR);
                     output.accept(MICROELECTRIC_MODULE);
                     output.accept(COMPACT_REACTOR);
+                    output.accept(BALLISTIC_WEAVE);
+                    output.accept(COMPOSITE_PLATE);
+                    output.accept(TACTICAL_OPTICS);
+                    output.accept(OPTICS_ARRAY);
+                    output.accept(NEON_BAND);
+                    output.accept(RESPIRATOR_FILTER);
+                    output.accept(MEDICAL_MODULE);
                 })
                 .build();
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Apogee.id("apogee"), tab);

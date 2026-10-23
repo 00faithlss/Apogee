@@ -103,6 +103,22 @@ loom {
             vmArg '-Dapogee.tendonsSmoke=true'
             programArgs '--width', '1280', '--height', '720'
         }
+        maxtacSmoke {
+            client()
+            name 'Apogee MaxTac armor smoke run'
+            source sourceSets.gametest
+            runDir 'build/maxtac-smoke'
+            vmArg '-Dapogee.maxtacSmoke=true'
+            programArgs '--width', '1280', '--height', '900'
+        }
+        traumaSmoke {
+            client()
+            name 'Apogee Trauma Team armor smoke run'
+            source sourceSets.gametest
+            runDir 'build/trauma-smoke'
+            vmArg '-Dapogee.traumaSmoke=true'
+            programArgs '--width', '1280', '--height', '900'
+        }
         bloodPumpSmoke {
             client()
             name 'Apogee Blood Pump smoke run'

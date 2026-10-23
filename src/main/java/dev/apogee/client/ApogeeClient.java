@@ -75,6 +75,8 @@ public final class ApogeeClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ApogeeClientConfig.load();
+        dev.apogee.client.armor.MaxtacVisorClient.register();
+        dev.apogee.client.armor.TraumaHelmetClient.register();
         KeyBindingHelper.registerKeyBinding(ACTIVATE_SANDEVISTAN);
         KeyBindingHelper.registerKeyBinding(TOGGLE_MANTIS);
         dev.apogee.client.tendons.TendonsClient.register();

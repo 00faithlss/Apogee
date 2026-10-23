@@ -1,5 +1,13 @@
 {
   "itemGroup.apogee": "Apogee",
+  "item.apogee.maxtac_helmet": "Casco MaxTac",
+  "item.apogee.maxtac_helmet_closed": "Casco MaxTac cerrado",
+  "item.apogee.maxtac_chestplate": "Chaleco MaxTac",
+  "item.apogee.maxtac_leggings": "Pantalones MaxTac",
+  "item.apogee.maxtac_boots": "Botas MaxTac",
+  "key.apogee.maxtac_visor": "Control del casco (MaxTac / Trauma Team)",
+  "message.apogee.maxtac_aux_on": "MaxTac: seis ópticas activas",
+  "message.apogee.maxtac_aux_off": "MaxTac: dos ópticas principales",
   "item.apogee.sandevistan": "Sandevistan",
   "item.apogee.os_core_t5": "Núcleo T5",
   "item.apogee.apogee_overdrive_kernel_t5": "Overdrive Kernel T5",
@@ -239,5 +247,18 @@
   "item.apogee.bionic_joints": "Articulaciones biónicas",
   "item.apogee.synaptic_accelerator": "Acelerador sináptico",
   "item.apogee.microelectric_module": "Módulo microeléctrico",
-  "item.apogee.compact_reactor": "Reactor compacto"
+  "item.apogee.compact_reactor": "Reactor compacto",
+  "item.apogee.trauma_team_helmet": "Casco Trauma Team",
+  "item.apogee.trauma_team_chestplate": "Chaleco Trauma Team",
+  "item.apogee.trauma_team_leggings": "Pantalones Trauma Team",
+  "item.apogee.trauma_team_boots": "Botas Trauma Team",
+  "message.apogee.trauma_helmet_open": "Trauma Team: casco abierto",
+  "item.apogee.ballistic_weave": "Tejido balístico",
+  "item.apogee.composite_plate": "Placa compuesta",
+  "item.apogee.tactical_optics": "Módulo óptico táctico",
+  "item.apogee.optics_array": "Matriz óptica",
+  "item.apogee.neon_band": "Banda fotoluminiscente",
+  "item.apogee.respirator_filter": "Filtro de respirador",
+  "item.apogee.medical_module": "Módulo médico",
+  "message.apogee.trauma_helmet_closed": "Trauma Team: casco cerrado"
 }
