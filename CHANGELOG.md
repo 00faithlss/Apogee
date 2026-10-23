@@ -4,6 +4,11 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Sin publicar]
 
+## [1.2.0+1.21.1] — 2026-10-23
+
+- Implante **Berserk** en tres variantes (`apogee:berserk_zetatech`, `apogee:berserk_biodyne` y `apogee:berserk_militech`), cada una con su propia receta, nuevos componentes (módulo microeléctrico y reactor compacto), tooltip animado, efectos en el HUD y pruebas multijugador. Solo se instala en la mesa de matasanos.
+- Implante **Bomba de sangre** `apogee:blood_pump` (ranura circulatoria) con sus piezas, Cámara hemo y Biomonitor, receta, modelo en el antebrazo derecho que acompaña a las Cuchillas Mantis y al Nanocable, y pruebas de un jugador y multijugador.
+- Los cuadrados de ciberware del HUD se apilan también sobre el Berserk, y el texto de bonificación por muertes ya no los tapa.
 - Se elimina la compatibilidad con Immersive Armors (dash de los pantalones Steampunk, dependencia de desarrollo y tecla propia); el dash aéreo pasa a los Tendones reforzados, que ahora lo hacen en todas direcciones.
 - Implante **Tendones reforzados** `apogee:reinforced_tendons` (ranura Piernas): pulsa saltar en el aire para un segundo salto normal (la misma altura que desde el suelo), con 4 bloques de caída amortiguados y una recarga por vuelo. Implante solo funcional (no se dibuja en el jugador), con modelo 3D propio hecho en Blockbench (`art/tendons/blockbench/`) y sonidos propios del segundo salto y del dash (recortados y limpios), receta propia, textos en español e inglés, pruebas de servidor, de cliente (`runTendonsSmoke`) y multijugador con y sin Punchy y Fresh Animations (`tools/tendons_tests.sh`).
 
