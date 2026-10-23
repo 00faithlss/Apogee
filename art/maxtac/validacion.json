@@ -1,0 +1,21 @@
+{
+  "result": "correcto",
+  "cubes": 284,
+  "bones": 25,
+  "checks_passed": 909,
+  "texture_sha256": "99f0dbcbfcb535ac4943d3d5944b23bcb2bed3b7fd9984eee6e3ec6eba43837c",
+  "minecraft_tested": true,
+  "client_smoke": "correcto",
+  "server_gametest": {
+    "tests": 60,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "maxtac_tests": 3
+  },
+  "notes": [
+    "Revisión y exportación real en Blockbench web con GeckoLib Models & Animations 4.2.5.",
+    "Prueba de cliente: skins clásicas y delgadas con capas exteriores, tecla N, sincronización con servidor integrado, dos/seis ópticas y brillo con luz ambiental cero.",
+    "Pendientes sesión de dos clientes reales, todas las poses, encantamientos, primera persona y convivencia visual con ciberware."
+  ]
+}

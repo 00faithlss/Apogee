@@ -1,0 +1,23 @@
+{
+  "result": "correcto",
+  "cubes": 251,
+  "bones": 25,
+  "checks_passed": 793,
+  "texture_sha256": "07d41f3722c157312fa2c841702859046b3f16e71bfe54b596c4977c851f267b",
+  "minecraft_tested": true,
+  "red_emissive_pixels_in_darkness": {
+    "on": 64,
+    "off": 0
+  },
+  "server_gametest": {
+    "tests": 63,
+    "failures": 0,
+    "errors": 0,
+    "trauma_tests": 3
+  },
+  "notes": [
+    "Proyecto, geometría y animaciones guardados y exportados en Blockbench.",
+    "Apertura/cierre por portador, lámina interior independiente y parpadeo rojo de un segundo.",
+    "Essential fuera de alcance por indicación del usuario; compatibilidad visual con ciberware y todas las poses todavía sin comprobar."
+  ]
+}
