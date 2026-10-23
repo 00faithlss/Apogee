@@ -2,8 +2,11 @@
 
 Mod privado para **Minecraft Java 1.21.1**, **Fabric** y **Java 21**, pensado para partidas con amigos mediante **Essential** (también funciona en individual, LAN y servidor dedicado). Identificador: `apogee`.
 
-Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, las **Cuchillas Mantis**, el **Nanocable** y los **Tendones reforzados**), tres componentes T5 y diez piezas para armar el ciberware de brazos.
-Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Berserk**, las **Cuchillas Mantis** y el **Nanocable**), tres componentes T5, diez piezas para armar el ciberware de brazos y ocho componentes de ciberware para el Berserk.
+Contiene la **mesa de matasanos** y seis familias de implantes: **Sandevistan**, **Berserk**, **Cuchillas Mantis**, **Nanocable**, **Tendones reforzados** y **Bomba de sangre**, con sus componentes y variantes.
+
+La rama de desarrollo incorpora una primera **armadura MaxTac** equipable de cuatro piezas. Está en la pestaña creativa de Apogee, con protección de netherita provisional y receta propia. El casco deja visible la boca (hay una variante, `apogee:maxtac_helmet_closed`, con la parte baja cerrada); **N** alterna entre dos y seis ópticas verdes. Las bandas violetas continuas y las ópticas tienen brillo propio. Modelo editable, capturas y límites de la prueba en [art/maxtac/LEEME.md](art/maxtac/LEEME.md).
+
+También incluye la **armadura Trauma Team**: traje verde, protección blanca y acentos rojos. **N** levanta la máscara y la recoge sobre la frente, dejando debajo la lámina translúcida y el respirador. Sus cuatro indicadores parpadean en rojo. Las cuatro piezas están en creativo, con netherita provisional y receta propia. [Modelo de Blockbench y pruebas](art/trauma-team/LEEME.md).
 
 > Versión oficial: **1.2.0+1.21.1**. La compatibilidad con Essential **no está comprobada** hasta completar la sesión real descrita en [los resultados de pruebas](docs/testing/2026-09-14-apogee-resultados.md).
 
@@ -23,6 +26,22 @@ Contiene la **mesa de matasanos**, cuatro implantes (el **Sandevistan**, el **Be
 | `apogee:nanowire` | Nanocable | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/arms`. |
 | `apogee:reinforced_tendons` | Tendones reforzados | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/legs`. Doble salto. |
 | `apogee:blood_pump` | Bomba de sangre | Implante reutilizable, sin durabilidad, no apilable. Ranura Trinkets `cyberware/circulatory`. |
+| `apogee:maxtac_helmet` | Casco MaxTac | Prototipo creativo; dos ópticas por defecto, cuatro auxiliares con N (tecla reasignable). |
+| `apogee:maxtac_helmet_closed` | Casco MaxTac cerrado | Variante con boca y mentón cubiertos; mismo control de ópticas con N. |
+| `apogee:maxtac_chestplate` | Chaleco MaxTac | Prototipo creativo; mangas con bandas violetas continuas y emisivas. |
+| `apogee:maxtac_leggings` | Pantalones MaxTac | Prototipo creativo; ranura de piernas vanilla. |
+| `apogee:maxtac_boots` | Botas MaxTac | Prototipo creativo; calzado reconstruido provisionalmente. |
+| `apogee:trauma_team_helmet` | Casco Trauma Team | N abre/cierra la máscara; lámina interior y cuatro indicadores rojos intermitentes. |
+| `apogee:trauma_team_chestplate` | Chaleco Trauma Team | Placas y bolsas blancas, mangas verdes y guantes rojos. |
+| `apogee:trauma_team_leggings` | Pantalones Trauma Team | Bolsillos laterales y rodilleras. |
+| `apogee:trauma_team_boots` | Botas Trauma Team | Refuerzos rojos en puntera y suela. |
+| `apogee:ballistic_weave` | Tejido balístico | Componente de las armaduras MaxTac y Trauma Team. |
+| `apogee:composite_plate` | Placa compuesta | Componente de las armaduras MaxTac y Trauma Team. |
+| `apogee:tactical_optics` | Módulo óptico táctico | Componente del casco MaxTac. |
+| `apogee:optics_array` | Matriz óptica | Reúne tres módulos ópticos; componente del casco MaxTac. |
+| `apogee:neon_band` | Banda fotoluminiscente | Componente del chaleco MaxTac. |
+| `apogee:respirator_filter` | Filtro de respirador | Componente del casco Trauma Team. |
+| `apogee:medical_module` | Módulo médico | Componente del casco y del chaleco Trauma Team. |
 | `apogee:hemo_chamber` | Cámara hemo | Pieza de la Bomba de sangre. |
 | `apogee:bio_monitor` | Biomonitor | Pieza de la Bomba de sangre. |
 | `apogee:os_core_t5` | Núcleo T5 | Componente apilable. |

@@ -1,6 +1,8 @@
 # Trauma Team — equipo de respuesta de 2077
 
-Actualizado: 2026-10-23. **Preparado para modelado; excelente cobertura de casco y cuerpo.**
+Actualizado: 2026-10-23. **Primera versión equipable, modelada y exportada en Blockbench.** [Proyecto, capturas y validación](../../art/trauma-team/LEEME.md).
+
+El conjunto incorpora cuatro piezas. **N** abre la máscara hacia arriba y la recoge sobre la frente, conservando la lámina interior translúcida y el respirador debajo. Los cuatro puntos frontales parpadean en rojo con brillo propio. Las mangas y pantalones incluyen margen para las capas exteriores de la skin. Es un prototipo creativo con estadísticas de netherita provisionales, con receta propia y sin capacidades médicas añadidas. Essential no forma parte de las comprobaciones solicitadas.
 
 ## Qué conjunto conviene modelar
 

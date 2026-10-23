@@ -1,6 +1,6 @@
 # MaxTac — equipo táctico de 2077
 
-Revisión: 2026-10-23. Siete imágenes locales, con casco, torso y pantalones por delante y por detrás, más una captura de producción de CD PROJEKT RED. **Preparado para elegir referencias y comenzar el modelado.**
+La selección del usuario ya tiene una [primera versión editable y equipable](../../art/maxtac/LEEME.md), modelada y exportada en Blockbench para GeckoLib. El casco deja descubiertos labios y mentón, tiene seis ópticas circulares, acabado negro uniforme y protector nasal fino. Dos ópticas están encendidas al equiparlo y **N** alterna las cuatro auxiliares. Las mangas llevan bandas violetas continuas con brillo propio. La cobertura se amplió y revisó dentro de Minecraft con skins clásicas y delgadas y sus capas exteriores activas. Las siete referencias documentadas abajo se complementan con las imágenes añadidas por el usuario y su selección guardada en `art/maxtac/referencias-seleccionadas.json`.
 
 ## Variante recomendada
 
@@ -13,17 +13,17 @@ Tomar el conjunto equipable SQ030 como base consistente (`01–06`) y la captura
 | Casco | Carcasa oscura, centro vertical que cubre frente/nariz y seis ópticas laterales (`03`) | Dos módulos de tres lentes; conservar la silueta ancha y el centro estrecho |
 | Nuca | Cobertura posterior segmentada, bandas y placas (`04`) | Dos o tres niveles de carcasa; resto en textura |
 | Torso | Chaleco negro, cuello levantado y superficies de tejido técnico (`01–02`) | Pechera rectangular ligeramente voluminosa y collar independiente del casco |
-| Brazos | Mangas oscuras, refuerzos y franjas violetas en el conjunto equipable (`01`) | Mangas por brazo y franjas en textura; no asumir que el brillo sea emisión real |
+| Brazos | Mangas oscuras, refuerzos y franjas violetas en el conjunto equipable (`01`) | Bandas continuas en relieve y emisión propia, según la elección del usuario; sin proyectar luz sobre el entorno |
 | Piernas | Pantalón negro, correas y protecciones de rodilla (`05–06`) | Rodilleras y correas diferenciadas; liberar la entrepierna para animaciones |
 | Botas | Las imágenes de pantalón recortan los pies | Diseñar provisionalmente calzado oscuro compatible; marcarlo como reconstrucción hasta obtener referencia completa |
 
-Paleta propuesta, no oficial: `#141A20` base, `#303A46` placas, `#66727D` cantos, `#387F6A` ópticas y `#7064AF` bandas. La captura oficial está iluminada por disparos y neón: usarla para volumen, no para medir colores exactos.
+La paleta del modelo se guarda en `art/maxtac/source/materiales.json`: casco carbón uniforme, traje azul muy oscuro, ópticas verdes y bandas violeta `#BC78FF`. Son elecciones de adaptación, no colores oficiales medidos. La captura oficial está iluminada por disparos y neón: usarla para volumen, no para medir colores exactos.
 
 ## Prioridades
 
-El casco multióptico debe distinguir a MaxTac incluso sin logos. Modelar las lentes con pequeñas caras cuadradas o escalonadas y círculos dibujados en textura; no hace falta geometría cilíndrica densa. Mantener separación entre los módulos ópticos, los hombros y el cuello al girar la cabeza. Probar los antebrazos con las Cuchillas Mantis y el Nanocable de Apogee.
+El casco multióptico debe distinguir a MaxTac incluso sin logos. La versión actual utiliza seis tambores de sección circular y biseles de dieciséis segmentos, conforme a la corrección del usuario. Queda por revisar los extremos de giro y la convivencia visual de los antebrazos con las Cuchillas Mantis y el Nanocable de Apogee.
 
-No se han construido modelos ni asignado estadísticas. La forma de las botas y las variantes de especialistas quedan como decisiones de diseño posteriores.
+Las cuatro piezas están disponibles en creativo, con estadísticas de netherita provisionales y con receta propia. Las botas son una adaptación provisional; las variantes de especialistas quedan para después de revisar el conjunto base.
 
 ## Fuentes
 

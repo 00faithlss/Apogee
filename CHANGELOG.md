@@ -4,6 +4,16 @@ Registro de cambios de Apogee. Las entradas describen trabajo completado.
 
 ## [Sin publicar]
 
+- Armadura **Trauma Team** de cuatro piezas, modelada y exportada en Blockbench: traje verde, chaleco y bolsas blancos, acentos rojos y margen para las capas exteriores de la skin. Prototipo creativo con netherita provisional y receta propia.
+- Máscara Trauma Team abatible hacia arriba con **N**, recogida sobre la frente; conserva la lámina translúcida y el respirador debajo. Apertura/cierre suave por portador, validación del servidor y cuatro indicadores frontales rojos intermitentes con brillo propio.
+- Primera armadura **MaxTac** de cuatro piezas, modelada y exportada en Blockbench para GeckoLib. Casco negro uniforme con seis ópticas circulares, puente nasal fino y boca descubierta; mangas y pantalones cubren las capas exteriores de las skins clásicas y delgadas.
+- Bandas violetas continuas con brillo propio. El casco enciende dos ópticas al equiparlo y permite alternar las cuatro auxiliares con **N**, con estado validado por servidor y sincronizado a los observadores. Reequiparlo vuelve al par principal.
+- Objetos disponibles en creativo, con estadísticas de netherita provisionales y receta propia. Pruebas de servidor y cliente de Minecraft para ranuras, cambio del visor, reequipamiento y emisión sin luz ambiental.
+- Variante `apogee:maxtac_helmet_closed` del casco MaxTac, con boca y mentón cubiertos y cuello acolchado; mantiene el control de ópticas con **N**. Las ópticas auxiliares apagadas muestran cristal oscuro con cruces tenues.
+- Armaduras con esquinas biseladas y márgenes ajustados para que no asomen las capas de la skin, comprobadas con skins clásica y delgada y con Skin Layers 3D. El casquete de Trauma Team es una cuña de tres secciones (quilla central y dos alas) unidas por líneas negras finas, que sube como una sola pieza al abrir.
+- Los nueve cascos, chalecos, pantalones y botas se ven en 3D en inventario, mano y suelo mediante un renderizador de ítem de GeckoLib.
+- Componentes de fabricación (`ballistic_weave`, `composite_plate`, `tactical_optics`, `optics_array`, `neon_band`, `respirator_filter`, `medical_module`) y recetas de las nueve piezas de armadura.
+
 ## [1.2.0+1.21.1] — 2026-10-23
 
 - Implante **Berserk** en tres variantes (`apogee:berserk_zetatech`, `apogee:berserk_biodyne` y `apogee:berserk_militech`), cada una con su propia receta, nuevos componentes (módulo microeléctrico y reactor compacto), tooltip animado, efectos en el HUD y pruebas multijugador. Solo se instala en la mesa de matasanos.

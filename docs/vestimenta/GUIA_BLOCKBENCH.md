@@ -41,7 +41,9 @@ Las hombreras deben seguir a su brazo y cada faldón a la parte pertinente. No c
 
 ## Orden sugerido
 
-**Trauma Team → Arasaka → Militech → MaxTac → NetWatch → Zetatech.** Trauma Team tiene buenas vistas y un contraste fuerte para comprobar el flujo completo. NetWatch requiere decidir cómo representar cyberware sobre una skin; Zetatech requiere reconstruir vistas y elegir entre Grasshopper histórica y una adaptación de 2077.
+El usuario eligió comenzar por **MaxTac**. Después se puede continuar con **Trauma Team → Arasaka → Militech → NetWatch → Zetatech**. NetWatch requiere decidir cómo representar cyberware sobre una skin; Zetatech requiere reconstruir vistas y elegir entre Grasshopper histórica y una adaptación de 2077.
+
+El segundo conjunto iniciado es [Trauma Team](../../art/trauma-team/LEEME.md), con máscara abatible, lámina interior e indicadores rojos intermitentes.
 
 ## Criterios de aceptación del futuro modelo
 
@@ -56,4 +58,4 @@ Las hombreras deben seguir a su brazo y cada faldón a la parte pertinente. No c
 
 ## Estado de esta entrega
 
-Investigación, imágenes, procedencia y preparación de diseño. No contiene armaduras `.bbmodel` ni cambios al mod. Las cifras de protección, recetas, rareza y habilidades quedan para la etapa de diseño jugable.
+La investigación se conserva como base de diseño. MaxTac ya tiene una [primera versión `.bbmodel`, texturas emisivas, exportación GeckoLib e integración equipable](../../art/maxtac/LEEME.md), iniciada por elección del usuario. El visor alterna dos y seis ópticas con N. Se comprobó la cobertura con skins clásicas y delgadas dentro de Minecraft; el balance usa netherita provisional, con receta propia. La revisión completa de animaciones y convivencia con ciberware sigue pendiente.
