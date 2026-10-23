@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GAG",
+    "ANA",
+    "GAG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glow_ink_sac"
+    },
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "N": {
+      "item": "apogee:neural_cable"
+    }
+  },
+  "result": {
+    "id": "apogee:neon_band",
+    "count": 2
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "PPP",
+    "MWM",
+    "WPW"
+  ],
+  "key": {
+    "P": {
+      "item": "apogee:composite_plate"
+    },
+    "W": {
+      "item": "apogee:ballistic_weave"
+    },
+    "M": {
+      "item": "apogee:optics_array"
+    }
+  },
+  "result": {
+    "id": "apogee:maxtac_helmet_closed",
+    "count": 1
+  }
+}

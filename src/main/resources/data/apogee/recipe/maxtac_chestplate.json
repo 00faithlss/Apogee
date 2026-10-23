@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "WPW",
+    "BPB",
+    "WPW"
+  ],
+  "key": {
+    "B": {
+      "item": "apogee:neon_band"
+    },
+    "P": {
+      "item": "apogee:composite_plate"
+    },
+    "W": {
+      "item": "apogee:ballistic_weave"
+    }
+  },
+  "result": {
+    "id": "apogee:maxtac_chestplate",
+    "count": 1
+  }
+}

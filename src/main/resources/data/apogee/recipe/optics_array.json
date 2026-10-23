@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "OPP",
+    "PO ",
+    "OPP"
+  ],
+  "key": {
+    "O": {
+      "item": "apogee:tactical_optics"
+    },
+    "P": {
+      "item": "apogee:composite_plate"
+    }
+  },
+  "result": {
+    "id": "apogee:optics_array",
+    "count": 1
+  }
+}

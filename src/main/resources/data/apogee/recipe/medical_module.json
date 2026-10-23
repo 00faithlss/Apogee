@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RWR",
+    "NCN",
+    "RWR"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:red_dye"
+    },
+    "W": {
+      "item": "minecraft:white_wool"
+    },
+    "N": {
+      "item": "apogee:neural_cable"
+    },
+    "C": {
+      "item": "apogee:control_chip"
+    }
+  },
+  "result": {
+    "id": "apogee:medical_module",
+    "count": 1
+  }
+}

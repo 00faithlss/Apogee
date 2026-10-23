@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "WPW",
+    "P P",
+    "W W"
+  ],
+  "key": {
+    "P": {
+      "item": "apogee:composite_plate"
+    },
+    "W": {
+      "item": "apogee:ballistic_weave"
+    }
+  },
+  "result": {
+    "id": "apogee:maxtac_leggings",
+    "count": 1
+  }
+}
