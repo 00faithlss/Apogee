@@ -117,3 +117,11 @@ Apogee no está afiliado a CD PROJEKT RED ni a los autores citados.
 - Origen: paquete `mesa-matasanos-edgerunner-assets`, aportado por el autor del proyecto: diseño propio de la pantalla, inspirado en la galería pública de Project: Edgerunner sin copiar sus texturas ni su código. Fuentes en `art/ripperdoc/` (ver `art/ripperdoc/NOTA.md`).
 - Usado en el juego: ninguna textura. La pantalla actual se dibuja con la textura de cofre de Minecraft y con los colores y esquinas del diseño; `textures/mesa_matasanos_gui.png` queda como referencia en `art/ripperdoc/`.
 - Íconos de las ranuras `textures/gui/slots/{cortex,skeleton,nerves,optics,circulatory,legs}.png`: los `textures/item-*.png` del paquete pasados a gris. `hands.png` e `integumentary.png` se dibujaron para el mod con el mismo estilo; son originales del proyecto.
+
+
+## Referencias visuales de vestimenta — investigación 2026-10-23
+
+- 33 imágenes en `docs/vestimenta/imagenes/`, descargadas desde el CDN de Cyberpunk Wiki y el CDN oficial de CD PROJEKT RED para estudio local solicitado por el autor del proyecto. No se incorporaron a `src/main/resources` ni al JAR.
+- Procedencia, enlaces, dimensiones, autoría conocida y huellas SHA-256 en [docs/vestimenta/referencias.json](docs/vestimenta/referencias.json); explicación y fuentes en [FUENTES.md](docs/vestimenta/FUENTES.md).
+- Material de Cyberpunk 2077: CD PROJEKT RED y artistas acreditados cuando se pudieron identificar. Material Grasshopper y dibujos históricos: R. Talsorian Games, con ilustradores individuales no confirmados. Fotografía de figura Trauma Team: fotógrafo y fabricante no confirmados.
+- No se ha obtenido permiso de redistribución ni se atribuye a las imágenes la licencia del texto de la wiki. Uso de referencia dentro de la entrega privada y local descrita en este archivo.
