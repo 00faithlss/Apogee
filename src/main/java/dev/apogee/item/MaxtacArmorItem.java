@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import org.jetbrains.annotations.Nullable;
@@ -32,9 +31,8 @@ public final class MaxtacArmorItem extends ArmorItem implements GeoItem {
 
     /** Con {@code closed} el casco cubre también boca y mentón; las demás piezas no cambian. */
     public MaxtacArmorItem(Type type, boolean closed) {
-        // Base provisional para revisar el conjunto en creativo, sin recetas nuevas.
-        super(ArmorMaterials.NETHERITE, type, new Properties()
-                .durability(type.getDurability(37)).rarity(Rarity.EPIC).fireResistant());
+        super(MaxtacArmorMaterial.MATERIAL, type, new Properties()
+                .durability(type.getDurability(MaxtacArmorMaterial.DURABILITY_MULTIPLIER)).rarity(Rarity.EPIC).fireResistant());
         this.closed = closed;
     }
 

@@ -35,6 +35,8 @@ public final class Apogee implements ModInitializer {
         ApogeeAttachments.register();
         ApogeeNetworking.registerCommon();
         dev.apogee.armor.MaxtacVisor.register();
+        dev.apogee.armor.MaxtacBuffs.register();
+        dev.apogee.armor.TraumaBuffs.register();
         dev.apogee.armor.TraumaHelmet.register();
         SandevistanManager.register();
         BerserkManager.register();

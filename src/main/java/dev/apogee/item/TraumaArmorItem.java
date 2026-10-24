@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import org.jetbrains.annotations.Nullable;
@@ -26,9 +25,8 @@ public final class TraumaArmorItem extends ArmorItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public TraumaArmorItem(Type type) {
-        // Base provisional para revisar el conjunto en creativo, sin recetas nuevas.
-        super(ArmorMaterials.NETHERITE, type, new Properties()
-                .durability(type.getDurability(37)).rarity(Rarity.EPIC).fireResistant());
+        super(TraumaArmorMaterial.MATERIAL, type, new Properties()
+                .durability(type.getDurability(TraumaArmorMaterial.DURABILITY_MULTIPLIER)).rarity(Rarity.EPIC).fireResistant());
     }
 
     @Override
